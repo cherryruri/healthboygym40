@@ -1715,7 +1715,7 @@ section{
 
   .facility-slide img{
   filter:grayscale(100%) brightness(0.72);
-  transition:filter 5s ease, transform 5s ease;
+  transition:filter 4s ease, transform 4s ease;
 }
 
   .facility-item.color-on img{

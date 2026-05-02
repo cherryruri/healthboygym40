@@ -1782,17 +1782,18 @@ body:not(.loaded) .main-content{
 }
 
 .faq-new-hero{
-  background:#f6f1f1;
-  margin:0 -20px 60px;
-  padding:110px 20px 100px;
+  background:#000;
+  margin:0 -20px 70px;
+  padding:110px 20px 105px;
   text-align:center;
+  color:#fff;
 }
 
 .faq-new-hero h2{
   font-size:42px;
   font-weight:900;
-  font-style:italic;
-  margin-bottom:30px;
+  font-style:normal;
+  margin-bottom:34px;
 }
 
 .faq-new-search{
@@ -1808,9 +1809,12 @@ body:not(.loaded) .main-content{
 
 .faq-new-search input{
   flex:1;
+  min-width:0;
   border:none;
   outline:none;
   font-size:15px;
+  font-weight:600;
+  color:#111;
 }
 
 .faq-new-search span{
@@ -1818,22 +1822,32 @@ body:not(.loaded) .main-content{
   color:#777;
 }
 
+.faq-new-wrap{
+  max-width:1000px;
+  margin:auto;
+}
+
 .faq-new-category{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-  margin-bottom:60px;
+  grid-template-columns:repeat(4, 1fr);
+  gap:16px;
+  margin-bottom:55px;
 }
 
 .faq-new-category button{
-  height:60px;
+  width:100%;
+  height:56px;
   border:1.5px solid #111;
   border-radius:999px;
   background:#fff;
+  color:#111;
+  font-size:14px;
   font-weight:800;
   cursor:pointer;
+  transition:0.25s;
 }
 
+.faq-new-category button:hover,
 .faq-new-category button.active{
   background:#000;
   color:#fff;
@@ -1842,50 +1856,86 @@ body:not(.loaded) .main-content{
 .faq-new-list{
   max-width:900px;
   margin:auto;
+  border-top:2px solid #111;
 }
 
 .faq-new-item{
   border-bottom:1px solid #ddd;
-  padding:22px 0;
+  padding:24px 0;
   cursor:pointer;
 }
 
 .faq-new-q{
   display:flex;
   justify-content:space-between;
+  gap:20px;
   font-weight:900;
   font-size:18px;
+}
+
+.faq-new-q span{
+  font-size:24px;
+  transition:0.3s;
+  flex-shrink:0;
 }
 
 .faq-new-a{
   max-height:0;
   overflow:hidden;
-  transition:0.3s;
   color:#555;
+  font-size:15px;
+  line-height:1.8;
+  font-weight:700;
+  transition:0.35s;
 }
 
 .faq-new-item.active .faq-new-a{
-  max-height:200px;
-  margin-top:10px;
+  max-height:220px;
+  margin-top:14px;
 }
 
-.faq-new-item.active span{
+.faq-new-item.active .faq-new-q span{
   transform:rotate(45deg);
 }
 
-/* 모바일 */
 @media(max-width:768px){
 
+  .faq-new-section{
+    padding:0 18px 90px;
+  }
+
   .faq-new-hero{
-    padding:80px 20px;
+    margin:0 -18px 50px;
+    padding:85px 18px 80px;
   }
 
   .faq-new-hero h2{
-    font-size:28px;
+    font-size:30px;
+    margin-bottom:26px;
+  }
+
+  .faq-new-search{
+    width:100%;
+    height:52px;
+    padding:0 20px;
   }
 
   .faq-new-category{
     grid-template-columns:1fr;
+    gap:14px;
+    margin-bottom:45px;
   }
 
+  .faq-new-category button{
+    height:56px;
+    font-size:14px;
+  }
+
+  .faq-new-q{
+    font-size:16px;
+  }
+
+  .faq-new-a{
+    font-size:14px;
+  }
 }

@@ -49,6 +49,7 @@ if(logo){
           fadeIn();
           startTyping();
           observeCounter();
+          startBrandTyping(); // 👈 추가
         },600);
 
       },500);
@@ -146,6 +147,52 @@ function startTyping(){
 }
 
 
+/* ================= 브랜드 타이핑 (핵심) ================= */
+function startBrandTyping(){
+
+  const brandHighlight = document.querySelector(".brand-highlight");
+  if(!brandHighlight) return;
+
+  const text = brandHighlight.innerHTML.replace(/<br\s*\/?>/gi, "\n").trim();
+  brandHighlight.innerHTML = "";
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+
+        brandHighlight.classList.add("show","typing");
+
+        let i = 0;
+
+        function type(){
+          if(i < text.length){
+
+            if(text[i] === "\n"){
+              brandHighlight.innerHTML += "<br>";
+            }else{
+              brandHighlight.innerHTML += text[i];
+            }
+
+            i++;
+
+            const speed = 18 + Math.random()*20;
+            setTimeout(type, speed);
+
+          }else{
+            brandHighlight.classList.add("typing");
+          }
+        }
+
+        type();
+        observer.disconnect();
+      }
+    });
+  },{threshold:0.6});
+
+  observer.observe(brandHighlight);
+}
+
+
 /* ================= 이미지 모달 ================= */
 const images = Array.from(document.querySelectorAll(".facility-slide img"));
 let currentIndex = 0;
@@ -207,194 +254,6 @@ if(images.length){
     modal.classList.toggle("zoom");
   };
 
-  document.addEventListener("keydown", (e)=>{
-    if(modal.style.display === "flex"){
-      if(e.key === "ArrowRight") next();
-      if(e.key === "ArrowLeft") prev();
-      if(e.key === "Escape") modal.style.display = "none";
-    }
-  });
-
-  let startX = 0;
-
-  modal.addEventListener("touchstart", (e)=>{
-    startX = e.touches[0].clientX;
-  });
-
-  modal.addEventListener("touchend", (e)=>{
-    let endX = e.changedTouches[0].clientX;
-
-    if(startX - endX > 50) next();
-    if(endX - startX > 50) prev();
-  });
-
 }
-
-});
-
-/* ================= 모바일 사이드 메뉴 생성 ================= */
-document.addEventListener("DOMContentLoaded", function(){
-
-  const navbar = document.querySelector(".navbar");
-  const menu = document.querySelector(".menu");
-
-  if(!navbar || !menu) return;
-  if(document.querySelector(".mobile-menu-btn")) return;
-
-  const menuBtn = document.createElement("button");
-  menuBtn.className = "mobile-menu-btn";
-  menuBtn.innerHTML = "☰";
-
-  const overlay = document.createElement("div");
-  overlay.className = "mobile-menu-overlay";
-
-  const sideMenu = document.createElement("div");
-  sideMenu.className = "mobile-side-menu";
-
-  sideMenu.innerHTML = `
-    <div class="mobile-side-top">
-      <div class="mobile-side-logo">HEALTHBOYGYM</div>
-      <button class="mobile-close">×</button>
-    </div>
-
-    <a href="#about">센터 소개</a>
-    <a href="#history">브랜드소개</a>
-    <a href="#facility">시설 투어</a>
-    <a href="#pilates">필라테스 안내</a>
-    <a href="#pass">올패스 안내</a>
-    <a href="#trainer">트레이너 소개</a>
-    <a href="#hours">운영 시간</a>
-    <a href="#location">오시는 길</a>
-    <a href="#faq">FAQ</a>
-
-    <a class="mobile-side-reserve" href="https://map.naver.com" target="_blank">
-      네이버 문의 및 예약 바로가기
-    </a>
-  `;
-
-  navbar.appendChild(menuBtn);
-  document.body.appendChild(overlay);
-  document.body.appendChild(sideMenu);
-
-  menuBtn.addEventListener("click", function(){
-    document.body.classList.add("menu-open");
-  });
-
-  overlay.addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
-
-  sideMenu.querySelector(".mobile-close").addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
-
-  sideMenu.querySelectorAll("a").forEach(link=>{
-    link.addEventListener("click", function(){
-      document.body.classList.remove("menu-open");
-    });
-  });
-/* ================= 스크롤 버튼 / 메뉴 부드럽게 이동 ================= */
-
-const scrollDown = document.querySelector(".scroll-down");
-
-if(scrollDown){
-  scrollDown.addEventListener("click", function(){
-    const about = document.querySelector("#about");
-    if(about){
-      about.scrollIntoView({ behavior:"smooth", block:"start" });
-    }
-  });
-}
-
-document.querySelectorAll('a[href^="#"]').forEach(link=>{
-  link.addEventListener("click", function(e){
-    const targetId = this.getAttribute("href");
-    const target = document.querySelector(targetId);
-
-    if(target){
-      e.preventDefault();
-
-      target.classList.add("show");
-
-      target.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-    }
-  });
-});
-});
-
-/* 모바일 시설투어 사진 스크롤 컬러 전환 */
-const facilityColorItems = document.querySelectorAll(".facility-item");
-
-const facilityColorObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("color-on");
-    }
-  });
-},{
-  threshold:0.35
-});
-
-facilityColorItems.forEach(item=>{
-  facilityColorObserver.observe(item);
-});
-
-/* FAQ NEW */
-document.addEventListener("DOMContentLoaded", function(){
-
-  const items = document.querySelectorAll(".faq-new-item");
-  const buttons = document.querySelectorAll(".faq-new-category button");
-  const search = document.getElementById("faqSearch");
-
-  items.forEach(item=>{
-    item.addEventListener("click", ()=>{
-      item.classList.toggle("active");
-    });
-  });
-
- buttons.forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const cat = btn.dataset.category;
-
-    buttons.forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-
-    items.forEach(item=>{
-
-      // 전부 보이게 유지
-      item.style.display = "block";
-
-      // 선택된 것만 강조
-      if(cat === "all" || item.dataset.category === cat){
-        item.classList.remove("faq-dim");
-      }else{
-        item.classList.add("faq-dim");
-      }
-
-    });
-  });
-});
-
-  if(search){
-    search.addEventListener("input", ()=>{
-  const val = search.value.toLowerCase();
-
-  items.forEach(item=>{
-    const text = item.innerText.toLowerCase();
-
-    // 전부 보이게 유지
-    item.style.display = "block";
-
-    if(text.includes(val)){
-      item.classList.remove("faq-dim");
-    }else{
-      item.classList.add("faq-dim");
-    }
-  });
-});
-  }
 
 });

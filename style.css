@@ -11,16 +11,10 @@ body {
   overflow-x:hidden;
 }
 
-:root {
-  --yellow:#fff200;
-}
+:root {--yellow:#fff200;}
 
-section {scroll-margin-top:90px;}
-
-/* ================= 헤더 ================= */
 header {
-  background:rgba(255,255,255,0.95);
-  backdrop-filter:blur(10px);
+  background:#fff;
   position:fixed;
   width:100%;
   top:0;
@@ -34,15 +28,14 @@ header {
   align-items:center;
   max-width:1380px;
   margin:auto;
-  padding:22px 20px;
+  padding:24px 20px;
 }
 
 .logo a {
-  font-size:28px;
-  font-weight:900;
-  text-decoration:none;
   color:#000;
-  font-style:italic;
+  font-weight:900;
+  font-size:28px;
+  text-decoration:none;
 }
 
 .menu {
@@ -50,37 +43,37 @@ header {
   list-style:none;
 }
 
-.menu li {margin:0 12px;}
+.menu li {margin:0 13px;}
 
 .menu a {
+  color:#111;
   font-size:14px;
   font-weight:900;
   text-decoration:none;
-  color:#111;
   position:relative;
+  padding-bottom:5px;
 }
 
 .menu a::after {
   content:"";
   position:absolute;
-  bottom:-6px;
   left:0;
-  width:0;
+  bottom:0;
+  width:0%;
   height:2px;
   background:#000;
-  transition:.3s;
+  transition:0.3s;
 }
 
 .menu a:hover::after {width:100%;}
 
 .download-btn {
   border:1px solid #000;
-  padding:10px 18px;
-  border-radius:999px;
+  padding:10px 20px;
+  color:#000;
   text-decoration:none;
   font-size:13px;
   font-weight:900;
-  color:#000;
 }
 
 .download-btn:hover {
@@ -88,7 +81,7 @@ header {
   color:#fff;
 }
 
-/* ================= 로고 인트로 ================= */
+/* 로고 인트로 */
 .logo-screen {
   background:#000;
   height:100vh;
@@ -104,13 +97,12 @@ header {
   color:#fff;
   font-size:64px;
   font-weight:900;
-  font-style:italic;
   border-right:3px solid #fff;
   animation:blink .7s infinite;
 }
 
 @keyframes blink {
-  50% {border-color:transparent;}
+  50%{border-color:transparent;}
 }
 
 .zoom-out {
@@ -118,7 +110,7 @@ header {
 }
 
 @keyframes zoomOut {
-  to {
+  to{
     opacity:0;
     transform:scale(1.1);
   }
@@ -126,24 +118,21 @@ header {
 
 .main-content {
   display:none;
-  padding-top:86px;
+  padding-top:88px;
 }
 
-body.loaded .main-content {
-  display:block;
-}
-
-/* ================= 인트로 ================= */
+/* 인트로 */
 .intro {
   height:100vh;
-  position:relative;
   display:flex;
   justify-content:center;
   align-items:center;
-  text-align:center;
-  color:#fff;
-  background:#000;
+  position:relative;
   overflow:hidden;
+  background:#000;
+  color:#fff;
+  padding:0 8%;
+  text-align:center;
 }
 
 .intro-video {
@@ -159,22 +148,21 @@ body.loaded .main-content {
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.58);
   z-index:1;
 }
 
 .intro-inner {
   position:relative;
   z-index:2;
-  padding:0 20px;
 }
 
 .intro-sub {
   font-size:14px;
-  font-weight:900;
+  color:#777;
   letter-spacing:3px;
-  color:#ddd;
-  margin-bottom:20px;
+  margin-bottom:22px;
+  font-weight:900;
 }
 
 .intro-main {
@@ -183,13 +171,7 @@ body.loaded .main-content {
   font-weight:900;
 }
 
-.intro-main::after {
-  content:".";
-  color:var(--yellow);
-}
-
 .intro-desc {
-  margin-top:20px;
   font-size:18px;
   line-height:1.8;
   color:#ddd;
@@ -202,25 +184,33 @@ body.loaded .main-content {
   bottom:45px;
   transform:translateX(-50%);
   z-index:3;
+  text-align:center;
   color:#fff;
   font-size:11px;
   font-weight:900;
   letter-spacing:1px;
-  cursor:pointer;
 }
 
 .scroll-arrow {
   display:block;
   font-size:34px;
+  line-height:1;
   transform:rotate(90deg);
   margin-bottom:6px;
+  animation:arrowMove 1.2s infinite;
 }
 
-/* ================= 공통 애니메이션 ================= */
+@keyframes arrowMove {
+  0% {transform:rotate(90deg) translateX(0);}
+  50% {transform:rotate(90deg) translateX(8px);}
+  100% {transform:rotate(90deg) translateX(0);}
+}
+
+/* 공통 애니메이션 */
 .fade {
   opacity:0;
   transform:translateY(30px);
-  transition:.8s;
+  transition:0.8s;
 }
 
 .fade.show {
@@ -228,16 +218,18 @@ body.loaded .main-content {
   transform:translateY(0);
 }
 
-/* ================= 숫자 ================= */
+/* 숫자 섹션 */
 .stats-section {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
   background:#000;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  border-top:1px solid rgba(255,255,255,0.1);
+  border-bottom:1px solid rgba(255,255,255,0.1);
 }
 
 .stat-box {
+  padding:58px 20px;
   text-align:center;
-  padding:60px 20px;
   border-right:1px solid rgba(255,255,255,0.1);
 }
 
@@ -246,9 +238,9 @@ body.loaded .main-content {
 }
 
 .stat-number {
-  font-size:50px;
-  font-weight:900;
   color:#fff;
+  font-size:52px;
+  font-weight:900;
 }
 
 .stat-number::after {
@@ -260,99 +252,20 @@ body.loaded .main-content {
 }
 
 .stat-box p {
-  margin-top:10px;
   color:#fff;
   font-size:15px;
+  margin-top:10px;
   font-weight:900;
 }
 
 .stat-box span {
   display:block;
-  margin-top:8px;
   color:#777;
   font-size:12px;
-}
-
-/* ================= 브랜드 ================= */
-.brand-section {
-  padding:150px 20px;
-  background:#fff;
-}
-
-.brand-wrap {
-  max-width:1200px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:60px;
-  align-items:center;
-}
-
-.eyebrow {
-  color:#777;
-  font-size:14px;
-  font-weight:900;
-  letter-spacing:4px;
-  margin-bottom:20px;
-}
-
-.brand-left h2 {
-  font-size:56px;
-  line-height:1.15;
-  font-weight:900;
-}
-
-.brand-left h2::after {
-  content:".";
-  color:var(--yellow);
-}
-
-.brand-left p {
-  margin-top:24px;
-  color:#555;
-  font-size:17px;
-  line-height:1.8;
-  font-weight:600;
-}
-
-.brand-cards {
-  display:flex;
-  flex-direction:column;
-  gap:20px;
-}
-
-.brand-card {
-  border:1px solid #ddd;
-  padding:30px;
-  border-radius:20px;
-  transition:.3s;
-  background:#fff;
-}
-
-.brand-card:hover {
-  transform:translateY(-5px);
-  border-color:#000;
-}
-
-.brand-card span {
-  color:#999;
-  font-weight:900;
-}
-
-.brand-card h3 {
   margin-top:10px;
-  font-size:24px;
-  font-weight:900;
 }
 
-.brand-card p {
-  margin-top:10px;
-  color:#666;
-  line-height:1.7;
-  font-weight:600;
-}
-
-/* ================= 시설 ================= */
+/* 시설투어 */
 .facility-section {
   background:#000;
   color:#fff;
@@ -360,17 +273,25 @@ body.loaded .main-content {
 }
 
 .facility-wrap {
-  max-width:1280px;
+  max-width:1380px;
   margin:auto;
 }
 
 .facility-title {
-  margin-bottom:80px;
+  margin-bottom:90px;
+}
+
+.facility-title .eyebrow {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:18px;
 }
 
 .facility-title h2 {
   font-size:58px;
-  line-height:1.1;
+  line-height:1.05;
   font-weight:900;
 }
 
@@ -380,20 +301,38 @@ body.loaded .main-content {
 }
 
 .facility-title p {
-  margin-top:24px;
   color:#aaa;
   font-size:17px;
-  line-height:1.8;
+  line-height:1.9;
+  margin-top:24px;
+  max-width:760px;
+}
+
+.facility-list {
+  display:flex;
+  flex-direction:column;
+  gap:90px;
 }
 
 .facility-item {
   display:grid;
-  grid-template-columns:1fr 1.3fr;
-  gap:50px;
+  grid-template-columns:0.8fr 1.4fr;
+  gap:60px;
   align-items:center;
-  margin-bottom:90px;
   padding-bottom:70px;
   border-bottom:1px solid #222;
+}
+
+.facility-item:nth-child(even) {
+  grid-template-columns:1.4fr 0.8fr;
+}
+
+.facility-item:nth-child(even) .facility-text {
+  order:2;
+}
+
+.facility-item:nth-child(even) .facility-slider {
+  order:1;
 }
 
 .facility-text .small {
@@ -405,41 +344,36 @@ body.loaded .main-content {
 }
 
 .facility-text h3 {
-  font-size:34px;
+  font-size:36px;
   line-height:1.25;
   font-weight:900;
-  margin-bottom:20px;
+  margin-bottom:22px;
+  transition:0.3s;
+}
+
+.facility-text h3:hover,
+.facility-text h3:hover span {
+  color:var(--yellow);
 }
 
 .facility-text p {
   color:#aaa;
   font-size:15px;
-  line-height:1.8;
+  line-height:1.9;
 }
 
 .facility-slider {
-  height:340px;
+  position:relative;
+  height:360px;
   overflow:hidden;
-  border-radius:24px;
   background:#111;
 }
 
 .facility-track {
   display:flex;
+  width:100%;
   height:100%;
   animation:slideMove 18s infinite;
-}
-
-.facility-slider.one .facility-track {
-  animation:none;
-}
-
-.facility-slider.three .facility-track {
-  animation:slideMoveThree 14s infinite;
-}
-
-.facility-slider.nine .facility-track {
-  animation:slideMoveNine 30s infinite;
 }
 
 .facility-slide {
@@ -451,14 +385,14 @@ body.loaded .main-content {
   width:100%;
   height:100%;
   object-fit:cover;
-  filter:grayscale(100%) brightness(.75);
-  transition:.5s;
+  filter:grayscale(100%) brightness(0.72);
+  transition:0.5s;
   cursor:pointer;
 }
 
-.facility-slider:hover img,
-.facility-item.color-on img {
+.facility-slider:hover img {
   filter:grayscale(0%) brightness(1);
+  transform:scale(1.04);
 }
 
 @keyframes slideMove {
@@ -469,11 +403,23 @@ body.loaded .main-content {
   100% {transform:translateX(0);}
 }
 
+.facility-slider.one .facility-track {
+  animation:none;
+}
+
+.facility-slider.three .facility-track {
+  animation:slideMoveThree 14s infinite;
+}
+
 @keyframes slideMoveThree {
   0%,28% {transform:translateX(0);}
   34%,62% {transform:translateX(-100%);}
   68%,94% {transform:translateX(-200%);}
   100% {transform:translateX(0);}
+}
+
+.facility-slider.nine .facility-track {
+  animation:slideMoveNine 30s infinite;
 }
 
 @keyframes slideMoveNine {
@@ -489,64 +435,77 @@ body.loaded .main-content {
   100% {transform:translateX(0);}
 }
 
-/* ================= 필라테스 / 올패스 / 운영시간 공통 ================= */
-.pilates-section,
-.pass-section,
-.hours-section {
+/* 필라테스 */
+.pilates-section {
   background:#000;
   color:#fff;
   padding:150px 20px;
+  position:relative;
 }
 
-.pilates-wrap,
-.pass-list,
-.hours-wrap {
+.pilates-wrap {
   max-width:1280px;
   margin:auto;
 }
 
-.pilates-head,
-.pass-title,
-.hours-left {
-  max-width:900px;
-  margin:0 auto 80px;
-  text-align:center;
+.pilates-carousel {
+  position:relative;
+  max-width:1280px;
+  margin:auto;
+  overflow:visible;
+  padding:0 110px;
 }
 
-.pilates-head h2,
-.pass-title h2,
-.hours-left h2 {
-  font-size:58px;
-  line-height:1.15;
+.pilates-window {
+  overflow:hidden;
+}
+
+.pilates-track {
+  display:flex;
+  transition:0.65s ease;
+}
+
+.pilates-slide {
+  min-width:100%;
+}
+
+.pilates-head {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.pilates-head .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.pilates-head h2 {
+  font-size:60px;
   font-weight:900;
 }
 
-.pilates-head h2::after,
-.pass-title h2::after,
-.hours-left h2::after {
-  content:".";
-  color:var(--yellow);
-}
-
-.pilates-head p,
-.pass-title p,
-.hours-left p {
-  margin-top:24px;
+.pilates-head p {
   color:#aaa;
   font-size:17px;
-  line-height:1.8;
+  line-height:1.9;
+  margin-top:24px;
 }
 
 .pilates-info {
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  margin-top:60px;
+  grid-template-columns:repeat(3, 1fr);
   border-top:1px solid #222;
   border-bottom:1px solid #222;
+  margin:70px 0;
 }
 
 .pilates-info div {
   padding:30px 20px;
+  text-align:center;
   border-right:1px solid #222;
 }
 
@@ -556,11 +515,11 @@ body.loaded .main-content {
 
 .pilates-info span {
   display:block;
-  color:#777;
+  color:#666;
   font-size:12px;
   font-weight:900;
   letter-spacing:3px;
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
 
 .pilates-info strong {
@@ -572,8 +531,6 @@ body.loaded .main-content {
   background:#fff;
   color:#111;
   padding:60px;
-  border-radius:30px;
-  overflow-x:auto;
 }
 
 .schedule-top {
@@ -619,12 +576,17 @@ body.loaded .main-content {
   line-height:1.45;
 }
 
+.schedule-table tr:last-child td {
+  border-bottom:3px solid #111;
+}
+
 .schedule-label {
   background:#000 !important;
   color:#fff !important;
   writing-mode:vertical-rl;
   text-orientation:upright;
   letter-spacing:8px;
+  font-size:18px !important;
   width:58px;
 }
 
@@ -635,25 +597,71 @@ body.loaded .main-content {
   width:90px;
 }
 
+.empty {
+  color:#ddd;
+  font-weight:400;
+}
+
 .schedule-note {
-  margin-top:20px;
+  margin-top:22px;
   color:#666;
   font-size:13px;
   line-height:1.7;
   font-weight:700;
 }
 
-/* ================= 올패스 ================= */
+/* 올패스 */
+.pass-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.pass-title {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.pass-title .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.pass-title h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+
+.pass-title p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+
 .pass-list {
+  max-width:1280px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:0;
   border-top:1px solid #222;
 }
 
 .pass-card {
   display:grid;
   grid-template-columns:220px 1fr;
-  gap:30px;
-  padding:42px 0;
   border-bottom:1px solid #222;
+  padding:42px 0;
+}
+
+.pass-left {
+  padding-right:30px;
 }
 
 .pass-name {
@@ -662,22 +670,41 @@ body.loaded .main-content {
 }
 
 .pass-desc {
-  margin-top:8px;
   color:#777;
+  font-size:14px;
+  margin-top:8px;
   font-weight:700;
 }
 
 .pass-use {
   display:inline-block;
-  margin-top:18px;
-  color:#aaa;
+  margin-top:20px;
   font-size:12px;
+  color:#aaa;
   font-weight:900;
+  letter-spacing:1px;
 }
 
 .pass-right h4 {
-  margin-bottom:20px;
   font-size:20px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+
+.branch-area {
+  display:grid;
+  gap:14px;
+}
+
+.branch-row {
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:20px;
+}
+
+.region {
+  color:inherit;
+  font-size:13px;
   font-weight:900;
 }
 
@@ -691,14 +718,16 @@ body.loaded .main-content {
   color:#aaa;
   font-size:14px;
   font-weight:700;
+  transition:0.25s;
 }
 
+.branches span:hover,
 .branches span.highlight {
   color:var(--yellow);
   font-weight:900;
 }
 
-/* ================= 트레이너 ================= */
+/* 트레이너 */
 .trainer-section {
   background:#fff;
   padding:150px 0;
@@ -708,23 +737,26 @@ body.loaded .main-content {
   text-align:center;
   font-size:60px;
   font-weight:900;
+  margin-bottom:18px;
 }
 
 .trainer-sub {
   text-align:center;
   color:#777;
-  margin:18px 0 80px;
+  font-size:16px;
   font-weight:700;
+  margin-bottom:80px;
 }
 
 .trainer-grid {
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(4, 1fr);
+  width:100%;
   border-top:1px solid #111;
 }
 
 .trainer-card {
-  height:620px;
+  height:660px;
   position:relative;
   overflow:hidden;
   background:#000;
@@ -736,41 +768,127 @@ body.loaded .main-content {
   width:100%;
   height:100%;
   object-fit:cover;
-  transition:.4s;
+  transition:0.45s;
 }
 
 .trainer-card:hover img {
   transform:scale(1.05);
-  opacity:.55;
+  opacity:0.28;
 }
 
 .trainer-basic {
   position:absolute;
-  left:28px;
-  bottom:28px;
+  left:34px;
+  bottom:34px;
   color:#fff;
   z-index:2;
-  text-shadow:0 8px 20px rgba(0,0,0,.8);
 }
 
 .trainer-basic h3 {
-  font-size:28px;
+  font-size:32px;
   font-weight:900;
 }
 
 .trainer-basic p {
-  margin-top:6px;
+  margin-top:8px;
   color:#ddd;
+  font-size:15px;
   font-weight:800;
 }
 
-/* ================= 운영시간 ================= */
+.trainer-detail {
+  position:absolute;
+  inset:0;
+  padding:44px 34px;
+  color:#fff;
+  opacity:0;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  transition:0.35s;
+  background:linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.92));
+}
+
+.trainer-card:hover .trainer-detail {
+  opacity:1;
+}
+
+.trainer-detail .tag {
+  color:#fff;
+  font-size:12px;
+  letter-spacing:3px;
+  font-weight:900;
+  margin-bottom:16px;
+}
+
+.trainer-detail h3 {
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+
+.trainer-detail h4 {
+  font-size:15px;
+  font-weight:900;
+  border-bottom:1px solid rgba(255,255,255,0.35);
+  padding-bottom:8px;
+  margin:18px 0 10px;
+}
+
+.trainer-detail li {
+  list-style:none;
+  color:#ddd;
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* 운영시간 */
+.hours-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.hours-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+
+.hours-left {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.hours-left .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.hours-left h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+
+.hours-left p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+
 .always-open {
   display:inline-block;
   margin-top:30px;
-  border-bottom:3px solid #fff;
+  color:#fff;
   font-size:18px;
   font-weight:900;
+  border-bottom:3px solid #fff;
 }
 
 .hours-grid {
@@ -782,16 +900,11 @@ body.loaded .main-content {
 
 .hour-card {
   padding:50px;
+  min-height:240px;
   border-right:1px solid #222;
 }
 
 .hour-card:nth-child(2) {
-  border-right:none;
-}
-
-.hour-card.full {
-  grid-column:1 / span 2;
-  border-top:1px solid #222;
   border-right:none;
 }
 
@@ -800,24 +913,42 @@ body.loaded .main-content {
   font-size:14px;
   font-weight:900;
   letter-spacing:3px;
-  margin-bottom:24px;
+  margin-bottom:28px;
 }
 
 .hour-card strong {
   display:block;
-  font-size:44px;
+  font-size:48px;
   font-weight:900;
 }
 
-.hour-card span,
-.hour-card p {
+.hour-card span {
   display:block;
   margin-top:16px;
   color:#aaa;
-  line-height:1.8;
+  font-size:16px;
+  font-weight:700;
 }
 
-/* ================= 위치 ================= */
+.hour-card.full {
+  grid-column:1 / span 2;
+  border-top:1px solid #222;
+  border-right:none;
+  min-height:auto;
+}
+
+.hour-card.full strong {
+  font-size:36px;
+}
+
+.hour-card.full p {
+  margin-top:18px;
+  color:#aaa;
+  line-height:1.8;
+  font-size:16px;
+}
+
+/* 위치 */
 .location {
   background:#fff;
   padding:150px 20px;
@@ -830,30 +961,29 @@ body.loaded .main-content {
 }
 
 .location-sub {
-  margin:20px 0 50px;
   color:#777;
+  margin:20px 0 50px;
   font-weight:700;
 }
 
 .address {
-  margin-bottom:60px;
   font-size:20px;
   font-weight:800;
+  margin-bottom:60px;
 }
 
 .map-container {
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr;
+  gap:60px;
   max-width:1280px;
   margin:auto;
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:60px;
 }
 
 .map-box {
   height:420px;
   overflow:hidden;
   border:1px solid #ddd;
-  border-radius:28px;
 }
 
 .map-info {
@@ -875,7 +1005,6 @@ body.loaded .main-content {
   display:inline-block;
   padding:14px 28px;
   border:1px solid #000;
-  border-radius:999px;
   text-decoration:none;
   color:#000;
   font-weight:900;
@@ -886,131 +1015,107 @@ body.loaded .main-content {
   color:#fff;
 }
 
-/* ================= FAQ NEW ================= */
-.faq-new-section {
-  background:#fff;
-  padding:0 20px 130px;
-}
-
-.faq-new-hero {
+/* FAQ */
+.faq-section {
   background:#000;
-  margin:0 -20px 70px;
-  padding:110px 20px 105px;
-  text-align:center;
   color:#fff;
+  padding:150px 20px;
 }
 
-.faq-new-hero h2 {
-  font-size:42px;
+.faq-wrap {
+  max-width:1000px;
+  margin:auto;
+}
+
+.faq-title {
+  text-align:center;
+  margin-bottom:70px;
+}
+
+.faq-title h2 {
+  font-size:60px;
   font-weight:900;
-  margin-bottom:34px;
-  letter-spacing:-0.04em;
 }
 
-.faq-new-search {
-  max-width:650px;
-  height:58px;
-  margin:auto;
-  background:#fff;
-  border-radius:999px;
-  display:flex;
-  align-items:center;
-  padding:0 25px;
-}
-
-.faq-new-search input {
-  flex:1;
-  border:none;
-  outline:none;
-  font-size:15px;
-  font-weight:600;
-  color:#111;
-}
-
-.faq-new-search span {
-  font-size:26px;
+.faq-title p {
   color:#777;
+  margin-top:20px;
+  font-weight:700;
 }
 
-.faq-new-wrap {
-  max-width:1280px;
-  margin:auto;
+.faq-search input {
+  width:100%;
+  padding:18px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  margin-bottom:25px;
 }
 
-.faq-new-category {
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:28px 34px;
-  margin-bottom:65px;
+.faq-keywords {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:40px;
 }
 
-.faq-new-category button {
-  height:62px;
-  border:1.5px solid #111;
-  border-radius:999px;
-  background:#fff;
-  color:#111;
-  font-size:15px;
-  font-weight:800;
+.faq-keywords button {
+  padding:10px 18px;
+  border:1px solid #444;
+  background:#111;
+  color:#fff;
+  font-weight:900;
   cursor:pointer;
   transition:.25s;
 }
 
-.faq-new-category button:hover,
-.faq-new-category button.active {
-  background:#000;
-  color:#fff;
+.faq-keywords button:hover {
+  background:#fff;
+  color:#000;
 }
 
-.faq-new-list {
-  max-width:900px;
-  margin:auto;
-  border-top:2px solid #111;
-}
-
-.faq-new-item {
-  border-bottom:1px solid #ddd;
-  padding:24px 0;
+.faq-item {
+  border-bottom:1px solid #222;
+  padding:22px 0;
   cursor:pointer;
 }
 
-.faq-new-q {
+.faq-q {
   display:flex;
   justify-content:space-between;
-  gap:20px;
   font-weight:900;
   font-size:18px;
 }
 
-.faq-new-q span {
-  font-size:24px;
-  transition:.3s;
-}
-
-.faq-new-a {
+.faq-a {
   max-height:0;
   overflow:hidden;
-  color:#555;
-  font-size:15px;
+  color:#aaa;
+  font-size:14px;
   line-height:1.8;
-  font-weight:700;
   transition:.35s;
 }
 
-.faq-new-item.active .faq-new-a {
-  max-height:220px;
-  margin-top:14px;
+.faq-item.active .faq-a {
+  max-height:200px;
+  margin-top:12px;
 }
 
-.faq-new-item.active .faq-new-q span {
+.faq-q span {
+  font-size:22px;
+  transition:.3s;
+}
+
+.faq-item.active .faq-q span {
   transform:rotate(45deg);
 }
 
-/* ================= 이미지 모달 ================= */
+/* 이미지 모달 */
 .image-modal {
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.92);
+  background:rgba(0,0,0,0.92);
   display:none;
   justify-content:center;
   align-items:center;
@@ -1020,60 +1125,119 @@ body.loaded .main-content {
 .image-modal img {
   max-width:90%;
   max-height:90%;
+  object-fit:contain;
+  transition:0.3s;
+  cursor:zoom-in;
 }
 
-.modal-btn,
+.image-modal.zoom img {
+  transform:scale(1.6);
+  cursor:zoom-out;
+}
+
+.modal-btn {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:60px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+  padding:10px 20px;
+}
+
+.modal-prev {
+  left:20px;
+}
+
+.modal-next {
+  right:20px;
+}
+
 .close-btn {
   position:absolute;
+  top:30px;
+  right:40px;
+  font-size:40px;
   color:#fff;
   cursor:pointer;
 }
 
-.modal-btn {
-  top:50%;
-  transform:translateY(-50%);
-  font-size:60px;
+/* 푸터 */
+footer {
+  text-align:center;
+  padding:50px;
+  color:#777;
+  background:#fff;
+  font-weight:800;
 }
 
-.modal-prev {left:20px;}
-.modal-next {right:20px;}
-
-.close-btn {
-  top:30px;
-  right:40px;
-  font-size:40px;
-}
-
-/* ================= 모바일 ================= */
+/* 모바일 */
 @media(max-width:768px){
 
-  section {scroll-margin-top:80px;}
-
-  .fade,
-  .fade.show {
-    opacity:1;
-    transform:none;
+  .main-content {
+    padding-top:125px;
   }
 
   .navbar {
-    padding:16px 18px;
-  }
-
-  .menu,
-  .download-btn {
-    display:none;
+    padding:14px 16px;
+    flex-direction:column;
+    gap:12px;
   }
 
   .logo a {
     font-size:22px;
   }
 
+  .menu {
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    justify-content:flex-start;
+    gap:14px;
+    padding:6px 0;
+    scrollbar-width:none;
+  }
+
+  .menu::-webkit-scrollbar {
+    display:none;
+  }
+
+  .menu li {
+    flex:0 0 auto;
+    margin:0;
+  }
+
+  .menu a {
+    font-size:13px;
+    white-space:nowrap;
+  }
+
+  .download-btn {
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    padding:11px;
+  }
+
+  #logo-text {
+    font-size:38px;
+  }
+
   .intro {
     height:82vh;
+    padding:0 22px;
+  }
+
+  .intro-sub {
+    font-size:11px;
+    margin-bottom:16px;
   }
 
   .intro-main {
     font-size:34px;
+    line-height:1.2;
   }
 
   .intro-desc {
@@ -1092,31 +1256,60 @@ body.loaded .main-content {
     font-size:34px;
   }
 
-  .brand-section,
+  .stat-box p {
+    font-size:13px;
+  }
+
   .facility-section,
   .pilates-section,
   .pass-section,
   .hours-section,
   .location,
-  .trainer-section {
+  .faq-section {
     padding:90px 18px;
   }
 
-  .brand-wrap,
-  .facility-item,
-  .map-container {
-    grid-template-columns:1fr;
+  .facility-title {
+    margin-bottom:55px;
   }
 
-  .brand-left h2,
   .facility-title h2,
   .pilates-head h2,
   .pass-title h2,
   .hours-left h2,
-  .title,
   .trainer-title,
-  .faq-new-hero h2 {
-    font-size:32px;
+  .title,
+  .faq-title h2 {
+    font-size:34px;
+    line-height:1.18;
+  }
+
+  .facility-title p,
+  .pilates-head p,
+  .pass-title p,
+  .hours-left p {
+    font-size:15px;
+    line-height:1.75;
+  }
+
+  .facility-list {
+    gap:60px;
+  }
+
+  .facility-item,
+  .facility-item:nth-child(even) {
+    grid-template-columns:1fr;
+    gap:26px;
+    padding-bottom:50px;
+  }
+
+  .facility-item:nth-child(even) .facility-text,
+  .facility-item:nth-child(even) .facility-slider {
+    order:initial;
+  }
+
+  .facility-text h3 {
+    font-size:27px;
   }
 
   .facility-slider {
@@ -1124,12 +1317,27 @@ body.loaded .main-content {
     border-radius:16px;
   }
 
+  .pilates-carousel {
+    padding:0;
+  }
+
+  .pilates-head {
+    margin-bottom:45px;
+  }
+
   .pilates-info {
     grid-template-columns:1fr;
+    margin:38px 0;
+  }
+
+  .pilates-info div {
+    border-right:none;
+    border-bottom:1px solid #222;
   }
 
   .schedule-wrap {
     padding:18px;
+    overflow-x:auto;
     border-radius:16px;
   }
 
@@ -1137,33 +1345,78 @@ body.loaded .main-content {
     display:block;
   }
 
+  .schedule-top h3 {
+    font-size:30px;
+    margin-bottom:12px;
+  }
+
   .schedule-table {
     min-width:820px;
   }
 
+  .pass-title {
+    margin-bottom:45px;
+  }
+
   .pass-card {
     grid-template-columns:1fr;
+    gap:22px;
+    padding:34px 0;
+  }
+
+  .pass-name {
+    font-size:28px;
+  }
+
+  .branch-row {
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .branches {
+    gap:8px 12px;
+  }
+
+  .branches span {
+    font-size:13px;
+  }
+
+  .trainer-section {
+    padding:90px 0;
+  }
+
+  .trainer-title {
+    font-size:40px;
+  }
+
+  .trainer-sub {
+    margin-bottom:45px;
+    padding:0 18px;
   }
 
   .trainer-grid {
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr;
   }
 
   .trainer-card {
-    height:300px;
+    height:520px;
   }
 
   .trainer-basic {
-    left:14px;
-    bottom:14px;
+    left:24px;
+    bottom:24px;
   }
 
   .trainer-basic h3 {
-    font-size:18px;
+    font-size:26px;
   }
 
-  .trainer-basic p {
-    font-size:11px;
+  .trainer-detail {
+    padding:34px 24px;
+  }
+
+  .trainer-detail h3 {
+    font-size:28px;
   }
 
   .hours-grid {
@@ -1182,9 +1435,23 @@ body.loaded .main-content {
     font-size:30px;
   }
 
+  .hour-card.full strong {
+    font-size:26px;
+  }
+
+  .address {
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:35px;
+  }
+
+  .map-container {
+    grid-template-columns:1fr;
+    gap:32px;
+  }
+
   .map-box {
     height:320px;
-    border-radius:18px;
   }
 
   .map-info {
@@ -1192,46 +1459,64 @@ body.loaded .main-content {
     gap:32px;
   }
 
-  .faq-new-section {
-    padding:0 18px 90px;
-  }
-
-  .faq-new-hero {
-    margin:0 -18px 50px;
-    padding:85px 18px 80px;
-  }
-
-  .faq-new-hero h2 {
-    font-size:30px;
-    margin-bottom:26px;
-  }
-
-  .faq-new-search {
-    height:52px;
-    padding:0 20px;
-  }
-
-  .faq-new-search input {
+  .typing {
     font-size:14px;
+    line-height:1.8;
   }
 
-  .faq-new-category {
-    grid-template-columns:1fr;
-    gap:16px;
-    margin-bottom:50px;
+  .faq-title {
+    margin-bottom:40px;
   }
 
-  .faq-new-category button {
-    height:58px;
-    font-size:14px;
+  .faq-search input {
+    font-size:13px;
+    padding:15px;
   }
 
-  .faq-new-q {
+  .faq-keywords {
+    gap:8px;
+  }
+
+  .faq-keywords button {
+    font-size:12px;
+    padding:9px 13px;
+  }
+
+  .faq-q {
     font-size:16px;
+    gap:15px;
   }
 
-  .faq-new-a {
-    font-size:14px;
+  .faq-a {
+    font-size:13px;
+  }
+
+  .image-modal img {
+    max-width:92%;
+    max-height:72%;
+  }
+
+  .image-modal.zoom img {
+    transform:scale(1.25);
+  }
+
+  .modal-btn {
+    font-size:38px;
+    padding:8px;
+  }
+
+  .modal-prev {
+    left:4px;
+  }
+
+  .modal-next {
+    right:4px;
+  }
+
+  .close-btn {
+    top:18px;
+    right:24px;
+    font-size:34px;
   }
 
   footer {
@@ -1241,15 +1526,366 @@ body.loaded .main-content {
 }
 
 @media(max-width:420px){
+
+  .intro-main {
+    font-size:30px;
+  }
+
   .stats-section {
     grid-template-columns:1fr;
   }
 
-  .trainer-grid {
-    grid-template-columns:1fr;
+  .facility-title h2,
+  .pilates-head h2,
+  .pass-title h2,
+  .hours-left h2,
+  .title {
+    font-size:30px;
   }
 
   .trainer-card {
-    height:450px;
+    height:480px;
   }
+
+  .schedule-wrap {
+    padding:16px;
+  }
+}
+
+/* ================= 모바일 사이드 메뉴 ================= */
+.mobile-menu-btn,
+.mobile-menu-overlay,
+.mobile-side-menu {
+  display:none;
+}
+
+@media(max-width:768px){
+
+  .navbar{
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 18px;
+  }
+
+  .menu,
+  .download-btn{
+    display:none;
+  }
+
+  .mobile-menu-btn{
+    display:flex;
+    width:44px;
+    height:44px;
+    border:1px solid #111;
+    background:#fff;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    font-weight:900;
+    cursor:pointer;
+    z-index:1002;
+  }
+
+  .mobile-menu-overlay{
+    display:block;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.55);
+    opacity:0;
+    visibility:hidden;
+    transition:0.3s;
+    z-index:1998;
+  }
+
+  .mobile-side-menu{
+    display:flex;
+    position:fixed;
+    top:0;
+    right:-82%;
+    width:82%;
+    max-width:340px;
+    height:100vh;
+    background:#fff;
+    z-index:1999;
+    padding:34px 26px;
+    flex-direction:column;
+    transition:0.35s ease;
+    box-shadow:-10px 0 40px rgba(0,0,0,0.25);
+  }
+
+  body.menu-open .mobile-menu-overlay{
+    opacity:1;
+    visibility:visible;
+  }
+
+  body.menu-open .mobile-side-menu{
+    right:0;
+  }
+
+  .mobile-side-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:42px;
+  }
+
+  .mobile-side-logo{
+    font-size:22px;
+    font-weight:900;
+    color:#000;
+  }
+
+  .mobile-close{
+    border:none;
+    background:none;
+    font-size:34px;
+    font-weight:300;
+    cursor:pointer;
+  }
+
+  .mobile-side-menu a{
+    color:#111;
+    text-decoration:none;
+    font-size:22px;
+    font-weight:900;
+    padding:17px 0;
+    border-bottom:1px solid #eee;
+  }
+
+  .mobile-side-menu a:hover{
+    color:#d3ac0f;
+  }
+
+  .mobile-side-reserve{
+    margin-top:32px;
+    background:#000;
+    color:#fff !important;
+    text-align:center;
+    padding:17px 18px !important;
+    border-bottom:none !important;
+    font-size:15px !important;
+  }
+
+  .main-content{
+    padding-top:76px;
+  }
+}
+
+
+.scroll-down{
+  cursor:pointer;
+}
+
+section{
+  scroll-margin-top:90px;
+}
+
+@media(max-width:768px){
+  section{
+    scroll-margin-top:80px;
+  }
+}
+
+
+/* ================= 로고 튜닝 (안전버전) ================= */
+
+.logo a,
+#logo-text{
+  font-style: italic;
+}
+/* 모바일에서 스크롤 시 섹션 안 보이는 문제 해결 */
+/* 모바일에서 fade 강제 표시 (안정버전) */
+@media(max-width:768px){
+
+  .fade{
+    opacity:1;
+    transform:none;
+  }
+
+  .fade.show{
+    opacity:1;
+    transform:none;
+  }
+
+}
+
+/* 모바일 시설투어 사진: 스크롤해서 보이면 컬러로 전환 */
+@media(max-width:768px){
+
+  .facility-slide img{
+  filter:grayscale(100%) brightness(0.72);
+  transition:filter 2s ease, transform 2s ease;
+}
+
+  .facility-item.color-on img{
+    filter:grayscale(0%) brightness(1);
+  }
+
+  .facility-slider:hover img{
+    transform:none;
+  }
+
+}
+/* 모바일 트레이너 사진 2열 강제 배치 */
+@media(max-width:768px){
+
+  .trainer-grid{
+    display:flex;
+    flex-wrap:wrap;
+    width:100%;
+    gap:0;
+  }
+
+  .trainer-card{
+    width:50%;
+    flex:0 0 50%;
+    height:300px;
+    border-right:1px solid #111;
+    border-bottom:1px solid #111;
+  }
+
+  .trainer-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .trainer-basic{
+    left:14px;
+    bottom:14px;
+  }
+
+  .trainer-basic h3{
+    font-size:18px;
+  }
+
+  .trainer-basic p{
+    font-size:11px;
+  }
+
+  .trainer-detail{
+    display:none;
+  }
+
+}
+
+/* 모바일 첫 화면 본문 깜빡임 방지 */
+body:not(.loaded) .main-content{
+  display:none !important;
+}
+/* ================= FAQ NEW ================= */
+
+.faq-new-section{
+  background:#fff;
+  padding:0 20px 130px;
+}
+
+.faq-new-hero{
+  background:#f6f1f1;
+  margin:0 -20px 60px;
+  padding:110px 20px 100px;
+  text-align:center;
+}
+
+.faq-new-hero h2{
+  font-size:42px;
+  font-weight:900;
+  font-style:italic;
+  margin-bottom:30px;
+}
+
+.faq-new-search{
+  max-width:650px;
+  height:58px;
+  margin:auto;
+  background:#fff;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  padding:0 25px;
+}
+
+.faq-new-search input{
+  flex:1;
+  border:none;
+  outline:none;
+  font-size:15px;
+}
+
+.faq-new-search span{
+  font-size:26px;
+  color:#777;
+}
+
+.faq-new-category{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+  margin-bottom:60px;
+}
+
+.faq-new-category button{
+  height:60px;
+  border:1.5px solid #111;
+  border-radius:999px;
+  background:#fff;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.faq-new-category button.active{
+  background:#000;
+  color:#fff;
+}
+
+.faq-new-list{
+  max-width:900px;
+  margin:auto;
+}
+
+.faq-new-item{
+  border-bottom:1px solid #ddd;
+  padding:22px 0;
+  cursor:pointer;
+}
+
+.faq-new-q{
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+  font-size:18px;
+}
+
+.faq-new-a{
+  max-height:0;
+  overflow:hidden;
+  transition:0.3s;
+  color:#555;
+}
+
+.faq-new-item.active .faq-new-a{
+  max-height:200px;
+  margin-top:10px;
+}
+
+.faq-new-item.active span{
+  transform:rotate(45deg);
+}
+
+/* 모바일 */
+@media(max-width:768px){
+
+  .faq-new-hero{
+    padding:80px 20px;
+  }
+
+  .faq-new-hero h2{
+    font-size:28px;
+  }
+
+  .faq-new-category{
+    grid-template-columns:1fr;
+  }
+
 }

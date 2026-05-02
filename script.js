@@ -49,23 +49,33 @@ if(logo){
           fadeIn();
           startTyping();
           observeCounter();
-          startBrandTyping(); // 👈 추가
+          startBrandTyping();
+          observeFacilityColor();
         },600);
 
       },500);
     }
   },60);
+}else{
+  document.body.classList.add("loaded");
+  fadeIn();
+  startTyping();
+  observeCounter();
+  startBrandTyping();
+  observeFacilityColor();
 }
 
 
 /* ================= fade 애니메이션 ================= */
 function fadeIn(){
   const els=document.querySelectorAll('.fade');
+
   const observer=new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       entry.target.classList.toggle('show', entry.isIntersecting);
     });
   },{threshold:0.2});
+
   els.forEach(el=>observer.observe(el));
 }
 
@@ -101,7 +111,6 @@ function startCounter(){
 
 function observeCounter(){
   const statsSection = document.querySelector('.stats-section');
-
   if(!statsSection) return;
 
   const observer = new IntersectionObserver((entries)=>{
@@ -116,7 +125,7 @@ function observeCounter(){
 }
 
 
-/* ================= 타이핑 안내 ================= */
+/* ================= 위치 타이핑 안내 ================= */
 function startTyping(){
   const content=` 
 주차 안내
@@ -143,13 +152,13 @@ function startTyping(){
       setTimeout(type,20);
     }
   }
+
   type();
 }
 
 
-/* ================= 브랜드 타이핑 (핵심) ================= */
+/* ================= 브랜드 타이핑 ================= */
 function startBrandTyping(){
-
   const brandHighlight = document.querySelector(".brand-highlight");
   if(!brandHighlight) return;
 
@@ -178,11 +187,94 @@ function startBrandTyping(){
       setTimeout(type, speed);
 
     }else{
-      brandHighlight.classList.add("typing");
+      brandHighlight.classList.remove("typing");
     }
   }
 
   type();
+}
+
+
+/* ================= 모바일 시설투어 사진 흑백 → 컬러 ================= */
+function observeFacilityColor(){
+  const items = document.querySelectorAll(".facility-item");
+  if(!items.length) return;
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("color-on");
+      }else{
+        entry.target.classList.remove("color-on");
+      }
+    });
+  },{
+    threshold:0.35
+  });
+
+  items.forEach(item=>{
+    observer.observe(item);
+  });
+}
+
+
+/* ================= FAQ 클릭 / 검색 / 카테고리 ================= */
+const faqItems = document.querySelectorAll(".faq-new-item");
+const faqButtons = document.querySelectorAll(".faq-new-category button");
+const faqSearch = document.querySelector(".faq-new-search input");
+
+faqItems.forEach(item=>{
+  item.addEventListener("click", function(){
+    this.classList.toggle("active");
+  });
+});
+
+faqButtons.forEach(btn=>{
+  btn.addEventListener("click", function(){
+
+    faqButtons.forEach(b=>b.classList.remove("active"));
+    this.classList.add("active");
+
+    const category = this.dataset.category;
+
+    faqItems.forEach(item=>{
+      const itemCategory = item.dataset.category;
+
+      item.classList.remove("active");
+      item.classList.remove("faq-dim");
+
+      if(category === "all" || itemCategory === category){
+        item.style.display = "block";
+      }else{
+        item.style.display = "none";
+      }
+    });
+  });
+});
+
+if(faqSearch){
+  faqSearch.addEventListener("input", function(){
+    const keyword = this.value.trim().toLowerCase();
+
+    faqItems.forEach(item=>{
+      const text = item.innerText.toLowerCase();
+
+      item.style.display = "block";
+
+      if(keyword === ""){
+        item.classList.remove("faq-dim");
+        item.classList.remove("active");
+        return;
+      }
+
+      if(text.includes(keyword)){
+        item.classList.remove("faq-dim");
+      }else{
+        item.classList.add("faq-dim");
+        item.classList.remove("active");
+      }
+    });
+  });
 }
 
 
@@ -249,16 +341,12 @@ if(images.length){
 
 }
 
-});
 
 /* ================= 모바일 사이드 메뉴 생성 ================= */
-document.addEventListener("DOMContentLoaded", function(){
+const navbar = document.querySelector(".navbar");
+const menu = document.querySelector(".menu");
 
-  const navbar = document.querySelector(".navbar");
-  const menu = document.querySelector(".menu");
-
-  if(!navbar || !menu) return;
-  if(document.querySelector(".mobile-menu-btn")) return;
+if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
 
   const menuBtn = document.createElement("button");
   menuBtn.className = "mobile-menu-btn";
@@ -277,7 +365,6 @@ document.addEventListener("DOMContentLoaded", function(){
     </div>
 
     <a href="#about">센터 소개</a>
-    <a href="#history">브랜드소개</a>
     <a href="#facility">시설 투어</a>
     <a href="#pilates">필라테스 안내</a>
     <a href="#pass">올패스 안내</a>
@@ -313,20 +400,6 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   });
 
-});
-/* 모바일 시설투어 사진 스크롤 컬러 전환 */
-const facilityColorItems = document.querySelectorAll(".facility-item");
+}
 
-const facilityColorObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("color-on");
-    }
-  });
-},{
-  threshold:0.35
-});
-
-facilityColorItems.forEach(item=>{
-  facilityColorObserver.observe(item);
 });

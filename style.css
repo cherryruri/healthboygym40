@@ -1694,3 +1694,15 @@ section{
 #logo-text{
   font-style: italic;
 }
+/* 모바일에서 스크롤 시 섹션 안 보이는 문제 해결 */
+@media(max-width:768px){
+  .fade{
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .fade.show{
+    opacity:1 !important;
+    transform:none !important;
+  }
+}

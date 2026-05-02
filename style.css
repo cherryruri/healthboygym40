@@ -1727,3 +1727,41 @@ section{
   }
 
 }
+/* 모바일 트레이너 사진 2열 배치 */
+@media(max-width:768px){
+
+  .trainer-grid{
+    grid-template-columns:repeat(2, 1fr);
+    gap:0;
+  }
+
+  .trainer-card{
+    height:300px;
+    border-right:1px solid #111;
+    border-bottom:1px solid #111;
+  }
+
+  .trainer-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .trainer-basic{
+    left:14px;
+    bottom:14px;
+  }
+
+  .trainer-basic h3{
+    font-size:18px;
+  }
+
+  .trainer-basic p{
+    font-size:11px;
+  }
+
+  .trainer-detail{
+    display:none;
+  }
+
+}

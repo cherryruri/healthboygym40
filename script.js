@@ -230,3 +230,67 @@ if(images.length){
 }
 
 });
+
+/* ================= 모바일 사이드 메뉴 생성 ================= */
+document.addEventListener("DOMContentLoaded", function(){
+
+  const navbar = document.querySelector(".navbar");
+  const menu = document.querySelector(".menu");
+
+  if(!navbar || !menu) return;
+  if(document.querySelector(".mobile-menu-btn")) return;
+
+  const menuBtn = document.createElement("button");
+  menuBtn.className = "mobile-menu-btn";
+  menuBtn.innerHTML = "☰";
+
+  const overlay = document.createElement("div");
+  overlay.className = "mobile-menu-overlay";
+
+  const sideMenu = document.createElement("div");
+  sideMenu.className = "mobile-side-menu";
+
+  sideMenu.innerHTML = `
+    <div class="mobile-side-top">
+      <div class="mobile-side-logo">HEALTHBOYGYM</div>
+      <button class="mobile-close">×</button>
+    </div>
+
+    <a href="#about">센터 소개</a>
+    <a href="#history">브랜드소개</a>
+    <a href="#facility">시설 투어</a>
+    <a href="#pilates">필라테스 안내</a>
+    <a href="#pass">올패스 안내</a>
+    <a href="#trainer">트레이너 소개</a>
+    <a href="#hours">운영 시간</a>
+    <a href="#location">오시는 길</a>
+    <a href="#faq">FAQ</a>
+
+    <a class="mobile-side-reserve" href="https://map.naver.com" target="_blank">
+      네이버 문의 및 예약 바로가기
+    </a>
+  `;
+
+  navbar.appendChild(menuBtn);
+  document.body.appendChild(overlay);
+  document.body.appendChild(sideMenu);
+
+  menuBtn.addEventListener("click", function(){
+    document.body.classList.add("menu-open");
+  });
+
+  overlay.addEventListener("click", function(){
+    document.body.classList.remove("menu-open");
+  });
+
+  sideMenu.querySelector(".mobile-close").addEventListener("click", function(){
+    document.body.classList.remove("menu-open");
+  });
+
+  sideMenu.querySelectorAll("a").forEach(link=>{
+    link.addEventListener("click", function(){
+      document.body.classList.remove("menu-open");
+    });
+  });
+
+});

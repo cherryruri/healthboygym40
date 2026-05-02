@@ -1992,3 +1992,38 @@ body:not(.loaded) .main-content{
     filter:grayscale(0%) brightness(1);
   }
 }
+/* ================= 모바일 시설투어 흑백 → 컬러 확실히 적용 ================= */
+.facility-item.color-on .facility-slide img{
+  filter:grayscale(0%) brightness(1) !important;
+  transform:scale(1.02);
+}
+
+/* 모바일에서는 hover 효과 때문에 꼬이지 않게 */
+@media(max-width:768px){
+  .facility-slider:hover img{
+    filter:grayscale(100%) brightness(0.72);
+    transform:none;
+  }
+
+  .facility-item.color-on .facility-slide img{
+    filter:grayscale(0%) brightness(1) !important;
+    transform:scale(1.02);
+  }
+}
+
+/* ================= FAQ 클릭 잘 되게 보정 ================= */
+.faq-new-item,
+.faq-new-q,
+.faq-new-category button{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+
+.faq-new-item{
+  position:relative;
+  z-index:1;
+}
+
+.faq-new-q{
+  cursor:pointer;
+}

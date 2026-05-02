@@ -1686,34 +1686,10 @@ section{
   }
 }
 
-.logo a,
-#logo-text{
-  display:inline-block;
-  transform: rotate(-3deg);
-}
+
 /* ================= 로고 튜닝 (안전버전) ================= */
 
-/* 상단 로고 살짝 기울이기 */
-.logo{
-  display:inline-block;
-  transform:rotate(-3deg);
-}
-
-/* 로딩 로고 살짝 기울이기 */
+.logo a,
 #logo-text{
-  display:inline-block;
-  transform:rotate(-3deg);
-}
-
-/* 모바일 로딩 로고 크기 */
-@media(max-width:768px){
-  #logo-text{
-    font-size:42px;
-  }
-}
-
-@media(max-width:420px){
-  #logo-text{
-    font-size:34px;
-  }
+  font-style: italic;
 }

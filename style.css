@@ -1918,3 +1918,43 @@ body:not(.loaded) .main-content{
   0%,70%{opacity:1;}
   71%,100%{opacity:0;}
 }
+
+
+@media(max-width:768px){
+
+  .brand-section{
+    padding:70px 18px 80px;
+  }
+
+  .brand-big-text{
+    font-size:52px;
+    width:100%;
+    max-width:100%;
+    overflow:visible;
+    white-space:nowrap;
+    letter-spacing:-0.08em;
+    margin:36px auto 44px;
+    background-size:260%;
+  }
+
+  .brand-text-block{
+    padding:0;
+    max-width:100%;
+  }
+
+  .brand-text-block p{
+    font-size:15px;
+    line-height:1.85;
+    text-align:center;
+    word-break:keep-all;
+    overflow-wrap:break-word;
+  }
+
+  .brand-text-block .brand-highlight{
+    font-size:18px;
+    line-height:1.75;
+    text-align:center;
+    word-break:keep-all;
+    margin-top:34px;
+  }
+}

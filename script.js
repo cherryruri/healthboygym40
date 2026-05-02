@@ -153,43 +153,36 @@ function startBrandTyping(){
   const brandHighlight = document.querySelector(".brand-highlight");
   if(!brandHighlight) return;
 
-  const text = brandHighlight.innerHTML.replace(/<br\s*\/?>/gi, "\n").trim();
+  const text = brandHighlight.innerText
+    .split("\n")
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .join("\n");
+
   brandHighlight.innerHTML = "";
+  brandHighlight.classList.add("show","typing");
 
-  const observer = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
+  let i = 0;
 
-        brandHighlight.classList.add("show","typing");
+  function type(){
+    if(i < text.length){
 
-        let i = 0;
-
-        function type(){
-          if(i < text.length){
-
-            if(text[i] === "\n"){
-              brandHighlight.innerHTML += "<br>";
-            }else{
-              brandHighlight.innerHTML += text[i];
-            }
-
-            i++;
-
-            const speed = 18 + Math.random()*20;
-            setTimeout(type, speed);
-
-          }else{
-            brandHighlight.classList.add("typing");
-          }
-        }
-
-        type();
-        observer.disconnect();
+      if(text[i] === "\n"){
+        brandHighlight.innerHTML += "<br>";
+      }else{
+        brandHighlight.innerHTML += text[i];
       }
-    });
-  },{threshold:0.6});
 
-  observer.observe(brandHighlight);
+      i++;
+      const speed = 22 + Math.random()*18;
+      setTimeout(type, speed);
+
+    }else{
+      brandHighlight.classList.add("typing");
+    }
+  }
+
+  type();
 }
 
 

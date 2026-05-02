@@ -1695,16 +1695,76 @@ section{
   font-style: italic;
 }
 /* 모바일에서 스크롤 시 섹션 안 보이는 문제 해결 */
+/* 모바일에서 fade 강제 표시 (안정버전) */
 @media(max-width:768px){
 
   .fade{
-    opacity:1 !important;
-    transform:none !important;
+    opacity:1;
+    transform:none;
   }
 
   .fade.show{
-    opacity:1 !important;
-    transform:none !important;
+    opacity:1;
+    transform:none;
   }
 
+}
+
+/* 모바일 시설투어 사진: 스크롤해서 보이면 컬러로 전환 */
+@media(max-width:768px){
+
+  .facility-slide img{
+    filter:grayscale(100%) brightness(0.72);
+    transition:filter 0.7s ease, transform 0.7s ease;
+  }
+
+  .facility-item.color-on img{
+    filter:grayscale(0%) brightness(1);
+  }
+
+  .facility-slider:hover img{
+    transform:none;
+  }
+
+}
+
+.facility-tabs{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-bottom:60px;
+  border-bottom:1px solid #222;
+}
+
+.tab-btn{
+  background:none;
+  border:none;
+  color:#777;
+  font-size:16px;
+  font-weight:900;
+  padding:12px 0;
+  cursor:pointer;
+  position:relative;
+}
+
+.tab-btn.active{
+  color:var(--yellow);
+}
+
+.tab-btn.active::after{
+  content:"";
+  position:absolute;
+  bottom:-1px;
+  left:0;
+  width:100%;
+  height:2px;
+  background:var(--yellow);
+}
+
+.tab-content{
+  display:none;
+}
+
+.tab-content.active{
+  display:block;
 }

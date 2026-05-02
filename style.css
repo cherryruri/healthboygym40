@@ -1727,15 +1727,19 @@ section{
   }
 
 }
-/* 모바일 트레이너 사진 2열 배치 */
+/* 모바일 트레이너 사진 2열 강제 배치 */
 @media(max-width:768px){
 
   .trainer-grid{
-    grid-template-columns:repeat(2, 1fr);
+    display:flex;
+    flex-wrap:wrap;
+    width:100%;
     gap:0;
   }
 
   .trainer-card{
+    width:50%;
+    flex:0 0 50%;
     height:300px;
     border-right:1px solid #111;
     border-bottom:1px solid #111;

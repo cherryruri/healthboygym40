@@ -1,0 +1,231 @@
+/* 🔥 프리미엄 센터 소개 */
+.intro {
+  height:100vh;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  overflow:hidden;
+}
+
+/* 배경 이미지 + 어둡게 */
+.intro::before {
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)),
+    url('gym.jpg') center/cover no-repeat;
+  z-index:0;
+  transform:scale(1.1);
+  animation:zoomBg 8s ease forwards;
+}
+
+/* 배경 줌 */
+@keyframes zoomBg {
+  from {transform:scale(1.2);}
+  to {transform:scale(1);}
+}
+
+/* 내용 */
+.intro-content {
+  position:relative;
+  z-index:1;
+  color:#fff;
+  max-width:800px;
+  padding:0 20px;
+}
+
+/* 작은 텍스트 */
+.intro-sub {
+  font-size:14px;
+  letter-spacing:4px;
+  color:#bbb;
+  margin-bottom:20px;
+  opacity:0;
+  transform:translateY(20px);
+  animation:fadeUp 1s forwards;
+}
+
+/* 큰 타이틀 */
+.intro-title {
+  font-size:64px;
+  font-weight:900;
+  line-height:1.2;
+  margin-bottom:25px;
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp 1s forwards;
+  animation-delay:0.3s;
+}
+
+/* 강조 컬러 */
+.highlight {
+  color:#d3ac0f;
+}
+
+/* 설명 */
+.intro-desc {
+  font-size:18px;
+  color:#ccc;
+  line-height:1.7;
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp 1s forwards;
+  animation-delay:0.6s;
+}
+
+/* 애니메이션 */
+@keyframes fadeUp {
+  to {
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+
+/* ===== 애플식 가로 연혁 ===== */
+.history-section {
+  height: 400vh; /* 스크롤 길이 */
+  background:#000;
+}
+
+.history-sticky {
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+}
+
+.history-track {
+  display:flex;
+  height:100%;
+  will-change: transform;
+}
+
+.history-card {
+  min-width:100vw;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-start;
+  padding:0 10%;
+  color:#fff;
+}
+
+.history-card h2 {
+  font-size:80px;
+  font-weight:900;
+  margin-bottom:20px;
+}
+
+.history-card.highlight h2 {
+  color:#fff200;
+}
+
+.history-card p {
+  font-size:20px;
+  color:#aaa;
+  max-width:600px;
+  line-height:1.8;
+}
+/* 🔥 센터소개 (intro 업그레이드) */
+.intro {
+  text-align:left;
+}
+
+.intro-inner {
+  max-width:600px;
+}
+
+.intro-sub {
+  color:#e7c128;
+  font-size:14px;
+  letter-spacing:5px;
+  margin-bottom:10px;
+}
+
+.intro-main {
+  font-size:40px;
+  font-weight:900;
+  line-height:2.3;
+}
+
+.intro-desc {
+  margin-top:30px;
+  color:#ccc;
+  font-size:10px;
+  line-height:1.6;
+}
+
+.faq-section {
+  background:#fff;
+  padding:150px 20px;
+}
+
+.faq-wrap {
+  max-width:900px;
+  margin:auto;
+}
+
+.faq-title {
+  text-align:center;
+  margin-bottom:60px;
+}
+
+.faq-title h2 {
+  font-size:48px;
+  font-weight:900;
+}
+
+.faq-title p {
+  color:#777;
+  margin-top:15px;
+}
+
+.faq-search input {
+  width:100%;
+  padding:16px;
+  border:1px solid #ddd;
+  font-size:14px;
+  margin-bottom:20px;
+}
+
+.faq-keywords {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:30px;
+}
+
+.faq-keywords button {
+  padding:10px 16px;
+  border:1px solid #000;
+  background:#fff;
+  cursor:pointer;
+  font-weight:800;
+}
+
+.faq-keywords button:hover {
+  background:#000;
+  color:#fff;
+}
+
+.faq-item {
+  border-bottom:1px solid #eee;
+  padding:20px 0;
+}
+
+.faq-item h3 {
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.faq-item p {
+  color:#666;
+  font-size:14px;
+}

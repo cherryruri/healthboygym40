@@ -1,0 +1,2022 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>헬스보이짐</title>
+
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {margin:0; padding:0; box-sizing:border-box;}
+html {scroll-behavior:smooth;}
+body {
+  
+  font-family:'Pretendard', Arial, sans-serif;
+  background:#fff;
+  color:#111;
+  letter-spacing:-0.04em;
+}
+:root {--yellow:#fff200;}
+
+header {
+  background:#fff;
+  position:fixed;
+  width:100%;
+  top:0;
+  z-index:1000;
+  border-bottom:1px solid #eee;
+}
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:1380px;
+  margin:auto;
+  padding:24px 20px;
+}
+.logo a {
+  color:#000;
+  font-weight:900;
+  font-size:28px;
+  text-decoration:none;
+}
+.menu {display:flex; list-style:none;}
+.menu li {margin:0 13px;}
+.menu a {
+  color:#111;
+  font-size:14px;
+  font-weight:900;
+  text-decoration:none;
+  position:relative;
+  padding-bottom:5px;
+}
+.menu a::after {
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:0%;
+  height:2px;
+  background:#000;
+  transition:0.3s;
+}
+.menu a:hover::after {width:100%;}
+.download-btn {
+  border:1px solid #000;
+  padding:10px 20px;
+  color:#000;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:900;
+}
+.download-btn:hover {background:#000; color:#fff;}
+
+.logo-screen {
+  background:#000;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:fixed;
+  width:100%;
+  z-index:9999;
+}
+#logo-text {
+  color:#fff;
+  font-size:64px;
+  font-weight:900;
+  border-right:3px solid #fff;
+  animation:blink .7s infinite;
+}
+@keyframes blink {50%{border-color:transparent;}}
+.zoom-out {animation:zoomOut .6s forwards;}
+@keyframes zoomOut {to{opacity:0; transform:scale(1.1);}}
+.main-content {display:none; padding-top:88px;}
+
+.intro {
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  color:#fff;
+  padding:0 8%;
+  text-align:center;
+}
+.intro-video {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+.intro::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.58);
+  z-index:1;
+}
+.intro-inner {position:relative; z-index:2;}
+.intro-sub {
+  font-size:14px;
+  color:#777;
+  letter-spacing:3px;
+  margin-bottom:22px;
+  font-weight:900;
+}
+.intro-main {
+  font-size:68px;
+  line-height:1.12;
+  font-weight:900;
+}
+.intro-desc {
+  font-size:18px;
+  line-height:1.8;
+  color:#ddd;
+  font-weight:600;
+}
+.scroll-down {
+  position:absolute;
+  left:50%;
+  bottom:45px;
+  transform:translateX(-50%);
+  z-index:3;
+  text-align:center;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.scroll-arrow {
+  display:block;
+  font-size:34px;
+  line-height:1;
+  transform:rotate(90deg);
+  margin-bottom:6px;
+  animation:arrowMove 1.2s infinite;
+}
+@keyframes arrowMove {
+  0% {transform:rotate(90deg) translateX(0);}
+  50% {transform:rotate(90deg) translateX(8px);}
+  100% {transform:rotate(90deg) translateX(0);}
+}
+
+.fade {opacity:0; transform:translateY(30px); transition:0.8s;}
+.fade.show {opacity:1; transform:translateY(0);}
+
+.stats-section {
+  background:#000;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  border-top:1px solid rgba(255,255,255,0.1);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+.stat-box {
+  padding:58px 20px;
+  text-align:center;
+  border-right:1px solid rgba(255,255,255,0.1);
+}
+.stat-box:last-child {border-right:none;}
+.stat-number {
+  color:#fff;
+  font-size:52px;
+  font-weight:900;
+}
+.stat-number::after {content:"+";}
+.stat-number.rank::after {content:"위";}
+.stat-box p {
+  color:#fff;
+  font-size:15px;
+  margin-top:10px;
+  font-weight:900;
+}
+.stat-box span {
+  display:block;
+  color:#777;
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* 센터 소개 */
+.brand-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+  overflow:hidden;
+}
+.brand-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+.brand-intro {
+  text-align:center;
+  max-width:980px;
+  margin:0 auto 90px;
+}
+.brand-intro .eyebrow {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:20px;
+}
+.brand-intro h2 {
+  font-size:58px;
+  font-weight:900;
+  line-height:1.15;
+}
+.brand-intro h2 span {
+  color:var(--yellow);
+}
+.brand-intro p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+.brand-number-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+  margin-bottom:100px;
+}
+.brand-number {
+  padding:36px 24px;
+  text-align:center;
+  border-right:1px solid #222;
+}
+.brand-number:last-child {border-right:none;}
+.brand-number strong {
+  display:block;
+  font-size:46px;
+  font-weight:900;
+  color:#fff;
+}
+.brand-number p {
+  color:#777;
+  font-size:13px;
+  font-weight:900;
+  margin-top:10px;
+  letter-spacing:1px;
+}
+.history-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:30px;
+  margin-bottom:40px;
+}
+.history-head .eyebrow {
+  color:var(--yellow);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:14px;
+}
+.history-head h3 {
+  font-size:46px;
+  font-weight:900;
+}
+.history-head p {
+  color:#777;
+  font-size:14px;
+  line-height:1.7;
+  max-width:420px;
+}
+.history-viewport {
+  overflow:hidden;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+}
+.history-track {
+  display:flex;
+  animation:historyAuto 24s infinite;
+}
+.history-card {
+  min-width:33.3333%;
+  padding:46px 36px;
+  border-right:1px solid #222;
+  min-height:260px;
+}
+.history-card .year {
+  color:#fff;
+  font-size:42px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+.history-card.active .year {
+  color:var(--yellow);
+}
+.history-card .line {
+  width:34px;
+  height:3px;
+  background:var(--yellow);
+  margin-bottom:22px;
+}
+.history-card p {
+  color:#aaa;
+  font-size:15px;
+  line-height:1.8;
+  font-weight:700;
+}
+@keyframes historyAuto {
+  0%,13% {transform:translateX(0);}
+  16%,29% {transform:translateX(-33.3333%);}
+  32%,45% {transform:translateX(-66.6666%);}
+  48%,61% {transform:translateX(-100%);}
+  64%,77% {transform:translateX(-133.3333%);}
+  80%,93% {transform:translateX(-166.6666%);}
+  100% {transform:translateX(0);}
+}
+
+/* 시설투어 */
+.facility-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+.facility-wrap {max-width:1380px; margin:auto;}
+.facility-title {margin-bottom:90px;}
+.facility-title .eyebrow {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:18px;
+}
+.facility-title h2 {
+  font-size:58px;
+  line-height:1.05;
+  font-weight:900;
+}
+.facility-title h2::after {
+  content:".";
+  color:var(--yellow);
+}
+.facility-title p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+  max-width:760px;
+}
+.facility-list {
+  display:flex;
+  flex-direction:column;
+  gap:90px;
+}
+.facility-item {
+  display:grid;
+  grid-template-columns:0.8fr 1.4fr;
+  gap:60px;
+  align-items:center;
+  padding-bottom:70px;
+  border-bottom:1px solid #222;
+}
+.facility-item:nth-child(even) {grid-template-columns:1.4fr 0.8fr;}
+.facility-item:nth-child(even) .facility-text {order:2;}
+.facility-item:nth-child(even) .facility-slider {order:1;}
+.facility-text .small {
+  color:#777;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:18px;
+}
+.facility-text h3 {
+  font-size:36px;
+  line-height:1.25;
+  font-weight:900;
+  margin-bottom:22px;
+  transition:0.3s;
+}
+.facility-text h3:hover,
+.facility-text h3:hover span {color:var(--yellow);}
+.facility-text p {
+  color:#aaa;
+  font-size:15px;
+  line-height:1.9;
+}
+.facility-slider {
+  position:relative;
+  height:360px;
+  overflow:hidden;
+  background:#111;
+}
+.facility-track {
+  display:flex;
+  width:100%;
+  height:100%;
+  animation:slideMove 18s infinite;
+}
+.facility-slide {
+  min-width:100%;
+  height:100%;
+}
+.facility-slide img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(100%) brightness(0.72);
+  transition:0.5s;
+}
+.facility-slider:hover img {
+  filter:grayscale(0%) brightness(1);
+  transform:scale(1.04);
+}
+@keyframes slideMove {
+  0%,20% {transform:translateX(0);}
+  25%,45% {transform:translateX(-100%);}
+  50%,70% {transform:translateX(-200%);}
+  75%,95% {transform:translateX(-300%);}
+  100% {transform:translateX(0);}
+}
+.facility-slider.one .facility-track {animation:none;}
+.facility-slider.three .facility-track {animation:slideMoveThree 14s infinite;}
+@keyframes slideMoveThree {
+  0%,28% {transform:translateX(0);}
+  34%,62% {transform:translateX(-100%);}
+  68%,94% {transform:translateX(-200%);}
+  100% {transform:translateX(0);}
+}
+.facility-slider.nine .facility-track {animation:slideMoveNine 30s infinite;}
+@keyframes slideMoveNine {
+  0%,10% {transform:translateX(0);}
+  12%,22% {transform:translateX(-100%);}
+  24%,34% {transform:translateX(-200%);}
+  36%,46% {transform:translateX(-300%);}
+  48%,58% {transform:translateX(-400%);}
+  60%,70% {transform:translateX(-500%);}
+  72%,82% {transform:translateX(-600%);}
+  84%,94% {transform:translateX(-700%);}
+  96% {transform:translateX(-800%);}
+  100% {transform:translateX(0);}
+}
+
+/* 필라테스 */
+.pilates-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+  position:relative;
+}
+.pilates-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+.pilates-carousel {
+  position:relative;
+  max-width:1280px;
+  margin:auto;
+  overflow:visible;
+  padding:0 110px;
+}
+.pilates-window {
+  overflow:hidden;
+}
+.pilates-track {
+  display:flex;
+  transition:0.65s ease;
+}
+.pilates-slide {
+  min-width:100%;
+}
+.pilates-head {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+.pilates-head .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+.pilates-head h2 {
+  font-size:60px;
+  font-weight:900;
+}
+.pilates-head p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+.pilates-info {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+  margin:70px 0;
+}
+.pilates-info div {
+  padding:30px 20px;
+  text-align:center;
+  border-right:1px solid #222;
+}
+.pilates-info div:last-child {border-right:none;}
+.pilates-info span {
+  display:block;
+  color:#666;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:10px;
+}
+.pilates-info strong {
+  font-size:20px;
+  font-weight:900;
+}
+.pilates-arrow {
+  position:absolute;
+  top:58%;
+  transform:translateY(-50%);
+  z-index:5;
+  width:76px;
+  height:76px;
+  border:1px solid rgba(255,255,255,0.25);
+  background:rgba(255,255,255,0.04);
+  color:#fff;
+  font-size:42px;
+  font-weight:300;
+  cursor:pointer;
+  transition:0.3s;
+}
+.pilates-arrow:hover {
+  background:var(--yellow);
+  color:#000;
+  border-color:var(--yellow);
+}
+.pilates-arrow.prev {left:0;}
+.pilates-arrow.next {right:0;}
+
+.schedule-wrap {
+  background:#fff;
+  color:#111;
+  padding:60px;
+}
+.schedule-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  border-bottom:4px solid #111;
+  padding-bottom:28px;
+  margin-bottom:36px;
+}
+.schedule-top h3 {
+  font-size:42px;
+  font-weight:900;
+}
+.schedule-top p {
+  color:#555;
+  font-size:14px;
+  line-height:1.7;
+  font-weight:700;
+}
+.schedule-table {
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+.schedule-table th {
+  padding:18px 8px;
+  border-bottom:3px solid #111;
+  font-size:18px;
+  font-weight:900;
+}
+.schedule-table td {
+  height:76px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.45;
+}
+.schedule-table tr:last-child td {border-bottom:3px solid #111;}
+.schedule-label {
+  background:#000 !important;
+  color:#fff !important;
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+  letter-spacing:8px;
+  font-size:18px !important;
+  width:58px;
+}
+.time {
+  color:#333;
+  font-size:18px !important;
+  font-weight:900 !important;
+  width:90px;
+}
+.empty {
+  color:#ddd;
+  font-weight:400;
+}
+.schedule-note {
+  margin-top:22px;
+  color:#666;
+  font-size:13px;
+  line-height:1.7;
+  font-weight:700;
+}
+.pilates-event {
+  background:transparent;
+  color:#fff;
+  min-height:620px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:50px 30px 80px;
+}
+.event-inner .event-label {
+  display:inline-block;
+  border:1px solid rgba(255,255,255,0.22);
+  color:#777;
+  padding:12px 24px;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:34px;
+}
+.event-inner h3 {
+  font-size:66px;
+  line-height:1.12;
+  font-weight:900;
+  margin-bottom:32px;
+}
+.event-inner h3 span {
+  color:var(--yellow);
+}
+.event-ticket {
+  display:grid;
+  grid-template-columns:1fr 70px 1fr;
+  align-items:center;
+  gap:24px;
+  max-width:720px;
+  margin:44px auto;
+}
+.ticket-box {
+  border:3px solid #fff;
+  padding:30px 20px;
+  font-size:32px;
+  font-weight:900;
+}
+.ticket-box span {
+  display:block;
+  color:#777;
+  font-size:13px;
+  letter-spacing:2px;
+  margin-bottom:10px;
+}
+.ticket-plus {
+  font-size:54px;
+  font-weight:900;
+  color:var(--yellow);
+}
+.event-inner p {
+  color:#aaa;
+  font-size:20px;
+  line-height:1.9;
+  font-weight:700;
+  max-width:780px;
+  margin:auto;
+}
+.event-points {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+  margin-top:60px;
+}
+.event-points div {
+  padding:28px 22px;
+  border-right:1px solid #222;
+  font-weight:900;
+  font-size:18px;
+}
+.event-points div:last-child {border-right:none;}
+
+/* 올패스 */
+.pass-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+.pass-title {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+.pass-title .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+.pass-title h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+.pass-title p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+.pass-list {
+  max-width:1280px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid #222;
+}
+.pass-card {
+  display:grid;
+  grid-template-columns:220px 1fr;
+  border-bottom:1px solid #222;
+  padding:42px 0;
+}
+.pass-left {padding-right:30px;}
+.pass-name {
+  font-size:34px;
+  font-weight:900;
+}
+.pass-desc {
+  color:#777;
+  font-size:14px;
+  margin-top:8px;
+  font-weight:700;
+}
+.pass-use {
+  display:inline-block;
+  margin-top:20px;
+  font-size:12px;
+  color:#aaa;
+  font-weight:900;
+  letter-spacing:1px;
+}
+.pass-right h4 {
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+.branch-area {
+  display:grid;
+  gap:14px;
+}
+.branch-row {
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:20px;
+}
+.region {
+  color:inherit;
+  font-size:13px;
+  font-weight:900;
+}
+.branches {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+}
+.branches span {
+  color:#aaa;
+  font-size:14px;
+  font-weight:700;
+  transition:0.25s;
+}
+.branches span:hover,
+.branches span.highlight {
+  color:var(--yellow);
+  font-weight:900;
+}
+
+/* 트레이너 */
+.trainer-section {
+  background:#fff;
+  padding:150px 0;
+}
+.trainer-title {
+  text-align:center;
+  font-size:60px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+.trainer-sub {
+  text-align:center;
+  color:#777;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:80px;
+}
+.trainer-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  width:100%;
+  border-top:1px solid #111;
+}
+.trainer-card {
+  height:660px;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  border-right:1px solid #111;
+  border-bottom:1px solid #111;
+}
+.trainer-card img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:0.45s;
+}
+.trainer-card:hover img {
+  transform:scale(1.05);
+  opacity:0.28;
+}
+.trainer-basic {
+  position:absolute;
+  left:34px;
+  bottom:34px;
+  color:#fff;
+  z-index:2;
+}
+.trainer-basic h3 {
+  font-size:32px;
+  font-weight:900;
+}
+.trainer-basic p {
+  margin-top:8px;
+  color:#ddd;
+  font-size:15px;
+  font-weight:800;
+}
+.trainer-detail {
+  position:absolute;
+  inset:0;
+  padding:44px 34px;
+  color:#fff;
+  opacity:0;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  transition:0.35s;
+  background:linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.92));
+}
+.trainer-card:hover .trainer-detail {opacity:1;}
+.trainer-detail .tag {
+  color:#fff;
+  font-size:12px;
+  letter-spacing:3px;
+  font-weight:900;
+  margin-bottom:16px;
+}
+.trainer-detail h3 {
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+.trainer-detail h4 {
+  font-size:15px;
+  font-weight:900;
+  border-bottom:1px solid rgba(255,255,255,0.35);
+  padding-bottom:8px;
+  margin:18px 0 10px;
+}
+.trainer-detail li {
+  list-style:none;
+  color:#ddd;
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* 운영시간 */
+.hours-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+.hours-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+.hours-left {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+.hours-left .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+.hours-left h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+.hours-left p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+.always-open {
+  display:inline-block;
+  margin-top:30px;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  border-bottom:3px solid #fff;
+}
+.hours-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+}
+.hour-card {
+  padding:50px;
+  min-height:240px;
+  border-right:1px solid #222;
+}
+.hour-card:nth-child(2) {border-right:none;}
+.hour-card h3 {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:28px;
+}
+.hour-card strong {
+  display:block;
+  font-size:48px;
+  font-weight:900;
+}
+.hour-card span {
+  display:block;
+  margin-top:16px;
+  color:#aaa;
+  font-size:16px;
+  font-weight:700;
+}
+.hour-card.full {
+  grid-column:1 / span 2;
+  border-top:1px solid #222;
+  border-right:none;
+  min-height:auto;
+}
+.hour-card.full strong {font-size:36px;}
+.hour-card.full p {
+  margin-top:18px;
+  color:#aaa;
+  line-height:1.8;
+  font-size:16px;
+}
+
+/* 위치 */
+.location {
+  background:#fff;
+  padding:150px 20px;
+  text-align:center;
+}
+.title {
+  font-size:60px;
+  font-weight:900;
+}
+.location-sub {
+  color:#777;
+  margin:20px 0 50px;
+  font-weight:700;
+}
+.address {
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:60px;
+}
+.map-container {
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr;
+  gap:60px;
+  max-width:1280px;
+  margin:auto;
+}
+.map-box {
+  height:420px;
+  overflow:hidden;
+  border:1px solid #ddd;
+}
+.map-info {
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  text-align:left;
+}
+.typing {
+  white-space:pre-line;
+  line-height:1.8;
+  color:#444;
+  border-right:2px solid #000;
+}
+.btn-box a {
+  display:inline-block;
+  padding:14px 28px;
+  border:1px solid #000;
+  text-decoration:none;
+  color:#000;
+  font-weight:900;
+}
+.btn-box a:hover {
+  background:#000;
+  color:#fff;
+}
+
+footer {
+  text-align:center;
+  padding:50px;
+  color:#777;
+  background:#fff;
+  font-weight:800;
+}
+
+@media(max-width:768px){
+  .navbar {flex-direction:column; gap:15px;}
+  .menu {flex-wrap:wrap; justify-content:center; gap:8px;}
+  .menu li {margin:0 5px;}
+  .download-btn {font-size:12px;}
+  .intro {padding:0 28px;}
+  .intro-main {font-size:42px;}
+  .stats-section {grid-template-columns:1fr 1fr;}
+  .stat-number {font-size:36px;}
+  .brand-intro h2,.facility-title h2,.pilates-head h2,.pass-title h2,.hours-left h2,.trainer-title,.title {font-size:40px;}
+  .brand-number-grid {grid-template-columns:1fr 1fr;}
+  .history-head {display:block;}
+  .history-head h3 {font-size:36px; margin-bottom:16px;}
+  .history-card {min-width:100%;}
+  @keyframes historyAuto {
+    0%,13% {transform:translateX(0);}
+    16%,29% {transform:translateX(-100%);}
+    32%,45% {transform:translateX(-200%);}
+    48%,61% {transform:translateX(-300%);}
+    64%,77% {transform:translateX(-400%);}
+    80%,93% {transform:translateX(-500%);}
+    100% {transform:translateX(0);}
+  }
+  .facility-item,.facility-item:nth-child(even) {grid-template-columns:1fr; gap:28px;}
+  .facility-item:nth-child(even) .facility-text,.facility-item:nth-child(even) .facility-slider {order:initial;}
+  .facility-slider {height:260px;}
+  .pilates-carousel {padding:0 54px;}
+  .pilates-arrow {width:44px; height:44px; font-size:28px; top:58%;}
+  .pilates-info {grid-template-columns:1fr;}
+  .pilates-info div {border-right:none; border-bottom:1px solid #222;}
+  .schedule-wrap {padding:20px; overflow-x:auto;}
+  .schedule-table {min-width:820px;}
+  .schedule-top {display:block;}
+  .schedule-top h3 {font-size:30px; margin-bottom:12px;}
+  .pilates-event {padding:40px 20px; min-height:560px;}
+  .event-inner h3 {font-size:38px;}
+  .event-ticket {grid-template-columns:1fr; gap:16px;}
+  .ticket-plus {font-size:38px;}
+  .event-points {grid-template-columns:1fr;}
+  .event-points div {border-right:none; border-bottom:1px solid #222;}
+  .pass-card {grid-template-columns:1fr; gap:24px;}
+  .trainer-grid {grid-template-columns:1fr 1fr;}
+  .trainer-card {height:480px;}
+  .hours-grid {grid-template-columns:1fr;}
+  .hour-card {border-right:none; border-bottom:1px solid #222;}
+  .hour-card.full {grid-column:auto;}
+  .hour-card strong {font-size:34px;}
+  .map-container {grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="logo-screen">
+  <h1 id="logo-text"></h1>
+</div>
+
+<div class="main-content">
+
+<header>
+<nav class="navbar">
+  <div class="logo"><a href="#">HEALTHBOYGYM</a></div>
+
+  <ul class="menu">
+    <li><a href="#about">센터 소개</a></li>
+    <li><a href="#history">브랜드소개</a></li>
+    <li><a href="#facility">시설 투어</a></li>
+    <li><a href="#pilates">필라테스 안내</a></li>
+    <li><a href="#pass">올패스 안내</a></li>
+    <li><a href="#trainer">트레이너 소개</a></li>
+    <li><a href="#hours">운영 시간</a></li>
+    <li><a href="#location">오시는 길</a></li>
+
+    
+  </ul>
+
+  <a href="https://map.naver.com" target="_blank" class="download-btn">
+    네이버 문의 및 예약 바로가기
+  </a>
+</nav>
+</header>
+
+<main>
+
+<section class="intro fade">
+  <video class="intro-video" autoplay muted loop playsinline>
+    <source src="센터 드론 영상.mp4" type="video/mp4">
+  </video>
+
+  <div class="intro-inner fade">
+    <p class="intro-sub">HEALTHBOYGYM SUNAE</p>
+    <h1 class="intro-main">수내동 지상최대규모,<br>헬스보이짐 수내점</h1>
+    <p class="intro-desc"><br>헬스 · PT · 6:1 그룹필라테스까지<br>한 공간에서 완성하는 프리미엄 피트니스</p>
+  </div>
+
+  <div class="scroll-down">
+    <span class="scroll-arrow">&gt;</span>
+    SCROLL TO EXPLORE
+  </div>
+</section>
+
+<section id="about" class="stats-section fade">
+  <div class="stat-box"><div class="stat-number" data-target="1250">0</div><p>네이버 리뷰</p><span>평균 4.9점 유지</span></div>
+  <div class="stat-box"><div class="stat-number" data-target="1200">0</div><p>블로그 포스팅</p><span>실제 회원 후기</span></div>
+  <div class="stat-box"><div class="stat-number" data-target="5000">0</div><p>누적 회원 등록</p><span>수내점 오픈 이후</span></div>
+  <div class="stat-box"><div class="stat-number rank" data-target="1">0</div><p>고객만족도</p><span>분당 헬스장 부문</span></div>
+</section>
+
+
+
+
+
+
+
+<section id="facility" class="facility-section fade">
+  <div class="facility-wrap">
+    <div class="facility-title">
+      <div class="eyebrow">FACILITY TOUR</div>
+      <h2>THE UNMATCHED<br>LEVEL FACILITY</h2>
+      <p>헬스보이짐 수내점은 운동 목적과 라이프스타일에 맞춰 공간을 세분화했습니다. <br> 넓고 쾌적한 운동 공간, 전문적인 기구 구성, 필라테스룸과 휴식 공간까지 한 번에 경험해보세요.</p>
+    </div>
+
+    <div class="facility-list">
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">01 / CENTER</div><h3>한계를 넘어선<br><span>프리미엄 피트니스 공간</span></h3><p>센터 전체가 넓고 쾌적하게 구성되어 처음 방문하는 순간부터 프리미엄한 분위기를 느낄 수 있습니다.</p></div>
+        <div class="facility-slider one"><div class="facility-track"><div class="facility-slide"><img src="센터전체사진1.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">02 / CONSULTING ROOM</div><h3>목표를 설계하는<br><span>전문 상담 공간</span></h3><p>회원님의 운동 목적, 체형, 생활패턴을 바탕으로 정확한 방향을 잡아드립니다.</p></div>
+        <div class="facility-slider one"><div class="facility-track"><div class="facility-slide"><img src="상담실사진.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">03 / STRETCHING ZONE</div><h3>운동 전후를 완성하는<br><span>스트레칭존</span></h3><p>부상 예방과 컨디션 회복을 위한 스트레칭 공간입니다.</p></div>
+        <div class="facility-slider one"><div class="facility-track"><div class="facility-slide"><img src="스트레칭존사진.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">04 / CARDIO ZONE</div><h3>쾌적하게 몰입하는<br><span>유산소존</span></h3><p>체지방 감량과 심폐지구력 향상을 위한 유산소 공간입니다.</p></div>
+        <div class="facility-slider"><div class="facility-track"><div class="facility-slide"><img src="유산소존사진1.jpg"></div><div class="facility-slide"><img src="유산소존사진2.jpg"></div><div class="facility-slide"><img src="유산소존사진3.jpg"></div><div class="facility-slide"><img src="유산소존사진4.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">05 / FREE WEIGHT ZONE</div><h3>진짜 운동이 시작되는<br><span>프리웨이트존</span></h3><p>근력 향상과 바디라인 개선을 위한 프리웨이트 공간입니다.</p></div>
+        <div class="facility-slider"><div class="facility-track"><div class="facility-slide"><img src="프리웨이트존사진1.jpg"></div><div class="facility-slide"><img src="프리웨이트존사진2.jpg"></div><div class="facility-slide"><img src="프리웨이트존사진3.jpg"></div><div class="facility-slide"><img src="프리웨이트존사진4.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">06 / MACHINE ZONE</div><h3>부위별 자극을 완성하는<br><span>전문 기구존</span></h3><p>초보자도 안전하게 사용할 수 있는 다양한 머신을 갖춘 공간입니다.</p></div>
+        <div class="facility-slider nine"><div class="facility-track"><div class="facility-slide"><img src="기구존사진1.jpg"></div><div class="facility-slide"><img src="기구존사진2.jpg"></div><div class="facility-slide"><img src="기구존사진3.jpg"></div><div class="facility-slide"><img src="기구존사진4.jpg"></div><div class="facility-slide"><img src="기구존사진5.jpg"></div><div class="facility-slide"><img src="기구존사진6.jpg"></div><div class="facility-slide"><img src="기구존사진7.jpg"></div><div class="facility-slide"><img src="기구존사진8.jpg"></div><div class="facility-slide"><img src="기구존사진9.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">07 / PILATES ROOM</div><h3>그룹부터 개인까지<br><span>필라테스 전문 공간</span></h3><p>리포머, 바렐, 체어를 활용해 체형 교정과 코어 강화에 집중할 수 있는 공간입니다.</p></div>
+        <div class="facility-slider"><div class="facility-track"><div class="facility-slide"><img src="리포머사진1.jpg"></div><div class="facility-slide"><img src="바렐체어사진1.jpg"></div><div class="facility-slide"><img src="바렐체어사진2.jpg"></div><div class="facility-slide"><img src="ROOM1.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">08 / TERRACE</div><h3>운동 후 여유를 더하는<br><span>테라스 공간</span></h3><p>운동 전후 잠시 숨을 고르고 리프레시할 수 있는 여유로운 공간입니다.</p></div>
+        <div class="facility-slider three"><div class="facility-track"><div class="facility-slide"><img src="테라스존사진1.jpg"></div><div class="facility-slide"><img src="테라스존사진2.jpg"></div><div class="facility-slide"><img src="테라스존사진1.jpg"></div></div></div>
+      </div>
+
+      <div class="facility-item fade">
+        <div class="facility-text"><div class="small">09 / LOCKER & SHOWER</div><h3>깔끔하게 마무리하는<br><span>탈의실·샤워실·락커룸</span></h3><p>운동 후 편하게 정리할 수 있도록 쾌적하게 관리합니다.</p></div>
+        <div class="facility-slider three"><div class="facility-track"><div class="facility-slide"><img src="탈의실사진.jpg"></div><div class="facility-slide"><img src="샤워실사진.jpg"></div><div class="facility-slide"><img src="공용락커사진.jpg"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pilates" class="pilates-section fade">
+  <div class="pilates-wrap">
+
+    <div class="pilates-carousel">
+  
+
+      <div class="pilates-window">
+        <div class="pilates-track" id="pilatesTrack">
+
+          <div class="pilates-slide">
+            <div class="pilates-head">
+              <div class="eyebrow">HEALTHBOYGYM PILATES</div>
+              <h2>그룹필라테스 시간표</h2>
+              <p>6:1 소규모 그룹수업으로 리포머 · 바렐 · 체어를 체계적으로 경험하세요.</p>
+
+              <div class="pilates-info">
+                <div><span>GROUP</span><strong>6:1 소규모 수업</strong></div>
+                <div><span>CLASS</span><strong>리포머 · 바렐 · 체어</strong></div>
+                <div><span>FOCUS</span><strong>체형교정 · 코어강화</strong></div>
+              </div>
+            </div>
+
+            <div class="schedule-wrap">
+              <div class="schedule-top">
+                <h3>PILATES SCHEDULE</h3>
+                <p>월요일부터 토요일까지 운영되는 그룹필라테스 시간표입니다.<br>수업 시간은 센터 상황에 따라 변동될 수 있습니다.</p>
+              </div>
+
+              <table class="schedule-table">
+                <tr><th></th><th></th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>
+                <tr><td class="schedule-label" rowspan="4">오전</td><td class="time">9:00</td><td>리포머<br>바렐/체어</td><td>바렐/체어<br>리포머</td><td>리포머<br>바렐/체어</td><td>바렐/체어<br>리포머</td><td>리포머</td><td class="empty"></td></tr>
+                <tr><td class="time">10:00</td><td>리포머<br>바렐/체어</td><td>바렐/체어<br>리포머</td><td>리포머<br>바렐/체어</td><td>바렐/체어<br>리포머</td><td>바렐&체어</td><td>리포머</td></tr>
+                <tr><td class="time">11:00</td><td>리포머</td><td>바렐&체어</td><td>리포머</td><td>바렐&체어</td><td>리포머</td><td>바렐/체어</td></tr>
+                <tr><td class="time">12:00</td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td class="empty"></td><td>리포머</td></tr>
+                <tr><td class="schedule-label" rowspan="7">오후</td><td class="time">18:00</td><td>바렐/체어</td><td class="empty"></td><td>바렐/체어</td><td class="empty"></td><td>바렐/체어</td><td class="empty"></td></tr>
+                <tr><td class="time">18:30</td><td class="empty"></td><td>리포머</td><td class="empty"></td><td>리포머</td><td class="empty"></td><td class="empty"></td></tr>
+                <tr><td class="time">19:00</td><td>리포머<br>바렐/체어</td><td class="empty"></td><td>리포머<br>바렐/체어</td><td class="empty"></td><td>리포머<br>바렐/체어</td><td class="empty"></td></tr>
+                <tr><td class="time">19:30</td><td class="empty"></td><td>바렐/체어<br>리포머</td><td class="empty"></td><td>바렐/체어<br>리포머</td><td class="empty"></td><td class="empty"></td></tr>
+                <tr><td class="time">20:00</td><td>리포머<br>바렐/체어</td><td class="empty"></td><td>리포머<br>바렐/체어</td><td class="empty"></td><td>리포머<br>바렐/체어</td><td class="empty"></td></tr>
+                <tr><td class="time">20:30</td><td class="empty"></td><td>바렐/체어<br>리포머</td><td class="empty"></td><td>바렐/체어<br>리포머</td><td class="empty"></td><td class="empty"></td></tr>
+                <tr><td class="time">21:00</td><td>리포머</td><td class="empty"></td><td>리포머</td><td class="empty"></td><td>리포머</td><td class="empty"></td></tr>
+              </table>
+
+              <p class="schedule-note">
+                ※ 수업 예약 및 잔여 좌석은 센터 문의를 통해 확인 가능합니다.  
+                ※ 시간표는 센터 운영 상황에 따라 일부 변경될 수 있습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="pass" class="pass-section fade">
+  <div class="pass-title">
+    <div class="eyebrow">HEALTHBOY ALL PASS</div>
+    <h2>대한민국 NO.1<br>피트니스 브랜드</h2>
+    <p>올패스로 전지점을 이용해보세요.</p>
+  </div>
+
+  <div class="pass-list">
+
+    <div class="pass-card">
+      <div class="pass-left"><div class="pass-name">Black</div><div class="pass-desc">블랙 10지점</div><div class="pass-use">BLACK 지점만 이용 가능</div></div>
+      <div class="pass-right"><h4>BLACK 지점</h4><div class="branch-area">
+        <div class="branch-row"><div class="region">서울</div><div class="branches"><span>가양역점</span><span>미아점</span><span>방배점</span><span>삼전동</span><span>방화역점</span></div></div>
+        <div class="branch-row"><div class="region">경기</div><div class="branches"><span>가운점</span></div></div>
+        <div class="branch-row"><div class="region">대전</div><div class="branches"><span>가장점</span></div></div>
+        <div class="branch-row"><div class="region">충남</div><div class="branches"><span>부여점</span></div></div>
+        <div class="branch-row"><div class="region">충북</div><div class="branches"><span>청주점</span></div></div>
+      </div></div>
+    </div>
+
+    <div class="pass-card">
+      <div class="pass-left"><div class="pass-name">Silver</div><div class="pass-desc">실버 29지점</div><div class="pass-use">BLACK + SILVER 이용 가능</div></div>
+      <div class="pass-right"><h4>BLACK + SILVER 지점</h4><div class="branch-area">
+        <div class="branch-row"><div class="region">서울</div><div class="branches"><span>당산역점</span><span>신대방점</span><span>장안동점</span><span>마곡점</span><span>성신여대점</span><span>홍대점</span><span>서울시청점</span><span>신촌점</span><span>상봉점</span><span>충정로점</span><span>왕십리점</span><span>녹번역점</span></div></div>
+        <div class="branch-row"><div class="region">경기</div><div class="branches"><span>상현점</span><span>주엽점</span><span>영통점</span><span>일산점</span><span>상동점</span><span>광명점</span><span>동탄점</span><span>진접점</span><span>인천연수점</span><span>별내점</span><span>원당점</span></div></div>
+        <div class="branch-row"><div class="region">대전</div><div class="branches"><span>둔산점</span><span>대전시청점</span><span>탄방점</span></div></div>
+        <div class="branch-row"><div class="region">충남</div><div class="branches"><span>천안두정점</span><span>천안아산역점</span></div></div>
+      </div></div>
+    </div>
+
+    <div class="pass-card">
+      <div class="pass-left"><div class="pass-name">Gold</div><div class="pass-desc">골드 22지점</div><div class="pass-use">BLACK + SILVER + GOLD 이용 가능</div></div>
+      <div class="pass-right"><h4>BLACK + SILVER + GOLD 지점</h4><div class="branch-area">
+        <div class="branch-row"><div class="region">서울</div><div class="branches"><span>강남역점</span><span>석촌점</span><span>역삼점</span><span>문정점</span><span>공덕점</span><span>홍제점</span><span>마곡점</span><span>신당점</span></div></div>
+        <div class="branch-row"><div class="region">경기</div><div class="branches"><span>권선점</span><span>평촌점</span><span>미금점</span><span class="highlight">수내점</span><span>야탑점</span><span>판교점</span><span>수지점</span><span>광명점</span><span>정자점</span><span>분당점</span></div></div>
+        <div class="branch-row"><div class="region">대전</div><div class="branches"><span>도안점</span><span>유성점</span></div></div>
+        <div class="branch-row"><div class="region">충남</div><div class="branches"><span>논산점</span></div></div>
+        <div class="branch-row"><div class="region">부산</div><div class="branches"><span>덕천점</span></div></div>
+        <div class="branch-row"><div class="region">충북</div><div class="branches"><span>청주점</span></div></div>
+      </div></div>
+    </div>
+
+    <div class="pass-card">
+      <div class="pass-left"><div class="pass-name">Premium</div><div class="pass-desc">프리미엄 8지점</div><div class="pass-use">PREMIUM 지점까지 이용 가능</div></div>
+      <div class="pass-right"><h4>PREMIUM 등급 지점</h4><div class="branch-area">
+        <div class="branch-row"><div class="region">서울</div><div class="branches"><span>강남구청역점</span><span>건대스타시티점</span><span>청담점</span><span>마곡보타닉점</span><span>잠실점</span></div></div>
+        <div class="branch-row"><div class="region">경기</div><div class="branches"><span>광교점</span><span>화성점</span><span>판교역점</span></div></div>
+        <div class="branch-row"><div class="region">대전</div><div class="branches"><span>송촌점</span></div></div>
+      </div></div>
+    </div>
+
+    <div class="pass-card">
+      <div class="pass-left"><div class="pass-name">S Premium</div><div class="pass-desc">S-프리미엄 3지점</div><div class="pass-use">전 등급 이용 가능</div></div>
+      <div class="pass-right"><h4>전 등급 지점 자유 이용</h4><div class="branch-area">
+        <div class="branch-row"><div class="region">서울</div><div class="branches"><span>선릉점</span><span>개봉점</span></div></div>
+        <div class="branch-row"><div class="region">제주</div><div class="branches"><span>제주한림점</span></div></div>
+      </div></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="trainer" class="trainer-section">
+  <h2 class="trainer-title fade">TRAINERS</h2>
+  <p class="trainer-sub fade">헬스보이짐 수내점의 전문 트레이너를 소개합니다.</p>
+
+  <div class="trainer-grid fade">
+
+    <div class="trainer-card">
+      <img src="정위영.jpg">
+      <div class="trainer-basic"><h3>정위영 점장님</h3><p>Branch Manager</p></div>
+      <div class="trainer-detail">
+        <div class="tag">MANAGER PROFILE</div>
+        <h3>정위영 점장님</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 지점장</li><li>센터 운영 및 회원 관리 총괄</li></ul>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 지점장</li><li>회원 상담 및 서비스 관리</li><li>트레이너 팀 관리</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="백인호.jpg">
+      <div class="trainer-basic"><h3>백인호 팀장님</h3><p>PT Team Leader</p></div>
+      <div class="trainer-detail">
+        <div class="tag">TRAINER PROFILE</div>
+        <h3>백인호 팀장님</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 트레이너</li><li>체형 개선 및 근력 향상 전문</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>생활체육지도자 2급</li><li>FISAF 교육 수료</li><li>카이로프라틱 교육 수료</li><li>케틀벨 교육 수료</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="이상원.jpg">
+      <div class="trainer-basic"><h3>이상원 팀장님</h3><p>PT Team Leader</p></div>
+      <div class="trainer-detail">
+        <div class="tag">TRAINER PROFILE</div>
+        <h3>이상원 팀장님</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 트레이너</li><li>다이어트 및 바디프로필 전문</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>퍼스널 트레이닝 교육 수료</li><li>근력 트레이닝 지도</li><li>체형 분석 및 운동 처방</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="이루리.jpg">
+      <div class="trainer-basic"><h3>이루리 FC주임</h3><p>Fitness Consultant</p></div>
+      <div class="trainer-detail">
+        <div class="tag">STAFF PROFILE</div>
+        <h3>이루리 FC주임</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 FC</li><li>회원 상담 및 센터 이용 안내</li></ul>
+        <h4>담당업무</h4>
+        <ul><li>회원권 상담</li><li>운동 목적별 프로그램 안내</li><li>센터 이용 관리</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="최호준.jpg">
+      <div class="trainer-basic"><h3>최호준 트레이너</h3><p>Personal Trainer</p></div>
+      <div class="trainer-detail">
+        <div class="tag">TRAINER PROFILE</div>
+        <h3>최호준 트레이너</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 트레이너</li><li>근력 향상 및 체형 개선 지도</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>퍼스널 트레이닝 교육 수료</li><li>웨이트 트레이닝 지도</li><li>기능성 운동 지도</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="이연주.jpg">
+      <div class="trainer-basic"><h3>이연주 전임</h3><p>Pilates Instructor</p></div>
+      <div class="trainer-detail">
+        <div class="tag">PILATES PROFILE</div>
+        <h3>이연주 전임</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 필라테스 강사</li><li>체형 교정 및 코어 강화 수업</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>리포머 지도</li><li>바렐·체어 지도</li><li>그룹 필라테스 지도</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="이도현.jpg">
+      <div class="trainer-basic"><h3>이도현 트레이너</h3><p>Personal Trainer</p></div>
+      <div class="trainer-detail">
+        <div class="tag">TRAINER PROFILE</div>
+        <h3>이도현 트레이너</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 트레이너</li><li>다이어트 및 근력 운동 지도</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>퍼스널 트레이닝 교육 수료</li><li>운동 자세 교정</li><li>체력 향상 프로그램 지도</li></ul>
+      </div>
+    </div>
+
+    <div class="trainer-card">
+      <img src="이용빈.jpg">
+      <div class="trainer-basic"><h3>이용빈 트레이너</h3><p>Personal Trainer</p></div>
+      <div class="trainer-detail">
+        <div class="tag">TRAINER PROFILE</div>
+        <h3>이용빈 트레이너</h3>
+        <h4>경력사항</h4>
+        <ul><li>현) 헬스보이짐 수내점 트레이너</li><li>초보자 운동 적응 및 체력 향상 지도</li></ul>
+        <h4>자격사항</h4>
+        <ul><li>퍼스널 트레이닝 교육 수료</li><li>웨이트 트레이닝 지도</li><li>운동 루틴 설계</li></ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="hours" class="hours-section fade">
+  <div class="hours-wrap">
+    <div class="hours-left">
+      <div class="eyebrow">OPENING HOURS</div>
+      <h2>센터 운영 시간 안내</h2>
+      <p>헬스보이짐 수내점은 바쁜 일상 속에서도 원하는 시간에 운동할 수 있도록 넓은 운영 시간을 제공합니다.</p>
+      <div class="always-open">365일 연중무휴</div>
+    </div>
+
+    <div class="hours-grid">
+      <div class="hour-card">
+        <h3>WEEKDAY</h3>
+        <strong>06:00 - 24:00</strong>
+        <span>평일 오전 6시 오픈 · 밤 12시 마감</span>
+      </div>
+
+      <div class="hour-card">
+        <h3>WEEKEND / HOLIDAY</h3>
+        <strong>08:00 - 21:00</strong>
+        <span>주말 및 공휴일 오전 8시 오픈 · 오후 9시 마감</span>
+      </div>
+
+      <div class="hour-card full">
+        <h3>NO CLOSED DAY</h3>
+        <strong>매일 열려있는 피트니스 공간</strong>
+        <p>평일, 주말, 공휴일 모두 운영합니다. 운동 루틴이 끊기지 않도록 언제든 방문할 수 있는 센터를 지향합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="location" class="location">
+  <h2 class="title fade">LOCATION</h2>
+  <p class="location-sub fade">헬스보이짐 필라걸 수내점</p>
+  <p class="address fade">주소 : 내정로173번길 49 5층</p>
+
+  <div class="map-container">
+    <div class="map-box fade">
+      <iframe src="https://map.naver.com/v5/search/내정로173번길49" width="100%" height="100%"></iframe>
+    </div>
+
+    <div class="map-info">
+      <div>
+        <h3 class="fade">HEALTHBOYGYM</h3>
+        <div id="typing-text" class="typing"></div>
+      </div>
+
+      <div class="btn-box">
+        <a href="https://map.naver.com/v5/search/내정로173번길49" target="_blank">
+          VIEW MAP →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="fade">
+  HEALTHBOYGYM PILAGIRL SUNAE
+</footer>
+
+</div>
+
+<script>
+let pilatesIndex = 0;
+
+function movePilates(direction){
+  const track = document.getElementById("pilatesTrack");
+  const total = track.children.length;
+
+  pilatesIndex += direction;
+
+  if(pilatesIndex < 0) pilatesIndex = total - 1;
+  if(pilatesIndex >= total) pilatesIndex = 0;
+
+  track.style.transform = `translateX(-${pilatesIndex * 100}%)`;
+}
+
+setInterval(()=>{
+  movePilates(1);
+}, 4500);
+
+window.onload=function(){
+  const text="HEALTHBOYGYM";
+  let i=0;
+  const logo=document.getElementById("logo-text");
+
+  const typing=setInterval(()=>{
+    if(i<text.length){
+      logo.textContent+=text[i];
+      i++;
+    }else{
+      clearInterval(typing);
+      setTimeout(()=>{
+        document.querySelector('.logo-screen').classList.add('zoom-out');
+        setTimeout(()=>{
+          document.querySelector('.logo-screen').style.display='none';
+          document.querySelector('.main-content').style.display='block';
+          fadeIn();
+          startTyping();
+          observeCounter();
+          observeBrandCounter();
+        },600);
+      },500);
+    }
+  },60);
+};
+
+function fadeIn(){
+  const els=document.querySelectorAll('.fade');
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      entry.target.classList.toggle('show', entry.isIntersecting);
+    });
+  },{threshold:0.2});
+  els.forEach(el=>observer.observe(el));
+}
+
+let counted = false;
+
+function startCounter(){
+  if(counted) return;
+
+  const stats = document.querySelectorAll('.stat-number');
+
+  stats.forEach(stat => {
+    const target = Number(stat.dataset.target);
+    let count = 0;
+    const speed = 80;
+    const increment = Math.ceil(target / speed);
+
+    const counter = setInterval(() => {
+      count += increment;
+
+      if(count >= target){
+        count = target;
+        clearInterval(counter);
+      }
+
+      stat.textContent = count.toLocaleString();
+    }, 20);
+  });
+
+  counted = true;
+}
+
+function observeCounter(){
+  const statsSection = document.querySelector('.stats-section');
+
+  if(!statsSection) return;
+
+  const counterObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        startCounter();
+      }
+    });
+  },{threshold:0.4});
+
+  counterObserver.observe(statsSection);
+}
+
+let brandCounted = false;
+
+function startBrandCounter(){
+  if(brandCounted) return;
+
+  const nums = document.querySelectorAll('.brand-counter');
+
+  nums.forEach(num => {
+    const target = Number(num.dataset.target);
+    let count = 0;
+    const speed = 70;
+    const increment = Math.ceil(target / speed);
+
+    const counter = setInterval(()=>{
+      count += increment;
+
+      if(count >= target){
+        count = target;
+        clearInterval(counter);
+      }
+
+      num.textContent = count.toLocaleString() + "+";
+    }, 22);
+  });
+
+  brandCounted = true;
+}
+
+function observeBrandCounter(){
+  const brandSection = document.querySelector('.brand-section');
+
+  if(!brandSection) return;
+
+  const brandObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        startBrandCounter();
+      }
+    });
+  },{threshold:0.35});
+
+  brandObserver.observe(brandSection);
+}
+
+function startTyping(){
+  const content=` 
+주차 안내
+건물 내 지하 2층, 3층 주차장으로 이용 가능합니다.
+
+[ 차량 이용 시 ]
+수내역 1번 출구에서 267m  
+지하 2층, 3층 주차 후  
+엘리베이터를 통해 5층으로 이동
+
+[ 도보 방문 시 ]
+배떼엠 옆 입구 이용`;
+
+  let i=0;
+  const el=document.getElementById("typing-text");
+  el.textContent="";
+
+  function type(){
+    if(i<content.length){
+      el.textContent+=content[i];
+      i++;
+      setTimeout(type,20);
+    }
+  }
+  type();
+}
+</script>
+<!-- ================= FAQ PRO START ================= -->
+<style>
+/* ===== FAQ ===== */
+.faq-section{
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.faq-wrap{max-width:1000px;margin:auto;}
+
+.faq-title{text-align:center;margin-bottom:70px;}
+.faq-title h2{
+  font-size:60px;
+  font-weight:900;
+}
+.faq-title p{
+  color:#777;
+  margin-top:20px;
+  font-weight:700;
+}
+
+/* 검색 */
+.faq-search input{
+  width:100%;
+  padding:18px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  margin-bottom:25px;
+}
+
+/* 카테고리 */
+.faq-keywords{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:40px;
+}
+
+.faq-keywords button{
+  padding:10px 18px;
+  border:1px solid #444;
+  background:#111;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  transition:.25s;
+}
+.faq-keywords button:hover{
+  background:#fff;
+  color:#000;
+}
+
+/* FAQ 아이템 */
+.faq-item{
+  border-bottom:1px solid #222;
+  padding:22px 0;
+  cursor:pointer;
+}
+
+.faq-q{
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+  font-size:18px;
+}
+
+.faq-a{
+  max-height:0;
+  overflow:hidden;
+  color:#aaa;
+  font-size:14px;
+  line-height:1.8;
+  transition:.35s;
+}
+
+.faq-item.active .faq-a{
+  max-height:200px;
+  margin-top:12px;
+}
+
+/* + 아이콘 */
+.faq-q span{
+  font-size:22px;
+  transition:.3s;
+}
+.faq-item.active .faq-q span{
+  transform:rotate(45deg);
+}
+</style>
+
+<script>
+window.addEventListener("load", function(){
+
+/* ===== 메뉴 추가 ===== */
+const menu = document.querySelector(".menu");
+const li = document.createElement("li");
+li.innerHTML = '<a href="#faq">FAQ</a>';
+menu.appendChild(li);
+
+/* ===== FAQ 삽입 ===== */
+const html = `
+<section id="faq" class="faq-section fade">
+  <div class="faq-wrap">
+
+    <div class="faq-title">
+      <h2>FAQ</h2>
+      <p>자주 묻는 질문을 빠르게 확인하세요</p>
+    </div>
+
+    <div class="faq-search">
+      <input type="text" id="faqSearch" placeholder="검색어 입력 (PT, 가격, 주차)">
+    </div>
+
+    <div class="faq-keywords">
+      <button data-key="전체">전체</button>
+      <button data-key="이용">이용</button>
+      <button data-key="가격">가격</button>
+      <button data-key="PT">PT</button>
+      <button data-key="필라테스">필라테스</button>
+      <button data-key="주차">주차</button>
+    </div>
+
+    <div class="faq-list">
+
+      <div class="faq-item" data-key="이용">
+        <div class="faq-q">헬스장 운영시간은?<span>+</span></div>
+        <div class="faq-a">평일 06:00~24:00 / 주말 08:00~21:00 운영됩니다.</div>
+      </div>
+
+      <div class="faq-item" data-key="가격">
+        <div class="faq-q">회원권 가격은?<span>+</span></div>
+        <div class="faq-a">이벤트 및 기간에 따라 다르며 방문 상담 시 안내드립니다.</div>
+      </div>
+
+      <div class="faq-item" data-key="PT">
+        <div class="faq-q">PT 필수인가요?<span>+</span></div>
+        <div class="faq-a">필수는 아니며 원하는 경우 선택 가능합니다.</div>
+      </div>
+
+      <div class="faq-item" data-key="필라테스">
+        <div class="faq-q">필라테스 예약 필요한가요?<span>+</span></div>
+        <div class="faq-a">네, 그룹 수업은 예약제로 운영됩니다.</div>
+      </div>
+
+      <div class="faq-item" data-key="주차">
+        <div class="faq-q">주차 가능한가요?<span>+</span></div>
+        <div class="faq-a">건물 내 지하 2~3층 주차장 이용 가능합니다.</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+`;
+
+document.getElementById("location")
+.insertAdjacentHTML("beforebegin", html);
+
+/* ===== 아코디언 ===== */
+document.querySelectorAll(".faq-item").forEach(item=>{
+  item.addEventListener("click", ()=>{
+    item.classList.toggle("active");
+  });
+});
+
+/* ===== 검색 ===== */
+document.getElementById("faqSearch").addEventListener("keyup", function(){
+  const v = this.value.toLowerCase();
+  document.querySelectorAll(".faq-item").forEach(i=>{
+    i.style.display = i.innerText.toLowerCase().includes(v) ? "block":"none";
+  });
+});
+
+/* ===== 필터 ===== */
+document.querySelectorAll(".faq-keywords button").forEach(btn=>{
+  btn.onclick = ()=>{
+    const k = btn.dataset.key;
+    document.querySelectorAll(".faq-item").forEach(i=>{
+      i.style.display = (k==="전체"||i.dataset.key===k)?"block":"none";
+    });
+  };
+});
+
+});
+</script>
+<!-- ================= FAQ PRO END ================= -->
+
+<style>
+.image-modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.92);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+.image-modal img {
+  max-width:90%;
+  max-height:90%;
+  object-fit:contain;
+  transition:0.3s;
+  cursor:zoom-in;
+}
+
+.image-modal.zoom img {
+  transform:scale(1.6);
+  cursor:zoom-out;
+}
+
+/* 버튼 */
+.modal-btn {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:60px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+  padding:10px 20px;
+}
+
+.modal-prev {left:20px;}
+.modal-next {right:20px;}
+
+.close-btn{
+  position:absolute;
+  top:30px;
+  right:40px;
+  font-size:40px;
+  color:#fff;
+  cursor:pointer;
+}
+</style>
+
+<script>
+// ===== 이미지 배열 수집 =====
+const images = Array.from(document.querySelectorAll(".facility-slide img"));
+let currentIndex = 0;
+
+// ===== 모달 생성 =====
+const modal = document.createElement("div");
+modal.className = "image-modal";
+
+modal.innerHTML = `
+  <span class="close-btn">&times;</span>
+  <span class="modal-btn modal-prev">&#10094;</span>
+  <img src="">
+  <span class="modal-btn modal-next">&#10095;</span>
+`;
+
+document.body.appendChild(modal);
+
+const modalImg = modal.querySelector("img");
+
+// ===== 이미지 열기 =====
+images.forEach((img, index)=>{
+  img.addEventListener("click", ()=>{
+    currentIndex = index;
+    showImage();
+    modal.style.display = "flex";
+  });
+});
+
+// ===== 이미지 표시 =====
+function showImage(){
+  modalImg.src = images[currentIndex].src;
+}
+
+// ===== 이전/다음 =====
+function next(){
+  currentIndex = (currentIndex + 1) % images.length;
+  showImage();
+}
+
+function prev(){
+  currentIndex = (currentIndex - 1 + images.length) % images.length;
+  showImage();
+}
+
+modal.querySelector(".modal-next").onclick = next;
+modal.querySelector(".modal-prev").onclick = prev;
+
+// ===== 닫기 =====
+modal.querySelector(".close-btn").onclick = ()=>{
+  modal.style.display = "none";
+  modal.classList.remove("zoom");
+};
+
+modal.onclick = (e)=>{
+  if(e.target === modal){
+    modal.style.display = "none";
+    modal.classList.remove("zoom");
+  }
+};
+
+// ===== 확대 (돋보기) =====
+modalImg.onclick = ()=>{
+  modal.classList.toggle("zoom");
+};
+
+// ===== 키보드 =====
+document.addEventListener("keydown", (e)=>{
+  if(modal.style.display === "flex"){
+    if(e.key === "ArrowRight") next();
+    if(e.key === "ArrowLeft") prev();
+    if(e.key === "Escape") modal.style.display = "none";
+  }
+});
+
+// ===== 모바일 스와이프 =====
+let startX = 0;
+
+modal.addEventListener("touchstart", (e)=>{
+  startX = e.touches[0].clientX;
+});
+
+modal.addEventListener("touchend", (e)=>{
+  let endX = e.changedTouches[0].clientX;
+
+  if(startX - endX > 50) next();
+  if(endX - startX > 50) prev();
+});
+</script>
+
+</body>
+</html>

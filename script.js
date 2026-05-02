@@ -292,5 +292,34 @@ document.addEventListener("DOMContentLoaded", function(){
       document.body.classList.remove("menu-open");
     });
   });
+/* ================= 스크롤 버튼 / 메뉴 부드럽게 이동 ================= */
 
+const scrollDown = document.querySelector(".scroll-down");
+
+if(scrollDown){
+  scrollDown.addEventListener("click", function(){
+    const about = document.querySelector("#about");
+    if(about){
+      about.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+  });
+}
+
+document.querySelectorAll('a[href^="#"]').forEach(link=>{
+  link.addEventListener("click", function(e){
+    const targetId = this.getAttribute("href");
+    const target = document.querySelector(targetId);
+
+    if(target){
+      e.preventDefault();
+
+      target.classList.add("show");
+
+      target.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    }
+  });
+});
 });

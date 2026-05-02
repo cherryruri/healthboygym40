@@ -1769,3 +1769,8 @@ section{
   }
 
 }
+
+/* 모바일 첫 화면 본문 깜빡임 방지 */
+body:not(.loaded) .main-content{
+  display:none !important;
+}

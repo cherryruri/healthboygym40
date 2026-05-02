@@ -44,6 +44,7 @@ if(logo){
         setTimeout(()=>{
           if(logoScreen) logoScreen.style.display='none';
           if(mainContent) mainContent.style.display='block';
+          document.body.classList.add("loaded");
 
           fadeIn();
           startTyping();

@@ -341,3 +341,46 @@ const facilityColorObserver = new IntersectionObserver((entries)=>{
 facilityColorItems.forEach(item=>{
   facilityColorObserver.observe(item);
 });
+
+/* FAQ NEW */
+document.addEventListener("DOMContentLoaded", function(){
+
+  const items = document.querySelectorAll(".faq-new-item");
+  const buttons = document.querySelectorAll(".faq-new-category button");
+  const search = document.getElementById("faqSearch");
+
+  items.forEach(item=>{
+    item.addEventListener("click", ()=>{
+      item.classList.toggle("active");
+    });
+  });
+
+  buttons.forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const cat = btn.dataset.category;
+
+      buttons.forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+
+      items.forEach(item=>{
+        if(cat === "all" || item.dataset.category === cat){
+          item.style.display="block";
+        }else{
+          item.style.display="none";
+        }
+      });
+    });
+  });
+
+  if(search){
+    search.addEventListener("input", ()=>{
+      const val = search.value.toLowerCase();
+
+      items.forEach(item=>{
+        const text = item.innerText.toLowerCase();
+        item.style.display = text.includes(val) ? "block" : "none";
+      });
+    });
+  }
+
+});

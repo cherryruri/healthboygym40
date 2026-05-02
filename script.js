@@ -209,7 +209,7 @@ function observeFacilityColor(){
       }
     });
   },{
-    threshold:0.7
+    threshold:2.0
   });
 
   items.forEach(item=>{

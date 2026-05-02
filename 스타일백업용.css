@@ -5,7 +5,7 @@ html {scroll-behavior:smooth;}
 
 body {
   font-family:'Pretendard', Arial, sans-serif;
-  background:#000000;
+  background:#fff;
   color:#111;
   letter-spacing:-0.04em;
   overflow-x:hidden;
@@ -119,7 +119,6 @@ header {
 .main-content {
   display:none;
   padding-top:88px;
-  background:#fff;
 }
 
 /* 인트로 */
@@ -2001,22 +2000,4 @@ body:not(.loaded) .main-content{
 .faq-new-item.faq-dim .faq-new-a{
   max-height:0 !important;
   margin-top:0 !important;
-}
-
-/* 모바일 트레이너 상세정보 보이게 */
-@media(max-width:768px){
-
-  .trainer-card{
-    height:460px;
-  }
-
-  .trainer-detail{
-    display:flex !important;
-    opacity:0;
-  }
-
-  .trainer-card:hover .trainer-detail,
-  .trainer-card:active .trainer-detail{
-    opacity:1;
-  }
 }

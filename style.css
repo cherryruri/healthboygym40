@@ -1,0 +1,1553 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+* {margin:0; padding:0; box-sizing:border-box;}
+html {scroll-behavior:smooth;}
+
+body {
+  font-family:'Pretendard', Arial, sans-serif;
+  background:#fff;
+  color:#111;
+  letter-spacing:-0.04em;
+  overflow-x:hidden;
+}
+
+:root {--yellow:#fff200;}
+
+header {
+  background:#fff;
+  position:fixed;
+  width:100%;
+  top:0;
+  z-index:1000;
+  border-bottom:1px solid #eee;
+}
+
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  max-width:1380px;
+  margin:auto;
+  padding:24px 20px;
+}
+
+.logo a {
+  color:#000;
+  font-weight:900;
+  font-size:28px;
+  text-decoration:none;
+}
+
+.menu {
+  display:flex;
+  list-style:none;
+}
+
+.menu li {margin:0 13px;}
+
+.menu a {
+  color:#111;
+  font-size:14px;
+  font-weight:900;
+  text-decoration:none;
+  position:relative;
+  padding-bottom:5px;
+}
+
+.menu a::after {
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:0%;
+  height:2px;
+  background:#000;
+  transition:0.3s;
+}
+
+.menu a:hover::after {width:100%;}
+
+.download-btn {
+  border:1px solid #000;
+  padding:10px 20px;
+  color:#000;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:900;
+}
+
+.download-btn:hover {
+  background:#000;
+  color:#fff;
+}
+
+/* 로고 인트로 */
+.logo-screen {
+  background:#000;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:fixed;
+  width:100%;
+  z-index:9999;
+}
+
+#logo-text {
+  color:#fff;
+  font-size:64px;
+  font-weight:900;
+  border-right:3px solid #fff;
+  animation:blink .7s infinite;
+}
+
+@keyframes blink {
+  50%{border-color:transparent;}
+}
+
+.zoom-out {
+  animation:zoomOut .6s forwards;
+}
+
+@keyframes zoomOut {
+  to{
+    opacity:0;
+    transform:scale(1.1);
+  }
+}
+
+.main-content {
+  display:none;
+  padding-top:88px;
+}
+
+/* 인트로 */
+.intro {
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  color:#fff;
+  padding:0 8%;
+  text-align:center;
+}
+
+.intro-video {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:0;
+}
+
+.intro::after {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.58);
+  z-index:1;
+}
+
+.intro-inner {
+  position:relative;
+  z-index:2;
+}
+
+.intro-sub {
+  font-size:14px;
+  color:#777;
+  letter-spacing:3px;
+  margin-bottom:22px;
+  font-weight:900;
+}
+
+.intro-main {
+  font-size:68px;
+  line-height:1.12;
+  font-weight:900;
+}
+
+.intro-desc {
+  font-size:18px;
+  line-height:1.8;
+  color:#ddd;
+  font-weight:600;
+}
+
+.scroll-down {
+  position:absolute;
+  left:50%;
+  bottom:45px;
+  transform:translateX(-50%);
+  z-index:3;
+  text-align:center;
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.scroll-arrow {
+  display:block;
+  font-size:34px;
+  line-height:1;
+  transform:rotate(90deg);
+  margin-bottom:6px;
+  animation:arrowMove 1.2s infinite;
+}
+
+@keyframes arrowMove {
+  0% {transform:rotate(90deg) translateX(0);}
+  50% {transform:rotate(90deg) translateX(8px);}
+  100% {transform:rotate(90deg) translateX(0);}
+}
+
+/* 공통 애니메이션 */
+.fade {
+  opacity:0;
+  transform:translateY(30px);
+  transition:0.8s;
+}
+
+.fade.show {
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* 숫자 섹션 */
+.stats-section {
+  background:#000;
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  border-top:1px solid rgba(255,255,255,0.1);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.stat-box {
+  padding:58px 20px;
+  text-align:center;
+  border-right:1px solid rgba(255,255,255,0.1);
+}
+
+.stat-box:last-child {
+  border-right:none;
+}
+
+.stat-number {
+  color:#fff;
+  font-size:52px;
+  font-weight:900;
+}
+
+.stat-number::after {
+  content:"+";
+}
+
+.stat-number.rank::after {
+  content:"위";
+}
+
+.stat-box p {
+  color:#fff;
+  font-size:15px;
+  margin-top:10px;
+  font-weight:900;
+}
+
+.stat-box span {
+  display:block;
+  color:#777;
+  font-size:12px;
+  margin-top:10px;
+}
+
+/* 시설투어 */
+.facility-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.facility-wrap {
+  max-width:1380px;
+  margin:auto;
+}
+
+.facility-title {
+  margin-bottom:90px;
+}
+
+.facility-title .eyebrow {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:18px;
+}
+
+.facility-title h2 {
+  font-size:58px;
+  line-height:1.05;
+  font-weight:900;
+}
+
+.facility-title h2::after {
+  content:".";
+  color:var(--yellow);
+}
+
+.facility-title p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+  max-width:760px;
+}
+
+.facility-list {
+  display:flex;
+  flex-direction:column;
+  gap:90px;
+}
+
+.facility-item {
+  display:grid;
+  grid-template-columns:0.8fr 1.4fr;
+  gap:60px;
+  align-items:center;
+  padding-bottom:70px;
+  border-bottom:1px solid #222;
+}
+
+.facility-item:nth-child(even) {
+  grid-template-columns:1.4fr 0.8fr;
+}
+
+.facility-item:nth-child(even) .facility-text {
+  order:2;
+}
+
+.facility-item:nth-child(even) .facility-slider {
+  order:1;
+}
+
+.facility-text .small {
+  color:#777;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:18px;
+}
+
+.facility-text h3 {
+  font-size:36px;
+  line-height:1.25;
+  font-weight:900;
+  margin-bottom:22px;
+  transition:0.3s;
+}
+
+.facility-text h3:hover,
+.facility-text h3:hover span {
+  color:var(--yellow);
+}
+
+.facility-text p {
+  color:#aaa;
+  font-size:15px;
+  line-height:1.9;
+}
+
+.facility-slider {
+  position:relative;
+  height:360px;
+  overflow:hidden;
+  background:#111;
+}
+
+.facility-track {
+  display:flex;
+  width:100%;
+  height:100%;
+  animation:slideMove 18s infinite;
+}
+
+.facility-slide {
+  min-width:100%;
+  height:100%;
+}
+
+.facility-slide img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:grayscale(100%) brightness(0.72);
+  transition:0.5s;
+  cursor:pointer;
+}
+
+.facility-slider:hover img {
+  filter:grayscale(0%) brightness(1);
+  transform:scale(1.04);
+}
+
+@keyframes slideMove {
+  0%,20% {transform:translateX(0);}
+  25%,45% {transform:translateX(-100%);}
+  50%,70% {transform:translateX(-200%);}
+  75%,95% {transform:translateX(-300%);}
+  100% {transform:translateX(0);}
+}
+
+.facility-slider.one .facility-track {
+  animation:none;
+}
+
+.facility-slider.three .facility-track {
+  animation:slideMoveThree 14s infinite;
+}
+
+@keyframes slideMoveThree {
+  0%,28% {transform:translateX(0);}
+  34%,62% {transform:translateX(-100%);}
+  68%,94% {transform:translateX(-200%);}
+  100% {transform:translateX(0);}
+}
+
+.facility-slider.nine .facility-track {
+  animation:slideMoveNine 30s infinite;
+}
+
+@keyframes slideMoveNine {
+  0%,10% {transform:translateX(0);}
+  12%,22% {transform:translateX(-100%);}
+  24%,34% {transform:translateX(-200%);}
+  36%,46% {transform:translateX(-300%);}
+  48%,58% {transform:translateX(-400%);}
+  60%,70% {transform:translateX(-500%);}
+  72%,82% {transform:translateX(-600%);}
+  84%,94% {transform:translateX(-700%);}
+  96% {transform:translateX(-800%);}
+  100% {transform:translateX(0);}
+}
+
+/* 필라테스 */
+.pilates-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+  position:relative;
+}
+
+.pilates-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+
+.pilates-carousel {
+  position:relative;
+  max-width:1280px;
+  margin:auto;
+  overflow:visible;
+  padding:0 110px;
+}
+
+.pilates-window {
+  overflow:hidden;
+}
+
+.pilates-track {
+  display:flex;
+  transition:0.65s ease;
+}
+
+.pilates-slide {
+  min-width:100%;
+}
+
+.pilates-head {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.pilates-head .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.pilates-head h2 {
+  font-size:60px;
+  font-weight:900;
+}
+
+.pilates-head p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+
+.pilates-info {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+  margin:70px 0;
+}
+
+.pilates-info div {
+  padding:30px 20px;
+  text-align:center;
+  border-right:1px solid #222;
+}
+
+.pilates-info div:last-child {
+  border-right:none;
+}
+
+.pilates-info span {
+  display:block;
+  color:#666;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:10px;
+}
+
+.pilates-info strong {
+  font-size:20px;
+  font-weight:900;
+}
+
+.schedule-wrap {
+  background:#fff;
+  color:#111;
+  padding:60px;
+}
+
+.schedule-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  border-bottom:4px solid #111;
+  padding-bottom:28px;
+  margin-bottom:36px;
+}
+
+.schedule-top h3 {
+  font-size:42px;
+  font-weight:900;
+}
+
+.schedule-top p {
+  color:#555;
+  font-size:14px;
+  line-height:1.7;
+  font-weight:700;
+}
+
+.schedule-table {
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+.schedule-table th {
+  padding:18px 8px;
+  border-bottom:3px solid #111;
+  font-size:18px;
+  font-weight:900;
+}
+
+.schedule-table td {
+  height:76px;
+  text-align:center;
+  border-bottom:1px solid #ddd;
+  font-size:15px;
+  font-weight:800;
+  line-height:1.45;
+}
+
+.schedule-table tr:last-child td {
+  border-bottom:3px solid #111;
+}
+
+.schedule-label {
+  background:#000 !important;
+  color:#fff !important;
+  writing-mode:vertical-rl;
+  text-orientation:upright;
+  letter-spacing:8px;
+  font-size:18px !important;
+  width:58px;
+}
+
+.time {
+  color:#333;
+  font-size:18px !important;
+  font-weight:900 !important;
+  width:90px;
+}
+
+.empty {
+  color:#ddd;
+  font-weight:400;
+}
+
+.schedule-note {
+  margin-top:22px;
+  color:#666;
+  font-size:13px;
+  line-height:1.7;
+  font-weight:700;
+}
+
+/* 올패스 */
+.pass-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.pass-title {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.pass-title .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.pass-title h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+
+.pass-title p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+
+.pass-list {
+  max-width:1280px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  gap:0;
+  border-top:1px solid #222;
+}
+
+.pass-card {
+  display:grid;
+  grid-template-columns:220px 1fr;
+  border-bottom:1px solid #222;
+  padding:42px 0;
+}
+
+.pass-left {
+  padding-right:30px;
+}
+
+.pass-name {
+  font-size:34px;
+  font-weight:900;
+}
+
+.pass-desc {
+  color:#777;
+  font-size:14px;
+  margin-top:8px;
+  font-weight:700;
+}
+
+.pass-use {
+  display:inline-block;
+  margin-top:20px;
+  font-size:12px;
+  color:#aaa;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.pass-right h4 {
+  font-size:20px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+
+.branch-area {
+  display:grid;
+  gap:14px;
+}
+
+.branch-row {
+  display:grid;
+  grid-template-columns:80px 1fr;
+  gap:20px;
+}
+
+.region {
+  color:inherit;
+  font-size:13px;
+  font-weight:900;
+}
+
+.branches {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+}
+
+.branches span {
+  color:#aaa;
+  font-size:14px;
+  font-weight:700;
+  transition:0.25s;
+}
+
+.branches span:hover,
+.branches span.highlight {
+  color:var(--yellow);
+  font-weight:900;
+}
+
+/* 트레이너 */
+.trainer-section {
+  background:#fff;
+  padding:150px 0;
+}
+
+.trainer-title {
+  text-align:center;
+  font-size:60px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+
+.trainer-sub {
+  text-align:center;
+  color:#777;
+  font-size:16px;
+  font-weight:700;
+  margin-bottom:80px;
+}
+
+.trainer-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  width:100%;
+  border-top:1px solid #111;
+}
+
+.trainer-card {
+  height:660px;
+  position:relative;
+  overflow:hidden;
+  background:#000;
+  border-right:1px solid #111;
+  border-bottom:1px solid #111;
+}
+
+.trainer-card img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:0.45s;
+}
+
+.trainer-card:hover img {
+  transform:scale(1.05);
+  opacity:0.28;
+}
+
+.trainer-basic {
+  position:absolute;
+  left:34px;
+  bottom:34px;
+  color:#fff;
+  z-index:2;
+}
+
+.trainer-basic h3 {
+  font-size:32px;
+  font-weight:900;
+}
+
+.trainer-basic p {
+  margin-top:8px;
+  color:#ddd;
+  font-size:15px;
+  font-weight:800;
+}
+
+.trainer-detail {
+  position:absolute;
+  inset:0;
+  padding:44px 34px;
+  color:#fff;
+  opacity:0;
+  z-index:3;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  transition:0.35s;
+  background:linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.92));
+}
+
+.trainer-card:hover .trainer-detail {
+  opacity:1;
+}
+
+.trainer-detail .tag {
+  color:#fff;
+  font-size:12px;
+  letter-spacing:3px;
+  font-weight:900;
+  margin-bottom:16px;
+}
+
+.trainer-detail h3 {
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:18px;
+}
+
+.trainer-detail h4 {
+  font-size:15px;
+  font-weight:900;
+  border-bottom:1px solid rgba(255,255,255,0.35);
+  padding-bottom:8px;
+  margin:18px 0 10px;
+}
+
+.trainer-detail li {
+  list-style:none;
+  color:#ddd;
+  font-size:14px;
+  line-height:1.7;
+}
+
+/* 운영시간 */
+.hours-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.hours-wrap {
+  max-width:1280px;
+  margin:auto;
+}
+
+.hours-left {
+  text-align:center;
+  max-width:900px;
+  margin:0 auto 80px;
+}
+
+.hours-left .eyebrow {
+  color:#555;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:4px;
+  margin-bottom:22px;
+}
+
+.hours-left h2 {
+  font-size:60px;
+  line-height:1.15;
+  font-weight:900;
+}
+
+.hours-left p {
+  color:#aaa;
+  font-size:17px;
+  line-height:1.9;
+  margin-top:24px;
+}
+
+.always-open {
+  display:inline-block;
+  margin-top:30px;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  border-bottom:3px solid #fff;
+}
+
+.hours-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  border-top:1px solid #222;
+  border-bottom:1px solid #222;
+}
+
+.hour-card {
+  padding:50px;
+  min-height:240px;
+  border-right:1px solid #222;
+}
+
+.hour-card:nth-child(2) {
+  border-right:none;
+}
+
+.hour-card h3 {
+  color:#777;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:28px;
+}
+
+.hour-card strong {
+  display:block;
+  font-size:48px;
+  font-weight:900;
+}
+
+.hour-card span {
+  display:block;
+  margin-top:16px;
+  color:#aaa;
+  font-size:16px;
+  font-weight:700;
+}
+
+.hour-card.full {
+  grid-column:1 / span 2;
+  border-top:1px solid #222;
+  border-right:none;
+  min-height:auto;
+}
+
+.hour-card.full strong {
+  font-size:36px;
+}
+
+.hour-card.full p {
+  margin-top:18px;
+  color:#aaa;
+  line-height:1.8;
+  font-size:16px;
+}
+
+/* 위치 */
+.location {
+  background:#fff;
+  padding:150px 20px;
+  text-align:center;
+}
+
+.title {
+  font-size:60px;
+  font-weight:900;
+}
+
+.location-sub {
+  color:#777;
+  margin:20px 0 50px;
+  font-weight:700;
+}
+
+.address {
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:60px;
+}
+
+.map-container {
+  display:grid;
+  grid-template-columns:1.2fr 0.8fr;
+  gap:60px;
+  max-width:1280px;
+  margin:auto;
+}
+
+.map-box {
+  height:420px;
+  overflow:hidden;
+  border:1px solid #ddd;
+}
+
+.map-info {
+  min-height:420px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  text-align:left;
+}
+
+.typing {
+  white-space:pre-line;
+  line-height:1.8;
+  color:#444;
+  border-right:2px solid #000;
+}
+
+.btn-box a {
+  display:inline-block;
+  padding:14px 28px;
+  border:1px solid #000;
+  text-decoration:none;
+  color:#000;
+  font-weight:900;
+}
+
+.btn-box a:hover {
+  background:#000;
+  color:#fff;
+}
+
+/* FAQ */
+.faq-section {
+  background:#000;
+  color:#fff;
+  padding:150px 20px;
+}
+
+.faq-wrap {
+  max-width:1000px;
+  margin:auto;
+}
+
+.faq-title {
+  text-align:center;
+  margin-bottom:70px;
+}
+
+.faq-title h2 {
+  font-size:60px;
+  font-weight:900;
+}
+
+.faq-title p {
+  color:#777;
+  margin-top:20px;
+  font-weight:700;
+}
+
+.faq-search input {
+  width:100%;
+  padding:18px;
+  border:1px solid #333;
+  background:#111;
+  color:#fff;
+  font-size:14px;
+  margin-bottom:25px;
+}
+
+.faq-keywords {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-bottom:40px;
+}
+
+.faq-keywords button {
+  padding:10px 18px;
+  border:1px solid #444;
+  background:#111;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+  transition:.25s;
+}
+
+.faq-keywords button:hover {
+  background:#fff;
+  color:#000;
+}
+
+.faq-item {
+  border-bottom:1px solid #222;
+  padding:22px 0;
+  cursor:pointer;
+}
+
+.faq-q {
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+  font-size:18px;
+}
+
+.faq-a {
+  max-height:0;
+  overflow:hidden;
+  color:#aaa;
+  font-size:14px;
+  line-height:1.8;
+  transition:.35s;
+}
+
+.faq-item.active .faq-a {
+  max-height:200px;
+  margin-top:12px;
+}
+
+.faq-q span {
+  font-size:22px;
+  transition:.3s;
+}
+
+.faq-item.active .faq-q span {
+  transform:rotate(45deg);
+}
+
+/* 이미지 모달 */
+.image-modal {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.92);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:99999;
+}
+
+.image-modal img {
+  max-width:90%;
+  max-height:90%;
+  object-fit:contain;
+  transition:0.3s;
+  cursor:zoom-in;
+}
+
+.image-modal.zoom img {
+  transform:scale(1.6);
+  cursor:zoom-out;
+}
+
+.modal-btn {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:60px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+  padding:10px 20px;
+}
+
+.modal-prev {
+  left:20px;
+}
+
+.modal-next {
+  right:20px;
+}
+
+.close-btn {
+  position:absolute;
+  top:30px;
+  right:40px;
+  font-size:40px;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* 푸터 */
+footer {
+  text-align:center;
+  padding:50px;
+  color:#777;
+  background:#fff;
+  font-weight:800;
+}
+
+/* 모바일 */
+@media(max-width:768px){
+
+  .main-content {
+    padding-top:125px;
+  }
+
+  .navbar {
+    padding:14px 16px;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .logo a {
+    font-size:22px;
+  }
+
+  .menu {
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    justify-content:flex-start;
+    gap:14px;
+    padding:6px 0;
+    scrollbar-width:none;
+  }
+
+  .menu::-webkit-scrollbar {
+    display:none;
+  }
+
+  .menu li {
+    flex:0 0 auto;
+    margin:0;
+  }
+
+  .menu a {
+    font-size:13px;
+    white-space:nowrap;
+  }
+
+  .download-btn {
+    width:100%;
+    text-align:center;
+    font-size:12px;
+    padding:11px;
+  }
+
+  #logo-text {
+    font-size:38px;
+  }
+
+  .intro {
+    height:82vh;
+    padding:0 22px;
+  }
+
+  .intro-sub {
+    font-size:11px;
+    margin-bottom:16px;
+  }
+
+  .intro-main {
+    font-size:34px;
+    line-height:1.2;
+  }
+
+  .intro-desc {
+    font-size:15px;
+  }
+
+  .stats-section {
+    grid-template-columns:1fr 1fr;
+  }
+
+  .stat-box {
+    padding:34px 10px;
+  }
+
+  .stat-number {
+    font-size:34px;
+  }
+
+  .stat-box p {
+    font-size:13px;
+  }
+
+  .facility-section,
+  .pilates-section,
+  .pass-section,
+  .hours-section,
+  .location,
+  .faq-section {
+    padding:90px 18px;
+  }
+
+  .facility-title {
+    margin-bottom:55px;
+  }
+
+  .facility-title h2,
+  .pilates-head h2,
+  .pass-title h2,
+  .hours-left h2,
+  .trainer-title,
+  .title,
+  .faq-title h2 {
+    font-size:34px;
+    line-height:1.18;
+  }
+
+  .facility-title p,
+  .pilates-head p,
+  .pass-title p,
+  .hours-left p {
+    font-size:15px;
+    line-height:1.75;
+  }
+
+  .facility-list {
+    gap:60px;
+  }
+
+  .facility-item,
+  .facility-item:nth-child(even) {
+    grid-template-columns:1fr;
+    gap:26px;
+    padding-bottom:50px;
+  }
+
+  .facility-item:nth-child(even) .facility-text,
+  .facility-item:nth-child(even) .facility-slider {
+    order:initial;
+  }
+
+  .facility-text h3 {
+    font-size:27px;
+  }
+
+  .facility-slider {
+    height:240px;
+    border-radius:16px;
+  }
+
+  .pilates-carousel {
+    padding:0;
+  }
+
+  .pilates-head {
+    margin-bottom:45px;
+  }
+
+  .pilates-info {
+    grid-template-columns:1fr;
+    margin:38px 0;
+  }
+
+  .pilates-info div {
+    border-right:none;
+    border-bottom:1px solid #222;
+  }
+
+  .schedule-wrap {
+    padding:18px;
+    overflow-x:auto;
+    border-radius:16px;
+  }
+
+  .schedule-top {
+    display:block;
+  }
+
+  .schedule-top h3 {
+    font-size:30px;
+    margin-bottom:12px;
+  }
+
+  .schedule-table {
+    min-width:820px;
+  }
+
+  .pass-title {
+    margin-bottom:45px;
+  }
+
+  .pass-card {
+    grid-template-columns:1fr;
+    gap:22px;
+    padding:34px 0;
+  }
+
+  .pass-name {
+    font-size:28px;
+  }
+
+  .branch-row {
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+
+  .branches {
+    gap:8px 12px;
+  }
+
+  .branches span {
+    font-size:13px;
+  }
+
+  .trainer-section {
+    padding:90px 0;
+  }
+
+  .trainer-title {
+    font-size:40px;
+  }
+
+  .trainer-sub {
+    margin-bottom:45px;
+    padding:0 18px;
+  }
+
+  .trainer-grid {
+    grid-template-columns:1fr;
+  }
+
+  .trainer-card {
+    height:520px;
+  }
+
+  .trainer-basic {
+    left:24px;
+    bottom:24px;
+  }
+
+  .trainer-basic h3 {
+    font-size:26px;
+  }
+
+  .trainer-detail {
+    padding:34px 24px;
+  }
+
+  .trainer-detail h3 {
+    font-size:28px;
+  }
+
+  .hours-grid {
+    grid-template-columns:1fr;
+  }
+
+  .hour-card,
+  .hour-card.full {
+    grid-column:auto;
+    border-right:none;
+    border-bottom:1px solid #222;
+    padding:34px 24px;
+  }
+
+  .hour-card strong {
+    font-size:30px;
+  }
+
+  .hour-card.full strong {
+    font-size:26px;
+  }
+
+  .address {
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:35px;
+  }
+
+  .map-container {
+    grid-template-columns:1fr;
+    gap:32px;
+  }
+
+  .map-box {
+    height:320px;
+  }
+
+  .map-info {
+    min-height:auto;
+    gap:32px;
+  }
+
+  .typing {
+    font-size:14px;
+    line-height:1.8;
+  }
+
+  .faq-title {
+    margin-bottom:40px;
+  }
+
+  .faq-search input {
+    font-size:13px;
+    padding:15px;
+  }
+
+  .faq-keywords {
+    gap:8px;
+  }
+
+  .faq-keywords button {
+    font-size:12px;
+    padding:9px 13px;
+  }
+
+  .faq-q {
+    font-size:16px;
+    gap:15px;
+  }
+
+  .faq-a {
+    font-size:13px;
+  }
+
+  .image-modal img {
+    max-width:92%;
+    max-height:72%;
+  }
+
+  .image-modal.zoom img {
+    transform:scale(1.25);
+  }
+
+  .modal-btn {
+    font-size:38px;
+    padding:8px;
+  }
+
+  .modal-prev {
+    left:4px;
+  }
+
+  .modal-next {
+    right:4px;
+  }
+
+  .close-btn {
+    top:18px;
+    right:24px;
+    font-size:34px;
+  }
+
+  footer {
+    padding:36px 20px;
+    font-size:12px;
+  }
+}
+
+@media(max-width:420px){
+
+  .intro-main {
+    font-size:30px;
+  }
+
+  .stats-section {
+    grid-template-columns:1fr;
+  }
+
+  .facility-title h2,
+  .pilates-head h2,
+  .pass-title h2,
+  .hours-left h2,
+  .title {
+    font-size:30px;
+  }
+
+  .trainer-card {
+    height:480px;
+  }
+
+  .schedule-wrap {
+    padding:16px;
+  }
+}

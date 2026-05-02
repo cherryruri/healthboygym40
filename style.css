@@ -2204,3 +2204,125 @@ body:not(.loaded) .main-content{
   }
 }
 
+/* ================= 모바일 메뉴 프리미엄 버전 ================= */
+
+@media(max-width:500px){
+
+  /* 햄버거 버튼 고급화 */
+  .mobile-menu-btn{
+    border:none;
+    background:#111;
+    color:#fff;
+    border-radius:999px;
+    width:46px;
+    height:46px;
+    font-size:0;
+    position:relative;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+
+  .mobile-menu-btn::before,
+  .mobile-menu-btn::after{
+    content:"";
+    position:absolute;
+    left:13px;
+    width:20px;
+    height:2px;
+    background:#fff;
+    border-radius:999px;
+    transition:0.3s;
+  }
+
+  .mobile-menu-btn::before{ top:17px; }
+  .mobile-menu-btn::after{ top:27px; }
+
+  /* 열리면 X로 변환 */
+  body.menu-open .mobile-menu-btn::before{
+    top:22px;
+    transform:rotate(45deg);
+  }
+
+  body.menu-open .mobile-menu-btn::after{
+    top:22px;
+    transform:rotate(-45deg);
+  }
+
+  /* ⭐ 핵심: 유리 느낌 (뒤 배경 보이게) */
+  .mobile-side-menu{
+  background:rgba(0,0,0,0.10);   /* ← 더 투명 */
+  backdrop-filter:blur(6px);      /* ← 덜 흐리게 */
+  -webkit-backdrop-filter:blur(6px);
+  border-left:1px solid rgba(255,255,255,0.25);
+}
+
+
+  /* 메뉴 글자 화이트 */
+  .mobile-side-menu a{
+    color:#fff;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+
+  .mobile-side-menu a:hover{
+    color:#fff200;
+  }
+
+  /* 로고 & 닫기 버튼 */
+  .mobile-side-logo{
+    color:#fff;
+  }
+
+  .mobile-close{
+    color:#fff;
+  }
+
+  /* 예약 버튼 더 고급스럽게 */
+  .mobile-side-reserve{
+    background:#fff;
+    color:#000 !important;
+    border-radius:999px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+  }
+
+  /* 배경 너무 검게 덮는거 줄이기 */
+  .mobile-menu-overlay{
+    background:rgba(0,0,0,0.35);
+  }
+
+}
+
+/* ================= 모바일 메뉴 최종 정리 ================= */
+
+.mobile-side-menu a{
+  /* 애니메이션 */
+  opacity:0;
+  transform:translateY(20px);
+  transition:0.6s ease;
+
+  /* 디자인 */
+  font-size:18px;
+  font-weight:700;
+  padding:14px 0;
+  letter-spacing:-0.01em;
+}
+
+/* 열렸을 때 */
+body.menu-open .mobile-side-menu a{
+  opacity:0.9;
+  transform:translateY(0);
+}
+
+/* hover 디테일 */
+.mobile-side-menu a:hover{
+  opacity:1;
+}
+
+/* 순서 애니메이션 */
+.mobile-side-menu a:nth-of-type(1){ transition-delay:0.1s; }
+.mobile-side-menu a:nth-of-type(2){ transition-delay:0.2s; }
+.mobile-side-menu a:nth-of-type(3){ transition-delay:0.3s; }
+.mobile-side-menu a:nth-of-type(4){ transition-delay:0.4s; }
+.mobile-side-menu a:nth-of-type(5){ transition-delay:0.5s; }
+.mobile-side-menu a:nth-of-type(6){ transition-delay:0.6s; }
+.mobile-side-menu a:nth-of-type(7){ transition-delay:0.7s; }
+.mobile-side-menu a:nth-of-type(8){ transition-delay:0.8s; }
+.mobile-side-menu a:nth-of-type(9){ transition-delay:0.9s; }

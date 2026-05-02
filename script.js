@@ -314,3 +314,19 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
 });
+/* 모바일 시설투어 사진 스크롤 컬러 전환 */
+const facilityColorItems = document.querySelectorAll(".facility-item");
+
+const facilityColorObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("color-on");
+    }
+  });
+},{
+  threshold:0.35
+});
+
+facilityColorItems.forEach(item=>{
+  facilityColorObserver.observe(item);
+});

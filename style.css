@@ -1714,9 +1714,9 @@ section{
 @media(max-width:768px){
 
   .facility-slide img{
-    filter:grayscale(100%) brightness(0.72);
-    transition:filter 0.7s ease, transform 0.7s ease;
-  }
+  filter:grayscale(100%) brightness(0.72);
+  transition:filter 2.2s ease, transform 2.2s ease;
+}
 
   .facility-item.color-on img{
     filter:grayscale(0%) brightness(1);

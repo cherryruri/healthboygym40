@@ -355,32 +355,46 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   });
 
-  buttons.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const cat = btn.dataset.category;
+ buttons.forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const cat = btn.dataset.category;
 
-      buttons.forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
+    buttons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
 
-      items.forEach(item=>{
-        if(cat === "all" || item.dataset.category === cat){
-          item.style.display="block";
-        }else{
-          item.style.display="none";
-        }
-      });
+    items.forEach(item=>{
+
+      // 전부 보이게 유지
+      item.style.display = "block";
+
+      // 선택된 것만 강조
+      if(cat === "all" || item.dataset.category === cat){
+        item.classList.remove("faq-dim");
+      }else{
+        item.classList.add("faq-dim");
+      }
+
     });
   });
+});
 
   if(search){
     search.addEventListener("input", ()=>{
-      const val = search.value.toLowerCase();
+  const val = search.value.toLowerCase();
 
-      items.forEach(item=>{
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(val) ? "block" : "none";
-      });
-    });
+  items.forEach(item=>{
+    const text = item.innerText.toLowerCase();
+
+    // 전부 보이게 유지
+    item.style.display = "block";
+
+    if(text.includes(val)){
+      item.classList.remove("faq-dim");
+    }else{
+      item.classList.add("faq-dim");
+    }
+  });
+});
   }
 
 });

@@ -1939,3 +1939,65 @@ body:not(.loaded) .main-content{
     font-size:14px;
   }
 }
+
+/* 모바일 FAQ 버튼 2열 배치 */
+@media(max-width:768px){
+
+  .faq-new-wrap{
+    max-width:100%;
+  }
+
+  .faq-new-category{
+    display:grid !important;
+    grid-template-columns:repeat(5, 1fr) !important;
+    gap:12px !important;
+    margin-bottom:45px !important;
+  }
+
+  .faq-new-category button{
+    width:100% !important;
+    height:48px !important;
+    font-size:12px !important;
+    padding:0 8px !important;
+    white-space:nowrap;
+  }
+
+  .faq-new-list{
+    max-width:100%;
+  }
+}
+
+.faq-new-item.faq-dim{
+  opacity:0.25;
+  filter:grayscale(100%);
+}
+
+
+/* FAQ 선택 안 된 질문 흐리게 */
+.faq-new-item{
+  transition:opacity .25s, filter .25s;
+}
+
+.faq-new-item.faq-dim{
+  opacity:0.28;
+  filter:grayscale(100%);
+}
+
+.faq-new-item.faq-dim .faq-new-a{
+  max-height:0 !important;
+  margin-top:0 !important;
+}
+
+.faq-new-item{
+  transition:opacity .25s, filter .25s;
+}
+
+.faq-new-item.faq-dim{
+  opacity:0.28;
+  filter:grayscale(100%);
+}
+
+.faq-new-item.faq-dim .faq-new-a{
+  max-height:0 !important;
+  margin-top:0 !important;
+}

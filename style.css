@@ -2020,3 +2020,187 @@ body:not(.loaded) .main-content{
     opacity:1;
   }
 }
+
+/* ================= 브랜드 + 연혁 섹션 ================= */
+
+.brand-section{
+  background:#fff;
+  color:#111;
+  overflow:hidden;
+}
+
+.brand-top{
+  padding:90px 20px 70px;
+  text-align:center;
+}
+
+.brand-label{
+  font-size:13px;
+  font-weight:900;
+  color:#333;
+  margin-bottom:12px;
+}
+
+.brand-top h2{
+  font-size:32px;
+  font-weight:900;
+  margin-bottom:24px;
+}
+
+.brand-top p{
+  color:#555;
+  font-size:15px;
+  line-height:1.8;
+  font-weight:700;
+  margin-bottom:42px;
+}
+
+.brand-big-text{
+  font-size:155px;
+  line-height:0.85;
+  font-weight:900;
+  letter-spacing:-0.08em;
+  color:transparent;
+  background-image:url("센터전체사진1.jpg");
+  background-size:cover;
+  background-position:center;
+  -webkit-background-clip:text;
+  background-clip:text;
+  white-space:nowrap;
+}
+
+.history-section{
+  display:grid;
+  grid-template-columns:38% 62%;
+  min-height:720px;
+  background:#f4f4f4;
+}
+
+.history-left{
+  background:#000;
+  color:#fff;
+  padding:90px 70px;
+}
+
+.history-left p{
+  color:var(--yellow);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:20px;
+  position:relative;
+  padding-left:42px;
+}
+
+.history-left p::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:50%;
+  width:28px;
+  height:2px;
+  background:var(--yellow);
+}
+
+.history-left h2{
+  font-size:58px;
+  line-height:1.15;
+  font-weight:900;
+}
+
+.history-right{
+  padding:80px 80px;
+  background:#f7f7f7;
+}
+
+.history-item{
+  position:relative;
+  padding:0 0 46px 42px;
+  border-left:1px solid #ccc;
+}
+
+.history-item::before{
+  content:"";
+  position:absolute;
+  left:-7px;
+  top:6px;
+  width:13px;
+  height:13px;
+  background:var(--yellow);
+  border-radius:50%;
+  box-shadow:0 0 0 5px rgba(255,242,0,0.18);
+}
+
+.history-item strong{
+  display:block;
+  font-size:34px;
+  font-weight:900;
+  margin-bottom:16px;
+}
+
+.history-item span{
+  display:block;
+  color:#333;
+  font-size:15px;
+  line-height:1.7;
+  font-weight:700;
+}
+
+.history-item.active strong{
+  color:#c7b600;
+}
+
+.history-item:last-child{
+  padding-bottom:0;
+}
+
+@media(max-width:768px){
+
+  .brand-top{
+    padding:75px 18px 55px;
+  }
+
+  .brand-top h2{
+    font-size:27px;
+  }
+
+  .brand-top p{
+    font-size:14px;
+  }
+
+  .brand-big-text{
+    font-size:56px;
+    line-height:1;
+    letter-spacing:-0.07em;
+  }
+
+  .history-section{
+    grid-template-columns:1fr;
+  }
+
+  .history-left{
+    padding:65px 26px 45px;
+  }
+
+  .history-left h2{
+    font-size:40px;
+  }
+
+  .history-right{
+    padding:50px 26px 70px;
+  }
+
+  .history-item{
+    padding-left:30px;
+    padding-bottom:40px;
+  }
+
+  .history-item strong{
+    font-size:28px;
+  }
+
+  .history-item span{
+    font-size:14px;
+  }
+}
+

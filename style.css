@@ -1986,3 +1986,9 @@ body:not(.loaded) .main-content{
 .mobile-side-menu a{
   color:#fff;
 }
+
+@media(max-width:768px){
+  .facility-item.color-on img{
+    filter:grayscale(0%) brightness(1);
+  }
+}

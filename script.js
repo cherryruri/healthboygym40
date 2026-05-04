@@ -78,7 +78,35 @@ function fadeIn(){
 
   els.forEach(el=>observer.observe(el));
 }
+/* ================= 모바일 메뉴 ================= */
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileCloseBtn = document.getElementById("mobileCloseBtn");
+const mobileOverlay = document.getElementById("mobileMenuOverlay");
+const mobileLinks = document.querySelectorAll(".mobile-side-menu a");
 
+function openMobileMenu(){
+  document.body.classList.add("menu-open");
+}
+
+function closeMobileMenu(){
+  document.body.classList.remove("menu-open");
+}
+
+if(mobileMenuBtn){
+  mobileMenuBtn.addEventListener("click", openMobileMenu);
+}
+
+if(mobileCloseBtn){
+  mobileCloseBtn.addEventListener("click", closeMobileMenu);
+}
+
+if(mobileOverlay){
+  mobileOverlay.addEventListener("click", closeMobileMenu);
+}
+
+mobileLinks.forEach(link=>{
+  link.addEventListener("click", closeMobileMenu);
+});
 
 /* ================= 숫자 카운터 ================= */
 let counted = false;

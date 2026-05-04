@@ -398,3 +398,23 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 });
+
+const brandText = `대한민국 NO.1 피트니스 브랜드 헬스보이짐입니다.
+단순한 운동 공간을 넘어, 삶의 변화를 만들어가는 프리미엄 공간을 제공합니다.
+지금 이 순간에도 더 나은 당신을 위한 변화는 여기서 시작됩니다.`;
+
+const typingEl = document.getElementById("typing-brand");
+
+if(typingEl){
+  let i = 0;
+
+  function typingEffect(){
+    if(i < brandText.length){
+      typingEl.innerHTML += brandText[i] === "\n" ? "<br>" : brandText[i];
+      i++;
+      setTimeout(typingEffect, 32);
+    }
+  }
+
+  setTimeout(typingEffect, 800);
+}

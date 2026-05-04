@@ -2346,5 +2346,10 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
+#typing-brand{
+  border-right:1px solid #000;
+  font-size:18px;
+}
+
 
 

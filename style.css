@@ -2354,5 +2354,8 @@ body.menu-open .mobile-side-menu a{
 @keyframes blink{
   50%{opacity:0;}
 }
+.brand-desc{
+  display:inline-block;
+}
 
 

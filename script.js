@@ -23,61 +23,6 @@ setInterval(()=>{
 }, 4500);
 
 
-/* ================= 로고 타이핑 ================= */
-const text="HEALTHBOYGYM";
-let i=0;
-const logo=document.getElementById("logo-text");
-
-if(logo){
-  const typing=setInterval(()=>{
-    if(i<text.length){
-      logo.textContent+=text[i];
-      i++;
-    }else{
-      clearInterval(typing);
-      setTimeout(()=>{
-        const logoScreen = document.querySelector('.logo-screen');
-        const mainContent = document.querySelector('.main-content');
-
-        if(logoScreen) logoScreen.classList.add('zoom-out');
-
-        setTimeout(()=>{
-          if(logoScreen) logoScreen.style.display='none';
-          if(mainContent) mainContent.style.display='block';
-          document.body.classList.add("loaded");
-
-          fadeIn();
-          startTyping();
-          observeCounter();
-          startBrandTyping();
-          observeFacilityColor(); // 👈 여기 실행됨
-        },600);
-
-      },500);
-    }
-  },60);
-}else{
-  document.body.classList.add("loaded");
-  fadeIn();
-  startTyping();
-  observeCounter();
-  startBrandTyping();
-  observeFacilityColor();
-}
-
-
-/* ================= fade 애니메이션 ================= */
-function fadeIn(){
-  const els=document.querySelectorAll('.fade');
-
-  const observer=new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      entry.target.classList.toggle('show', entry.isIntersecting);
-    });
-  },{threshold:0.2});
-
-  els.forEach(el=>observer.observe(el));
-}
 /* ================= 모바일 메뉴 ================= */
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 const mobileCloseBtn = document.getElementById("mobileCloseBtn");
@@ -107,6 +52,74 @@ if(mobileOverlay){
 mobileLinks.forEach(link=>{
   link.addEventListener("click", closeMobileMenu);
 });
+
+
+/* ================= 로고 타이핑 ================= */
+const text="HEALTHBOYGYM";
+let i=0;
+const logo=document.getElementById("logo-text");
+
+function startSite(){
+  const logoScreen = document.querySelector('.logo-screen');
+  const mainContent = document.querySelector('.main-content');
+
+  if(logoScreen) logoScreen.classList.add('zoom-out');
+
+  setTimeout(()=>{
+    if(logoScreen) logoScreen.style.display='none';
+    if(mainContent) mainContent.style.display='block';
+
+    document.body.classList.add("loaded");
+
+    fadeIn();
+    startTyping();
+    observeCounter();
+    startBrandTyping();
+    observeFacilityColor();
+    forceFacilityColorMobile();
+  },600);
+}
+
+if(logo){
+  const typing=setInterval(()=>{
+    if(i<text.length){
+      logo.textContent+=text[i];
+      i++;
+    }else{
+      clearInterval(typing);
+      setTimeout(startSite,500);
+    }
+  },60);
+}else{
+  const mainContent = document.querySelector('.main-content');
+  if(mainContent) mainContent.style.display='block';
+
+  document.body.classList.add("loaded");
+
+  fadeIn();
+  startTyping();
+  observeCounter();
+  startBrandTyping();
+  observeFacilityColor();
+  forceFacilityColorMobile();
+}
+
+
+/* ================= fade 애니메이션 ================= */
+function fadeIn(){
+  const els=document.querySelectorAll('.fade');
+
+  const observer=new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('show');
+      }
+    });
+  },{threshold:0.2});
+
+  els.forEach(el=>observer.observe(el));
+}
+
 
 /* ================= 숫자 카운터 ================= */
 let counted = false;
@@ -190,7 +203,7 @@ function startBrandTyping(){
   const brandHighlight = document.querySelector(".brand-highlight");
   if(!brandHighlight) return;
 
-  const text = brandHighlight.innerText
+  const brandText = brandHighlight.innerText
     .split("\n")
     .map(line => line.trim())
     .filter(line => line.length > 0)
@@ -202,12 +215,12 @@ function startBrandTyping(){
   let i = 0;
 
   function type(){
-    if(i < text.length){
+    if(i < brandText.length){
 
-      if(text[i] === "\n"){
+      if(brandText[i] === "\n"){
         brandHighlight.innerHTML += "<br>";
       }else{
-        brandHighlight.innerHTML += text[i];
+        brandHighlight.innerHTML += brandText[i];
       }
 
       i++;
@@ -237,13 +250,33 @@ function observeFacilityColor(){
       }
     });
   },{
-    threshold:0.4   // ✅ 정상값 (여기 핵심 수정됨)
+    threshold:0.35
   });
 
   items.forEach(item=>{
     observer.observe(item);
   });
 }
+
+function forceFacilityColorMobile(){
+  const items = document.querySelectorAll(".facility-item");
+
+  items.forEach(item=>{
+    const rect = item.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if(rect.top < windowHeight * 0.75 && rect.bottom > windowHeight * 0.2){
+      item.classList.add("color-on");
+    }
+  });
+}
+
+window.addEventListener("scroll", forceFacilityColorMobile);
+window.addEventListener("resize", forceFacilityColorMobile);
+window.addEventListener("load", forceFacilityColorMobile);
+
+setTimeout(forceFacilityColorMobile, 800);
+setTimeout(forceFacilityColorMobile, 1600);
 
 
 /* ================= FAQ 클릭 ================= */
@@ -316,42 +349,6 @@ if(images.length){
   modalImg.onclick = ()=>{
     modal.classList.toggle("zoom");
   };
-
 }
 
 });
-
-/* ================= 시설투어 모바일 컬러 강제 적용 ================= */
-function forceFacilityColorMobile(){
-  const items = document.querySelectorAll(".facility-item");
-
-  items.forEach(item=>{
-    const rect = item.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
-
-    if(rect.top < windowHeight * 0.65 && rect.bottom > windowHeight * 0.25){
-      item.classList.add("color-on");
-    }else{
-      item.classList.remove("color-on");
-    }
-  });
-}
-
-window.addEventListener("scroll", forceFacilityColorMobile);
-window.addEventListener("resize", forceFacilityColorMobile);
-window.addEventListener("load", forceFacilityColorMobile);
-
-setTimeout(forceFacilityColorMobile, 1000);
-setTimeout(forceFacilityColorMobile, 2000);
-
-document.getElementById("mobileMenuBtn").onclick = () => {
-  document.body.classList.add("menu-open");
-};
-
-document.getElementById("mobileCloseBtn").onclick = () => {
-  document.body.classList.remove("menu-open");
-};
-
-document.getElementById("mobileMenuOverlay").onclick = () => {
-  document.body.classList.remove("menu-open");
-};

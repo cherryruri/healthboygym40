@@ -2033,5 +2033,15 @@ body:not(.loaded) .main-content{
     transform:scale(1.02) !important;
   }
 }
+@media(max-width:768px){
+  .facility-slide img{
+    filter:grayscale(100%) brightness(0.72) !important;
+    transition:filter 1.2s ease, transform 1.2s ease !important;
+  }
 
+  .facility-item.color-on .facility-slide img{
+    filter:grayscale(0%) brightness(1) !important;
+    transform:scale(1.02) !important;
+  }
+}
 

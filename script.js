@@ -343,3 +343,15 @@ window.addEventListener("load", forceFacilityColorMobile);
 
 setTimeout(forceFacilityColorMobile, 1000);
 setTimeout(forceFacilityColorMobile, 2000);
+
+document.getElementById("mobileMenuBtn").onclick = () => {
+  document.body.classList.add("menu-open");
+};
+
+document.getElementById("mobileCloseBtn").onclick = () => {
+  document.body.classList.remove("menu-open");
+};
+
+document.getElementById("mobileMenuOverlay").onclick = () => {
+  document.body.classList.remove("menu-open");
+};

@@ -2312,3 +2312,14 @@ body.menu-open .mobile-side-menu a{
 .mobile-side-menu a:nth-of-type(7){ transition-delay:0.7s; }
 .mobile-side-menu a:nth-of-type(8){ transition-delay:0.8s; }
 .mobile-side-menu a:nth-of-type(9){ transition-delay:0.9s; }
+
+@media(max-width:768px){
+  .brand-big-text{
+    font-size:48px;
+    line-height:1.1;
+    white-space:normal;
+  }
+}
+
+
+

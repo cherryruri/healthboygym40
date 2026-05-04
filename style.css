@@ -2044,4 +2044,24 @@ body:not(.loaded) .main-content{
     transform:scale(1.02) !important;
   }
 }
+@media(max-width:768px){
+  .mobile-side-menu{
+    background:rgba(0,0,0,0.72);
+    backdrop-filter:blur(12px);
+    color:#fff;
+  }
 
+  .mobile-side-menu a,
+  .mobile-side-logo,
+  .mobile-close{
+    color:#fff;
+  }
+
+  .mobile-close{
+    background:none;
+  }
+
+  body.menu-open .mobile-side-menu{
+    right:0;
+  }
+}

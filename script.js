@@ -50,7 +50,7 @@ if(logo){
           startTyping();
           observeCounter();
           startBrandTyping();
-          observeFacilityColor();
+          observeFacilityColor(); // 👈 여기 실행됨
         },600);
 
       },500);
@@ -195,7 +195,7 @@ function startBrandTyping(){
 }
 
 
-/* ================= 모바일 시설투어 사진 흑백 → 컬러 ================= */
+/* ================= 모바일 시설투어 컬러 전환 ================= */
 function observeFacilityColor(){
   const items = document.querySelectorAll(".facility-item");
   if(!items.length) return;
@@ -209,7 +209,7 @@ function observeFacilityColor(){
       }
     });
   },{
-    threshold:2.0
+    threshold:0.4   // ✅ 정상값 (여기 핵심 수정됨)
   });
 
   items.forEach(item=>{
@@ -218,64 +218,14 @@ function observeFacilityColor(){
 }
 
 
-/* ================= FAQ 클릭 / 검색 / 카테고리 ================= */
+/* ================= FAQ 클릭 ================= */
 const faqItems = document.querySelectorAll(".faq-new-item");
-const faqButtons = document.querySelectorAll(".faq-new-category button");
-const faqSearch = document.querySelector(".faq-new-search input");
 
 faqItems.forEach(item=>{
   item.addEventListener("click", function(){
     this.classList.toggle("active");
   });
 });
-
-faqButtons.forEach(btn=>{
-  btn.addEventListener("click", function(){
-
-    faqButtons.forEach(b=>b.classList.remove("active"));
-    this.classList.add("active");
-
-    const category = this.dataset.category;
-
-    faqItems.forEach(item=>{
-      const itemCategory = item.dataset.category;
-
-      item.classList.remove("active");
-      item.classList.remove("faq-dim");
-
-      if(category === "all" || itemCategory === category){
-        item.style.display = "block";
-      }else{
-        item.style.display = "none";
-      }
-    });
-  });
-});
-
-if(faqSearch){
-  faqSearch.addEventListener("input", function(){
-    const keyword = this.value.trim().toLowerCase();
-
-    faqItems.forEach(item=>{
-      const text = item.innerText.toLowerCase();
-
-      item.style.display = "block";
-
-      if(keyword === ""){
-        item.classList.remove("faq-dim");
-        item.classList.remove("active");
-        return;
-      }
-
-      if(text.includes(keyword)){
-        item.classList.remove("faq-dim");
-      }else{
-        item.classList.add("faq-dim");
-        item.classList.remove("active");
-      }
-    });
-  });
-}
 
 
 /* ================= 이미지 모달 ================= */
@@ -338,67 +288,6 @@ if(images.length){
   modalImg.onclick = ()=>{
     modal.classList.toggle("zoom");
   };
-
-}
-
-
-/* ================= 모바일 사이드 메뉴 생성 ================= */
-const navbar = document.querySelector(".navbar");
-const menu = document.querySelector(".menu");
-
-if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
-
-  const menuBtn = document.createElement("button");
-  menuBtn.className = "mobile-menu-btn";
-  menuBtn.innerHTML = "☰";
-
-  const overlay = document.createElement("div");
-  overlay.className = "mobile-menu-overlay";
-
-  const sideMenu = document.createElement("div");
-  sideMenu.className = "mobile-side-menu";
-
-  sideMenu.innerHTML = `
-    <div class="mobile-side-top">
-      <div class="mobile-side-logo">HEALTHBOYGYM</div>
-      <button class="mobile-close">×</button>
-    </div>
-
-    <a href="#about">센터 소개</a>
-    <a href="#facility">시설 투어</a>
-    <a href="#pilates">필라테스 안내</a>
-    <a href="#pass">올패스 안내</a>
-    <a href="#trainer">트레이너 소개</a>
-    <a href="#hours">운영 시간</a>
-    <a href="#location">오시는 길</a>
-    <a href="#faq">FAQ</a>
-
-    <a class="mobile-side-reserve" href="https://map.naver.com" target="_blank">
-      네이버 문의 및 예약 바로가기
-    </a>
-  `;
-
-  navbar.appendChild(menuBtn);
-  document.body.appendChild(overlay);
-  document.body.appendChild(sideMenu);
-
-  menuBtn.addEventListener("click", function(){
-    document.body.classList.add("menu-open");
-  });
-
-  overlay.addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
-
-  sideMenu.querySelector(".mobile-close").addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
-
-  sideMenu.querySelectorAll("a").forEach(link=>{
-    link.addEventListener("click", function(){
-      document.body.classList.remove("menu-open");
-    });
-  });
 
 }
 

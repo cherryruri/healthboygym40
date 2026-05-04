@@ -2328,7 +2328,6 @@ body.menu-open .mobile-side-menu a{
   font-weight:700;
   max-width:720px;
   margin:auto;
-  border-right:1px solid #000;
   animation:blinkCursor 1s infinite;
   white-space:pre-line;
   overflow:hidden;
@@ -2346,10 +2345,14 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
-#typing-brand{
-  border-right:1px solid #000;
-  font-size:18px;
+#typing-brand::after{
+  content:"|";
+  margin-left:4px;
+  animation:blink 1s infinite;
 }
 
+@keyframes blink{
+  50%{opacity:0;}
+}
 
 

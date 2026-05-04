@@ -1738,13 +1738,13 @@ section{
     gap:0;
   }
 
-  .trainer-card{
-    width:50%;
-    flex:0 0 50%;
-    height:300px;
-    border-right:1px solid #111;
-    border-bottom:1px solid #111;
-  }
+.trainer-card{
+  width:calc(100% / 3);
+  flex:0 0 calc(100% / 3);
+  height:300px;
+  border-right:1px solid #111;
+  border-bottom:1px solid #111;
+}
 
   .trainer-card img{
     width:100%;

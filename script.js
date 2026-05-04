@@ -246,11 +246,20 @@ if(typingEl){
     if(j < brandText.length){
       typingEl.innerHTML += brandText[j] === "\n" ? "<br>" : brandText[j];
       j++;
-      setTimeout(typingEffect, 70);
+      setTimeout(typingEffect, 100);
     }
   }
 
-  setTimeout(typingEffect, 1200);
+  const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      typingEffect();
+      observer.disconnect();
+    }
+  });
+},{ threshold:0.4 });
+
+observer.observe(typingEl);
 }
 
 });

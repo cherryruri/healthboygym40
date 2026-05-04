@@ -246,11 +246,11 @@ if(typingEl){
     if(j < brandText.length){
       typingEl.innerHTML += brandText[j] === "\n" ? "<br>" : brandText[j];
       j++;
-      setTimeout(typingEffect, 32);
+      setTimeout(typingEffect, 70);
     }
   }
 
-  setTimeout(typingEffect, 800);
+  setTimeout(typingEffect, 1200);
 }
 
 });

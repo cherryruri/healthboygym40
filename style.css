@@ -2321,5 +2321,29 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
+.brand-desc{
+  font-size:18px;
+  line-height:1.9;
+  color:#444;
+  font-weight:700;
+  max-width:720px;
+  margin:auto;
+  border-right:2px solid #000;
+  white-space:pre-line;
+  overflow:hidden;
+  animation:blinkCursor 0.7s infinite;
+}
+
+@keyframes blinkCursor{
+  50%{border-color:transparent;}
+}
+
+@media(max-width:768px){
+  .brand-desc{
+    font-size:15px;
+    padding:0 10px;
+  }
+}
+
 
 

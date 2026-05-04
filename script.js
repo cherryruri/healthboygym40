@@ -292,3 +292,26 @@ if(images.length){
 }
 
 });
+
+/* ================= 시설투어 모바일 컬러 강제 적용 ================= */
+function forceFacilityColorMobile(){
+  const items = document.querySelectorAll(".facility-item");
+
+  items.forEach(item=>{
+    const rect = item.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if(rect.top < windowHeight * 0.65 && rect.bottom > windowHeight * 0.25){
+      item.classList.add("color-on");
+    }else{
+      item.classList.remove("color-on");
+    }
+  });
+}
+
+window.addEventListener("scroll", forceFacilityColorMobile);
+window.addEventListener("resize", forceFacilityColorMobile);
+window.addEventListener("load", forceFacilityColorMobile);
+
+setTimeout(forceFacilityColorMobile, 1000);
+setTimeout(forceFacilityColorMobile, 2000);

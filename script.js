@@ -24,7 +24,7 @@ setInterval(()=>{
 
 
 /* ================= 모바일 메뉴 ================= */
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileMenuBtn = document.getElementById("mobileMenu");
 const mobileCloseBtn = document.getElementById("mobileCloseBtn");
 const mobileOverlay = document.getElementById("mobileMenuOverlay");
 const mobileLinks = document.querySelectorAll(".mobile-side-menu a");

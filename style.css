@@ -1765,9 +1765,6 @@ section{
     font-size:11px;
   }
 
-  .trainer-detail{
-    display:none;
-  }
 
 }
 
@@ -1989,19 +1986,8 @@ body:not(.loaded) .main-content{
   margin-top:0 !important;
 }
 
-.faq-new-item{
-  transition:opacity .25s, filter .25s;
-}
 
-.faq-new-item.faq-dim{
-  opacity:0.28;
-  filter:grayscale(100%);
-}
 
-.faq-new-item.faq-dim .faq-new-a{
-  max-height:0 !important;
-  margin-top:0 !important;
-}
 
 /* 모바일 트레이너 상세정보 보이게 */
 @media(max-width:768px){

@@ -2027,3 +2027,11 @@ body:not(.loaded) .main-content{
 .faq-new-q{
   cursor:pointer;
 }
+@media(max-width:768px){
+  .facility-item.color-on img{
+    filter:grayscale(0%) brightness(1) !important;
+    transform:scale(1.02) !important;
+  }
+}
+
+

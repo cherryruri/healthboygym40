@@ -2348,23 +2348,17 @@ body.menu-open .mobile-side-menu a{
 #typing-brand::after{
   content:"|";
   margin-left:4px;
-  animation:blink 1s infinite;
+  animation:brandBlink 1s infinite;
 }
 
-@keyframes blink{
+@keyframes brandBlink{
   50%{opacity:0;}
 }
+
+
 .brand-desc{
   display:inline-block;
 }
-@media(max-width:768px){
-
-  .facility-item.color-on .facility-slide img{
-    filter:grayscale(0%) brightness(1) !important;
-  }
-
-}
-
 
 
 @media(max-width:768px){
@@ -2375,9 +2369,7 @@ body.menu-open .mobile-side-menu a{
   }
 
   .facility-item.color-on .facility-slide img{
-    filter:grayscale(0%) brightness(1);
+    filter:grayscale(0%) brightness(1) !important;
   }
 
 }
-
-

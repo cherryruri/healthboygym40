@@ -1,3 +1,8 @@
+
+
+
+
+
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 * {margin:0; padding:0; box-sizing:border-box;}
@@ -2416,80 +2421,69 @@ body.menu-open .mobile-side-menu a{
 }
 
 
-/* ================= 연혁 워드 스크롤 ================= */
 
-.hbg-word-scroll{
-  height:100vh;
-  overflow-y:auto;
-  background:#000;
-  color:#fff;
-  scroll-snap-type:y proximity;
+
+
+
+
+
+
+
+
+
+
+
+.box-history {
+  --cut-top: 50%;
+  --cut-bottom: 60%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: #000;
 }
 
-.hbg-word-scroll-inner{
-  min-height:180vh;
-  display:flex;
-  justify-content:center;
-  gap:18px;
-  padding:45vh 20px;
-  font-size:54px;
-  line-height:1.25;
-  font-weight:900;
-}
+.box-history .slice {
+  display: grid;
+  font-weight: 900;
+  font-size: clamp(6rem, 16vw, 12rem);
+  letter-spacing: .15em;
+  color: #fff;
+  text-transform: uppercase;
+  margin: 0;
+  position: relative;
 
-.hbg-word-scroll h2{
-  position:sticky;
-  top:45vh;
-  height:fit-content;
-  margin:0;
-  font-size:inherit;
-  font-weight:900;
-  white-space:nowrap;
-}
-
-.hbg-word-scroll ul{
-  list-style:none;
-  margin:0;
-  padding:0;
-}
-
-.hbg-word-scroll li{
-  min-height:1.25em;
-  scroll-snap-align:center;
-  color:rgba(255,255,255,0.18); /* 기존보다 살짝 더 어둡게 */
-  transition:.35s;
-}
-
-.hbg-word-scroll li.active{
-  color:#fff;
-  filter:none;
+  outline: none;      /* 포커스 테두리 제거 */
+  user-select: none;  /* 선택 시 하이라이트 방지 */
 }
 
 
-@media(max-width:768px){
-  .hbg-word-scroll-inner{
-    display:block;
-    font-size:28px;       /* 글자 조금 작게 */
-    padding:35vh 22px;    /* padding 조정 */
-  }
-
-  .hbg-word-scroll li.active{
-    color:#fff;
-    font-weight:900;      /* 강조 */
-  }
-
-  .hbg-word-scroll h2{
-    top:30vh;
-    margin-bottom:16px;
-  }
+.box-history .slice:focus {
+    outline: none;      /* focus 시 브라우저 기본 테두리 제거 */
 }
 
-  .hbg-word-scroll h2{
-    top:34vh;
-    margin-bottom:18px;
-  }
+.box-history .slice__text {
+  grid-area: 1 / 1;
+  clip-path: polygon(0 0, 100% 0, 100% var(--cut-top), 0 var(--cut-bottom));
+  color: #fff;
+}
 
-  .hbg-word-scroll li{
-    margin-bottom:10px;
+.box-history .slice:after {
+  grid-area: 1 / 1;
+  rotate: -1deg;
+  display: inline-block;
+  content: attr(data-text);
+  user-select: none;
+  transform: translate(-.03em, .04em);
+  color: transparent;
+  background-image: linear-gradient(179deg, #000 var(--cut-top), #fff 70%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
+}
+
+@media screen and (max-width: 768px) {
+  .box-history .slice {
+    font-size: clamp(3rem, 14vw, 8rem); /* 모바일 글자 크기 조절 */
   }
 }

@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function(){
 
 /* 필라테스 슬라이드 */
@@ -384,62 +385,46 @@ if(search){
     });
   });
 }
-/* 브랜드 타이핑 */
-const brandText = `대한민국 NO.1 피트니스 브랜드 헬스보이짐입니다.
-단순한 운동 공간을 넘어, 삶의 변화를 만드는 프리미엄 공간을 제공합니다.`;
 
-let brandIndex = 0;
-
-function typingBrand(){
-  const el = document.getElementById("typing-brand");
-  if(!el) return;
-
-  if(brandIndex < brandText.length){
-    el.innerHTML += brandText[brandIndex] === "\n" ? "<br>" : brandText[brandIndex];
-    brandIndex++;
-    setTimeout(typingBrand, 30);
-  }
-}
-
-typingBrand();
-
-/* 연혁 워드 스크롤 */
-/* 연혁 워드 스크롤 - 항상 하나만 활성화 */
-function initHistoryWordScroll(){
-  const section = document.querySelector(".hbg-word-scroll");
-  if(!section) return;
-
-  const items = Array.from(section.querySelectorAll("li"));
-  if(!items.length) return;
-
-  function checkActive(){
-    const center = window.innerHeight / 2;
-
-    let closest = items[0];
-    let minDistance = Infinity;
-
-    items.forEach(item=>{
-      const rect = item.getBoundingClientRect();
-      const itemCenter = rect.top + rect.height / 2;
-      const distance = Math.abs(center - itemCenter);
-
-      if(distance < minDistance){
-        minDistance = distance;
-        closest = item;
-      }
-    });
-
-    items.forEach(item=>item.classList.remove("active"));
-    closest.classList.add("active");
-  }
-
-  section.addEventListener("scroll", checkActive);
-  window.addEventListener("resize", checkActive);
-  window.addEventListener("orientationchange", checkActive);
-  checkActive();
-}
-
-initHistoryWordScroll();
 
 
 });
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.querySelector(".box-history");
+  const slice = box.querySelector("#slice-history");
+
+  // 초기 화면용 innerText → data-text sync
+  slice.dataset.text = slice.innerText;
+
+  document.addEventListener('mousemove', (e) => {
+    const y = e.clientY / window.innerHeight;
+
+    let top = y * 100;
+    top = Math.min(70, Math.max(30, top));
+    const bottom = top + 14;
+
+    box.style.setProperty('--cut-top', `${top}%`);
+    box.style.setProperty('--cut-bottom', `${bottom}%`);
+  });
+
+  // contenteditable 업데이트
+  slice.addEventListener("input", () => {
+    slice.dataset.text = slice.innerText;
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function(){
 
 /* 필라테스 슬라이드 */
@@ -111,7 +112,7 @@ function observeCounter(){
 }
 
 
-/* 위치 타이핑 */
+/* 위치 안내 타이핑 */
 function startTyping(){
   const content=` 
 주차 안내
@@ -242,7 +243,7 @@ if(images.length){
 }
 
 
-/* 모바일 메뉴 */
+/* 모바일 사이드 메뉴 */
 const navbar = document.querySelector(".navbar");
 const menu = document.querySelector(".menu");
 
@@ -294,7 +295,7 @@ if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
 }
 
 
-/* 스크롤 */
+/* 스크롤 이동 */
 const scrollDown = document.querySelector(".scroll-down");
 
 if(scrollDown){
@@ -309,13 +310,15 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const target = document.querySelector(this.getAttribute("href"));
     if(target){
       e.preventDefault();
+      target.classList.add("show");
       target.scrollIntoView({behavior:"smooth", block:"start"});
     }
   });
 });
 
 
-/* 시설 컬러 */
+/* 모바일 시설투어 컬러 */
+/* 모바일 시설투어 사진 스크롤 컬러 전환 */
 function checkFacilityColor(){
   const items = document.querySelectorAll(".facility-item");
 
@@ -332,6 +335,8 @@ function checkFacilityColor(){
 window.addEventListener("scroll", checkFacilityColor);
 window.addEventListener("resize", checkFacilityColor);
 setTimeout(checkFacilityColor, 800);
+setTimeout(checkFacilityColor, 1800);
+
 
 
 /* FAQ */
@@ -381,4 +386,38 @@ if(search){
   });
 }
 
+
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.querySelector(".box-history");
+
+  const updateCut = (yRatio) => {
+    let top = yRatio * 100;
+    top = Math.min(70, Math.max(30, top));
+    const bottom = top + 14;
+    box.style.setProperty('--cut-top', `${top}%`);
+    box.style.setProperty('--cut-bottom', `${bottom}%`);
+  }
+
+  // ✅ PC 마우스 이벤트
+  document.addEventListener('mousemove', (e) => {
+    const y = e.clientY / window.innerHeight;
+    updateCut(y);
+  });
+
+  // ✅ 모바일 전용
+  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // 초기값 중앙 기준
+    updateCut(0.5);
+    requestAnimationFrame(() => updateCut(0.5));
+
+    // 터치 이동 이벤트
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const y = touch.clientY / window.innerHeight;
+      updateCut(y);
+    }, { passive: true });
+  }
 });

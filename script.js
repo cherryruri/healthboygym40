@@ -388,7 +388,6 @@ if(search){
 
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
@@ -407,9 +406,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ===== 모바일 전용 scroll 이벤트 =====
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  if (isMobile) {
     const updateCutMobile = (ratio) => {
-      let top = 30 + ratio * 40;
+      let top = 30 + ratio * 40; // 30~70%
       const bottom = top + 14;
       box.style.setProperty('--cut-top', `${top}%`);
       box.style.setProperty('--cut-bottom', `${bottom}%`);
@@ -419,12 +419,19 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCutMobile(0.5);
     requestAnimationFrame(() => updateCutMobile(0.5));
 
-    // 모바일 스크롤 이벤트
+    // scroll + requestAnimationFrame으로 부드럽게 동기화
+    let ticking = false;
     document.addEventListener('scroll', () => {
-      const rect = box.getBoundingClientRect();
-      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
-      ratio = Math.min(Math.max(ratio, 0), 1);
-      updateCutMobile(ratio);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = box.getBoundingClientRect();
+          let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
+          ratio = Math.min(Math.max(ratio, 0), 1);
+          updateCutMobile(ratio);
+          ticking = false;
+        });
+        ticking = true;
+      }
     }, { passive: true });
   }
 });

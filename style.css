@@ -2430,11 +2430,9 @@ body.menu-open .mobile-side-menu a{
 
 
 
-/* ================= BOX 전용 스타일 ================= */
 .box-history {
   --cut-top: 50%;
   --cut-bottom: 60%;
-
   height: 100vh;
   display: grid;
   place-items: center;
@@ -2447,7 +2445,7 @@ body.menu-open .mobile-side-menu a{
 .box-history .slice {
   display: grid;
   font-weight: 900;
-  font-size: clamp(4rem, 12vw, 10rem); /* PC/모바일 공용 */
+  font-size: clamp(4rem, 12vw, 10rem);
   letter-spacing: .15em;
   color: #fff;
   text-transform: uppercase;
@@ -2482,5 +2480,3 @@ body.menu-open .mobile-side-menu a{
     font-size: clamp(3rem, 14vw, 8rem);
   }
 }
-
-

@@ -2358,4 +2358,17 @@ body.menu-open .mobile-side-menu a{
   display:inline-block;
 }
 
+@media(max-width:768px){
+
+  .facility-item .facility-slide img{
+    filter:grayscale(100%) brightness(0.72);
+    transition:filter 1.2s ease, transform 1.2s ease;
+  }
+
+  .facility-item.color-on .facility-slide img{
+    filter:grayscale(0%) brightness(1);
+  }
+
+}
+
 

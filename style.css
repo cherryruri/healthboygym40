@@ -2496,3 +2496,10 @@ body.menu-open .mobile-side-menu a{
   z-index: 2; /* slice 위 */
   opacity: 1; /* 항상 중앙에 보이도록 */
 }
+
+@media(max-width:768px){
+  .box-history .slice{
+    font-size: clamp(2.2rem, 10vw, 5rem);
+    letter-spacing: .08em;
+  }
+}

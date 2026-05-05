@@ -2440,6 +2440,7 @@ body.menu-open .mobile-side-menu a{
   background: #000;
   padding: 0 1rem;
   box-sizing: border-box;
+    overflow: hidden;  /* ← 이 한 줄 추가 */
 }
 
 .box-history .slice {
@@ -2479,4 +2480,19 @@ body.menu-open .mobile-side-menu a{
   .box-history .slice {
     font-size: clamp(3rem, 14vw, 8rem);
   }
+}
+
+
+/* 문구 등장 애니메이션 */
+.brand-new-text {
+    position: sticky;  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 64px;
+  font-weight: 900;
+  color: #fff;
+  text-align: center;
+  z-index: 2; /* slice 위 */
+  opacity: 1; /* 항상 중앙에 보이도록 */
 }

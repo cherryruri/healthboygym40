@@ -388,10 +388,11 @@ if(search){
 
 });
 
+
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // ===== PC 마우스 이벤트 (그대로) =====
+  // ===== PC 마우스 이벤트 (변경 없음) =====
   const updateCutPC = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));
@@ -406,33 +407,77 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ===== 모바일 전용 scroll 이벤트 =====
-  const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isMobile) {
+  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     const updateCutMobile = (ratio) => {
-      let top = 20 + ratio * 50; // top 범위 넓게 잡아서 CHANGE 글자 포함
+      let top = 30 + ratio * 40;
       const bottom = top + 14;
       box.style.setProperty('--cut-top', `${top}%`);
       box.style.setProperty('--cut-bottom', `${bottom}%`);
     }
 
-    // 초기값: CHANGE 글자 포함하도록 조금 높게
+    // 초기값 중앙
     updateCutMobile(0.5);
     requestAnimationFrame(() => updateCutMobile(0.5));
 
-    // scroll + requestAnimationFrame으로 부드럽게 동기화
-    let ticking = false;
+    // 모바일 스크롤 이벤트
     document.addEventListener('scroll', () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const rect = box.getBoundingClientRect();
-          // offsetTop 기준 ratio 계산
-          let ratio = (window.scrollY + window.innerHeight / 2 - (box.offsetTop)) / box.offsetHeight;
-          ratio = Math.min(Math.max(ratio, 0), 1);
-          updateCutMobile(ratio);
-          ticking = false;
-        });
-        ticking = true;
-      }
+      const rect = box.getBoundingClientRect();
+      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
+      ratio = Math.min(Math.max(ratio, 0), 1);
+      updateCutMobile(ratio);
     }, { passive: true });
   }
+});
+
+(function() {
+  const brandBox = document.querySelector(".box-history");
+  const slice = document.querySelector("#slice-history");
+  const facilitySection = document.querySelector(".facility-section");
+
+  if (!brandBox || !slice || !facilitySection) return;
+
+  // 새 텍스트
+  const newText = document.createElement("div");
+  newText.textContent = "헬스보이짐은 다릅니다";
+  newText.style.position = "absolute";
+  newText.style.top = "55%"; // 시작은 살짝 아래
+  newText.style.left = "50%";
+  newText.style.transform = "translate(-50%, -50%)";
+  newText.style.fontSize = "64px";
+  newText.style.fontWeight = "900";
+  newText.style.color = "#fff";
+  newText.style.opacity = "0";
+  newText.style.transition = "opacity 0.8s ease, top 0.8s ease";
+  newText.style.textAlign = "center";
+  brandBox.appendChild(newText);
+
+  function handleBrandScroll() {
+    const rectFacility = facilitySection.getBoundingClientRect();
+    const windowH = window.innerHeight;
+
+    // 스크롤 내려서 시설투어 영역이 화면에 보이면
+    if (rectFacility.top < windowH) {
+      // CHANGE YOUR LIFE fade-out
+      slice.style.opacity = 0;
+
+      // 헬스보이짐 문구 fade-in + 위로 살짝 올라오기
+      newText.style.top = "50%";
+      newText.style.opacity = 1;
+    } else {
+      // 스크롤 위로 올리면 다시 CHANGE YOUR LIFE 보여주기
+      slice.style.opacity = 1;
+
+      // 새 텍스트 숨기기
+      newText.style.opacity = 0;
+      newText.style.top = "55%"; // 초기 위치
+    }
+  }
+
+  window.addEventListener("scroll", handleBrandScroll);
+  window.addEventListener("resize", handleBrandScroll);
+})();
+
+const brandText = document.querySelector('.brand-new-text');
+window.addEventListener('scroll', () => {
+  brandText.style.top = '50%'; // 항상 화면 중앙 유지
 });

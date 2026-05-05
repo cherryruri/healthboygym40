@@ -2439,35 +2439,31 @@ body.menu-open .mobile-side-menu a{
   display: grid;
   place-items: center;
   text-align: center;
-  background: #000; /* 검은 배경 */
-  padding: 0 1rem;
+  background: #000;
+  padding: 0 1rem;  /* 모바일 여백 대응 */
   box-sizing: border-box;
 }
 
 .box-history .slice {
   display: grid;
   font-weight: 900;
-  font-size: clamp(4rem, 12vw, 10rem); /* 반응형 글자 */
+  font-size: clamp(4rem, 12vw, 10rem); /* 모바일/PC 대응 */
   letter-spacing: .15em;
-  color: #fff; /* 흰 글자 */
+  color: #fff;
   text-transform: uppercase;
   margin: 0;
   position: relative;
-  user-select: none; /* 선택 안되게 */
-}
-
-/* CHANGE YOUR LIFE 전체 글자 컷팅 선 적용 */
-.box-history .slice__text,
-.box-history .slice:after {
-  grid-area: 1 / 1;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  user-select: none;
 }
 
 .box-history .slice__text {
+  grid-area: 1 / 1;
+  clip-path: polygon(0 0, 100% 0, 100% var(--cut-top), 0 var(--cut-bottom));
   color: #fff;
 }
 
 .box-history .slice:after {
+  grid-area: 1 / 1;
   rotate: -1deg;
   display: inline-block;
   content: attr(data-text);
@@ -2477,11 +2473,12 @@ body.menu-open .mobile-side-menu a{
   background-image: linear-gradient(179deg, #000 var(--cut-top), #fff 70%);
   background-clip: text;
   -webkit-background-clip: text;
+  clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
 }
 
-/* 모바일 글자 크기 조절 */
+/* 모바일 대응 */
 @media screen and (max-width: 768px) {
   .box-history .slice {
-    font-size: clamp(3rem, 14vw, 8rem);
+    font-size: clamp(3rem, 14vw, 8rem); /* 모바일 글자 크기 조정 */
   }
 }

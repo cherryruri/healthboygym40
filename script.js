@@ -390,37 +390,29 @@ if(search){
 
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
+  const slice = box.querySelector("#slice-history");
 
-  // PC는 기존 마우스 이벤트 그대로
-  // 모바일에서만 scroll/touch 이벤트 적용
-  if (/Mobi|Android/i.test(navigator.userAgent)) {
+  const updateCut = (yRatio) => {
+    let top = yRatio * 100;
+    top = Math.min(70, Math.max(30, top));
+    const bottom = top + 14;
 
-    const updateCut = () => {
-      const rect = box.getBoundingClientRect();
-      // 화면 중앙 기준 비율 계산
-      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
-      ratio = Math.min(Math.max(ratio, 0), 1); // 0~1 범위 제한
-      const top = 30 + ratio * 40; // 30~70%
-      const bottom = top + 14;
-      box.style.setProperty('--cut-top', `${top}%`);
-      box.style.setProperty('--cut-bottom', `${bottom}%`);
-    }
-
-    // ✅ 초기값 강제 업데이트: 로딩 직후에도 선 표시
-    requestAnimationFrame(updateCut);
-
-    // 스크롤 / 터치 시 업데이트
-    const tick = () => requestAnimationFrame(updateCut);
-    document.addEventListener('scroll', tick, { passive: true });
-    document.addEventListener('touchmove', tick, { passive: true });
+    box.style.setProperty('--cut-top', `${top}%`);
+    box.style.setProperty('--cut-bottom', `${bottom}%`);
   }
+
+  // 마우스 움직임 (PC)
+  document.addEventListener('mousemove', (e) => {
+    const y = e.clientY / window.innerHeight;
+    updateCut(y);
+  });
+
+  // 터치 이동 (모바일)
+  document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const y = touch.clientY / window.innerHeight;
+    updateCut(y);
+  }, { passive: true });
 });
-
-
-
-
-
-

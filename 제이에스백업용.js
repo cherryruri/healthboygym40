@@ -1,6 +1,7 @@
+
 document.addEventListener("DOMContentLoaded", function(){
 
-/* ================= 필라테스 슬라이드 ================= */
+/* 필라테스 슬라이드 */
 let pilatesIndex = 0;
 
 function movePilates(direction){
@@ -11,79 +12,78 @@ function movePilates(direction){
   if(total <= 1) return;
 
   pilatesIndex += direction;
-
   if(pilatesIndex < 0) pilatesIndex = total - 1;
   if(pilatesIndex >= total) pilatesIndex = 0;
 
   track.style.transform = `translateX(-${pilatesIndex * 100}%)`;
 }
 
-setInterval(()=>{
-  movePilates(1);
-}, 4500);
+setInterval(()=> movePilates(1), 4500);
 
 
-/* ================= 로고 타이핑 ================= */
-const text="HEALTHBOYGYM";
-let i=0;
-const logo=document.getElementById("logo-text");
+/* 로고 타이핑 */
+const text = "HEALTHBOYGYM";
+let logoIndex = 0;
+const logo = document.getElementById("logo-text");
+
+function openMain(){
+  const logoScreen = document.querySelector(".logo-screen");
+  const mainContent = document.querySelector(".main-content");
+
+  if(logoScreen) logoScreen.classList.add("zoom-out");
+
+  setTimeout(()=>{
+    if(logoScreen) logoScreen.style.display = "none";
+    if(mainContent) mainContent.style.display = "block";
+    document.body.classList.add("loaded");
+
+    fadeIn();
+    startTyping();
+    observeCounter();
+    startBrandTyping();
+  },600);
+}
 
 if(logo){
-  const typing=setInterval(()=>{
-    if(i<text.length){
-      logo.textContent+=text[i];
-      i++;
+  const typing = setInterval(()=>{
+    if(logoIndex < text.length){
+      logo.textContent += text[logoIndex];
+      logoIndex++;
     }else{
       clearInterval(typing);
-      setTimeout(()=>{
-        const logoScreen = document.querySelector('.logo-screen');
-        const mainContent = document.querySelector('.main-content');
-
-        if(logoScreen) logoScreen.classList.add('zoom-out');
-
-        setTimeout(()=>{
-          if(logoScreen) logoScreen.style.display='none';
-          if(mainContent) mainContent.style.display='block';
-          document.body.classList.add("loaded");
-
-          fadeIn();
-          startTyping();
-          observeCounter();
-        },600);
-
-      },500);
+      setTimeout(openMain, 500);
     }
   },60);
+}else{
+  openMain();
 }
 
 
-/* ================= fade 애니메이션 ================= */
+/* fade */
 function fadeIn(){
-  const els=document.querySelectorAll('.fade');
-  const observer=new IntersectionObserver((entries)=>{
+  const els = document.querySelectorAll(".fade");
+  const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
-      entry.target.classList.toggle('show', entry.isIntersecting);
+      entry.target.classList.toggle("show", entry.isIntersecting);
     });
   },{threshold:0.2});
+
   els.forEach(el=>observer.observe(el));
 }
 
 
-/* ================= 숫자 카운터 ================= */
+/* 숫자 카운터 */
 let counted = false;
 
 function startCounter(){
   if(counted) return;
 
-  const stats = document.querySelectorAll('.stat-number');
-
-  stats.forEach(stat => {
+  document.querySelectorAll(".stat-number").forEach(stat=>{
     const target = Number(stat.dataset.target);
     let count = 0;
-    const speed = 80;
-    const increment = Math.ceil(target / speed);
+    const increment = Math.ceil(target / 80);
 
-    const counter = setInterval(() => {
+    const counter = setInterval(()=>{
       count += increment;
 
       if(count >= target){
@@ -92,22 +92,19 @@ function startCounter(){
       }
 
       stat.textContent = count.toLocaleString();
-    }, 20);
+    },20);
   });
 
   counted = true;
 }
 
 function observeCounter(){
-  const statsSection = document.querySelector('.stats-section');
-
+  const statsSection = document.querySelector(".stats-section");
   if(!statsSection) return;
 
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        startCounter();
-      }
+      if(entry.isIntersecting) startCounter();
     });
   },{threshold:0.4});
 
@@ -115,7 +112,7 @@ function observeCounter(){
 }
 
 
-/* ================= 타이핑 안내 ================= */
+/* 위치 안내 타이핑 */
 function startTyping(){
   const content=` 
 주차 안내
@@ -129,29 +126,66 @@ function startTyping(){
 [ 도보 방문 시 ]
 배떼엠 옆 입구 이용`;
 
-  let i=0;
-  const el=document.getElementById("typing-text");
+  let i = 0;
+  const el = document.getElementById("typing-text");
   if(!el) return;
 
-  el.textContent="";
+  el.textContent = "";
 
   function type(){
-    if(i<content.length){
-      el.textContent+=content[i];
+    if(i < content.length){
+      el.textContent += content[i];
       i++;
       setTimeout(type,20);
     }
   }
+
   type();
 }
 
 
-/* ================= 이미지 모달 ================= */
+/* 브랜드 타이핑 */
+function startBrandTyping(){
+  const typingEl = document.getElementById("typing-brand");
+  if(!typingEl) return;
+
+  const brandText = `대한민국 NO.1 피트니스 브랜드 헬스보이짐입니다.
+단순한 운동 공간을 넘어, 삶의 변화를 만들어가는 프리미엄 공간을 제공합니다.
+지금 이 순간에도 더 나은 당신을 위한 변화는 여기서 시작됩니다.`;
+
+  let j = 0;
+  let started = false;
+
+  function typingEffect(){
+    if(j < brandText.length){
+      typingEl.innerHTML += brandText[j] === "\n" ? "<br>" : brandText[j];
+      j++;
+
+      const speed = brandText[j] === " " ? 10 : 32;
+      setTimeout(typingEffect, speed);
+    }
+  }
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting && !started){
+        started = true;
+        typingEl.innerHTML = "";
+        typingEffect();
+        observer.disconnect();
+      }
+    });
+  },{threshold:0.4});
+
+  observer.observe(typingEl);
+}
+
+
+/* 이미지 모달 */
 const images = Array.from(document.querySelectorAll(".facility-slide img"));
 let currentIndex = 0;
 
 if(images.length){
-
   const modal = document.createElement("div");
   modal.className = "image-modal";
 
@@ -180,8 +214,8 @@ if(images.length){
     showImage();
   }
 
-  images.forEach((img, index)=>{
-    img.addEventListener("click", ()=>{
+  images.forEach((img,index)=>{
+    img.addEventListener("click",()=>{
       currentIndex = index;
       showImage();
       modal.style.display = "flex";
@@ -206,41 +240,14 @@ if(images.length){
   modalImg.onclick = ()=>{
     modal.classList.toggle("zoom");
   };
-
-  document.addEventListener("keydown", (e)=>{
-    if(modal.style.display === "flex"){
-      if(e.key === "ArrowRight") next();
-      if(e.key === "ArrowLeft") prev();
-      if(e.key === "Escape") modal.style.display = "none";
-    }
-  });
-
-  let startX = 0;
-
-  modal.addEventListener("touchstart", (e)=>{
-    startX = e.touches[0].clientX;
-  });
-
-  modal.addEventListener("touchend", (e)=>{
-    let endX = e.changedTouches[0].clientX;
-
-    if(startX - endX > 50) next();
-    if(endX - startX > 50) prev();
-  });
-
 }
 
-});
 
-/* ================= 모바일 사이드 메뉴 생성 ================= */
-document.addEventListener("DOMContentLoaded", function(){
+/* 모바일 사이드 메뉴 */
+const navbar = document.querySelector(".navbar");
+const menu = document.querySelector(".menu");
 
-  const navbar = document.querySelector(".navbar");
-  const menu = document.querySelector(".menu");
-
-  if(!navbar || !menu) return;
-  if(document.querySelector(".mobile-menu-btn")) return;
-
+if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
   const menuBtn = document.createElement("button");
   menuBtn.className = "mobile-menu-btn";
   menuBtn.innerHTML = "☰";
@@ -276,125 +283,141 @@ document.addEventListener("DOMContentLoaded", function(){
   document.body.appendChild(overlay);
   document.body.appendChild(sideMenu);
 
-  menuBtn.addEventListener("click", function(){
-    document.body.classList.add("menu-open");
-  });
-
-  overlay.addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
-
-  sideMenu.querySelector(".mobile-close").addEventListener("click", function(){
-    document.body.classList.remove("menu-open");
-  });
+  menuBtn.onclick = ()=> document.body.classList.add("menu-open");
+  overlay.onclick = ()=> document.body.classList.remove("menu-open");
+  sideMenu.querySelector(".mobile-close").onclick = ()=> document.body.classList.remove("menu-open");
 
   sideMenu.querySelectorAll("a").forEach(link=>{
-    link.addEventListener("click", function(){
+    link.addEventListener("click",()=>{
       document.body.classList.remove("menu-open");
     });
   });
-/* ================= 스크롤 버튼 / 메뉴 부드럽게 이동 ================= */
+}
 
+
+/* 스크롤 이동 */
 const scrollDown = document.querySelector(".scroll-down");
 
 if(scrollDown){
-  scrollDown.addEventListener("click", function(){
+  scrollDown.addEventListener("click",()=>{
     const about = document.querySelector("#about");
-    if(about){
-      about.scrollIntoView({ behavior:"smooth", block:"start" });
-    }
+    if(about) about.scrollIntoView({behavior:"smooth", block:"start"});
   });
 }
 
 document.querySelectorAll('a[href^="#"]').forEach(link=>{
-  link.addEventListener("click", function(e){
-    const targetId = this.getAttribute("href");
-    const target = document.querySelector(targetId);
-
+  link.addEventListener("click",function(e){
+    const target = document.querySelector(this.getAttribute("href"));
     if(target){
       e.preventDefault();
-
       target.classList.add("show");
-
-      target.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
+      target.scrollIntoView({behavior:"smooth", block:"start"});
     }
   });
 });
-});
 
+
+/* 모바일 시설투어 컬러 */
 /* 모바일 시설투어 사진 스크롤 컬러 전환 */
-const facilityColorItems = document.querySelectorAll(".facility-item");
-
-const facilityColorObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("color-on");
-    }
-  });
-},{
-  threshold:0.35
-});
-
-facilityColorItems.forEach(item=>{
-  facilityColorObserver.observe(item);
-});
-
-/* FAQ NEW */
-document.addEventListener("DOMContentLoaded", function(){
-
-  const items = document.querySelectorAll(".faq-new-item");
-  const buttons = document.querySelectorAll(".faq-new-category button");
-  const search = document.getElementById("faqSearch");
+function checkFacilityColor(){
+  const items = document.querySelectorAll(".facility-item");
 
   items.forEach(item=>{
-    item.addEventListener("click", ()=>{
-      item.classList.toggle("active");
-    });
-  });
+    const rect = item.getBoundingClientRect();
+    const windowH = window.innerHeight;
 
- buttons.forEach(btn=>{
-  btn.addEventListener("click", ()=>{
+    if(rect.top < windowH * 0.75 && rect.bottom > 0){
+      item.classList.add("color-on");
+    }
+  });
+}
+
+window.addEventListener("scroll", checkFacilityColor);
+window.addEventListener("resize", checkFacilityColor);
+setTimeout(checkFacilityColor, 800);
+setTimeout(checkFacilityColor, 1800);
+
+
+
+/* FAQ */
+const items = document.querySelectorAll(".faq-new-item");
+const buttons = document.querySelectorAll(".faq-new-category button");
+const search = document.getElementById("faqSearch");
+
+items.forEach(item=>{
+  item.addEventListener("click",()=>{
+    item.classList.toggle("active");
+  });
+});
+
+buttons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
     const cat = btn.dataset.category;
 
     buttons.forEach(b=>b.classList.remove("active"));
     btn.classList.add("active");
 
     items.forEach(item=>{
-
-      // 전부 보이게 유지
       item.style.display = "block";
 
-      // 선택된 것만 강조
       if(cat === "all" || item.dataset.category === cat){
         item.classList.remove("faq-dim");
       }else{
         item.classList.add("faq-dim");
       }
-
     });
   });
 });
 
-  if(search){
-    search.addEventListener("input", ()=>{
-  const val = search.value.toLowerCase();
+if(search){
+  search.addEventListener("input",()=>{
+    const val = search.value.toLowerCase();
 
-  items.forEach(item=>{
-    const text = item.innerText.toLowerCase();
+    items.forEach(item=>{
+      const text = item.innerText.toLowerCase();
+      item.style.display = "block";
 
-    // 전부 보이게 유지
-    item.style.display = "block";
-
-    if(text.includes(val)){
-      item.classList.remove("faq-dim");
-    }else{
-      item.classList.add("faq-dim");
-    }
+      if(text.includes(val)){
+        item.classList.remove("faq-dim");
+      }else{
+        item.classList.add("faq-dim");
+      }
+    });
   });
+}
+
+
+
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.querySelector(".box-history");
+  const slice = box.querySelector("#slice-history");
+
+  const updateCut = (yRatio) => {
+    let top = yRatio * 100;
+    top = Math.min(70, Math.max(30, top));
+    const bottom = top + 14;
+
+    box.style.setProperty('--cut-top', `${top}%`);
+    box.style.setProperty('--cut-bottom', `${bottom}%`);
   }
 
+  // 마우스 움직임 (PC)
+  document.addEventListener('mousemove', (e) => {
+    const y = e.clientY / window.innerHeight;
+    updateCut(y);
+  });
+
+  // 터치 이동 (모바일)
+  document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const y = touch.clientY / window.innerHeight;
+    updateCut(y);
+  }, { passive: true });
 });
+
+
+
+

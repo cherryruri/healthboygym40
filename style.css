@@ -2456,14 +2456,18 @@ body.menu-open .mobile-side-menu a{
   user-select: none; /* 선택 안되게 */
 }
 
-.box-history .slice__text {
+/* CHANGE YOUR LIFE 전체 글자 컷팅 선 적용 */
+.box-history .slice__text,
+.box-history .slice:after {
   grid-area: 1 / 1;
-  clip-path: polygon(0 0, 100% 0, 100% var(--cut-top), 0 var(--cut-bottom));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+
+.box-history .slice__text {
   color: #fff;
 }
 
 .box-history .slice:after {
-  grid-area: 1 / 1;
   rotate: -1deg;
   display: inline-block;
   content: attr(data-text);
@@ -2473,7 +2477,6 @@ body.menu-open .mobile-side-menu a{
   background-image: linear-gradient(179deg, #000 var(--cut-top), #fff 70%);
   background-clip: text;
   -webkit-background-clip: text;
-  clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
 }
 
 /* 모바일 글자 크기 조절 */

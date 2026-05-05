@@ -420,10 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // 모바일 전용
   if (/Mobi|Android/i.test(navigator.userAgent)) {
-    const boxTop = box.getBoundingClientRect().top + window.scrollY;
-    const boxHeight = box.offsetHeight;
 
     const updateCut = (ratio) => {
       let top = ratio * 100;
@@ -433,17 +430,25 @@ document.addEventListener('DOMContentLoaded', () => {
       box.style.setProperty('--cut-bottom', `${bottom}%`);
     }
 
-    // ✅ 초기값 계산: 로딩 직후 선이 바로 보이도록
-    const initialRatio = (window.scrollY - boxTop + window.innerHeight / 2) / boxHeight;
-    updateCut(Math.min(1, Math.max(0, initialRatio)));
-
-    // 스크롤 이벤트
-    document.addEventListener('scroll', () => {
+    // 스크롤 이벤트 안에서 boxTop 매번 계산
+    const onScroll = () => {
+      const boxTop = box.getBoundingClientRect().top + window.scrollY;
+      const boxHeight = box.offsetHeight;
       const scrollY = window.scrollY;
+
       let ratio = (scrollY - boxTop + window.innerHeight / 2) / boxHeight;
       ratio = Math.min(1, Math.max(0, ratio));
       updateCut(ratio);
-    }, { passive: true });
+    }
+
+    // 초기값 바로 계산
+    onScroll();
+
+    // 스크롤 이벤트
+    document.addEventListener('scroll', onScroll, { passive: true });
+
+    // 터치 이동도 추가 (옵션)
+    document.addEventListener('touchmove', onScroll, { passive: true });
   }
 });
 

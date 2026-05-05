@@ -1,7 +1,6 @@
-
 document.addEventListener("DOMContentLoaded", function(){
 
-/* 필라테스 슬라이드 */
+/* ================= 필라테스 슬라이드 ================= */
 let pilatesIndex = 0;
 
 function movePilates(direction){
@@ -21,7 +20,7 @@ function movePilates(direction){
 setInterval(()=> movePilates(1), 4500);
 
 
-/* 로고 타이핑 */
+/* ================= 로고 타이핑 ================= */
 const text = "HEALTHBOYGYM";
 let logoIndex = 0;
 const logo = document.getElementById("logo-text");
@@ -59,7 +58,7 @@ if(logo){
 }
 
 
-/* fade */
+/* ================= fade ================= */
 function fadeIn(){
   const els = document.querySelectorAll(".fade");
   const observer = new IntersectionObserver((entries)=>{
@@ -72,7 +71,7 @@ function fadeIn(){
 }
 
 
-/* 숫자 카운터 */
+/* ================= 숫자 카운터 ================= */
 let counted = false;
 
 function startCounter(){
@@ -112,9 +111,9 @@ function observeCounter(){
 }
 
 
-/* 위치 안내 타이핑 */
+/* ================= 위치 타이핑 ================= */
 function startTyping(){
-  const content=` 
+  const content = `
 주차 안내
 건물 내 지하 2층, 3층 주차장으로 이용 가능합니다.
 
@@ -144,7 +143,7 @@ function startTyping(){
 }
 
 
-/* 브랜드 타이핑 */
+/* ================= 브랜드 타이핑 ================= */
 function startBrandTyping(){
   const typingEl = document.getElementById("typing-brand");
   if(!typingEl) return;
@@ -181,7 +180,7 @@ function startBrandTyping(){
 }
 
 
-/* 이미지 모달 */
+/* ================= 이미지 모달 ================= */
 const images = Array.from(document.querySelectorAll(".facility-slide img"));
 let currentIndex = 0;
 
@@ -243,7 +242,7 @@ if(images.length){
 }
 
 
-/* 모바일 사이드 메뉴 */
+/* ================= 모바일 메뉴 ================= */
 const navbar = document.querySelector(".navbar");
 const menu = document.querySelector(".menu");
 
@@ -295,7 +294,7 @@ if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
 }
 
 
-/* 스크롤 이동 */
+/* ================= 스크롤 이동 ================= */
 const scrollDown = document.querySelector(".scroll-down");
 
 if(scrollDown){
@@ -310,15 +309,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const target = document.querySelector(this.getAttribute("href"));
     if(target){
       e.preventDefault();
-      target.classList.add("show");
       target.scrollIntoView({behavior:"smooth", block:"start"});
     }
   });
 });
 
 
-/* 모바일 시설투어 컬러 */
-/* 모바일 시설투어 사진 스크롤 컬러 전환 */
+/* ================= 시설 컬러 전환 ================= */
 function checkFacilityColor(){
   const items = document.querySelectorAll(".facility-item");
 
@@ -338,8 +335,7 @@ setTimeout(checkFacilityColor, 800);
 setTimeout(checkFacilityColor, 1800);
 
 
-
-/* FAQ */
+/* ================= FAQ ================= */
 const items = document.querySelectorAll(".faq-new-item");
 const buttons = document.querySelectorAll(".faq-new-category button");
 const search = document.getElementById("faqSearch");
@@ -386,98 +382,4 @@ if(search){
   });
 }
 
-});
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const box = document.querySelector(".box-history");
-
-  // ===== PC 마우스 이벤트 (변경 없음) =====
-  const updateCutPC = (yRatio) => {
-    let top = yRatio * 100;
-    top = Math.min(70, Math.max(30, top));
-    const bottom = top + 14;
-    box.style.setProperty('--cut-top', `${top}%`);
-    box.style.setProperty('--cut-bottom', `${bottom}%`);
-  }
-
-  document.addEventListener('mousemove', (e) => {
-    const y = e.clientY / window.innerHeight;
-    updateCutPC(y);
-  });
-
-  // ===== 모바일 전용 scroll 이벤트 =====
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    const updateCutMobile = (ratio) => {
-      let top = 30 + ratio * 40;
-      const bottom = top + 14;
-      box.style.setProperty('--cut-top', `${top}%`);
-      box.style.setProperty('--cut-bottom', `${bottom}%`);
-    }
-
-    // 초기값 중앙
-    updateCutMobile(0.5);
-    requestAnimationFrame(() => updateCutMobile(0.5));
-
-    // 모바일 스크롤 이벤트
-    document.addEventListener('scroll', () => {
-      const rect = box.getBoundingClientRect();
-      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
-      ratio = Math.min(Math.max(ratio, 0), 1);
-      updateCutMobile(ratio);
-    }, { passive: true });
-  }
-});
-
-(function() {
-  const brandBox = document.querySelector(".box-history");
-  const slice = document.querySelector("#slice-history");
-  const facilitySection = document.querySelector(".facility-section");
-
-  if (!brandBox || !slice || !facilitySection) return;
-
-  // 새 텍스트
-  const newText = document.createElement("div");
-  newText.textContent = "헬스보이짐은 다릅니다";
-  newText.style.position = "absolute";
-  newText.style.top = "55%"; // 시작은 살짝 아래
-  newText.style.left = "50%";
-  newText.style.transform = "translate(-50%, -50%)";
-  newText.style.fontSize = "64px";
-  newText.style.fontWeight = "900";
-  newText.style.color = "#fff";
-  newText.style.opacity = "0";
-  newText.style.transition = "opacity 0.8s ease, top 0.8s ease";
-  newText.style.textAlign = "center";
-  brandBox.appendChild(newText);
-
-  function handleBrandScroll() {
-    const rectFacility = facilitySection.getBoundingClientRect();
-    const windowH = window.innerHeight;
-
-    // 스크롤 내려서 시설투어 영역이 화면에 보이면
-    if (rectFacility.top < windowH) {
-      // CHANGE YOUR LIFE fade-out
-      slice.style.opacity = 0;
-
-      // 헬스보이짐 문구 fade-in + 위로 살짝 올라오기
-      newText.style.top = "50%";
-      newText.style.opacity = 1;
-    } else {
-      // 스크롤 위로 올리면 다시 CHANGE YOUR LIFE 보여주기
-      slice.style.opacity = 1;
-
-      // 새 텍스트 숨기기
-      newText.style.opacity = 0;
-      newText.style.top = "55%"; // 초기 위치
-    }
-  }
-
-  window.addEventListener("scroll", handleBrandScroll);
-  window.addEventListener("resize", handleBrandScroll);
-})();
-
-const brandText = document.querySelector('.brand-new-text');
-window.addEventListener('scroll', () => {
-  brandText.style.top = '50%'; // 항상 화면 중앙 유지
 });

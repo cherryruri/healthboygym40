@@ -2430,36 +2430,30 @@ body.menu-open .mobile-side-menu a{
 
 
 
-
-
-
+/* ================= BOX 전용 스타일 ================= */
 .box-history {
   --cut-top: 50%;
   --cut-bottom: 60%;
+
   height: 100vh;
   display: grid;
   place-items: center;
   text-align: center;
-  background: #000;
+  background: #000; /* 검은 배경 */
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
 
 .box-history .slice {
   display: grid;
   font-weight: 900;
-  font-size: clamp(6rem, 16vw, 12rem);
+  font-size: clamp(4rem, 12vw, 10rem); /* 반응형 글자 */
   letter-spacing: .15em;
-  color: #fff;
+  color: #fff; /* 흰 글자 */
   text-transform: uppercase;
   margin: 0;
   position: relative;
-
-  outline: none;      /* 포커스 테두리 제거 */
-  user-select: none;  /* 선택 시 하이라이트 방지 */
-}
-
-
-.box-history .slice:focus {
-    outline: none;      /* focus 시 브라우저 기본 테두리 제거 */
+  user-select: none; /* 선택 안되게 */
 }
 
 .box-history .slice__text {
@@ -2482,8 +2476,9 @@ body.menu-open .mobile-side-menu a{
   clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
 }
 
+/* 모바일 글자 크기 조절 */
 @media screen and (max-width: 768px) {
   .box-history .slice {
-    font-size: clamp(3rem, 14vw, 8rem); /* 모바일 글자 크기 조절 */
+    font-size: clamp(3rem, 14vw, 8rem);
   }
 }

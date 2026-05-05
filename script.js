@@ -419,13 +419,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
-  const slice = box.querySelector(".slice__text");
 
+  // 모바일에서만 동작
   if (/Mobi|Android/i.test(navigator.userAgent)) {
 
     const updateCut = () => {
       const rect = box.getBoundingClientRect();
-      const ratio = Math.min(Math.max((window.innerHeight/2 - rect.top) / rect.height, 0), 1);
+      // 화면 중앙 기준 비율 계산
+      const ratio = Math.min(Math.max((window.innerHeight / 2 - rect.top) / rect.height, 0), 1);
       const top = 30 + ratio * 40; // 30~70%
       const bottom = top + 14;
 
@@ -433,10 +434,10 @@ document.addEventListener('DOMContentLoaded', () => {
       box.style.setProperty('--cut-bottom', `${bottom}%`);
     }
 
-    // 초기값 적용
+    // 초기값 적용: 페이지 로딩 직후도 선 표시
     updateCut();
 
-    // 스크롤/터치 이벤트
+    // 스크롤 이벤트 → 스크롤 내리면 선 내려가고 올리면 올라감
     const tick = () => requestAnimationFrame(updateCut);
     document.addEventListener('scroll', tick, { passive: true });
     document.addEventListener('touchmove', tick, { passive: true });

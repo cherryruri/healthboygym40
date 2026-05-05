@@ -420,18 +420,30 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // 모바일에서만 동작
+  // 모바일 전용
   if (/Mobi|Android/i.test(navigator.userAgent)) {
     const boxTop = box.getBoundingClientRect().top + window.scrollY;
     const boxHeight = box.offsetHeight;
 
+    const updateCut = (ratio) => {
+      let top = ratio * 100;
+      top = Math.min(70, Math.max(30, top));
+      const bottom = top + 14;
+      box.style.setProperty('--cut-top', `${top}%`);
+      box.style.setProperty('--cut-bottom', `${bottom}%`);
+    }
+
+    // ✅ 초기값 계산: 로딩 직후 선이 바로 보이도록
+    const initialRatio = (window.scrollY - boxTop + window.innerHeight / 2) / boxHeight;
+    updateCut(Math.min(1, Math.max(0, initialRatio)));
+
+    // 스크롤 이벤트
     document.addEventListener('scroll', () => {
       const scrollY = window.scrollY;
       let ratio = (scrollY - boxTop + window.innerHeight / 2) / boxHeight;
-      ratio = Math.min(1, Math.max(0, ratio)); // 0~1 제한
-      box.style.setProperty('--cut-top', `${ratio*100}%`);
-      box.style.setProperty('--cut-bottom', `${ratio*100 + 14}%`);
-    });
+      ratio = Math.min(1, Math.max(0, ratio));
+      updateCut(ratio);
+    }, { passive: true });
   }
 });
 

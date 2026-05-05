@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-/* ================= 필라테스 슬라이드 ================= */
+/* 필라테스 슬라이드 */
 let pilatesIndex = 0;
 
 function movePilates(direction){
@@ -11,7 +11,6 @@ function movePilates(direction){
   if(total <= 1) return;
 
   pilatesIndex += direction;
-
   if(pilatesIndex < 0) pilatesIndex = total - 1;
   if(pilatesIndex >= total) pilatesIndex = 0;
 
@@ -21,7 +20,7 @@ function movePilates(direction){
 setInterval(()=> movePilates(1), 4500);
 
 
-/* ================= 로고 타이핑 ================= */
+/* 로고 타이핑 */
 const text = "HEALTHBOYGYM";
 let logoIndex = 0;
 const logo = document.getElementById("logo-text");
@@ -59,10 +58,9 @@ if(logo){
 }
 
 
-/* ================= fade ================= */
+/* fade */
 function fadeIn(){
   const els = document.querySelectorAll(".fade");
-
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       entry.target.classList.toggle("show", entry.isIntersecting);
@@ -73,7 +71,7 @@ function fadeIn(){
 }
 
 
-/* ================= 숫자 카운터 ================= */
+/* 숫자 카운터 */
 let counted = false;
 
 function startCounter(){
@@ -113,9 +111,9 @@ function observeCounter(){
 }
 
 
-/* ================= 위치 타이핑 ================= */
+/* 위치 안내 타이핑 */
 function startTyping(){
-  const content = `
+  const content=` 
 주차 안내
 건물 내 지하 2층, 3층 주차장으로 이용 가능합니다.
 
@@ -145,7 +143,7 @@ function startTyping(){
 }
 
 
-/* ================= 브랜드 타이핑 ================= */
+/* 브랜드 타이핑 */
 function startBrandTyping(){
   const typingEl = document.getElementById("typing-brand");
   if(!typingEl) return;
@@ -182,7 +180,7 @@ function startBrandTyping(){
 }
 
 
-/* ================= 이미지 모달 ================= */
+/* 이미지 모달 */
 const images = Array.from(document.querySelectorAll(".facility-slide img"));
 let currentIndex = 0;
 
@@ -244,7 +242,7 @@ if(images.length){
 }
 
 
-/* ================= 모바일 메뉴 ================= */
+/* 모바일 사이드 메뉴 */
 const navbar = document.querySelector(".navbar");
 const menu = document.querySelector(".menu");
 
@@ -296,7 +294,7 @@ if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
 }
 
 
-/* ================= 스크롤 이동 ================= */
+/* 스크롤 이동 */
 const scrollDown = document.querySelector(".scroll-down");
 
 if(scrollDown){
@@ -311,13 +309,14 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
     const target = document.querySelector(this.getAttribute("href"));
     if(target){
       e.preventDefault();
+      target.classList.add("show");
       target.scrollIntoView({behavior:"smooth", block:"start"});
     }
   });
 });
 
 
-/* ================= 시설 컬러 전환 ================= */
+/* 시설 컬러 전환 */
 function checkFacilityColor(){
   const items = document.querySelectorAll(".facility-item");
 
@@ -337,55 +336,51 @@ setTimeout(checkFacilityColor, 800);
 setTimeout(checkFacilityColor, 1800);
 
 
-/* ================= CHANGE YOUR LIFE 전환 ================= */
-(function(){
-  const brandBox = document.querySelector(".box-history");
-  const slice = document.querySelector("#slice-history");
-  const facilitySection = document.querySelector(".facility-section");
+/* FAQ */
+const items = document.querySelectorAll(".faq-new-item");
+const buttons = document.querySelectorAll(".faq-new-category button");
+const search = document.getElementById("faqSearch");
 
-  if(!brandBox || !slice || !facilitySection) return;
-
-  const newText = document.createElement("div");
-  newText.textContent = "헬스보이짐은 다릅니다";
-
-  Object.assign(newText.style,{
-    position:"absolute",
-    top:"55%",
-    left:"50%",
-    transform:"translate(-50%,-50%)",
-    fontSize:"64px",
-    fontWeight:"900",
-    color:"#fff",
-    opacity:"0",
-    transition:"opacity 0.6s ease, transform 0.6s ease",
-    textAlign:"center",
-    zIndex:"2"
+items.forEach(item=>{
+  item.addEventListener("click",()=>{
+    item.classList.toggle("active");
   });
+});
 
-  brandBox.appendChild(newText);
+buttons.forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const cat = btn.dataset.category;
 
-  function handleScroll(){
-    const rect = facilitySection.getBoundingClientRect();
-    const windowH = window.innerHeight;
+    buttons.forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
 
-    const trigger = windowH * 0.75;
+    items.forEach(item=>{
+      item.style.display = "block";
 
-    if(rect.top < trigger){
-      slice.style.opacity = 0;
-      slice.style.transform = "translateY(-10px)";
+      if(cat === "all" || item.dataset.category === cat){
+        item.classList.remove("faq-dim");
+      }else{
+        item.classList.add("faq-dim");
+      }
+    });
+  });
+});
 
-      newText.style.opacity = 1;
-      newText.style.transform = "translate(-50%,-50%) scale(1)";
-    }else{
-      slice.style.opacity = 1;
-      slice.style.transform = "translateY(0px)";
+if(search){
+  search.addEventListener("input",()=>{
+    const val = search.value.toLowerCase();
 
-      newText.style.opacity = 0;
-      newText.style.transform = "translate(-50%,-50%) scale(0.98)";
-    }
-  }
+    items.forEach(item=>{
+      const text = item.innerText.toLowerCase();
+      item.style.display = "block";
 
-  window.addEventListener("scroll", handleScroll);
-  window.addEventListener("resize", handleScroll);
-})();
+      if(text.includes(val)){
+        item.classList.remove("faq-dim");
+      }else{
+        item.classList.add("faq-dim");
+      }
+    });
+  });
+}
+
 });

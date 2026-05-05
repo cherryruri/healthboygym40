@@ -314,6 +314,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 
 /* 모바일 시설투어 컬러 */
+/* 모바일 시설투어 사진 스크롤 컬러 전환 */
 const facilityColorItems = document.querySelectorAll(".facility-item");
 
 if(facilityColorItems.length){
@@ -323,10 +324,18 @@ if(facilityColorItems.length){
         entry.target.classList.add("color-on");
       }
     });
-  },{threshold:0.35});
+  },{
+    threshold:0.15,
+    rootMargin:"0px 0px -80px 0px"
+  });
 
-  facilityColorItems.forEach(item=>facilityColorObserver.observe(item));
+  facilityColorItems.forEach(item=>{
+    facilityColorObserver.observe(item);
+  });
 }
+
+
+
 
 
 /* FAQ */

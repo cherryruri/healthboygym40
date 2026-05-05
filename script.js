@@ -315,26 +315,23 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 /* 모바일 시설투어 컬러 */
 /* 모바일 시설투어 사진 스크롤 컬러 전환 */
-const facilityColorItems = document.querySelectorAll(".facility-item");
+function checkFacilityColor(){
+  const items = document.querySelectorAll(".facility-item");
 
-if(facilityColorItems.length){
-  const facilityColorObserver = new IntersectionObserver((entries)=>{
-    entries.forEach(entry=>{
-      if(entry.isIntersecting){
-        entry.target.classList.add("color-on");
-      }
-    });
-  },{
-    threshold:0.15,
-    rootMargin:"0px 0px -80px 0px"
-  });
+  items.forEach(item=>{
+    const rect = item.getBoundingClientRect();
+    const windowH = window.innerHeight;
 
-  facilityColorItems.forEach(item=>{
-    facilityColorObserver.observe(item);
+    if(rect.top < windowH * 0.75 && rect.bottom > 0){
+      item.classList.add("color-on");
+    }
   });
 }
 
-
+window.addEventListener("scroll", checkFacilityColor);
+window.addEventListener("resize", checkFacilityColor);
+setTimeout(checkFacilityColor, 800);
+setTimeout(checkFacilityColor, 1800);
 
 
 

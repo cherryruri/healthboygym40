@@ -413,7 +413,7 @@ function initHistoryWordScroll(){
   if(!items.length) return;
 
   function checkActive(){
-    const center = section.getBoundingClientRect().top + section.clientHeight / 2;
+    const center = window.innerHeight / 2;
 
     let closest = items[0];
     let minDistance = Infinity;
@@ -435,6 +435,7 @@ function initHistoryWordScroll(){
 
   section.addEventListener("scroll", checkActive);
   window.addEventListener("resize", checkActive);
+  window.addEventListener("orientationchange", checkActive);
   checkActive();
 }
 

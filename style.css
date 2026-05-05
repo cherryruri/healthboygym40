@@ -2465,12 +2465,24 @@ body.menu-open .mobile-side-menu a{
   filter:none;
 }
 
+
 @media(max-width:768px){
   .hbg-word-scroll-inner{
     display:block;
-    font-size:32px;
-    padding:38vh 22px;
+    font-size:28px;       /* 글자 조금 작게 */
+    padding:35vh 22px;    /* padding 조정 */
   }
+
+  .hbg-word-scroll li.active{
+    color:#fff;
+    font-weight:900;      /* 강조 */
+  }
+
+  .hbg-word-scroll h2{
+    top:30vh;
+    margin-bottom:16px;
+  }
+}
 
   .hbg-word-scroll h2{
     top:34vh;

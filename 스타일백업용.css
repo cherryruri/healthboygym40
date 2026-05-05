@@ -1,3 +1,5 @@
+
+
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 * {margin:0; padding:0; box-sizing:border-box;}
@@ -2435,14 +2437,14 @@ body.menu-open .mobile-side-menu a{
   place-items: center;
   text-align: center;
   background: #000;
-  padding: 0 1rem;  /* 모바일 여백 대응 */
+  padding: 0 1rem;
   box-sizing: border-box;
 }
 
 .box-history .slice {
   display: grid;
   font-weight: 900;
-  font-size: clamp(4rem, 12vw, 10rem); /* 모바일/PC 대응 */
+  font-size: clamp(4rem, 12vw, 10rem); /* PC/모바일 공용 */
   letter-spacing: .15em;
   color: #fff;
   text-transform: uppercase;
@@ -2471,9 +2473,9 @@ body.menu-open .mobile-side-menu a{
   clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
 }
 
-/* 모바일 대응 */
+/* 모바일 글자 크기만 조정 */
 @media screen and (max-width: 768px) {
   .box-history .slice {
-    font-size: clamp(3rem, 14vw, 8rem); /* 모바일 글자 크기 조정 */
+    font-size: clamp(3rem, 14vw, 8rem);
   }
 }

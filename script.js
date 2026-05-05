@@ -389,11 +389,11 @@ if(search){
 
 
 });
-
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  const updateCut = (yRatio) => {
+  // ===== PC 마우스 이벤트 (기존 그대로) =====
+  const updateCutPC = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));
     const bottom = top + 14;
@@ -401,23 +401,30 @@ document.addEventListener('DOMContentLoaded', () => {
     box.style.setProperty('--cut-bottom', `${bottom}%`);
   }
 
-  // ✅ PC 마우스 이벤트
   document.addEventListener('mousemove', (e) => {
     const y = e.clientY / window.innerHeight;
-    updateCut(y);
+    updateCutPC(y);
   });
 
-  // ✅ 모바일 전용
+  // ===== 모바일 전용 scroll 이벤트 =====
   if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-    // 초기값 중앙 기준
-    updateCut(0.5);
-    requestAnimationFrame(() => updateCut(0.5));
+    const updateCutMobile = (ratio) => {
+      let top = 30 + ratio * 40; // 30~70%
+      const bottom = top + 14;
+      box.style.setProperty('--cut-top', `${top}%`);
+      box.style.setProperty('--cut-bottom', `${bottom}%`);
+    }
 
-    // 터치 이동 이벤트
-    document.addEventListener('touchmove', (e) => {
-      const touch = e.touches[0];
-      const y = touch.clientY / window.innerHeight;
-      updateCut(y);
+    // 초기값 중앙
+    updateCutMobile(0.5);
+    requestAnimationFrame(() => updateCutMobile(0.5));
+
+    // 스크롤 이벤트
+    document.addEventListener('scroll', () => {
+      const rect = box.getBoundingClientRect();
+      let ratio = (window.scrollY + window.innerHeight / 2 - (rect.top + window.scrollY)) / rect.height;
+      ratio = Math.min(Math.max(ratio, 0), 1);
+      updateCutMobile(ratio);
     }, { passive: true });
   }
 });

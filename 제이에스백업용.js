@@ -390,34 +390,34 @@ if(search){
 
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
-  const slice = box.querySelector("#slice-history");
 
   const updateCut = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));
     const bottom = top + 14;
-
     box.style.setProperty('--cut-top', `${top}%`);
     box.style.setProperty('--cut-bottom', `${bottom}%`);
   }
 
-  // 마우스 움직임 (PC)
+  // ✅ PC 마우스 이벤트
   document.addEventListener('mousemove', (e) => {
     const y = e.clientY / window.innerHeight;
     updateCut(y);
   });
 
-  // 터치 이동 (모바일)
-  document.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    const y = touch.clientY / window.innerHeight;
-    updateCut(y);
-  }, { passive: true });
+  // ✅ 모바일 전용
+  if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+    // 초기값 중앙 기준
+    updateCut(0.5);
+    requestAnimationFrame(() => updateCut(0.5));
+
+    // 터치 이동 이벤트
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      const y = touch.clientY / window.innerHeight;
+      updateCut(y);
+    }, { passive: true });
+  }
 });
-
-
-
-

@@ -11,6 +11,7 @@ function movePilates(direction){
   if(total <= 1) return;
 
   pilatesIndex += direction;
+
   if(pilatesIndex < 0) pilatesIndex = total - 1;
   if(pilatesIndex >= total) pilatesIndex = 0;
 
@@ -61,6 +62,7 @@ if(logo){
 /* ================= fade ================= */
 function fadeIn(){
   const els = document.querySelectorAll(".fade");
+
   const observer = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       entry.target.classList.toggle("show", entry.isIntersecting);
@@ -335,51 +337,55 @@ setTimeout(checkFacilityColor, 800);
 setTimeout(checkFacilityColor, 1800);
 
 
-/* ================= FAQ ================= */
-const items = document.querySelectorAll(".faq-new-item");
-const buttons = document.querySelectorAll(".faq-new-category button");
-const search = document.getElementById("faqSearch");
+/* ================= CHANGE YOUR LIFE 전환 ================= */
+(function(){
+  const brandBox = document.querySelector(".box-history");
+  const slice = document.querySelector("#slice-history");
+  const facilitySection = document.querySelector(".facility-section");
 
-items.forEach(item=>{
-  item.addEventListener("click",()=>{
-    item.classList.toggle("active");
+  if(!brandBox || !slice || !facilitySection) return;
+
+  const newText = document.createElement("div");
+  newText.textContent = "헬스보이짐은 다릅니다";
+
+  Object.assign(newText.style,{
+    position:"absolute",
+    top:"55%",
+    left:"50%",
+    transform:"translate(-50%,-50%)",
+    fontSize:"64px",
+    fontWeight:"900",
+    color:"#fff",
+    opacity:"0",
+    transition:"opacity 0.6s ease, transform 0.6s ease",
+    textAlign:"center",
+    zIndex:"2"
   });
-});
 
-buttons.forEach(btn=>{
-  btn.addEventListener("click",()=>{
-    const cat = btn.dataset.category;
+  brandBox.appendChild(newText);
 
-    buttons.forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
+  function handleScroll(){
+    const rect = facilitySection.getBoundingClientRect();
+    const windowH = window.innerHeight;
 
-    items.forEach(item=>{
-      item.style.display = "block";
+    const trigger = windowH * 0.75;
 
-      if(cat === "all" || item.dataset.category === cat){
-        item.classList.remove("faq-dim");
-      }else{
-        item.classList.add("faq-dim");
-      }
-    });
-  });
-});
+    if(rect.top < trigger){
+      slice.style.opacity = 0;
+      slice.style.transform = "translateY(-10px)";
 
-if(search){
-  search.addEventListener("input",()=>{
-    const val = search.value.toLowerCase();
+      newText.style.opacity = 1;
+      newText.style.transform = "translate(-50%,-50%) scale(1)";
+    }else{
+      slice.style.opacity = 1;
+      slice.style.transform = "translateY(0px)";
 
-    items.forEach(item=>{
-      const text = item.innerText.toLowerCase();
-      item.style.display = "block";
+      newText.style.opacity = 0;
+      newText.style.transform = "translate(-50%,-50%) scale(0.98)";
+    }
+  }
 
-      if(text.includes(val)){
-        item.classList.remove("faq-dim");
-      }else{
-        item.classList.add("faq-dim");
-      }
-    });
-  });
-}
-
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", handleScroll);
+})();
 });

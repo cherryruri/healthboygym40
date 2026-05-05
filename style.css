@@ -2357,6 +2357,15 @@ body.menu-open .mobile-side-menu a{
 .brand-desc{
   display:inline-block;
 }
+@media(max-width:768px){
+
+  .facility-item.color-on .facility-slide img{
+    filter:grayscale(0%) brightness(1) !important;
+  }
+
+}
+
+
 
 @media(max-width:768px){
 

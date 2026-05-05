@@ -391,7 +391,7 @@ if(search){
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // ===== PC 마우스 이벤트 (변경 없음) =====
+  // ===== PC 마우스 이벤트 (그대로) =====
   const updateCutPC = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));
@@ -409,13 +409,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   if (isMobile) {
     const updateCutMobile = (ratio) => {
-      let top = 30 + ratio * 40; // 30~70%
+      let top = 20 + ratio * 50; // top 범위 넓게 잡아서 CHANGE 글자 포함
       const bottom = top + 14;
       box.style.setProperty('--cut-top', `${top}%`);
       box.style.setProperty('--cut-bottom', `${bottom}%`);
     }
 
-    // 초기값 중앙
+    // 초기값: CHANGE 글자 포함하도록 조금 높게
     updateCutMobile(0.5);
     requestAnimationFrame(() => updateCutMobile(0.5));
 
@@ -425,7 +425,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const rect = box.getBoundingClientRect();
-          let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
+          // offsetTop 기준 ratio 계산
+          let ratio = (window.scrollY + window.innerHeight / 2 - (box.offsetTop)) / box.offsetHeight;
           ratio = Math.min(Math.max(ratio, 0), 1);
           updateCutMobile(ratio);
           ticking = false;

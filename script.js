@@ -386,13 +386,13 @@ if(search){
   });
 }
 
-
-
 });
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // ===== PC 마우스 이벤트 (기존 그대로) =====
+  // ===== PC 마우스 이벤트 (변경 없음) =====
   const updateCutPC = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));
@@ -409,7 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== 모바일 전용 scroll 이벤트 =====
   if (/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
     const updateCutMobile = (ratio) => {
-      let top = 30 + ratio * 40; // 30~70%
+      let top = 30 + ratio * 40;
       const bottom = top + 14;
       box.style.setProperty('--cut-top', `${top}%`);
       box.style.setProperty('--cut-bottom', `${bottom}%`);
@@ -419,10 +419,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCutMobile(0.5);
     requestAnimationFrame(() => updateCutMobile(0.5));
 
-    // 스크롤 이벤트
+    // 모바일 스크롤 이벤트
     document.addEventListener('scroll', () => {
       const rect = box.getBoundingClientRect();
-      let ratio = (window.scrollY + window.innerHeight / 2 - (rect.top + window.scrollY)) / rect.height;
+      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
       ratio = Math.min(Math.max(ratio, 0), 1);
       updateCutMobile(ratio);
     }, { passive: true });

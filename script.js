@@ -391,65 +391,33 @@ if(search){
 });
 
 
-
-document.addEventListener('DOMContentLoaded', () => {
-  const box = document.querySelector(".box-history");
-  const slice = box.querySelector("#slice-history");
-
-  // 초기 화면용 innerText → data-text sync
-  slice.dataset.text = slice.innerText;
-
-  document.addEventListener('mousemove', (e) => {
-    const y = e.clientY / window.innerHeight;
-
-    let top = y * 100;
-    top = Math.min(70, Math.max(30, top));
-    const bottom = top + 14;
-
-    box.style.setProperty('--cut-top', `${top}%`);
-    box.style.setProperty('--cut-bottom', `${bottom}%`);
-  });
-
-  // contenteditable 업데이트
-  slice.addEventListener("input", () => {
-    slice.dataset.text = slice.innerText;
-  });
-});
-
-
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
-  // 모바일에서만 동작
+  // PC는 기존 마우스 이벤트 그대로
+  // 모바일에서만 scroll/touch 이벤트 적용
   if (/Mobi|Android/i.test(navigator.userAgent)) {
 
     const updateCut = () => {
       const rect = box.getBoundingClientRect();
       // 화면 중앙 기준 비율 계산
-      const ratio = Math.min(Math.max((window.innerHeight / 2 - rect.top) / rect.height, 0), 1);
+      let ratio = (window.innerHeight / 2 - rect.top) / rect.height;
+      ratio = Math.min(Math.max(ratio, 0), 1); // 0~1 범위 제한
       const top = 30 + ratio * 40; // 30~70%
       const bottom = top + 14;
-
       box.style.setProperty('--cut-top', `${top}%`);
       box.style.setProperty('--cut-bottom', `${bottom}%`);
     }
 
-    // 초기값 적용: 페이지 로딩 직후도 선 표시
-    updateCut();
+    // ✅ 초기값 강제 업데이트: 로딩 직후에도 선 표시
+    requestAnimationFrame(updateCut);
 
-    // 스크롤 이벤트 → 스크롤 내리면 선 내려가고 올리면 올라감
+    // 스크롤 / 터치 시 업데이트
     const tick = () => requestAnimationFrame(updateCut);
     document.addEventListener('scroll', tick, { passive: true });
     document.addEventListener('touchmove', tick, { passive: true });
   }
 });
-
-
-
-
-
-
-
 
 
 

@@ -417,6 +417,40 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+document.addEventListener('DOMContentLoaded', () => {
+  const box = document.querySelector(".box-history");
+
+  const updateCut = (ratio) => {
+    let top = ratio * 100;
+    top = Math.min(70, Math.max(30, top));
+    const bottom = top + 14;
+    box.style.setProperty('--cut-top', `${top}%`);
+    box.style.setProperty('--cut-bottom', `${bottom}%`);
+  }
+
+  // PC 마우스
+  document.addEventListener('mousemove', (e) => {
+    const y = e.clientY / window.innerHeight;
+    updateCut(y);
+  });
+
+  // 모바일 터치
+  document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const y = touch.clientY / window.innerHeight;
+    updateCut(y);
+  }, { passive: true });
+
+  // 모바일 스크롤 감지
+  document.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY; // 현재 스크롤 위치
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const ratio = scrollTop / docHeight; // 0 ~ 1 비율
+    updateCut(ratio);
+  });
+});
+
+
 
 
 

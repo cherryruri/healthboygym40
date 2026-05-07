@@ -1,6 +1,9 @@
 
+
+
 document.addEventListener("DOMContentLoaded", function(){
 
+  document.body.classList.add("loaded");
 /* 필라테스 슬라이드 */
 let pilatesIndex = 0;
 
@@ -41,6 +44,12 @@ function openMain(){
     startTyping();
     observeCounter();
     startBrandTyping();
+setTimeout(()=>{
+  document.querySelectorAll(".facility-section, .facility-item")
+    .forEach(el => el.classList.add("show"));
+}, 800);
+
+
   },600);
 }
 
@@ -305,16 +314,36 @@ if(scrollDown){
   });
 }
 
+
+
 document.querySelectorAll('a[href^="#"]').forEach(link=>{
   link.addEventListener("click",function(e){
-    const target = document.querySelector(this.getAttribute("href"));
+
+    const id = this.getAttribute("href");
+
+    // ❗ 핵심 방어 코드
+    if(!id || id === "#" || id.length < 2) return;
+
+    let target;
+
+    try{
+      target = document.querySelector(id);
+    }catch{
+      return;
+    }
+
     if(target){
       e.preventDefault();
       target.classList.add("show");
-      target.scrollIntoView({behavior:"smooth", block:"start"});
+      target.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
     }
+
   });
 });
+
 
 
 /* 모바일 시설투어 컬러 */
@@ -419,5 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = touch.clientY / window.innerHeight;
       updateCut(y);
     }, { passive: true });
+
+      document.body.classList.add("loaded"); // 👈 이거 추가
   }
 });

@@ -2525,3 +2525,210 @@ body.menu-open .mobile-side-menu a{
   }
 
 }
+
+
+
+
+/* ================= ABOUT US NIKE STYLE STORY ================= */
+
+.brand-about-section{
+  --brand-progress:0;
+  background:#fff;
+  color:#111;
+  min-height:390vh;
+  padding:0 20px;
+  overflow:visible;
+  position:relative;
+}
+
+.brand-about-inner{
+  width:100%;
+  max-width:1180px;
+  height:100vh;
+  margin:auto;
+  position:sticky;
+  top:0;
+}
+
+/* ABOUT US */
+
+.brand-about-title{
+  --clear:clamp(0, calc(var(--brand-progress) / 0.45), 1);
+  --move:clamp(0, calc((var(--brand-progress) - 0.48) / 0.22), 1);
+
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:100%;
+  text-align:center;
+
+  transform:
+    translate(calc(-50% - (15vw * var(--move))), -50%)
+    scale(calc(1.35 - (0.35 * var(--clear))));
+
+  filter:blur(calc(14px - (14px * var(--clear))));
+  will-change:transform, filter;
+}
+
+.brand-about-title h2{
+  font-size:130px;
+  line-height:.88;
+  font-weight:900;
+  letter-spacing:-0.09em;
+  white-space:nowrap;
+}
+
+.brand-about-title p{
+  font-size:12px;
+  letter-spacing:6px;
+  color:#999;
+  font-weight:900;
+  margin-bottom:14px;
+  opacity:var(--move);
+}
+
+/* 오른쪽 고정 영역 */
+
+.brand-copy-stage{
+  --stage:clamp(0, calc((var(--brand-progress) - 0.64) / 0.12), 1);
+
+  position:absolute;
+  right:0;
+  top:62%;
+  width:44%;
+  min-height:440px;
+
+  opacity:var(--stage);
+
+  transform:
+    translateY(-50%)
+    translateX(calc(-70px + (70px * var(--stage))));
+
+  overflow:hidden;
+}
+
+/* 공통 내용 */
+
+.brand-about-copy{
+  position:absolute;
+  left:0;
+  top:0;
+  width:100%;
+
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+
+  transform:translateX(-70px);
+  clip-path:inset(0 100% 0 0);
+}
+
+.brand-about-copy span{
+  display:block;
+  font-size:12px;
+  letter-spacing:5px;
+  color:#aaa;
+  font-weight:900;
+  margin-bottom:22px;
+}
+
+.brand-about-copy h3{
+  font-size:36px;
+  line-height:1.28;
+  font-weight:900;
+  letter-spacing:-0.06em;
+  margin-bottom:26px;
+}
+
+.brand-about-copy p{
+  font-size:17px;
+  line-height:2;
+  color:#555;
+  font-weight:700;
+  word-break:keep-all;
+}
+
+/* 선택된 내용만 부드럽게 쫙 등장 */
+
+.brand-about-section[data-copy="1"] .copy-one,
+.brand-about-section[data-copy="2"] .copy-two,
+.brand-about-section[data-copy="3"] .copy-three{
+  visibility:visible;
+  opacity:1;
+  transform:translateX(0);
+  clip-path:inset(0 0 0 0);
+
+  transition:
+    clip-path .75s cubic-bezier(.22,.61,.36,1),
+    transform .75s cubic-bezier(.22,.61,.36,1),
+    opacity .25s ease;
+}
+
+/* 이전 내용은 바로 숨김 */
+
+.brand-about-section[data-copy="0"] .brand-about-copy{
+  opacity:0;
+  visibility:hidden;
+}
+
+/* 모바일 */
+
+@media(max-width:768px){
+
+  .brand-about-section{
+    min-height:370vh;
+    padding:0 20px;
+  }
+
+  .brand-about-title{
+    top:calc(50% - (24% * var(--move)));
+
+    transform:
+      translate(-50%, -50%)
+      scale(calc(1.35 - (0.35 * var(--clear))));
+  }
+
+  .brand-about-title h2{
+    font-size:15vw;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  .brand-about-title p{
+    font-size:10px;
+    letter-spacing:3px;
+  }
+
+  .brand-copy-stage{
+    left:0;
+    right:auto;
+    top:67%;
+    width:100%;
+    min-height:440px;
+    text-align:center;
+
+    transform:
+      translateY(-50%)
+      translateX(calc(-35px + (35px * var(--stage))));
+  }
+
+  .brand-about-copy{
+    transform:translateX(-45px);
+  }
+
+  .brand-about-section[data-copy="1"] .copy-one,
+  .brand-about-section[data-copy="2"] .copy-two,
+  .brand-about-section[data-copy="3"] .copy-three{
+    transform:translateX(0);
+  }
+
+  .brand-about-copy h3{
+    font-size:27px;
+  }
+
+  .brand-about-copy p{
+    font-size:14px;
+    line-height:1.9;
+  }
+}
+

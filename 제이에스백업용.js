@@ -1,6 +1,8 @@
 
+
 document.addEventListener("DOMContentLoaded", function(){
 
+  document.body.classList.add("loaded");
 /* 필라테스 슬라이드 */
 let pilatesIndex = 0;
 
@@ -41,6 +43,12 @@ function openMain(){
     startTyping();
     observeCounter();
     startBrandTyping();
+setTimeout(()=>{
+  document.querySelectorAll(".facility-section, .facility-item")
+    .forEach(el => el.classList.add("show"));
+}, 800);
+
+
   },600);
 }
 
@@ -265,7 +273,7 @@ if(navbar && menu && !document.querySelector(".mobile-menu-btn")){
     </div>
 
     <a href="#about">센터 소개</a>
-    <a href="#history">브랜드소개</a>
+    <a href="#brand">브랜드소개</a>
     <a href="#facility">시설 투어</a>
     <a href="#pilates">필라테스 안내</a>
     <a href="#pass">올패스 안내</a>
@@ -305,16 +313,36 @@ if(scrollDown){
   });
 }
 
+
+
 document.querySelectorAll('a[href^="#"]').forEach(link=>{
   link.addEventListener("click",function(e){
-    const target = document.querySelector(this.getAttribute("href"));
+
+    const id = this.getAttribute("href");
+
+    // ❗ 핵심 방어 코드
+    if(!id || id === "#" || id.length < 2) return;
+
+    let target;
+
+    try{
+      target = document.querySelector(id);
+    }catch{
+      return;
+    }
+
     if(target){
       e.preventDefault();
       target.classList.add("show");
-      target.scrollIntoView({behavior:"smooth", block:"start"});
+      target.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
     }
+
   });
 });
+
 
 
 /* 모바일 시설투어 컬러 */
@@ -419,5 +447,38 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = touch.clientY / window.innerHeight;
       updateCut(y);
     }, { passive: true });
+
+      document.body.classList.add("loaded"); // 👈 이거 추가
   }
+
+/* 브랜드 소개 ABOUT US - 나이키식 장면 전환 */
+const brandAbout = document.querySelector(".brand-about-section");
+
+if(brandAbout){
+
+  function updateBrandAbout(){
+    const rect = brandAbout.getBoundingClientRect();
+    const windowH = window.innerHeight;
+
+    let progress = (windowH * 0.15 - rect.top) / (windowH * 2.1);
+    progress = Math.max(0, Math.min(1, progress));
+
+    brandAbout.style.setProperty("--brand-progress", progress);
+
+    if(progress < 0.68){
+      brandAbout.dataset.copy = "0";
+    }else if(progress < 0.80){
+      brandAbout.dataset.copy = "1";
+    }else if(progress < 0.92){
+      brandAbout.dataset.copy = "2";
+    }else{
+      brandAbout.dataset.copy = "3";
+    }
+  }
+
+  window.addEventListener("scroll", updateBrandAbout);
+  window.addEventListener("resize", updateBrandAbout);
+  updateBrandAbout();
+
+}
 });

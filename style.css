@@ -2786,4 +2786,8 @@ body.menu-open .mobile-side-menu a{
       opacity .25s ease;
   }
 
+   .brand-about-section{
+    min-height:620vh;
+  }
+
 }

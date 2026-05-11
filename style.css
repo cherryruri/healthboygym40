@@ -2480,34 +2480,44 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
-/* ================= 브랜드 모바일 최적화 ================= */
+/* ================= 브랜드 모바일 최종 고정 ================= */
 
 @media(max-width:768px){
 
   .brand-section{
-    overflow:hidden;
+    overflow:hidden !important;
   }
 
   .brand-top{
-    padding:60px 18px 50px;
+    padding:55px 18px 45px !important;
   }
 
   .brand-big-text{
-    font-size:34px !important;
-    line-height:1.05;
-    letter-spacing:-0.05em;
-    white-space:normal;
-    word-break:keep-all;
-    overflow-wrap:break-word;
-    max-width:100%;
-    margin-top:22px;
+    display:block !important;
+    width:100% !important;
+
+    font-size:32px !important;
+    line-height:1.05 !important;
+    letter-spacing:-0.06em !important;
+
+    white-space:normal !important;
+    word-break:keep-all !important;
+    overflow-wrap:break-word !important;
+
+    max-width:100% !important;
+    overflow:hidden !important;
+
+    margin-top:18px !important;
   }
 
   .brand-desc{
-    font-size:14px;
-    line-height:1.7;
-    max-width:100%;
-    padding:0 6px;
+    width:100% !important;
+    max-width:100% !important;
+
+    font-size:14px !important;
+    line-height:1.7 !important;
+
+    padding:0 4px !important;
   }
 
 }

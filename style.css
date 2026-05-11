@@ -2480,28 +2480,3 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
-/* ================= 브랜드소개 모바일 overflow 해결 ================= */
-
-@media(max-width:768px){
-
-  .brand-section{
-    overflow:hidden;
-  }
-
-  .brand-big-text{
-    width:100%;
-    max-width:100%;
-
-    font-size:32px;
-    line-height:1.05;
-
-    letter-spacing:-0.04em;
-
-    white-space:normal;
-    word-break:keep-all;
-    overflow-wrap:anywhere;
-
-    padding:0 8px;
-  }
-
-}

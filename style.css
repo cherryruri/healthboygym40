@@ -797,18 +797,27 @@ header {
   font-weight:800;
 }
 
-.trainer-detail {
+.trainer-detail{
   position:absolute;
   inset:0;
   padding:44px 34px;
   color:#fff;
   opacity:0;
   z-index:3;
+
   display:flex;
   flex-direction:column;
-  justify-content:flex-end;
+  justify-content:flex-start;
+
   transition:0.35s;
-  background:linear-gradient(180deg, rgba(0,0,0,0.05), rgba(0,0,0,0.92));
+
+  background:linear-gradient(
+    180deg,
+    rgba(0,0,0,0.15),
+    rgba(0,0,0,0.92)
+  );
+
+  overflow-y:auto;
 }
 
 .trainer-card:hover .trainer-detail {

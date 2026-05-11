@@ -1739,8 +1739,8 @@ section{
   }
 
 .trainer-card{
-  width:calc(100% / 3);
-  flex:0 0 calc(100% / 3);
+  width:calc(100% / 2);
+  flex:0 0 calc(100% / 2);
   height:300px;
   border-right:1px solid #111;
   border-bottom:1px solid #111;

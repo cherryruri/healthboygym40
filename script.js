@@ -481,34 +481,69 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.classList.add("loaded"); // 👈 이거 추가
   }
 
-/* 브랜드 소개 ABOUT US - 나이키식 장면 전환 */
-const brandAbout = document.querySelector(".brand-about-section");
 
-if(brandAbout){
 
-  function updateBrandAbout(){
-    const rect = brandAbout.getBoundingClientRect();
-    const windowH = window.innerHeight;
+  document.addEventListener("DOMContentLoaded", () => {
 
-    let progress = (windowH * 0.15 - rect.top) / (windowH * 2.1);
-    progress = Math.max(0, Math.min(1, progress));
+  /* 브랜드 소개 ABOUT US - PC/모바일 공용 */
+  const brandAbout = document.querySelector(".brand-about-section");
 
-    brandAbout.style.setProperty("--brand-progress", progress);
+  if(brandAbout){
+    function updateBrandAbout(){
+      const rect = brandAbout.getBoundingClientRect();
+      const windowH = window.innerHeight;
 
-    if(progress < 0.68){
-      brandAbout.dataset.copy = "0";
-    }else if(progress < 0.80){
-      brandAbout.dataset.copy = "1";
-    }else if(progress < 0.92){
-      brandAbout.dataset.copy = "2";
-    }else{
-      brandAbout.dataset.copy = "3";
+      let progress = (windowH * 0.15 - rect.top) / (windowH * 2.1);
+      progress = Math.max(0, Math.min(1, progress));
+
+      brandAbout.style.setProperty("--brand-progress", progress);
+
+      if(progress < 0.68){
+        brandAbout.dataset.copy = "0";
+      }else if(progress < 0.80){
+        brandAbout.dataset.copy = "1";
+      }else if(progress < 0.92){
+        brandAbout.dataset.copy = "2";
+      }else{
+        brandAbout.dataset.copy = "3";
+      }
+    }
+
+    window.addEventListener("scroll", updateBrandAbout, { passive:true });
+    window.addEventListener("resize", updateBrandAbout);
+
+    setTimeout(updateBrandAbout, 100);
+    setTimeout(updateBrandAbout, 700);
+  }
+
+
+  /* box-history 있을 때만 실행 */
+  const box = document.querySelector(".box-history");
+
+  if(box){
+    const updateCut = (yRatio) => {
+      let top = yRatio * 100;
+      top = Math.min(70, Math.max(30, top));
+      const bottom = top + 14;
+
+      box.style.setProperty("--cut-top", `${top}%`);
+      box.style.setProperty("--cut-bottom", `${bottom}%`);
+    };
+
+    document.addEventListener("mousemove", (e) => {
+      const y = e.clientY / window.innerHeight;
+      updateCut(y);
+    });
+
+    if(/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){
+      updateCut(0.5);
+
+      document.addEventListener("touchmove", (e) => {
+        const touch = e.touches[0];
+        const y = touch.clientY / window.innerHeight;
+        updateCut(y);
+      }, { passive:true });
     }
   }
 
-  window.addEventListener("scroll", updateBrandAbout);
-  window.addEventListener("resize", updateBrandAbout);
-  updateBrandAbout();
-
-}
 });

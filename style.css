@@ -2483,36 +2483,35 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
-/* ================= 모바일 트레이너 상세 최적화 ================= */
+
+
+/* ================= 모바일 트레이너 상세 스크롤 ================= */
 
 @media(max-width:768px){
 
-  .trainer-card{
-    height:auto !important;
-    min-height:unset !important;
-  }
-
   .trainer-detail{
-    height:auto !important;
-    max-height:none !important;
+    height:70%;
+    overflow-y:auto;
 
     padding:18px 14px !important;
 
-    overflow:visible !important;
+    -webkit-overflow-scrolling:touch;
   }
 
   .trainer-detail h3{
-    font-size:18px !important;
+    font-size:18px;
+    margin-bottom:6px;
   }
 
   .trainer-detail h4{
-    font-size:13px !important;
+    font-size:13px;
     margin-top:10px;
+    margin-bottom:6px;
   }
 
   .trainer-detail ul li{
-    font-size:11px !important;
-    line-height:1.45 !important;
+    font-size:11px;
+    line-height:1.45;
     margin-bottom:2px;
   }
 

@@ -1176,6 +1176,12 @@ footer {
 /* 모바일 */
 @media(max-width:768px){
 
+  .trainer-detail{
+    overflow-y:auto;
+    max-height:75%;
+  }
+
+
   .main-content {
     padding-top:125px;
   }

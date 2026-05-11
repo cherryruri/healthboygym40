@@ -2732,3 +2732,62 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
+/* ================= 브랜드 → 다음 섹션 덮기 전환 ================= */
+
+.brand-about-section{
+  min-height:480vh; /* 브랜드 마지막에 덮이는 여유 공간 추가 */
+  z-index:1;
+}
+
+.brand-about-inner{
+  z-index:1;
+}
+
+/* 브랜드 다음 섹션이 위로 덮으면서 올라오게 */
+#facility{
+  position:relative;
+  z-index:5;
+  margin-top:-100vh;
+  border-radius:42px 42px 0 0;
+  box-shadow:0 -40px 90px rgba(0,0,0,0.45);
+}
+
+/* 덮이는 느낌 부드럽게 */
+.facility-section{
+  transform:translateZ(0);
+}
+
+/* 모바일 */
+@media(max-width:768px){
+  .brand-about-section{
+    min-height:460vh;
+  }
+
+  #facility{
+    margin-top:-100vh;
+    border-radius:28px 28px 0 0;
+  }
+}
+
+@media(max-width:768px){
+
+  .brand-about-section[data-copy="1"] .copy-one,
+  .brand-about-section[data-copy="2"] .copy-two,
+  .brand-about-section[data-copy="3"] .copy-three{
+
+    visibility:visible;
+    opacity:1;
+    transform:translateX(0);
+    clip-path:inset(0 0 0 0);
+
+    transition:
+      clip-path .75s cubic-bezier(.22,.61,.36,1),
+      transform .75s cubic-bezier(.22,.61,.36,1),
+      opacity .25s ease;
+  }
+
+   .brand-about-section{
+    min-height:620vh;
+  }
+
+}

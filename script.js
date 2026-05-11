@@ -421,6 +421,36 @@ if(search){
 document.addEventListener('DOMContentLoaded', () => {
   const box = document.querySelector(".box-history");
 
+    if(!box){
+    const brandAbout = document.querySelector(".brand-about-section");
+
+    if(brandAbout){
+      function updateBrandAbout(){
+        const rect = brandAbout.getBoundingClientRect();
+        const windowH = window.innerHeight;
+
+        let progress = (windowH * 0.15 - rect.top) / (windowH * 2.1);
+        progress = Math.max(0, Math.min(1, progress));
+
+        brandAbout.style.setProperty("--brand-progress", progress);
+
+        if(progress < 0.68){
+          brandAbout.dataset.copy = "0";
+        }else if(progress < 0.80){
+          brandAbout.dataset.copy = "1";
+        }else if(progress < 0.92){
+          brandAbout.dataset.copy = "2";
+        }else{
+          brandAbout.dataset.copy = "3";
+        }
+      }
+
+      window.addEventListener("scroll", updateBrandAbout);
+      window.addEventListener("resize", updateBrandAbout);
+      updateBrandAbout();
+    }
+  }
+
   const updateCut = (yRatio) => {
     let top = yRatio * 100;
     top = Math.min(70, Math.max(30, top));

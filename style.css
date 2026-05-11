@@ -1176,12 +1176,9 @@ footer {
 /* 모바일 */
 @media(max-width:768px){
 
-  .trainer-detail{
-    overflow-y:auto;
-    max-height:75%;
-  }
 
 
+  
   .main-content {
     padding-top:125px;
   }
@@ -2484,5 +2481,40 @@ body.menu-open .mobile-side-menu a{
   .box-history .slice {
     font-size: clamp(3rem, 14vw, 8rem);
   }
+}
+
+/* ================= 모바일 트레이너 상세 최적화 ================= */
+
+@media(max-width:768px){
+
+  .trainer-card{
+    height:auto !important;
+    min-height:unset !important;
+  }
+
+  .trainer-detail{
+    height:auto !important;
+    max-height:none !important;
+
+    padding:18px 14px !important;
+
+    overflow:visible !important;
+  }
+
+  .trainer-detail h3{
+    font-size:18px !important;
+  }
+
+  .trainer-detail h4{
+    font-size:13px !important;
+    margin-top:10px;
+  }
+
+  .trainer-detail ul li{
+    font-size:11px !important;
+    line-height:1.45 !important;
+    margin-bottom:2px;
+  }
+
 }
 

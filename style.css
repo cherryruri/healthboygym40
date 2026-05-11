@@ -793,7 +793,7 @@ header {
 .trainer-basic p {
   margin-top:8px;
   color:#ddd;
-  font-size:15px;
+  font-size:20px;
   font-weight:800;
 }
 
@@ -824,13 +824,13 @@ header {
 }
 
 .trainer-detail h3 {
-  font-size:15px;
+  font-size:33px;
   font-weight:900;
   margin-bottom:18px;
 }
 
 .trainer-detail h4 {
-  font-size:9px;
+  font-size:20px;
   font-weight:900;
   border-bottom:1px solid rgba(255,255,255,0.35);
   padding-bottom:8px;
@@ -840,7 +840,7 @@ header {
 .trainer-detail li {
   list-style:none;
   color:#ddd;
-  font-size:6px;
+  font-size:20px;
   line-height:1.7;
 }
 

@@ -2479,3 +2479,35 @@ body.menu-open .mobile-side-menu a{
     font-size: clamp(3rem, 14vw, 8rem);
   }
 }
+
+/* ================= 브랜드 모바일 최적화 ================= */
+
+@media(max-width:768px){
+
+  .brand-section{
+    overflow:hidden;
+  }
+
+  .brand-top{
+    padding:60px 18px 50px;
+  }
+
+  .brand-big-text{
+    font-size:34px !important;
+    line-height:1.05;
+    letter-spacing:-0.05em;
+    white-space:normal;
+    word-break:keep-all;
+    overflow-wrap:break-word;
+    max-width:100%;
+    margin-top:22px;
+  }
+
+  .brand-desc{
+    font-size:14px;
+    line-height:1.7;
+    max-width:100%;
+    padding:0 6px;
+  }
+
+}

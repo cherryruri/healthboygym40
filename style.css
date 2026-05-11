@@ -2480,44 +2480,28 @@ body.menu-open .mobile-side-menu a{
   }
 }
 
-/* ================= 브랜드 모바일 최종 고정 ================= */
+/* ================= 브랜드소개 모바일 overflow 해결 ================= */
 
 @media(max-width:768px){
 
   .brand-section{
-    overflow:hidden !important;
-  }
-
-  .brand-top{
-    padding:55px 18px 45px !important;
+    overflow:hidden;
   }
 
   .brand-big-text{
-    display:block !important;
-    width:100% !important;
+    width:100%;
+    max-width:100%;
 
-    font-size:32px !important;
-    line-height:1.05 !important;
-    letter-spacing:-0.06em !important;
+    font-size:32px;
+    line-height:1.05;
 
-    white-space:normal !important;
-    word-break:keep-all !important;
-    overflow-wrap:break-word !important;
+    letter-spacing:-0.04em;
 
-    max-width:100% !important;
-    overflow:hidden !important;
+    white-space:normal;
+    word-break:keep-all;
+    overflow-wrap:anywhere;
 
-    margin-top:18px !important;
-  }
-
-  .brand-desc{
-    width:100% !important;
-    max-width:100% !important;
-
-    font-size:14px !important;
-    line-height:1.7 !important;
-
-    padding:0 4px !important;
+    padding:0 8px;
   }
 
 }

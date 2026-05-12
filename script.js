@@ -205,16 +205,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
       brandAbout.style.setProperty("--brand-progress", progress);
 
-      if(progress < 0.74){
+if(progress < 0.84){
   brandAbout.dataset.copy = "0";
-}else if(progress < 0.84){
+}else if(progress < 0.92){
   brandAbout.dataset.copy = "1";
-}else if(progress < 0.93){
+}else if(progress < 0.98){
   brandAbout.dataset.copy = "2";
 }else{
   brandAbout.dataset.copy = "3";
 }
-    }
 
     window.addEventListener("scroll", updateBrandAbout, { passive:true });
     window.addEventListener("resize", updateBrandAbout);

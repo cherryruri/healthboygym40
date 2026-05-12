@@ -2619,3 +2619,12 @@ body.menu-open .mobile-side-menu a{
   }
 
 }
+
+/* 모바일 트레이너 상세 열기 */
+@media(max-width:768px){
+
+  .trainer-card.active .trainer-detail{
+    opacity:1 !important;
+  }
+
+}

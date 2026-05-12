@@ -471,7 +471,26 @@ document.addEventListener("DOMContentLoaded", function(){
       });
     });
   }
+  /* 모바일 트레이너 터치 */
+  const trainerCards = document.querySelectorAll(".trainer-card");
 
+  trainerCards.forEach(card=>{
+
+    card.addEventListener("click",()=>{
+
+      if(window.innerWidth > 768) return;
+
+      trainerCards.forEach(c=>{
+        if(c !== card){
+          c.classList.remove("active");
+        }
+      });
+
+      card.classList.toggle("active");
+
+    });
+
+  });
 
   
 });

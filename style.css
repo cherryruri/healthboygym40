@@ -648,32 +648,8 @@ header {
   overflow-y:auto;
 }
 
-/* ================= 모바일 트레이너 터치 상세정보 ================= */
-
-@media(max-width:768px){
-
-  .trainer-card{
-    height:460px;
-    position:relative;
-  }
-
-  .trainer-detail{
-    opacity:0;
-    pointer-events:none;
-
-    transition:0.35s ease;
-
-    max-height:100%;
-    overflow-y:auto;
-
-    -webkit-overflow-scrolling:touch;
-  }
-
-  .trainer-card.active .trainer-detail{
-    opacity:1;
-    pointer-events:auto;
-  }
-
+.trainer-card:hover .trainer-detail {
+  opacity:1;
 }
 
 .trainer-detail .tag {

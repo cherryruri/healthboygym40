@@ -213,7 +213,7 @@ if(progress < 0.84){
   brandAbout.dataset.copy = "2";
 }else{
   brandAbout.dataset.copy = "3";
-}
+}}
 
     window.addEventListener("scroll", updateBrandAbout, { passive:true });
     window.addEventListener("resize", updateBrandAbout);

@@ -472,4 +472,27 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   }
 
+
+  /* 모바일 트레이너 터치 */
+const trainerCards = document.querySelectorAll(".trainer-card");
+
+trainerCards.forEach(card=>{
+
+  card.addEventListener("click",()=>{
+
+    // 이미 열려있으면 닫기
+    if(card.classList.contains("active")){
+      card.classList.remove("active");
+      return;
+    }
+
+    // 다른 카드 닫기
+    trainerCards.forEach(c=>c.classList.remove("active"));
+
+    // 현재 카드 열기
+    card.classList.add("active");
+
+  });
+
+});
 });

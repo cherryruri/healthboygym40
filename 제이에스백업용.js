@@ -341,7 +341,6 @@ document.addEventListener("DOMContentLoaded", function(){
       <a href="#about">센터 소개</a>
       <a href="#brand">브랜드소개</a>
       <a href="#facility">시설 투어</a>
-      <a href="#pilates">필라테스 안내</a>
       <a href="#pass">올패스 안내</a>
       <a href="#trainer">트레이너 소개</a>
       <a href="#hours">운영 시간</a>
@@ -471,5 +470,24 @@ document.addEventListener("DOMContentLoaded", function(){
       });
     });
   }
+
+});
+
+/* 모바일 트레이너 터치 */
+const trainerCards = document.querySelectorAll(".trainer-card");
+
+trainerCards.forEach(card => {
+
+  card.addEventListener("click", () => {
+
+    trainerCards.forEach(other => {
+      if(other !== card){
+        other.classList.remove("active");
+      }
+    });
+
+    card.classList.toggle("active");
+
+  });
 
 });

@@ -436,180 +436,7 @@ header {
   100% {transform:translateX(0);}
 }
 
-/* 필라테스 */
-.pilates-section {
-  background:#000;
-  color:#fff;
-  padding:150px 20px;
-  position:relative;
-}
 
-.pilates-wrap {
-  max-width:1280px;
-  margin:auto;
-}
-
-.pilates-carousel {
-  position:relative;
-  max-width:1280px;
-  margin:auto;
-  overflow:visible;
-  padding:0 110px;
-}
-
-.pilates-window {
-  overflow:hidden;
-}
-
-.pilates-track {
-  display:flex;
-  transition:0.65s ease;
-}
-
-.pilates-slide {
-  min-width:100%;
-}
-
-.pilates-head {
-  text-align:center;
-  max-width:900px;
-  margin:0 auto 80px;
-}
-
-.pilates-head .eyebrow {
-  color:#555;
-  font-size:14px;
-  font-weight:900;
-  letter-spacing:4px;
-  margin-bottom:22px;
-}
-
-.pilates-head h2 {
-  font-size:60px;
-  font-weight:900;
-}
-
-.pilates-head p {
-  color:#aaa;
-  font-size:17px;
-  line-height:1.9;
-  margin-top:24px;
-}
-
-.pilates-info {
-  display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  border-top:1px solid #222;
-  border-bottom:1px solid #222;
-  margin:70px 0;
-}
-
-.pilates-info div {
-  padding:30px 20px;
-  text-align:center;
-  border-right:1px solid #222;
-}
-
-.pilates-info div:last-child {
-  border-right:none;
-}
-
-.pilates-info span {
-  display:block;
-  color:#666;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:3px;
-  margin-bottom:10px;
-}
-
-.pilates-info strong {
-  font-size:20px;
-  font-weight:900;
-}
-
-.schedule-wrap {
-  background:#fff;
-  color:#111;
-  padding:60px;
-}
-
-.schedule-top {
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-end;
-  border-bottom:4px solid #111;
-  padding-bottom:28px;
-  margin-bottom:36px;
-}
-
-.schedule-top h3 {
-  font-size:42px;
-  font-weight:900;
-}
-
-.schedule-top p {
-  color:#555;
-  font-size:14px;
-  line-height:1.7;
-  font-weight:700;
-}
-
-.schedule-table {
-  width:100%;
-  border-collapse:collapse;
-  table-layout:fixed;
-}
-
-.schedule-table th {
-  padding:18px 8px;
-  border-bottom:3px solid #111;
-  font-size:18px;
-  font-weight:900;
-}
-
-.schedule-table td {
-  height:76px;
-  text-align:center;
-  border-bottom:1px solid #ddd;
-  font-size:15px;
-  font-weight:800;
-  line-height:1.45;
-}
-
-.schedule-table tr:last-child td {
-  border-bottom:3px solid #111;
-}
-
-.schedule-label {
-  background:#000 !important;
-  color:#fff !important;
-  writing-mode:vertical-rl;
-  text-orientation:upright;
-  letter-spacing:8px;
-  font-size:18px !important;
-  width:58px;
-}
-
-.time {
-  color:#333;
-  font-size:18px !important;
-  font-weight:900 !important;
-  width:90px;
-}
-
-.empty {
-  color:#ddd;
-  font-weight:400;
-}
-
-.schedule-note {
-  margin-top:22px;
-  color:#666;
-  font-size:13px;
-  line-height:1.7;
-  font-weight:700;
-}
 
 /* 올패스 */
 .pass-section {
@@ -1999,160 +1826,51 @@ body:not(.loaded) .main-content{
 }
 
 
-
-
-/* 모바일 트레이너 상세정보 보이게 */
+/* 모바일 트레이너 상세 터치 시 표시 */
 @media(max-width:768px){
 
   .trainer-card{
     height:460px;
+    position:relative;
   }
 
   .trainer-detail{
     display:flex !important;
     opacity:0;
+    pointer-events:none;
+
+    transition:.35s;
+
+    padding:18px 14px !important;
+
+    overflow-y:auto;
+    max-height:65vh;
+
+    background:linear-gradient(
+      180deg,
+      rgba(0,0,0,0.15),
+      rgba(0,0,0,0.92)
+    );
+
+    -webkit-overflow-scrolling:touch;
   }
 
-  .trainer-card:hover .trainer-detail,
-  .trainer-card:active .trainer-detail{
+  .trainer-card.active .trainer-detail{
     opacity:1;
-  }
-}
-/* ================= 연혁 아코디언 ================= */
-/* ================= 연혁 아코디언 수정 ================= */
-
-.history-section{
-  background:#fff;
-  padding:120px 20px;
-}
-
-.history-accordion{
-  max-width:1280px;
-  height:520px;
-  margin:auto;
-  display:flex;
-  overflow:hidden;
-  background:#000;
-  border-radius:0;
-}
-
-.history-panel{
-  position:relative;
-  flex:1;
-  min-width:0;
-  overflow:hidden;
-  cursor:pointer;
-  transition:flex .7s cubic-bezier(.22,.61,.36,1);
-  border-right:1px solid rgba(255,255,255,.18);
-}
-
-.history-panel.active,
-.history-panel:hover{
-  flex:3.6;
-}
-
-.history-panel img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  filter:brightness(.32) grayscale(45%);
-  transition:.7s ease;
-}
-
-.history-panel:hover img,
-.history-panel.active img{
-  filter:brightness(.55) grayscale(0%);
-  transform:scale(1.05);
-}
-
-.history-panel-content{
-  position:absolute;
-  left:32px;
-  right:32px;
-  bottom:40px;
-  color:#fff;
-  z-index:2;
-}
-
-.history-panel-content strong{
-  display:block;
-  font-size:34px;
-  font-weight:900;
-  color:var(--yellow);
-  margin-bottom:10px;
-}
-
-.history-panel-content h3{
-  font-size:22px;
-  line-height:1.25;
-  font-weight:900;
-  margin-bottom:12px;
-  white-space:normal;
-  word-break:keep-all;
-}
-
-.history-panel-content p{
-  font-size:14px;
-  line-height:1.7;
-  font-weight:700;
-  color:rgba(255,255,255,.82);
-  opacity:0;
-  max-width:420px;
-  transform:translateY(12px);
-  transition:.45s ease;
-}
-
-.history-panel:hover .history-panel-content p,
-.history-panel.active .history-panel-content p{
-  opacity:1;
-  transform:translateY(0);
-}
-
-@media(max-width:768px){
-  .history-section{
-    padding:80px 18px;
+    pointer-events:auto;
   }
 
-  .history-accordion{
-    height:auto;
-    flex-direction:column;
-  }
-
-  .history-panel{
-    height:170px;
-    flex:none;
-  }
-
-  .history-panel:hover,
-  .history-panel.active{
-    height:260px;
-    flex:none;
-  }
-
-  .history-panel-content{
-    left:22px;
-    right:22px;
-    bottom:24px;
-  }
-
-  .history-panel-content strong{
-    font-size:30px;
-  }
-
-  .history-panel-content h3{
-    font-size:19px;
-  }
-
-  .history-panel-content p{
-    opacity:1;
-    transform:none;
-    font-size:13px;
-  }
 }
 
-/* ================= 브랜드 타이핑 ================= */
+
+
+
+
+
+
+
+
+
 
 /* ================= 브랜드 섹션 복구 ================= */
 

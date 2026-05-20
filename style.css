@@ -2785,6 +2785,8 @@ body.menu-open .mobile-side-menu a{
   display:flex;
   justify-content:center;
   align-items:center;
+
+  padding-top:6vh;
 }
 
 @media(max-width:768px){

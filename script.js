@@ -491,3 +491,4 @@ trainerCards.forEach(card => {
   });
 
 });
+

@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-  document.body.classList.add("loaded");
-
   /* 필라테스 슬라이드 */
   let pilatesIndex = 0;
 
@@ -22,11 +20,7 @@ document.addEventListener("DOMContentLoaded", function(){
   setInterval(()=> movePilates(1), 4500);
 
 
-  /* 로고 타이핑 */
-  const text = "HEALTHBOYGYM";
-  let logoIndex = 0;
-  const logo = document.getElementById("logo-text");
-
+  /* 로고 로더 */
   function openMain(){
     const logoScreen = document.querySelector(".logo-screen");
     const mainContent = document.querySelector(".main-content");
@@ -53,19 +47,8 @@ document.addEventListener("DOMContentLoaded", function(){
     },600);
   }
 
-  if(logo){
-    const typing = setInterval(()=>{
-      if(logoIndex < text.length){
-        logo.textContent += text[logoIndex];
-        logoIndex++;
-      }else{
-        clearInterval(typing);
-        setTimeout(openMain, 500);
-      }
-    },60);
-  }else{
-    openMain();
-  }
+  /* 로딩 시간 */
+  setTimeout(openMain, 500);
 
 
   /* fade */
@@ -191,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
 
-  /* 브랜드 소개 ABOUT US - PC/모바일 공용 */
+  /* 브랜드 소개 ABOUT US */
   function initBrandAbout(){
     const brandAbout = document.querySelector(".brand-about-section");
     if(!brandAbout) return;
@@ -471,24 +454,20 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   }
 
-});
 
-/* 모바일 트레이너 터치 */
-const trainerCards = document.querySelectorAll(".trainer-card");
+  /* 모바일 트레이너 터치 */
+  const trainerCards = document.querySelectorAll(".trainer-card");
 
-trainerCards.forEach(card => {
+  trainerCards.forEach(card => {
+    card.addEventListener("click", () => {
+      trainerCards.forEach(other => {
+        if(other !== card){
+          other.classList.remove("active");
+        }
+      });
 
-  card.addEventListener("click", () => {
-
-    trainerCards.forEach(other => {
-      if(other !== card){
-        other.classList.remove("active");
-      }
+      card.classList.toggle("active");
     });
-
-    card.classList.toggle("active");
-
   });
 
 });
-

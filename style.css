@@ -2618,3 +2618,18 @@ body.menu-open .mobile-side-menu a{
   }
 
 }
+
+
+/* 모바일 트레이너 상세 항상 표시 */
+@media(max-width:768px){
+
+  .trainer-detail{
+    opacity:1 !important;
+    background:linear-gradient(
+      180deg,
+      rgba(0,0,0,0.15),
+      rgba(0,0,0,0.92)
+    );
+  }
+
+}

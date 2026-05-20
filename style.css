@@ -2722,8 +2722,12 @@ body.menu-open .mobile-side-menu a{
 }
 
 @media(max-width:768px){
+
   .loader{
-    --main-size:2em;
-    width:11em;
+    --main-size:4.2em;
+    width:13em;
+
+    transform:scale(1.15);
   }
+
 }

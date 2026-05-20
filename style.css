@@ -1826,17 +1826,20 @@ body:not(.loaded) .main-content{
 }
 
 
-
-/* 모바일 트레이너 상세 항상 표시 */
+/* 모바일 트레이너 상세 터치 시 표시 */
 @media(max-width:768px){
 
   .trainer-card{
     height:460px;
+    position:relative;
   }
 
   .trainer-detail{
     display:flex !important;
-    opacity:1 !important;
+    opacity:0;
+    pointer-events:none;
+
+    transition:.35s;
 
     padding:18px 14px !important;
 
@@ -1852,7 +1855,19 @@ body:not(.loaded) .main-content{
     -webkit-overflow-scrolling:touch;
   }
 
+  .trainer-card.active .trainer-detail{
+    opacity:1;
+    pointer-events:auto;
+  }
+
 }
+
+
+
+
+
+
+
 
 
 

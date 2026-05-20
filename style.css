@@ -2724,10 +2724,10 @@ body.menu-open .mobile-side-menu a{
 @media(max-width:768px){
 
   .loader{
-    --main-size:6.5em;
-    width:16em;
+    --main-size:3.8em;
+    width:12em;
 
-    transform:translate(-50%, -50%) scale(1.55);
+    transform:translate(-50%, -50%) scale(1);
   }
 
 }

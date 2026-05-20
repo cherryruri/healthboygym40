@@ -2732,13 +2732,3 @@ body.menu-open .mobile-side-menu a{
 
 }
 
-/* 모바일 로딩 로고 크게 */
-@media(max-width:768px){
-
-  .logo-screen .loader{
-    --main-size:7.8em !important;
-    width:15em !important;
-    height:1.25em !important;
-  }
-
-}

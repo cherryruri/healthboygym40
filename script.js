@@ -470,27 +470,4 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   });
 
-/* 포토존 쇼케이스 */
-const photoSlides = document.querySelectorAll(".photo-slide");
-
-const photoObserver = new IntersectionObserver((entries)=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting){
-      entry.target.classList.add("active");
-    }else{
-      entry.target.classList.remove("active");
-    }
-  });
-},{
-  threshold:0.45
 });
-
-photoSlides.forEach(slide=>{
-  photoObserver.observe(slide);
-});
-
-
-
-
-});
-

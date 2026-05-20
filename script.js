@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   /* 로딩 시간 */
-  setTimeout(openMain, 2800);
+  setTimeout(openMain, 500);
 
 
   /* fade */

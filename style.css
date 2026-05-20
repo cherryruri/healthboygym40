@@ -2731,3 +2731,20 @@ body.menu-open .mobile-side-menu a{
   }
 
 }
+
+/* 모바일 로딩 강제 표시 */
+
+.logo-screen{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  background:#000;
+}
+
+.main-content{
+  display:none;
+}
+
+body.loaded .main-content{
+  display:block;
+}

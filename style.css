@@ -2561,6 +2561,8 @@ body.menu-open .mobile-side-menu a{
   width:12em;
   height:1.4em;
 
+  margin:auto;
+
   filter:drop-shadow(0 0 0.05em var(--shine-color));
 }
 
@@ -2643,100 +2645,50 @@ body.menu-open .mobile-side-menu a{
     shadow 3.8s cubic-bezier(0.1,0.6,0.9,0.4) infinite;
 }
 
-.loader .text:nth-child(1) span{
-  background:linear-gradient(
-    to right,
-    var(--text-color) 4%,
-    var(--shadow-color) 7%
-  );
+.loader .text:nth-child(1) span,
+.loader .text:nth-child(2) span,
+.loader .text:nth-child(3) span,
+.loader .text:nth-child(4) span,
+.loader .text:nth-child(6) span,
+.loader .text:nth-child(7) span,
+.loader .text:nth-child(8) span,
+.loader .text:nth-child(9) span{
   background-size:200% auto;
   background-clip:text;
   -webkit-background-clip:text;
   color:transparent;
+}
+
+.loader .text:nth-child(1) span{
+  background-image:linear-gradient(to right,var(--text-color) 4%,var(--shadow-color) 7%);
 }
 
 .loader .text:nth-child(2) span{
-  background:linear-gradient(
-    to right,
-    var(--text-color) 9%,
-    var(--shadow-color) 13%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--text-color) 9%,var(--shadow-color) 13%);
 }
 
 .loader .text:nth-child(3) span{
-  background:linear-gradient(
-    to right,
-    var(--text-color) 15%,
-    var(--shadow-color) 18%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--text-color) 15%,var(--shadow-color) 18%);
 }
 
 .loader .text:nth-child(4) span{
-  background:linear-gradient(
-    to right,
-    var(--text-color) 20%,
-    var(--shadow-color) 23%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--text-color) 20%,var(--shadow-color) 23%);
 }
 
 .loader .text:nth-child(6) span{
-  background:linear-gradient(
-    to right,
-    var(--shadow-color) 29%,
-    var(--text-color) 32%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--shadow-color) 29%,var(--text-color) 32%);
 }
 
 .loader .text:nth-child(7) span{
-  background:linear-gradient(
-    to right,
-    var(--shadow-color) 34%,
-    var(--text-color) 37%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--shadow-color) 34%,var(--text-color) 37%);
 }
 
 .loader .text:nth-child(8) span{
-  background:linear-gradient(
-    to right,
-    var(--shadow-color) 39%,
-    var(--text-color) 42%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--shadow-color) 39%,var(--text-color) 42%);
 }
 
 .loader .text:nth-child(9) span{
-  background:linear-gradient(
-    to right,
-    var(--shadow-color) 45%,
-    var(--text-color) 48%
-  );
-  background-size:200% auto;
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
+  background-image:linear-gradient(to right,var(--shadow-color) 45%,var(--text-color) 48%);
 }
 
 .loader .line{
@@ -2838,10 +2790,10 @@ body.menu-open .mobile-side-menu a{
 @media(max-width:768px){
 
   .loader{
-    --main-size:4em;
+    --main-size:4.8em;
 
-    width:16em;
-    height:1.6em;
+    width:13em;
+    height:1.2em;
 
     margin:auto;
   }

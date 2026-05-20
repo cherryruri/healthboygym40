@@ -2724,7 +2724,7 @@ body.menu-open .mobile-side-menu a{
 @media(max-width:768px){
 
   .loader{
-    --main-size:6.5em;
+    --main-size:6em;
     width:14em;
 
     transform:scale(1.35);

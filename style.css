@@ -1395,9 +1395,7 @@ footer {
 /* ================= 모바일 사이드 메뉴 ================= */
 .mobile-menu-btn,
 .mobile-menu-overlay,
-.mobile-side-menu {
-  display:none;
-}
+
 
 @media(max-width:768px){
 
@@ -2811,10 +2809,6 @@ body.loaded .main-content{
   opacity:.5;
 }
 
-.mobile-menu-btn,
-.mobile-side-menu{
-  display:none;
-}
 
 @media(max-width:768px){
   .menu,
@@ -2849,9 +2843,7 @@ body.loaded .main-content{
     transition:.35s ease;
   }
 
-  .mobile-side-menu.active{
-    right:0;
-  }
+
 
   .mobile-side-menu a{
     color:#111;
@@ -2883,11 +2875,6 @@ body.loaded .main-content{
   }
 }
 
-@media(max-width:768px){
-  body.menu-open .mobile-side-menu,
-  .mobile-side-menu.active{
-    right:0 !important;
-  }
 
   .mobile-menu-btn{
     display:flex !important;

@@ -2808,3 +2808,75 @@ body.loaded .main-content{
 #logoutBtn:hover{
   opacity:.5;
 }
+
+.mobile-menu-btn,
+.mobile-side-menu{
+  display:none;
+}
+
+@media(max-width:768px){
+  .menu,
+  .download-btn{
+    display:none;
+  }
+
+  .mobile-menu-btn{
+    display:block;
+    position:absolute;
+    right:20px;
+    top:22px;
+    background:none;
+    border:none;
+    color:#111;
+    font-size:28px;
+    z-index:3000;
+  }
+
+  .mobile-side-menu{
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:82%;
+    height:100vh;
+    background:#fff;
+    z-index:5000;
+    display:flex;
+    flex-direction:column;
+    padding:90px 34px;
+    gap:22px;
+    transition:.35s ease;
+  }
+
+  .mobile-side-menu.active{
+    right:0;
+  }
+
+  .mobile-side-menu a{
+    color:#111;
+    text-decoration:none;
+    font-size:20px;
+    font-weight:900;
+  }
+
+  .mobile-close-btn{
+    position:absolute;
+    top:24px;
+    right:24px;
+    background:none;
+    border:none;
+    font-size:26px;
+  }
+
+  .mobile-login-area{
+    margin-top:26px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+
+  #mobileLogoutBtn{
+    border:none;
+    background:none;
+    font-weight:900;
+  }
+}

@@ -472,3 +472,24 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileSideMenu = document.getElementById("mobileSideMenu");
+const mobileCloseBtn = document.getElementById("mobileCloseBtn");
+
+if(mobileMenuBtn && mobileSideMenu){
+  mobileMenuBtn.addEventListener("click", ()=>{
+    mobileSideMenu.classList.add("active");
+  });
+}
+
+if(mobileCloseBtn && mobileSideMenu){
+  mobileCloseBtn.addEventListener("click", ()=>{
+    mobileSideMenu.classList.remove("active");
+  });
+}
+
+document.querySelectorAll(".mobile-side-menu a").forEach(link=>{
+  link.addEventListener("click", ()=>{
+    mobileSideMenu.classList.remove("active");
+  });
+});

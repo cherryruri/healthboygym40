@@ -19,59 +19,72 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-/* 로그인 상태 체크 */
-onAuthStateChanged(auth, (user)=>{
-
-  const loginLink =
-    document.getElementById("loginLink");
-
-  const logoutBtn =
-    document.getElementById("logoutBtn");
+function setUserMenu(user){
+  const loginLink = document.getElementById("loginLink");
+  const logoutBtn = document.getElementById("logoutBtn");
 
   if(!loginLink || !logoutBtn) return;
 
   if(user){
+    const name = user.email.split("@")[0];
 
-    const name =
-      user.email.split("@")[0];
-
-    loginLink.textContent =
-      `${name}님 환영합니다`;
-
+    loginLink.textContent = `${name}님 환영합니다`;
     loginLink.href = "#";
 
-    logoutBtn.style.display =
-      "inline-block";
-
+    logoutBtn.style.display = "inline-block";
   }else{
-
     loginLink.textContent = "LOGIN";
-
     loginLink.href = "login.html";
 
     logoutBtn.style.display = "none";
-
   }
+}
 
+function setMobileUserMenu(user){
+  const mobileLoginLink = document.getElementById("mobileLoginLink");
+  const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
+
+  if(!mobileLoginLink || !mobileLogoutBtn) return;
+
+  if(user){
+    const name = user.email.split("@")[0];
+
+    mobileLoginLink.textContent = `${name}님 환영합니다`;
+    mobileLoginLink.href = "#";
+
+    mobileLogoutBtn.style.display = "inline-block";
+  }else{
+    mobileLoginLink.textContent = "LOGIN";
+    mobileLoginLink.href = "login.html";
+
+    mobileLogoutBtn.style.display = "none";
+  }
+}
+
+/* 로그인 상태 체크 */
+onAuthStateChanged(auth, (user)=>{
+  setUserMenu(user);
+  setMobileUserMenu(user);
 });
 
-/* 로그아웃 */
-const logoutBtn =
-  document.getElementById("logoutBtn");
+/* PC 로그아웃 */
+const logoutBtn = document.getElementById("logoutBtn");
 
 if(logoutBtn){
+  logoutBtn.addEventListener("click", async ()=>{
+    await signOut(auth);
+    alert("로그아웃 완료");
+    location.reload();
+  });
+}
 
-  logoutBtn.addEventListener(
-    "click",
-    async ()=>{
+/* 모바일 로그아웃 */
+const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
 
-      await signOut(auth);
-
-      alert("로그아웃 완료");
-
-      location.reload();
-
-    }
-  );
-
+if(mobileLogoutBtn){
+  mobileLogoutBtn.addEventListener("click", async ()=>{
+    await signOut(auth);
+    alert("로그아웃 완료");
+    location.reload();
+  });
 }

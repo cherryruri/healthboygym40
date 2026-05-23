@@ -719,17 +719,12 @@
 </footer>
 
 </div>
-
-
-<!-- Firebase -->
+<!-- Firebase: 메인 로그인 상태 표시 -->
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
   getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
@@ -747,73 +742,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-/* 회원가입 */
-window.signup = function(){
-
-  const email = document.getElementById("signupEmail").value;
-  const password = document.getElementById("signupPassword").value;
-
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("회원가입 완료!");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-
-}
-
-/* 로그인 */
-window.login = function(){
-
-  const email = document.getElementById("loginEmail").value;
-  const password = document.getElementById("loginPassword").value;
-
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      alert("로그인 성공!");
-      document.body.classList.add("logged-in");
-    })
-    .catch((error) => {
-      alert(error.message);
-    });
-
-}
-
-/* 로그아웃 */
-window.logoutUser = function(){
-
-  signOut(auth)
-    .then(() => {
-      alert("로그아웃 완료");
-      document.body.classList.remove("logged-in");
-    });
-
-}
-
-/* 로그인 상태 유지 */
 onAuthStateChanged(auth, (user) => {
+  const loginLink = document.getElementById("loginLink");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-  const loginBtn = document.querySelector(".login-btn");
-  const logoutBtn = document.querySelector(".logout-btn");
+  if(!loginLink || !logoutBtn) return;
 
   if(user){
+    const name = user.email.split("@")[0];
 
-    if(loginBtn) loginBtn.style.display = "none";
-    if(logoutBtn) logoutBtn.style.display = "inline-block";
+    loginLink.textContent = `${name}님 환영합니다`;
+    loginLink.href = "#";
 
+    logoutBtn.style.display = "inline-block";
   }else{
+    loginLink.textContent = "LOGIN";
+    loginLink.href = "login.html";
 
-    if(loginBtn) loginBtn.style.display = "inline-block";
-    if(logoutBtn) logoutBtn.style.display = "none";
-
+    logoutBtn.style.display = "none";
   }
-
 });
 
+const logoutBtn = document.getElementById("logoutBtn");
+
+if(logoutBtn){
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    alert("로그아웃 완료");
+    location.reload();
+  });
+}
 </script>
-
-
 
 
 

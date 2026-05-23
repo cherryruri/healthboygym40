@@ -2880,3 +2880,14 @@ body.loaded .main-content{
     font-weight:900;
   }
 }
+
+@media(max-width:768px){
+  body.menu-open .mobile-side-menu,
+  .mobile-side-menu.active{
+    right:0 !important;
+  }
+
+  .mobile-menu-btn{
+    display:flex !important;
+  }
+}

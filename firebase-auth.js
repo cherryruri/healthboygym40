@@ -1,5 +1,5 @@
 alert("firebase-auth.js 연결됨");
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
@@ -10,7 +10,6 @@ import {
   browserSessionPersistence,
   setPersistence
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -54,6 +53,7 @@ window.login = async function(){
     console.log(error);
     alert("로그인 오류: " + error.code);
   }
+
 }
 
 /* 회원가입 */
@@ -87,4 +87,5 @@ window.signup = async function(){
     console.log(error);
     alert("회원가입 오류: " + error.code);
   }
+
 }

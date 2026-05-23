@@ -61,7 +61,7 @@ header {
   bottom:0;
   width:0%;
   height:2px;
-  background:#000;
+  background:#e6c016;
   transition:0.3s;
 }
 
@@ -2747,4 +2747,64 @@ body.menu-open .mobile-side-menu a{
 
 body.loaded .main-content{
   display:block;
+}
+
+
+.user-mini{
+  position:absolute;
+  top:12px;
+  right:24px;
+  z-index:2000;
+  display:flex;
+  gap:10px;
+  align-items:center;
+}
+
+.user-mini a,
+.user-mini button{
+  border:none;
+  background:none;
+  color:#111;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-decoration:none;
+  cursor:pointer;
+  font-family:'Pretendard', Arial, sans-serif;
+}
+
+@media(max-width:768px){
+  .user-mini{
+    top:8px;
+    right:70px;
+  }
+
+  .user-mini a,
+  .user-mini button{
+    font-size:10px;
+  }
+}
+
+.login-menu{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+#logoutBtn{
+  border:none;
+  background:none;
+
+  cursor:pointer;
+
+  font-size:13px;
+  font-weight:900;
+
+  color:#111;
+
+  transition:.2s;
+}
+
+#logoutBtn:hover{
+  opacity:.5;
 }

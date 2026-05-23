@@ -522,3 +522,25 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
 });
+
+/* 모바일 메뉴 강제 복구 */
+document.addEventListener("click", function(e){
+
+  const menuBtn = e.target.closest(".mobile-menu-btn");
+  const closeBtn = e.target.closest(".mobile-close, .mobile-close-btn");
+  const overlay = e.target.closest(".mobile-menu-overlay");
+  const menuLink = e.target.closest(".mobile-side-menu a");
+
+  if(menuBtn){
+    document.body.classList.add("menu-open");
+    const side = document.querySelector(".mobile-side-menu");
+    if(side) side.classList.add("active");
+  }
+
+  if(closeBtn || overlay || menuLink){
+    document.body.classList.remove("menu-open");
+    const side = document.querySelector(".mobile-side-menu");
+    if(side) side.classList.remove("active");
+  }
+
+});

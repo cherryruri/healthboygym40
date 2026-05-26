@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function(){
   function openMain(){
 
     const loader =
-      document.querySelector(".loader");
+      document.querySelector(".logo-screen");
 
     const mainContent =
       document.querySelector(".main-content");

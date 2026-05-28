@@ -2546,6 +2546,135 @@ body.menu-open .mobile-side-menu a{
 
 }
 
+/* ================= 회원가입 프리미엄 ================= */
+
+.join-premium-section{
+  position:relative;
+  padding:180px 7%;
+  background:#050505;
+  overflow:hidden;
+}
+
+.join-premium-bg{
+  position:absolute;
+  inset:0;
+  background:
+  radial-gradient(circle at top right,
+  rgba(255,255,255,0.08),
+  transparent 35%);
+}
+
+.join-premium-inner{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  gap:80px;
+  align-items:center;
+}
+
+.join-premium-left{
+  flex:1;
+}
+
+.join-premium-left span{
+  font-size:13px;
+  letter-spacing:4px;
+  opacity:0.6;
+}
+
+.join-premium-left h2{
+  margin-top:20px;
+  font-size:68px;
+  line-height:1.1;
+  font-weight:800;
+}
+
+.join-premium-left p{
+  margin-top:30px;
+  font-size:18px;
+  line-height:1.8;
+  opacity:0.7;
+}
+
+.join-premium-right{
+  width:480px;
+}
+
+.join-card{
+  backdrop-filter:blur(24px);
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:36px;
+  padding:50px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.join-card h3{
+  font-size:34px;
+  margin-bottom:34px;
+}
+
+.join-card input,
+.join-card select{
+  width:100%;
+  height:64px;
+  border:none;
+  outline:none;
+  border-radius:18px;
+  padding:0 22px;
+  margin-bottom:18px;
+  background:#111;
+  color:#fff;
+  font-size:16px;
+}
+
+.join-card button{
+  width:100%;
+  height:68px;
+  border:none;
+  border-radius:20px;
+  background:#fff;
+  color:#000;
+  font-size:17px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+@media(max-width:900px){
+
+  .join-premium-inner{
+    flex-direction:column;
+  }
+
+  .join-premium-left h2{
+    font-size:46px;
+  }
+
+  .join-premium-right{
+    width:100%;
+  }
+
+  .join-card{
+    padding:34px;
+  }
+
+}
+
+/* ================= 모바일 메뉴 기본 숨김 ================= */
+
+.mobile-menu-btn,
+.mobile-menu-overlay,
+.mobile-side-menu{
+  display:none;
+}
+
+
+
+
+
+
+
 /* ================= 첫 로딩 HEALTHBOYGYM ================= */
 
 .logo-screen{
@@ -2705,244 +2834,3 @@ body.loaded .main-content{
 
 
 
-/* ================= 회원가입 프리미엄 ================= */
-
-.join-premium-section{
-  position:relative;
-  padding:180px 7%;
-  background:#050505;
-  overflow:hidden;
-}
-
-.join-premium-bg{
-  position:absolute;
-  inset:0;
-  background:
-  radial-gradient(circle at top right,
-  rgba(255,255,255,0.08),
-  transparent 35%);
-}
-
-.join-premium-inner{
-  position:relative;
-  z-index:2;
-  display:flex;
-  justify-content:space-between;
-  gap:80px;
-  align-items:center;
-}
-
-.join-premium-left{
-  flex:1;
-}
-
-.join-premium-left span{
-  font-size:13px;
-  letter-spacing:4px;
-  opacity:0.6;
-}
-
-.join-premium-left h2{
-  margin-top:20px;
-  font-size:68px;
-  line-height:1.1;
-  font-weight:800;
-}
-
-.join-premium-left p{
-  margin-top:30px;
-  font-size:18px;
-  line-height:1.8;
-  opacity:0.7;
-}
-
-.join-premium-right{
-  width:480px;
-}
-
-.join-card{
-  backdrop-filter:blur(24px);
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:36px;
-  padding:50px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
-
-.join-card h3{
-  font-size:34px;
-  margin-bottom:34px;
-}
-
-.join-card input,
-.join-card select{
-  width:100%;
-  height:64px;
-  border:none;
-  outline:none;
-  border-radius:18px;
-  padding:0 22px;
-  margin-bottom:18px;
-  background:#111;
-  color:#fff;
-  font-size:16px;
-}
-
-.join-card button{
-  width:100%;
-  height:68px;
-  border:none;
-  border-radius:20px;
-  background:#fff;
-  color:#000;
-  font-size:17px;
-  font-weight:700;
-  cursor:pointer;
-}
-
-@media(max-width:900px){
-
-  .join-premium-inner{
-    flex-direction:column;
-  }
-
-  .join-premium-left h2{
-    font-size:46px;
-  }
-
-  .join-premium-right{
-    width:100%;
-  }
-
-  .join-card{
-    padding:34px;
-  }
-
-}
-
-/* ================= 모바일 메뉴 기본 숨김 ================= */
-
-.mobile-menu-btn,
-.mobile-menu-overlay,
-.mobile-side-menu{
-  display:none;
-}
-
-
-/* ================= 로딩 디자인 최종 ================= */
-
-.logo-screen{
-  position:fixed;
-  inset:0;
-  z-index:999999;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-  transition:opacity .6s ease, visibility .6s ease;
-}
-
-.logo-screen.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
-}
-
-.loader{
-  position:relative;
-  width:min(90vw,680px);
-  height:90px;
-  overflow:hidden;
-  background:#000;
-}
-
-.loader .text{
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:58px;
-  font-weight:900;
-  font-style:italic;
-  letter-spacing:-0.07em;
-  color:#fff;
-  transform:translateY(100%);
-  opacity:0;
-  animation:loaderUp 1.6s ease-in-out infinite;
-}
-
-.loader .text span{
-  display:block;
-  white-space:nowrap;
-  text-shadow:
-    0 0 18px rgba(255,255,255,.35),
-    0 0 42px rgba(255,255,255,.12);
-}
-
-.loader .text:nth-child(1){animation-delay:0s;}
-.loader .text:nth-child(2){animation-delay:.08s;}
-.loader .text:nth-child(3){animation-delay:.16s;}
-.loader .text:nth-child(4){animation-delay:.24s;}
-.loader .text:nth-child(5){animation-delay:.32s;}
-.loader .text:nth-child(6){animation-delay:.40s;}
-.loader .text:nth-child(7){animation-delay:.48s;}
-.loader .text:nth-child(8){animation-delay:.56s;}
-.loader .text:nth-child(9){animation-delay:.64s;}
-
-@keyframes loaderUp{
-  0%{
-    opacity:0;
-    transform:translateY(100%);
-  }
-
-  25%{
-    opacity:1;
-    transform:translateY(0);
-  }
-
-  65%{
-    opacity:1;
-    transform:translateY(0);
-  }
-
-  100%{
-    opacity:0;
-    transform:translateY(-100%);
-  }
-}
-
-.loader .line{
-  position:absolute;
-  left:0;
-  bottom:8px;
-  width:100%;
-  height:2px;
-  background:#fff;
-  transform:scaleX(0);
-  transform-origin:left;
-  animation:loaderLine 1.6s ease-in-out infinite;
-}
-
-@keyframes loaderLine{
-  0%{transform:scaleX(0);}
-  55%{transform:scaleX(1);}
-  100%{transform:scaleX(0);}
-}
-
-/* 모바일 */
-@media(max-width:768px){
-  .loader{
-    width:88vw;
-    height:64px;
-  }
-
-  .loader .text{
-    font-size:32px;
-  }
-
-  .loader .line{
-    bottom:4px;
-  }
-}

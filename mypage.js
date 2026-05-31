@@ -45,7 +45,6 @@ function setText(el, value){
 
 onAuthStateChanged(auth, async (user)=>{
 
-const isFirstWelcome = sessionStorage.getItem("welcomeShown");
 
 
 
@@ -65,11 +64,10 @@ if(!user){
 
 
   
-const showWelcome = sessionStorage.getItem("welcome");
 
-if(showWelcome === "yes"){
+const welcomeShown = sessionStorage.getItem("welcomeShown");
 
-  sessionStorage.removeItem("welcome");
+if(!welcomeShown){
 
   if(myWelcome){
     myWelcome.style.display = "flex";
@@ -89,7 +87,28 @@ if(showWelcome === "yes"){
       mypageRoot.style.display = "block";
     }
 
+    sessionStorage.setItem("welcomeShown","yes");
+
   },4200);
+
+}else{
+
+  if(myWelcome){
+    myWelcome.style.display = "none";
+  }
+
+  if(mypageRoot){
+    mypageRoot.style.display = "block";
+  }
+
+}
+
+
+
+
+
+
+
 
 }else{
 

@@ -180,7 +180,7 @@ if(mypageBtn){
     e.preventDefault();
 
     if(auth.currentUser){
-      sessionStorage.removeItem("welcome"); // ← 여기 추가
+      sessionStorage.removeItem("showWelcomeOnce");
       location.href = "mypage.html";
     }else{
       location.href = "login.html";

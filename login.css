@@ -751,11 +751,21 @@ body{
   display:none;
 }
 
+
+
 /* 모바일 */
 @media(max-width:768px){
 
+  html,
+  body{
+    width:100%;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+
   body{
     overflow:auto;
+    padding-bottom:72px;
   }
 
   .close-login{
@@ -764,14 +774,19 @@ body{
     left:auto;
   }
 
-  .login-card{
-    width:100vw;
+  .login-page{
+    width:100%;
+    min-height:calc(100vh - 72px);
+    height:auto;
+  }
 
-    min-height:100vh;
+  .login-card{
+    width:100%;
+    min-height:calc(100vh - 72px);
+    height:auto;
     max-height:none;
 
     grid-template-columns:1fr;
-
     border-radius:0;
   }
 
@@ -780,7 +795,8 @@ body{
   }
 
   .login-content{
-    min-height:100vh;
+    min-height:calc(100vh - 72px);
+    height:auto;
 
     padding:70px 24px 34px;
   }
@@ -793,64 +809,75 @@ body{
     display:none;
   }
 
-}
+  .mobile-bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
 
-/* 약관 체크박스도 로그인 유지 체크박스랑 동일하게 */
-.agree-wrap input[type="checkbox"]{
-  appearance:none;
-  -webkit-appearance:none;
+    width:100%;
+    height:72px;
 
-  width:20px;
-  height:20px;
-  min-width:20px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
 
-  border-radius:5px;
-  border:1.5px solid rgba(255,255,255,.45);
-  background:rgba(255,255,255,.08);
+    background:#0b0b0c;
+    border-top:1px solid rgba(255,255,255,.06);
+    z-index:999999;
 
-  position:relative;
-  cursor:pointer;
-}
-
-.agree-wrap input[type="checkbox"]:checked{
-  background:rgba(255,255,255,.08);
-  border-color:#fff200;
-}
-
-.agree-wrap input[type="checkbox"]:checked::after{
-  content:"✓";
-  position:absolute;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  color:#fff200;
-  font-size:18px;
-  font-weight:900;
-  line-height:1;
-}
-
-@media(max-width:768px){
-
-  body{
-    overflow:auto;
-    min-height:100vh;
+    box-shadow:0 -14px 40px rgba(0,0,0,.45);
   }
 
-  .login-page{
-    min-height:100vh;
-    height:auto;
+  .bottom-nav-item{
+    position:relative;
+
+    display:grid;
+    grid-template-rows:24px 14px;
+    align-content:center;
+    justify-items:center;
+    row-gap:5px;
+
+    color:rgba(255,255,255,.52);
+    text-decoration:none;
+
+    font-family:'Pretendard', Arial, sans-serif;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:-0.03em;
   }
 
-  .login-card{
-    min-height:100vh;
-    height:auto;
+  .bottom-icon{
+    width:24px;
+    height:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
   }
 
-  .login-content{
-    min-height:100vh;
-    height:auto;
+  .bottom-icon svg{
+    width:19px;
+    height:19px;
+
+    fill:none;
+    stroke:currentColor;
+    stroke-width:1.85;
+    stroke-linecap:round;
+    stroke-linejoin:round;
   }
 
+  .bottom-label{
+    height:14px;
+    line-height:14px;
+    font-size:10px;
+    font-weight:800;
+  }
+
+  .bottom-nav-item.active{
+    color:#fff200;
+  }
 }
 
-
+/* PC에서는 하단바 숨김 */
+.mobile-bottom-nav{
+  display:none;
+}

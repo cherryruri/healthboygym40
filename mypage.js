@@ -65,11 +65,11 @@ if(!user){
 
 
   
-const showWelcome = sessionStorage.getItem("welcome");
+const showWelcome = sessionStorage.getItem("showWelcomeOnce");
 
 if(showWelcome === "yes"){
 
-  sessionStorage.removeItem("welcome");
+sessionStorage.removeItem("showWelcomeOnce");
 
   if(myWelcome){
     myWelcome.style.display = "flex";

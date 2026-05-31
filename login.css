@@ -463,9 +463,21 @@ body{
 
 }
 
-/* 기존 이전 다음 숨김 */
+@media(max-width:768px){
+
+  #signupBox[data-page="1"]
+  .signup-nav
+  .sub-btn:first-child{
+    visibility:hidden;
+  }
+
+}
+
 .signup-nav{
-  display:none;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px;
 }
 
 /* 회원가입 화살표 */

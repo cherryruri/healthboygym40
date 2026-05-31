@@ -1,183 +1,175 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-  min-height:100vh;
-  font-family:'Pretendard', Arial, sans-serif;
-  background:#111;
-  color:#fff;
+background:#050505;
+color:#fff;
+font-family:'Pretendard',sans-serif;
 }
 
 .mypage{
-  width:100%;
-  min-height:100vh;
-  background:#111;
-  padding:22px 22px 42px;
+min-height:100vh;
+padding:22px;
 }
 
 .mypage-header{
-  height:58px;
-  display:grid;
-  grid-template-columns:40px 1fr 40px;
-  align-items:center;
+display:flex;
+align-items:center;
+justify-content:space-between;
+height:60px;
 }
 
 .back-btn{
-  color:#fff;
-  text-decoration:none;
-  font-size:42px;
-  font-weight:300;
-  line-height:1;
+color:#fff;
+text-decoration:none;
+font-size:40px;
+line-height:1;
 }
 
 .mypage-header h1{
-  text-align:center;
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:-0.05em;
+font-size:20px;
+font-weight:900;
 }
 
 .profile-area{
-  padding:62px 0 70px;
-  text-align:center;
+padding:60px 0;
+text-align:center;
+}
+
+.profile-image{
+margin-bottom:24px;
 }
 
 .my-avatar{
-  width:132px;
-  height:132px;
-  margin:0 auto 24px;
-  border-radius:34px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(145deg,#222,#2b2b2b);
-  color:#fff200;
-  font-size:52px;
-  font-weight:900;
-  box-shadow:0 24px 50px rgba(0,0,0,.18);
+width:120px;
+height:120px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin:0 auto;
+
+border-radius:36px;
+
+background:linear-gradient(145deg,#111,#1d1d1d);
+
+color:#fff200;
+font-size:48px;
+font-weight:900;
 }
 
 .profile-area h2{
-  font-size:30px;
-  font-weight:900;
-  letter-spacing:-0.06em;
+font-size:34px;
+font-weight:900;
+margin-bottom:8px;
 }
 
 .profile-area p{
-  margin-top:8px;
-  color:#bbb;
-  font-size:14px;
-  font-weight:800;
+color:rgba(255,255,255,.45);
+font-size:14px;
+}
+
+.section-divider{
+height:10px;
+background:#0d0d0d;
+margin:0 -22px;
 }
 
 .info-section{
-  padding-top:34px;
-  border-top:10px solid #1a1a1a;
+padding-top:34px;
 }
 
 .info-section h3{
-  font-size:24px;
-  font-weight:900;
-  letter-spacing:-0.06em;
-  margin-bottom:28px;
+font-size:28px;
+font-weight:900;
+margin-bottom:28px;
 }
 
 .info-row{
-  min-height:64px;
-  display:grid;
-  grid-template-columns:118px 1fr;
-  align-items:center;
-  border-bottom:1px solid rgba(255,255,255,.08);
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+min-height:72px;
+
+border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .info-row span{
-  color:#9aa0a6;
-  font-size:17px;
-  font-weight:800;
+color:rgba(255,255,255,.45);
+font-size:16px;
+font-weight:700;
 }
 
 .info-row strong{
-  color:#fff;
-  font-size:18px;
-  font-weight:800;
-  word-break:break-all;
+color:#fff;
+font-size:17px;
+font-weight:800;
+text-align:right;
 }
 
 .logout-btn{
-  width:100%;
-  height:56px;
-  margin-top:42px;
-  border:0;
-  border-radius:18px;
-  background:#fff200;
-  color:#111;
-  font-size:16px;
-  font-weight:900;
-  cursor:pointer;
+width:100%;
+height:58px;
+
+margin-top:40px;
+
+border:none;
+border-radius:18px;
+
+background:#fff200;
+color:#000;
+
+font-size:16px;
+font-weight:900;
 }
 
-.logout-btn:active{
-  transform:scale(.98);
-}
+/* welcome */
 
-/* 웰컴 인트로 */
 .my-welcome{
-  position:fixed;
-  inset:0;
-  z-index:99999;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:#000;
-  color:#fff;
-  transition: opacity .9s ease, visibility .9s ease;
+position:fixed;
+inset:0;
+z-index:99999;
+
+display:none;
+align-items:center;
+justify-content:center;
+
+background:#000;
 }
 
 .my-welcome.hide{
-  opacity:0;
-  visibility:hidden;
+opacity:0;
+visibility:hidden;
+transition:.8s;
 }
 
 .welcome-text{
-  text-align:center;
+text-align:center;
 }
 
 .welcome-text h1{
-  font-size:26px;
-  font-weight:800;
-  margin-bottom:18px;
-  opacity:0;
-  transform:translateY(18px);
-  animation:welcomeFadeUp .9s cubic-bezier(.22,.61,.36,1) forwards;
+font-size:22px;
+margin-bottom:18px;
 }
 
 .welcome-text p{
-  font-size:20px;
-  font-weight:800;
-  line-height:1.55;
-  letter-spacing:-0.04em;
-  color:rgba(255,255,255,.86);
-  opacity:0;
-  transform:translateY(18px);
-  animation:welcomeFadeUp .9s cubic-bezier(.22,.61,.36,1) .85s forwards;
+font-size:28px;
+font-weight:900;
+line-height:1.5;
 }
 
-@keyframes welcomeFadeUp{
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
+@media(min-width:768px){
+
+.mypage{
+max-width:500px;
+margin:auto;
 }
 
-@media(min-width:769px){
-  .mypage{
-    max-width:520px;
-    margin:0 auto;
-    box-shadow:0 0 0 1px #333;
-  }
 }

@@ -64,14 +64,18 @@ if(myWelcome){
   myWelcome.style.display = "flex";
 }
 
+if(mypageRoot){
+  mypageRoot.style.display = "none";
+}
+
 setTimeout(()=>{
 
   if(myWelcome){
-    myWelcome.classList.add("hide");
+    myWelcome.style.display = "none";
   }
 
   if(mypageRoot){
-    mypageRoot.style.display = "flex";
+    mypageRoot.style.display = "block";
   }
 
 },4200);

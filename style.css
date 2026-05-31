@@ -1468,6 +1468,9 @@ footer {
     width:82%;
     max-width:340px;
     height:100vh;
+
+      z-index:1999;
+
       background:rgba(0,0,0,0.25);
   backdrop-filter:blur(14px);
   -webkit-backdrop-filter:blur(14px);

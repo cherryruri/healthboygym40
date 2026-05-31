@@ -8,8 +8,9 @@
 </head>
 <body>
 
+
   
-  
+  <div class ="logo-screen">
 <div class="loader">
   <div class="text"><span>HEALTHBOYGYM</span></div>
   <div class="text"><span>HEALTHBOYGYM</span></div>
@@ -23,13 +24,22 @@
   
   <div class="line"></div>
 </div>
-
+</div>
 
 <div class="main-content">
 
 <header>
-<nav class="navbar">
-  <div class="logo"><a href="#">HEALTHBOYGYM</a></div>
+
+
+
+
+  <nav class="navbar">
+
+  <div class="logo">
+    <a href="#">HEALTHBOYGYM</a>
+  </div>
+
+
 
   <ul class="menu">
     <li><a href="#about">센터 소개</a></li>
@@ -40,11 +50,87 @@
     <li><a href="#hours">운영 시간</a></li>
     <li><a href="#location">오시는 길</a></li>
     <li><a href="#faq">FAQ</a></li>
+
+
+<li class="login-menu" id="userMenu">
+
+  <a href="login.html" id="loginLink">
+    LOGIN
+  </a>
+
+  <button id="logoutBtn" style="display:none;">
+    LOGOUT
+  </button>
+
+</li>
   </ul>
+
+
+
+
+
+
 
   <a href="https://map.naver.com" target="_blank" class="download-btn">
     네이버 문의 및 예약 바로가기
   </a>
+
+<button class="mobile-menu-btn">
+  ☰
+</button>
+
+<div class="mobile-menu-overlay"></div>
+
+<div class="mobile-side-menu">
+
+  <div class="mobile-side-top">
+
+    <div class="mobile-side-logo">
+      HEALTHBOYGYM
+    </div>
+
+    <button class="mobile-close">
+      ×
+    </button>
+
+  </div>
+
+  <a href="#about">센터 소개</a>
+  <a href="#brand">브랜드 소개</a>
+  <a href="#facility">시설 투어</a>
+  <a href="#pass">올패스 안내</a>
+  <a href="#trainer">트레이너 소개</a>
+  <a href="#hours">운영 시간</a>
+  <a href="#location">오시는 길</a>
+  <a href="#faq">FAQ</a>
+
+  <div class="mobile-login-area">
+
+    <a href="login.html" id="mobileLoginLink">
+      LOGIN
+    </a>
+
+    <button id="mobileLogoutBtn" style="display:none;">
+      LOGOUT
+    </button>
+
+  </div>
+
+  <a
+    class="mobile-side-reserve"
+    href="https://map.naver.com"
+    target="_blank"
+  >
+    네이버 문의 및 예약 바로가기
+  </a>
+
+</div>
+
+
+
+
+
+
 </nav>
 </header>
 
@@ -584,6 +670,21 @@
   </div>
 </section>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <section id="faq" class="faq-new-section fade">
 
   <div class="faq-new-hero">
@@ -695,6 +796,11 @@
 
 </div>
 
+
+
+<script type="module" src="./firebase-index.js?v=1"></script>
 <script src="script.js"></script>
+
+
 </body>
 </html>

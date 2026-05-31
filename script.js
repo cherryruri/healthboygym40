@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(){
       document.querySelector(".main-content");
 
     if(loader){
-      loader.classList.add("hide");
+      loader.classList.add("zoom-out");
     }
 
     setTimeout(()=>{
@@ -30,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function(){
       startTyping();
       startBrandTyping();
       initBrandAbout();
-      checkFacilityColor();
 
     },600);
 

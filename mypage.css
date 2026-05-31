@@ -250,3 +250,10 @@ margin:auto;
   transform:translateY(0);
   transition-delay:1s;
 }
+
+
+@media(max-width:768px){
+  .mobile-bottom-nav{
+    display:grid;
+  }
+}

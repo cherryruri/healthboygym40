@@ -63,7 +63,7 @@ setTimeout(()=>{
   if(mypageRoot){
     mypageRoot.style.display = "flex";
   }
-},1200);
+},4600);
 
 
 

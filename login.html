@@ -93,31 +93,56 @@
             <p id="passwordMatch" class="password-msg"></p>
           </div>
 
-          <div class="signup-page" data-page="2">
-            <input type="text" id="signupName" placeholder="이름">
+         
+<div class="signup-page" data-page="2">
 
-            <div class="phone-row">
-              <input type="tel" id="phone1" value="010" maxlength="3">
-              <input type="tel" id="phone2" placeholder="0000" maxlength="4">
-              <input type="tel" id="phone3" placeholder="0000" maxlength="4">
-            </div>
+  <div class="member-info-head">
+    <small>MEMBER INFO</small>
+    <h3>회원 정보 입력</h3>
+    <p>회원가입을 위한 기본 정보를 입력해주세요.</p>
+  </div>
 
-            <div class="birth-row">
-              <input type="text" id="birthYear" placeholder="YYYY" maxlength="4">
-              <input type="text" id="birthMonth" placeholder="MM" maxlength="2">
-              <input type="text" id="birthDay" placeholder="DD" maxlength="2">
-            </div>
+  <div class="input-label">이름</div>
+  <input type="text" id="signupName" placeholder="이름">
 
-            <select id="signupGender">
-              <option value="">성별 선택</option>
-              <option value="female">여성</option>
-              <option value="male">남성</option>
-              <option value="none">선택 안 함</option>
-            </select>
+  <div class="input-label">전화번호</div>
+  <div class="phone-row">
+    <input type="tel" id="phone1" value="010" maxlength="3">
+    <input type="tel" id="phone2" placeholder="0000" maxlength="4">
+    <input type="tel" id="phone3" placeholder="0000" maxlength="4">
+  </div>
 
-            <input type="text" id="signupAddress" placeholder="주소">
-            <input type="text" id="signupAddressDetail" placeholder="상세주소">
-          </div>
+  <div class="input-label">생년월일</div>
+  <div class="birth-row">
+    <input type="text" id="birthYear" placeholder="YYYY" maxlength="4">
+    <input type="text" id="birthMonth" placeholder="MM" maxlength="2">
+    <input type="text" id="birthDay" placeholder="DD" maxlength="2">
+  </div>
+
+  <div class="input-label">성별</div>
+  <select id="signupGender">
+    <option value="">성별 선택</option>
+    <option value="female">여성</option>
+    <option value="male">남성</option>
+    <option value="none">선택 안 함</option>
+  </select>
+
+  <div class="optional-divider">
+    <span>선택 입력</span>
+  </div>
+
+  <input type="text" id="signupAddress" placeholder="주소">
+  <input type="text" id="signupAddressDetail" placeholder="상세주소">
+
+</div>
+
+
+
+
+
+
+
+
 
           <div class="signup-page" data-page="3">
             <div class="member-check">

@@ -1,6 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -28,70 +36,95 @@ const avatar = document.querySelector(".my-avatar");
 const mypageRoot = document.getElementById("mypageRoot");
 const myWelcome = document.getElementById("myWelcome");
 
-function setText(el,value){ if(el) el.textContent = value||"-"; }
+function setText(el, value){
+  if(el) el.textContent = value || "-";
+}
 
 onAuthStateChanged(auth, async (user)=>{
-  if(!user){ location.href="login.html"; return; }
+
+  if(!user){
+    location.href = "login.html";
+    return;
+  }
 
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
-  // 웰컴 화면 한 번만
-  if(!sessionStorage.getItem("showWelcomeOnce")){
-    if(myWelcome) myWelcome.classList.add("show");
+  const shouldShowWelcome = sessionStorage.getItem("showWelcomeOnce");
+
+  if(!shouldShowWelcome){
+    if(myWelcome){
+      myWelcome.style.display = "flex";
+    }
+
     setTimeout(()=>{
       if(myWelcome){
-        myWelcome.classList.remove("show");
         myWelcome.classList.add("hide");
       }
-      if(mypageRoot) mypageRoot.style.display="flex";
+
+      if(mypageRoot){
+        mypageRoot.style.display = "flex";
+      }
+
       sessionStorage.setItem("showWelcomeOnce","yes");
+
     },4200);
-  } else {
-    if(myWelcome) myWelcome.style.display="none";
-    if(mypageRoot) mypageRoot.style.display="flex";
+  }else{
+    if(myWelcome){
+      myWelcome.style.display = "none";
+    }
+    if(mypageRoot){
+      mypageRoot.style.display = "flex";
+    }
   }
 
-  setText(myName,`${userId}님`);
-  setText(myId,user.email);
-  setText(infoId,userId);
-  if(avatar) avatar.textContent=userId.charAt(0).toUpperCase();
+  setText(myName, `${userId}님`);
+  setText(myId, user.email);
+  setText(infoId, userId);
+
+  if(avatar){
+    avatar.textContent = userId.charAt(0).toUpperCase();
+  }
 
   try{
-    const userRef = doc(db,"users",user.uid);
+    const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
+
     if(userSnap.exists()){
-      const data=userSnap.data();
-      const phone=[data.phone1,data.phone2,data.phone3].filter(Boolean).join("-");
-      setText(infoName,data.name||data.signupName||userId);
-      setText(infoPhone,phone||data.phone||"-");
-      setText(infoMember,data.isGymMember==="yes"?"헬스보이짐 회원":"비회원");
-      setText(infoRole,data.role==="admin"?"관리자":"일반 회원");
-      if(data.name&&myName) myName.textContent=`${data.name}님`;
-      if(data.name&&avatar) avatar.textContent=data.name.charAt(0);
-    } else {
-      setText(infoName,userId);
-      setText(infoPhone,"-");
-      setText(infoMember,"-");
-      setText(infoRole,"일반 회원");
+      const data = userSnap.data();
+      const phone = [data.phone1,data.phone2,data.phone3].filter(Boolean).join("-");
+      setText(infoName, data.name || data.signupName || userId);
+      setText(infoPhone, phone || data.phone || "-");
+      setText(infoMember, data.isGymMember === "yes" ? "헬스보이짐 회원" : "비회원");
+      setText(infoRole, data.role === "admin" ? "관리자" : "일반 회원");
+
+      if(data.name && myName){
+        myName.textContent = `${data.name}님`;
+      }
+      if(data.name && avatar){
+        avatar.textContent = data.name.charAt(0);
+      }
+
+    }else{
+      setText(infoName, userId);
+      setText(infoPhone, "-");
+      setText(infoMember, "-");
+      setText(infoRole, "일반 회원");
     }
-  } catch(e){ console.error(e); setText(infoName,userId); setText(infoPhone,"-"); setText(infoMember,"-"); setText(infoRole,"정보 불러오기 오류"); }
+
+  }catch(error){
+    console.error(error);
+    setText(infoName, userId);
+    setText(infoPhone, "-");
+    setText(infoMember, "-");
+    setText(infoRole, "정보 불러오기 오류");
+  }
+
 });
 
 if(logoutBtn){
-  logoutBtn.addEventListener("click",async()=>{
+  logoutBtn.addEventListener("click", async ()=>{
     await signOut(auth);
     alert("로그아웃 완료");
-    location.href="index.html";
-  });
-}
-
-// 모바일 하단바 mypage 버튼 처리
-const mypageBtn = document.getElementById("mypageBtn");
-if(mypageBtn){
-  mypageBtn.addEventListener("click",(e)=>{
-    e.preventDefault();
-    const user = auth.currentUser;
-    if(user) location.href="mypage.html";
-    else location.href="login.html";
+    location.href = "index.html";
   });
 }

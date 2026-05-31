@@ -188,3 +188,27 @@ if(mypageBtn){
 
   });
 }
+
+// mypage.js onAuthStateChanged 안쪽
+if(showWelcome === "yes"){
+  sessionStorage.removeItem("showWelcomeOnce");
+
+  if(myWelcome){
+    myWelcome.style.display = "flex";
+    myWelcome.classList.add("show"); // p 태그 순차 페이드
+  }
+
+  if(mypageRoot){
+    mypageRoot.style.display = "none";
+  }
+
+  setTimeout(()=>{
+    if(myWelcome){
+      myWelcome.style.display = "none";
+      myWelcome.classList.remove("show");
+    }
+    if(mypageRoot){
+      mypageRoot.style.display = "block";
+    }
+  },4200);
+}

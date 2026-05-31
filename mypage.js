@@ -58,22 +58,38 @@ if(!user){
 
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
-if(myWelcome){
-  myWelcome.style.display = "flex";
-}
-  if(welcomeName){
-  welcomeName.textContent = `안녕하세요, ${userId}님`;
-}
+const welcomeShown = sessionStorage.getItem("mypageWelcomeShown");
 
-setTimeout(()=>{
+if(!welcomeShown){
+
   if(myWelcome){
-    myWelcome.classList.add("hide");
+    myWelcome.style.display = "flex";
+  }
+
+  setTimeout(()=>{
+    if(myWelcome){
+      myWelcome.classList.add("hide");
+    }
+
+    if(mypageRoot){
+      mypageRoot.style.display = "flex";
+    }
+
+    sessionStorage.setItem("mypageWelcomeShown", "yes");
+
+  },4200);
+
+}else{
+
+  if(myWelcome){
+    myWelcome.style.display = "none";
   }
 
   if(mypageRoot){
     mypageRoot.style.display = "flex";
   }
-},4600);
+
+}
 
 
   setText(myName, `${userId}님`);

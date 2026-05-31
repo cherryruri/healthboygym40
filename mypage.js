@@ -45,6 +45,11 @@ function setText(el, value){
 
 onAuthStateChanged(auth, async (user)=>{
 
+const isFirstWelcome = sessionStorage.getItem("welcomeShown");
+
+
+
+
 if(!user){
   location.href = "login.html";
   return;
@@ -60,15 +65,33 @@ if(!user){
 
 
   
-if(myWelcome){
-  myWelcome.style.display = "flex";
-}
+const showWelcome = sessionStorage.getItem("welcome");
 
-if(mypageRoot){
-  mypageRoot.style.display = "none";
-}
+if(showWelcome === "yes"){
 
-setTimeout(()=>{
+  sessionStorage.removeItem("welcome");
+
+  if(myWelcome){
+    myWelcome.style.display = "flex";
+  }
+
+  if(mypageRoot){
+    mypageRoot.style.display = "none";
+  }
+
+  setTimeout(()=>{
+
+    if(myWelcome){
+      myWelcome.style.display = "none";
+    }
+
+    if(mypageRoot){
+      mypageRoot.style.display = "block";
+    }
+
+  },4200);
+
+}else{
 
   if(myWelcome){
     myWelcome.style.display = "none";
@@ -78,7 +101,7 @@ setTimeout(()=>{
     mypageRoot.style.display = "block";
   }
 
-},4200);
+}
 
 
 

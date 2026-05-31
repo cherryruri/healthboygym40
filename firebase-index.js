@@ -43,6 +43,9 @@ function setUserMenu(user){
 function setMobileUserMenu(user){
   const mobileLoginLink = document.getElementById("mobileLoginLink");
   const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
+  const mobileProfileCard = document.getElementById("mobileProfileCard");
+const mobileProfileName = document.getElementById("mobileProfileName");
+const mobileProfileText = document.getElementById("mobileProfileText");
 
   if(!mobileLoginLink || !mobileLogoutBtn) return;
 
@@ -53,11 +56,37 @@ function setMobileUserMenu(user){
     mobileLoginLink.href = "#";
 
     mobileLogoutBtn.style.display = "";
+if(mobileProfileCard){
+  mobileProfileCard.href = "mypage.html";
+}
+
+if(mobileProfileName){
+  mobileProfileName.textContent = `${name}님`;
+}
+
+if(mobileProfileText){
+  mobileProfileText.textContent = "헬스보이짐 수내점 이용 회원님입니다.";
+}
+
+
+
+
   }else{
     mobileLoginLink.textContent = "LOGIN";
     mobileLoginLink.href = "login.html";
 
     mobileLogoutBtn.style.display = "none";
+    if(mobileProfileCard){
+  mobileProfileCard.href = "login.html";
+}
+
+if(mobileProfileName){
+  mobileProfileName.textContent = "LOGIN";
+}
+
+if(mobileProfileText){
+  mobileProfileText.textContent = "로그인 후 마이페이지를 이용해보세요.";
+}
   }
 }
 
@@ -102,15 +131,9 @@ if(mypageBtn){
 
     }else{
 
-      const goLogin = confirm(
-        "로그인 후 이용할 수 있습니다.\n\n로그인 페이지로 이동하시겠습니까?"
-      );
+  location.href = "login.html";
 
-      if(goLogin){
-        location.href = "login.html";
-      }
-
-    }
+}
 
   });
 

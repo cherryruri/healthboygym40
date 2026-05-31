@@ -853,49 +853,4 @@ body{
 
 }
 
-@media(max-width:768px){
 
-  .signup-nav{
-    position:fixed;
-    left:24px;
-    right:24px;
-    bottom:24px;
-    z-index:100;
-  }
-
-  .signup-nav .sub-btn{
-    margin:0;
-  }
-
-  #signupBox[data-page="1"] .signup-nav .sub-btn:first-child{
-    display:none;
-  }
-
-  #signupBox[data-page="3"] .signup-nav{
-    display:none;
-  }
-
-  .login-content{
-    padding-bottom:110px;
-  }
-
-}
-
-@media(max-width:768px){
-
-  #signupBox[data-page="3"] .signup-nav{
-    display:none;
-  }
-
-  #signupBox[data-page="3"] .signup-real-btn{
-    position:static;
-    width:100%;
-    margin-top:14px;
-    margin-bottom:8px;
-  }
-
-  #signupBox[data-page="3"] .signup-real-btn + .sub-btn{
-    margin-top:0;
-  }
-
-}

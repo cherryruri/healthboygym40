@@ -871,9 +871,22 @@ body{
     display:none;
   }
 
-  #signupBox[data-page="3"] .signup-nav{
-    display:none;
-  }
+#signupBox[data-page="3"] .signup-nav{
+  display:none;
+}
+
+#signupBox[data-page="3"] .signup-real-btn{
+  position:fixed;
+  left:24px;
+  right:24px;
+  bottom:24px;
+  width:auto;
+  z-index:101;
+}
+
+#signupBox[data-page="3"] .sub-btn[onclick="showLogin()"]{
+  margin-top:68px;
+}
 
   .login-content{
     padding-bottom:110px;

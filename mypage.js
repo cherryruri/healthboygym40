@@ -43,10 +43,11 @@ function setText(el, value){
 onAuthStateChanged(auth, async (user)=>{
 
 if(!user){
-  alert("로그인 후 이용할 수 있습니다.");
   location.href = "login.html";
   return;
 }
+
+
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
   setText(myName, `${userId}님`);

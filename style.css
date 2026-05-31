@@ -3253,3 +3253,13 @@ body.menu-open .mobile-login-area{
   margin-top:20px;
 }
 
+.mobile-bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+
+  display:flex !important;
+
+  z-index:9999;
+}

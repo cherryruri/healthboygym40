@@ -35,6 +35,7 @@ const infoMember = document.getElementById("infoMember");
 const infoRole = document.getElementById("infoRole");
 const logoutBtn = document.getElementById("logoutBtn");
 const avatar = document.querySelector(".my-avatar");
+const mypageRoot = document.getElementById("mypageRoot");
 
 function setText(el, value){
   if(el) el.textContent = value || "-";
@@ -46,6 +47,12 @@ if(!user){
   location.href = "login.html";
   return;
 }
+
+if(mypageRoot){
+  mypageRoot.style.display = "flex";
+}
+
+
 
 
   const userId = user.email ? user.email.split("@")[0] : "회원";

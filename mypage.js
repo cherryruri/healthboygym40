@@ -36,6 +36,8 @@ const infoRole = document.getElementById("infoRole");
 const logoutBtn = document.getElementById("logoutBtn");
 const avatar = document.querySelector(".my-avatar");
 const mypageRoot = document.getElementById("mypageRoot");
+const myWelcome = document.getElementById("myWelcome");
+const welcomeName = document.getElementById("welcomeName");
 
 function setText(el, value){
   if(el) el.textContent = value || "-";
@@ -48,9 +50,21 @@ if(!user){
   return;
 }
 
-if(mypageRoot){
-  mypageRoot.style.display = "flex";
+
+if(welcomeName){
+  welcomeName.textContent = `안녕하세요, ${userId}님`;
 }
+
+setTimeout(()=>{
+  if(myWelcome){
+    myWelcome.classList.add("hide");
+  }
+
+  if(mypageRoot){
+    mypageRoot.style.display = "flex";
+  }
+},1200);
+
 
 
 

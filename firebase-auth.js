@@ -141,7 +141,6 @@ window.login = async function(){
 
     await signInWithEmailAndPassword(auth, email, password);
 
-    alert("로그인 성공!");
     window.location.href = "./index.html";
 
   }catch(error){

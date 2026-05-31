@@ -349,16 +349,24 @@ document.addEventListener("DOMContentLoaded", function(){
   if(sideMenu){
 
     sideMenu
-      .querySelectorAll("a")
-      .forEach(link=>{
+  .querySelectorAll("a")
+  .forEach(link=>{
 
-        link.addEventListener("click", ()=>{
+    link.addEventListener("click", ()=>{
 
-          document.body.classList.remove("menu-open");
+      const href = link.getAttribute("href");
 
-        });
+      if(href === "login.html"){
+        window.location.href = "login.html";
+        return;
+      }
 
-      });
+      document.body.classList.remove("menu-open");
+
+    });
+
+  });
+
 
   }
 

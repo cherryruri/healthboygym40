@@ -85,3 +85,35 @@ if(mobileLogoutBtn){
     location.reload();
   });
 }
+
+const mypageBtn = document.getElementById("mypageBtn");
+
+if(mypageBtn){
+
+  mypageBtn.addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    const user = auth.currentUser;
+
+    if(user){
+
+      location.href = "mypage.html";
+
+    }else{
+
+      const goLogin = confirm(
+        "로그인 후 이용할 수 있습니다.\n\n로그인 페이지로 이동하시겠습니까?"
+      );
+
+      if(goLogin){
+        location.href = "login.html";
+      }
+
+    }
+
+  });
+
+}
+
+

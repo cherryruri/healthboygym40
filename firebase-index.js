@@ -6,17 +6,6 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
-import {
-  getFirestore,
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-
-
-
-
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
   authDomain: "healthboygym40-4ee44.firebaseapp.com",
@@ -29,8 +18,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
-
 
 function setUserMenu(user){
   const loginLink = document.getElementById("loginLink");
@@ -74,44 +61,11 @@ function setMobileUserMenu(user){
   }
 }
 
-/* 로그인 상태 체크 */
-onAuthStateChanged(auth, async (user)=>{
-
-  if(!user){
-    setUserMenu(null);
-    setMobileUserMenu(null);
-    return;
-  }
-
-  const userDoc = await getDoc(
-    doc(db, "users", user.uid)
-  );
-
-  const userData = userDoc.data();
-
-  const displayName =
-    userData?.role === "admin"
-      ? `${userData.name} 관리자님 환영합니다`
-      : `${userData.name}님 환영합니다`;
-
-  const loginLink = document.getElementById("loginLink");
-  const mobileLoginLink = document.getElementById("mobileLoginLink");
-
-  if(loginLink){
-    loginLink.textContent = displayName;
-    loginLink.href = "#";
-  }
-
-  if(mobileLoginLink){
-    mobileLoginLink.textContent = displayName;
-    mobileLoginLink.href = "#";
-  }
-
-  document.getElementById("logoutBtn").style.display = "";
-  document.getElementById("mobileLogoutBtn").style.display = "";
-
+onAuthStateChanged(auth, (user)=>{
+  setUserMenu(user);
+  setMobileUserMenu(user);
 });
-/* PC 로그아웃 */
+
 const logoutBtn = document.getElementById("logoutBtn");
 
 if(logoutBtn){
@@ -122,7 +76,6 @@ if(logoutBtn){
   });
 }
 
-/* 모바일 로그아웃 */
 const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
 
 if(mobileLogoutBtn){

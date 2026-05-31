@@ -3191,3 +3191,64 @@ body.menu-open .mobile-login-area{
     display:none;
   }
 }
+
+/* 모바일 메뉴 프로필 카드 */
+.mobile-profile-card{
+  display:flex;
+  align-items:center;
+  gap:14px;
+
+  padding:14px 0 18px;
+  margin-bottom:10px;
+
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+
+.mobile-profile-avatar{
+  width:54px;
+  height:54px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.16);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,.18);
+
+  color:#fff;
+  font-size:24px;
+}
+
+.mobile-profile-info strong{
+  display:block;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+}
+
+.mobile-profile-info p{
+  color:rgba(255,255,255,.62);
+  font-size:12px;
+  font-weight:700;
+  margin-top:5px;
+  line-height:1.4;
+}
+
+/* 모바일 메뉴 간격 줄이기 */
+.mobile-side-menu a{
+  font-size:16px;
+  padding:11px 0;
+}
+
+.mobile-side-top{
+  margin-bottom:22px;
+}
+
+.mobile-side-reserve{
+  margin-top:20px;
+}

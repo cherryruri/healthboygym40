@@ -31,7 +31,7 @@ function setUserMenu(user){
     loginLink.textContent = `${name}님 환영합니다`;
     loginLink.href = "#";
 
-    logoutBtn.style.display = "inline-block";
+    logoutBtn.style.display = "";
   }else{
     loginLink.textContent = "LOGIN";
     loginLink.href = "login.html";
@@ -52,7 +52,7 @@ function setMobileUserMenu(user){
     mobileLoginLink.textContent = `${name}님 환영합니다`;
     mobileLoginLink.href = "#";
 
-    mobileLogoutBtn.style.display = "inline-block";
+    mobileLogoutBtn.style.display = "";
   }else{
     mobileLoginLink.textContent = "LOGIN";
     mobileLoginLink.href = "login.html";

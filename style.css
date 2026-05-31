@@ -2872,37 +2872,42 @@ body.loaded .main-content{
   display:block;
 }
 
-
 /* 로그인 메뉴 */
-
-.login-menu{
-  display:flex !important;
+.menu li.login-menu{
+  display:flex;
   align-items:center;
-  gap:10px;
+  gap:14px;
 }
 
-#logoutBtn{
+.menu li.login-menu #loginLink{
+  white-space:nowrap;
+}
+
+.menu li.login-menu #logoutBtn{
   display:inline-flex;
   align-items:center;
   justify-content:center;
 
-  margin-left:8px;
-  padding:7px 16px;
-
-  border:none;
+  padding:7px 15px;
+  border:0;
   border-radius:999px;
 
   background:#111;
   color:#fff;
 
   font-size:11px;
-  font-weight:700;
+  font-weight:800;
+  letter-spacing:.04em;
 
   cursor:pointer;
-  transition:.25s;
+  appearance:none;
+  -webkit-appearance:none;
+
+  transition:.25s ease;
 }
 
-#logoutBtn:hover{
+.menu li.login-menu #logoutBtn:hover{
   background:#fff200;
   color:#000;
+  transform:translateY(-1px);
 }

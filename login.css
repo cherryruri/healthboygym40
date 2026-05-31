@@ -463,22 +463,12 @@ body{
 
 }
 
-@media(max-width:768px){
-
-  #signupBox[data-page="1"]
-  .signup-nav
-  .sub-btn:first-child{
-    visibility:hidden;
-  }
-
-}
-
 .signup-nav{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  display:flex;
   gap:8px;
   margin-top:10px;
 }
+
 
 /* 회원가입 화살표 */
 .signup-arrow{
@@ -859,6 +849,34 @@ body{
   .login-content{
     min-height:100vh;
     height:auto;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .signup-nav{
+    position:fixed;
+    left:24px;
+    right:24px;
+    bottom:24px;
+    z-index:100;
+  }
+
+  .signup-nav .sub-btn{
+    margin:0;
+  }
+
+  #signupBox[data-page="1"] .signup-nav .sub-btn:first-child{
+    display:none;
+  }
+
+  #signupBox[data-page="3"] .signup-nav{
+    display:none;
+  }
+
+  .login-content{
+    padding-bottom:110px;
   }
 
 }

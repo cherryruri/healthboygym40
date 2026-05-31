@@ -169,6 +169,14 @@ window.signup = async function(){
 
   const agree1 = document.getElementById("agree1").checked;
   const agree2 = document.getElementById("agree2").checked;
+  const adminCode = document.getElementById("adminCode").value.trim();
+
+const role =
+  adminCode === "healthboy0909!!!"
+    ? "admin"
+    : "user";
+
+
 
   if(!id || !password || !passwordConfirm){
     alert("아이디와 비밀번호를 입력해주세요.");
@@ -242,6 +250,7 @@ window.signup = async function(){
       email: email,
       name: name,
       phone: phone,
+      role: role,
       birth: `${birthYear}-${birthMonth}-${birthDay}`,
       gender: gender,
       address: address,

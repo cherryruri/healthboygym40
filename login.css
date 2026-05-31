@@ -871,25 +871,31 @@ body{
     display:none;
   }
 
-#signupBox[data-page="3"] .signup-nav{
-  display:none;
-}
-
-#signupBox[data-page="3"] .signup-real-btn{
-  position:fixed;
-  left:24px;
-  right:24px;
-  bottom:24px;
-  width:auto;
-  z-index:101;
-}
-
-#signupBox[data-page="3"] .sub-btn[onclick="showLogin()"]{
-  margin-top:68px;
-}
+  #signupBox[data-page="3"] .signup-nav{
+    display:none;
+  }
 
   .login-content{
     padding-bottom:110px;
+  }
+
+}
+
+@media(max-width:768px){
+
+  #signupBox[data-page="3"] .signup-nav{
+    display:none;
+  }
+
+  #signupBox[data-page="3"] .signup-real-btn{
+    position:static;
+    width:100%;
+    margin-top:14px;
+    margin-bottom:8px;
+  }
+
+  #signupBox[data-page="3"] .signup-real-btn + .sub-btn{
+    margin-top:0;
   }
 
 }

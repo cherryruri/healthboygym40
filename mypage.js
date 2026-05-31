@@ -151,13 +151,6 @@ if(logoutBtn){
   });
 }
 
-if(logoutBtn){
-  logoutBtn.addEventListener("click", async ()=>{
-    await signOut(auth);
-    alert("로그아웃 완료");
-    location.href = "index.html";
-  });
-}
 
 /* 여기부터 추가 */
 

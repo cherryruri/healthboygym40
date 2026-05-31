@@ -877,7 +877,12 @@ body{
   }
 }
 
-/* PC에서는 하단바 숨김 */
-.mobile-bottom-nav{
-  display:none;
+
+
+@media(min-width:769px){
+
+  .mobile-bottom-nav{
+    display:none;
+  }
+
 }

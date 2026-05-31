@@ -60,8 +60,7 @@ if(!user){
 
 const shouldShowWelcome = sessionStorage.getItem("showWelcomeOnce");
 
-
-if(shouldShowWelcome === "yes"){
+if(!shouldShowWelcome){
 
   if(myWelcome){
     myWelcome.style.display = "flex";
@@ -75,8 +74,7 @@ if(shouldShowWelcome === "yes"){
     if(mypageRoot){
       mypageRoot.style.display = "flex";
     }
-
-sessionStorage.removeItem("showWelcomeOnce");
+sessionStorage.setItem("showWelcomeOnce", "yes");
 
   },4200);
 

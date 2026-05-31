@@ -4,11 +4,18 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  fetchSignInMethodsForEmail,
   browserLocalPersistence,
   browserSessionPersistence,
   setPersistence
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -22,26 +29,33 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
 let idChecked = false;
 let idAvailable = false;
+let checkedId = "";
 
-function makeEmail(id){
-  return id.includes("@") ? id : `${id}@healthboygym.com`;
+function cleanId(id){
+  return id.trim().toLowerCase();
 }
 
-/* 아이디 입력 바뀌면 중복확인 초기화 */
+function makeEmail(id){
+  return `${cleanId(id)}@healthboygym.com`;
+}
+
+/* 아이디 바꾸면 중복확인 초기화 */
 const signupIdInput = document.getElementById("signupId");
-const idCheckMsg = document.getElementById("idCheckMsg");
 
 if(signupIdInput){
   signupIdInput.addEventListener("input", ()=>{
     idChecked = false;
     idAvailable = false;
+    checkedId = "";
 
-    if(idCheckMsg){
-      idCheckMsg.textContent = "";
-      idCheckMsg.className = "id-check-msg";
+    const msg = document.getElementById("idCheckMsg");
+    if(msg){
+      msg.textContent = "";
+      msg.className = "id-check-msg";
     }
   });
 }
@@ -49,7 +63,7 @@ if(signupIdInput){
 /* 아이디 중복확인 */
 window.checkSignupId = async function(){
 
-  const id = document.getElementById("signupId").value.trim();
+  const id = cleanId(document.getElementById("signupId").value);
   const msg = document.getElementById("idCheckMsg");
 
   if(!msg) return;
@@ -57,27 +71,23 @@ window.checkSignupId = async function(){
   if(!id){
     msg.textContent = "아이디를 입력해주세요.";
     msg.className = "id-check-msg error";
-    idChecked = false;
-    idAvailable = false;
     return;
   }
 
   if(id.length < 4){
     msg.textContent = "아이디는 4자 이상 입력해주세요.";
     msg.className = "id-check-msg error";
-    idChecked = false;
-    idAvailable = false;
     return;
   }
 
-  const email = makeEmail(id);
-
   try{
-    const methods = await fetchSignInMethodsForEmail(auth, email);
+    const idRef = doc(db, "userIds", id);
+    const idSnap = await getDoc(idRef);
 
     idChecked = true;
+    checkedId = id;
 
-    if(methods.length > 0){
+    if(idSnap.exists()){
       idAvailable = false;
       msg.textContent = "이미 사용 중인 아이디입니다.";
       msg.className = "id-check-msg error";
@@ -89,8 +99,6 @@ window.checkSignupId = async function(){
 
   }catch(error){
     console.log(error);
-    idChecked = false;
-    idAvailable = false;
     msg.textContent = "중복확인 중 오류가 발생했습니다.";
     msg.className = "id-check-msg error";
   }
@@ -99,7 +107,7 @@ window.checkSignupId = async function(){
 /* 로그인 */
 window.login = async function(){
 
-  const id = document.getElementById("loginId").value.trim();
+  const id = cleanId(document.getElementById("loginId").value);
   const password = document.getElementById("loginPassword").value;
   const remember = document.querySelector(".remember input").checked;
 
@@ -130,7 +138,7 @@ window.login = async function(){
 /* 회원가입 */
 window.signup = async function(){
 
-  const id = document.getElementById("signupId").value.trim();
+  const id = cleanId(document.getElementById("signupId").value);
   const password = document.getElementById("signupPassword").value;
   const passwordConfirm = document.getElementById("signupPasswordConfirm").value;
 
@@ -139,13 +147,8 @@ window.signup = async function(){
     return;
   }
 
-  if(!idChecked){
+  if(!idChecked || !idAvailable || checkedId !== id){
     alert("아이디 중복확인을 먼저 해주세요.");
-    return;
-  }
-
-  if(!idAvailable){
-    alert("이미 사용 중인 아이디입니다.");
     return;
   }
 
@@ -157,7 +160,14 @@ window.signup = async function(){
   const email = makeEmail(id);
 
   try{
-    await createUserWithEmailAndPassword(auth, email, password);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+    await setDoc(doc(db, "userIds", id), {
+      uid: userCredential.user.uid,
+      id: id,
+      email: email,
+      createdAt: serverTimestamp()
+    });
 
     alert("회원가입 완료!");
     window.location.href = "./index.html";

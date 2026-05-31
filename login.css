@@ -827,3 +827,26 @@ body{
   line-height:1;
 }
 
+@media(max-width:768px){
+
+  body{
+    overflow:auto;
+    min-height:100vh;
+  }
+
+  .login-page{
+    min-height:100vh;
+    height:auto;
+  }
+
+  .login-card{
+    min-height:100vh;
+    height:auto;
+  }
+
+  .login-content{
+    min-height:100vh;
+    height:auto;
+  }
+
+}

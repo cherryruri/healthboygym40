@@ -58,7 +58,9 @@ if(!user){
 
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
-
+if(myWelcome){
+  myWelcome.style.display = "flex";
+}
   if(welcomeName){
   welcomeName.textContent = `안녕하세요, ${userId}님`;
 }

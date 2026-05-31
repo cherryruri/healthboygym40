@@ -156,11 +156,13 @@ function checkPasswordLive(){
 }
 
 if(signupPassword){
-  signupPassword.addEventListener("input", checkPasswordLive);
+  signupPassword.oninput = checkPasswordLive;
+  signupPassword.onkeyup = checkPasswordLive;
 }
 
 if(signupPasswordConfirm){
-  signupPasswordConfirm.addEventListener("input", checkPasswordLive);
+  signupPasswordConfirm.oninput = checkPasswordLive;
+  signupPasswordConfirm.onkeyup = checkPasswordLive;
 }
 
 const birthYear = document.getElementById("birthYear");

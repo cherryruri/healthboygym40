@@ -39,8 +39,23 @@ function cleanId(id){
   return id.trim().toLowerCase();
 }
 
+function cleanText(text){
+  return text.trim().replace(/\s/g, "");
+}
+
 function makeEmail(id){
   return `${cleanId(id)}@healthboygym.com`;
+}
+
+function getPhone(){
+  const p1 = document.getElementById("phone1").value.trim();
+  const p2 = document.getElementById("phone2").value.trim();
+  const p3 = document.getElementById("phone3").value.trim();
+  return `${p1}${p2}${p3}`;
+}
+
+function getMemberKey(name, phone){
+  return `${cleanText(name)}_${phone}`;
 }
 
 /* 아이디 바꾸면 중복확인 초기화 */
@@ -142,6 +157,19 @@ window.signup = async function(){
   const password = document.getElementById("signupPassword").value;
   const passwordConfirm = document.getElementById("signupPasswordConfirm").value;
 
+  const name = cleanText(document.getElementById("signupName").value);
+  const phone = getPhone();
+
+  const birthYear = document.getElementById("birthYear").value.trim();
+  const birthMonth = document.getElementById("birthMonth").value.trim();
+  const birthDay = document.getElementById("birthDay").value.trim();
+  const gender = document.getElementById("signupGender").value;
+  const address = document.getElementById("signupAddress").value.trim();
+  const addressDetail = document.getElementById("signupAddressDetail").value.trim();
+
+  const agree1 = document.getElementById("agree1").checked;
+  const agree2 = document.getElementById("agree2").checked;
+
   if(!id || !password || !passwordConfirm){
     alert("아이디와 비밀번호를 입력해주세요.");
     return;
@@ -157,15 +185,67 @@ window.signup = async function(){
     return;
   }
 
+  if(!name){
+    alert("이름을 입력해주세요.");
+    return;
+  }
+
+  if(phone.length !== 11){
+    alert("전화번호를 정확히 입력해주세요.");
+    return;
+  }
+
+  if(!agree1 || !agree2){
+    alert("개인정보 및 이용약관에 동의해주세요.");
+    return;
+  }
+
   const email = makeEmail(id);
+  const memberKey = getMemberKey(name, phone);
 
   try{
+    const phoneSnap = await getDoc(doc(db, "phoneNumbers", phone));
+    const memberSnap = await getDoc(doc(db, "memberKeys", memberKey));
+
+    if(phoneSnap.exists() || memberSnap.exists()){
+      alert("이미 가입된 계정입니다.");
+      return;
+    }
+
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
     await setDoc(doc(db, "userIds", id), {
       uid: userCredential.user.uid,
       id: id,
       email: email,
+      createdAt: serverTimestamp()
+    });
+
+    await setDoc(doc(db, "phoneNumbers", phone), {
+      uid: userCredential.user.uid,
+      id: id,
+      name: name,
+      phone: phone,
+      createdAt: serverTimestamp()
+    });
+
+    await setDoc(doc(db, "memberKeys", memberKey), {
+      uid: userCredential.user.uid,
+      id: id,
+      name: name,
+      phone: phone,
+      createdAt: serverTimestamp()
+    });
+
+    await setDoc(doc(db, "users", userCredential.user.uid), {
+      id: id,
+      email: email,
+      name: name,
+      phone: phone,
+      birth: `${birthYear}-${birthMonth}-${birthDay}`,
+      gender: gender,
+      address: address,
+      addressDetail: addressDetail,
       createdAt: serverTimestamp()
     });
 

@@ -794,25 +794,79 @@
 </div>
 
 
+<!-- PC FLOATING WIDGET -->
+<nav class="pc-floating-widget">
+
+  <a href="#" class="pc-widget-item" data-label="HOME" aria-label="홈">
+    <svg viewBox="0 0 24 24"><path d="M3 10.8L12 3.8l9 7v9.4a1 1 0 0 1-1 1h-5.2v-6.3H9.2v6.3H4a1 1 0 0 1-1-1v-9.4z"/></svg>
+  </a>
+
+  <a href="#" class="pc-widget-item" data-label="BOARD" aria-label="게시판">
+    <svg viewBox="0 0 24 24"><path d="M4 5.5h16v10.8H8.6L4 20.5v-15z"/><path d="M8 9.2h8"/><path d="M8 12.3h5.5"/></svg>
+  </a>
+
+  <a href="#" class="pc-widget-item" data-label="EVENT" aria-label="이벤트">
+    <svg viewBox="0 0 24 24"><path d="M4 10h16v11H4z"/><path d="M3 7h18v3H3z"/><path d="M12 7v14"/><path d="M12 7H8.7A2.2 2.2 0 1 1 12 4.8V7z"/><path d="M12 7h3.3A2.2 2.2 0 1 0 12 4.8V7z"/></svg>
+  </a>
+
+  <a href="mypage.html" class="pc-widget-item" data-label="MY" aria-label="마이페이지">
+    <svg viewBox="0 0 24 24"><path d="M12 12.2a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2z"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
+  </a>
+
+</nav>
+
+
+
 <!-- 모바일 하단 고정바 -->
 <nav class="mobile-bottom-nav">
-  <a href="#" class="bottom-nav-item active">
-    <span class="bottom-icon">⌂</span>
-    <span>홈</span>
+
+  <a href="#" class="bottom-nav-item active" aria-label="홈">
+    <span class="bottom-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M3 10.8L12 3.8l9 7v9.4a1 1 0 0 1-1 1h-5.2v-6.3H9.2v6.3H4a1 1 0 0 1-1-1v-9.4z"/>
+      </svg>
+    </span>
+    <span class="bottom-label">홈</span>
   </a>
 
-  <a href="#" class="bottom-nav-item">
-    <span class="bottom-icon">☰</span>
-    <span>게시판</span>
+  <a href="#" class="bottom-nav-item" aria-label="게시판">
+    <span class="bottom-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 5.5h16v10.8H8.6L4 20.5v-15z"/>
+        <path d="M8 9.2h8"/>
+        <path d="M8 12.3h5.5"/>
+      </svg>
+    </span>
+    <span class="bottom-label">게시판</span>
   </a>
 
-  <a href="#" class="bottom-nav-item">
-    <span class="bottom-icon">✦</span>
-    <span>이벤트</span>
+  <a href="#" class="bottom-nav-item" aria-label="이벤트소식">
+    <span class="bottom-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 10h16v11H4z"/>
+        <path d="M3 7h18v3H3z"/>
+        <path d="M12 7v14"/>
+        <path d="M12 7H8.7A2.2 2.2 0 1 1 12 4.8V7z"/>
+        <path d="M12 7h3.3A2.2 2.2 0 1 0 12 4.8V7z"/>
+      </svg>
+    </span>
+    <span class="bottom-label">이벤트</span>
   </a>
 
-  <a href="mypage.html" class="bottom-nav-item">
-    <span class="bottom-icon">◌</span>
-    <span>마이</span>
+  <a href="mypage.html" class="bottom-nav-item" aria-label="마이페이지">
+    <span class="bottom-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 12.2a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2z"/>
+        <path d="M4.5 21a7.5 7.5 0 0 1 15 0"/>
+      </svg>
+    </span>
+    <span class="bottom-label">마이</span>
   </a>
+
 </nav>
+
+<script type="module" src="./firebase-index.js?v=1"></script>
+<script src="script.js"></script>
+
+</body>
+</html>

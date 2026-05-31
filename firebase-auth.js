@@ -139,9 +139,10 @@ window.login = async function(){
       remember ? browserLocalPersistence : browserSessionPersistence
     );
 
-    await signInWithEmailAndPassword(auth, email, password);
+await signInWithEmailAndPassword(auth, email, password);
 
-    window.location.href = "./index.html";
+sessionStorage.setItem("showWelcomeOnce", "yes");
+window.location.href = "./mypage.html";
 
   }catch(error){
     console.log(error);
@@ -257,8 +258,8 @@ const role =
       createdAt: serverTimestamp()
     });
 
-    alert("회원가입 완료!");
-    window.location.href = "./index.html";
+sessionStorage.setItem("showWelcomeOnce", "yes");
+window.location.href = "./mypage.html";
 
   }catch(error){
     console.log(error);

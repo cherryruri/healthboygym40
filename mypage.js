@@ -37,7 +37,7 @@ const logoutBtn = document.getElementById("logoutBtn");
 const avatar = document.querySelector(".my-avatar");
 const mypageRoot = document.getElementById("mypageRoot");
 const myWelcome = document.getElementById("myWelcome");
-const welcomeName = document.getElementById("welcomeName");
+
 
 function setText(el, value){
   if(el) el.textContent = value || "-";
@@ -58,9 +58,10 @@ if(!user){
 
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
-const welcomeShown = sessionStorage.getItem("mypageWelcomeShown");
+const shouldShowWelcome = sessionStorage.getItem("showWelcomeOnce");
 
-if(!welcomeShown){
+
+if(shouldShowWelcome === "yes"){
 
   if(myWelcome){
     myWelcome.style.display = "flex";
@@ -75,7 +76,7 @@ if(!welcomeShown){
       mypageRoot.style.display = "flex";
     }
 
-    sessionStorage.setItem("mypageWelcomeShown", "yes");
+sessionStorage.removeItem("showWelcomeOnce");
 
   },4200);
 

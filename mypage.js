@@ -51,7 +51,15 @@ if(!user){
 }
 
 
-if(welcomeName){
+
+
+
+
+
+  const userId = user.email ? user.email.split("@")[0] : "회원";
+
+
+  if(welcomeName){
   welcomeName.textContent = `안녕하세요, ${userId}님`;
 }
 
@@ -65,11 +73,6 @@ setTimeout(()=>{
   }
 },4600);
 
-
-
-
-
-  const userId = user.email ? user.email.split("@")[0] : "회원";
 
   setText(myName, `${userId}님`);
   setText(myId, user.email);

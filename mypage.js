@@ -177,10 +177,10 @@ const mypageBtn = document.getElementById("mypageBtn");
 
 if(mypageBtn){
   mypageBtn.addEventListener("click",(e)=>{
-
     e.preventDefault();
 
     if(auth.currentUser){
+      sessionStorage.removeItem("welcome"); // ← 여기 추가
       location.href = "mypage.html";
     }else{
       location.href = "login.html";

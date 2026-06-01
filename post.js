@@ -107,5 +107,8 @@ deleteBtn.addEventListener("click", async ()=>{
 });
 
 editBtn.addEventListener("click", ()=>{
-  alert("다음 단계에서 수정 기능 연결 예정");
+
+  location.href =
+    `editor.html?id=${postId}`;
+
 });

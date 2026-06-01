@@ -274,3 +274,15 @@ padding:14px 16px;
 background:#fafafa;
 border-bottom:1px solid #eee;
 }
+
+.editor-toolbar button,
+.editor-toolbar select{
+height:34px;
+padding:0 10px;
+border:1px solid #ddd;
+border-radius:6px;
+background:#fff;
+font-size:13px;
+cursor:pointer;
+transition:.15s;
+}

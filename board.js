@@ -33,8 +33,23 @@ const db = getFirestore(app);
 let currentUser = null;
 let currentBoard = "free";
 
+const boardNames = {
+  free:"수내점자유게시판",
+  praise:"칭찬합니다",
+  news:"수내점소식",
+  review:"PT회원 실제 후기",
+  worry:"운동사춘기 호소글"
+};
+
 const postList = document.getElementById("postList");
 const writeBtn = document.getElementById("writeBtn");
+
+const writeModal = document.getElementById("writeModal");
+const writeClose = document.getElementById("writeClose");
+const writeBoardName = document.getElementById("writeBoardName");
+const postTitle = document.getElementById("postTitle");
+const postContent = document.getElementById("postContent");
+const submitPost = document.getElementById("submitPost");
 
 onAuthStateChanged(auth, (user)=>{
   currentUser = user;
@@ -43,19 +58,21 @@ onAuthStateChanged(auth, (user)=>{
 
 document.querySelectorAll(".board-tab").forEach(tab=>{
   tab.addEventListener("click", ()=>{
-    document.querySelectorAll(".board-tab").forEach(t=>{
-      t.classList.remove("active");
-    });
-
+    document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
+
     currentBoard = tab.dataset.board;
+
+    if(writeBoardName){
+      writeBoardName.textContent = boardNames[currentBoard];
+    }
 
     loadPosts();
   });
 });
 
 if(writeBtn){
-  writeBtn.addEventListener("click", async ()=>{
+  writeBtn.addEventListener("click", ()=>{
 
     if(!currentUser){
       alert("로그인한 회원만 글을 쓸 수 있습니다.");
@@ -63,11 +80,38 @@ if(writeBtn){
       return;
     }
 
-    const title = prompt("제목을 입력해주세요.");
-    if(!title) return;
+    if(writeBoardName){
+      writeBoardName.textContent = boardNames[currentBoard];
+    }
 
-    const content = prompt("내용을 입력해주세요.");
-    if(!content) return;
+    if(postTitle) postTitle.value = "";
+    if(postContent) postContent.value = "";
+
+    writeModal.classList.add("show");
+  });
+}
+
+if(writeClose){
+  writeClose.addEventListener("click", ()=>{
+    writeModal.classList.remove("show");
+  });
+}
+
+if(submitPost){
+  submitPost.addEventListener("click", async ()=>{
+
+    const title = postTitle.value.trim();
+    const content = postContent.value.trim();
+
+    if(!title){
+      alert("제목을 입력해주세요.");
+      return;
+    }
+
+    if(!content){
+      alert("내용을 입력해주세요.");
+      return;
+    }
 
     await addDoc(collection(db, "boards"), {
       board: currentBoard,
@@ -82,6 +126,8 @@ if(writeBtn){
     });
 
     alert("글이 등록되었습니다. 관리자 공개 전까지 비밀글입니다.");
+
+    writeModal.classList.remove("show");
     loadPosts();
   });
 }

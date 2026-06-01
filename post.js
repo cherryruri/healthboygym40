@@ -69,7 +69,20 @@ async function loadPost(){
       currentPost.createdAt.toDate().toLocaleDateString("ko-KR");
   }
 
+const isWriter =
+  currentUser &&
+  currentPost.writerUid === currentUser.uid;
+
+if(currentPost.isSecret && !isWriter){
+  contentEl.innerHTML = `
+    <div class="secret-message">
+      비공개 글입니다.<br>
+      작성자만 내용을 확인할 수 있습니다.
+    </div>
+  `;
+}else{
   contentEl.innerHTML = currentPost.content;
+}
 
   statusEl.textContent =
     currentPost.isPublic ? "공개글" : "비밀글";

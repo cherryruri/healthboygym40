@@ -112,7 +112,7 @@ async function loadPosts(){
       <div>${date}</div>
     `;
 
-    row.addEventListener("click", ()=>{
+  row.addEventListener("click", ()=>{
   location.href = `post.html?id=${docSnap.id}`;
 });
 

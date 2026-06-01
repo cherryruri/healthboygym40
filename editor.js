@@ -119,20 +119,19 @@ location.href = "board.html";
 });
 
 
-
 if(fontSizeSelect){
   fontSizeSelect.addEventListener("change", ()=>{
+
+    const selected = window.getSelection().toString();
+
     document.execCommand(
       "insertHTML",
       false,
-      `<span style="font-size:${fontSizeSelect.value}px">${window.getSelection()}</span>`
+      `<span style="font-size:${fontSizeSelect.value}px">${selected}</span>`
     );
+
   });
 }
-
-
-
-
 
 
 

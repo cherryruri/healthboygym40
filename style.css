@@ -3270,3 +3270,10 @@ body.menu-open .mobile-login-area{
     z-index:999999;
   }
 }
+
+
+body.page-leaving .mobile-bottom-nav{
+  opacity:0;
+  transform:translateY(100%);
+  pointer-events:none;
+}

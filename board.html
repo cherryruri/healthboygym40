@@ -172,5 +172,18 @@
 
 </nav>
 
+<script>
+document.querySelectorAll(".bottom-nav-item").forEach(item=>{
+  item.addEventListener("click", ()=>{
+    document.body.classList.add("page-leaving");
+  });
+});
+</script>
+
+
+
+
+
+
 </body>
 </html>

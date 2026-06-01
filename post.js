@@ -143,9 +143,28 @@ async function loadComments(){
     const div = document.createElement("div");
     div.className = "comment";
 
-    div.innerHTML = `
-      <b>${c.writer}</b> : ${c.text}
-    `;
+ div.innerHTML = `
+  <div class="comment-box">
+    
+    <div class="comment-left">
+      <div class="avatar">
+       ${(c.writer || "U").charAt(0).toUpperCase()}
+      </div>
+    </div>
+
+    <div class="comment-right">
+      <div class="comment-meta">
+        <span class="writer">${c.writer}</span>
+        <span class="time">방금 전</span>
+      </div>
+
+      <div class="comment-text">
+        ${c.text}
+      </div>
+    </div>
+
+  </div>
+`;
 
     commentList.appendChild(div);
   });

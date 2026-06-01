@@ -417,3 +417,33 @@ cursor:pointer;
 .like-btn:hover{
   transform:scale(1.1);
 }
+
+.like-btn{
+  margin-left:auto;        /* ⭐ 오른쪽 끝으로 밀기 */
+  background:none;         /* 배경 제거 */
+  border:none;             /* 외곽선 제거 */
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  font-size:14px;
+  padding:0;
+  color:#999;
+}
+
+/* 클릭 느낌 */
+.like-btn:hover{
+  color:#000;
+  transform:scale(1.05);
+  transition:0.2s;
+}
+
+/* 클릭했을 때 느낌 (선택) */
+.like-btn:active{
+  transform:scale(0.95);
+}
+
+/* 포커스 테두리 제거 */
+.like-btn:focus{
+  outline:none;
+}

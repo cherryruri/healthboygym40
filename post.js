@@ -99,6 +99,8 @@ async function loadComments() {
   snap.forEach((docSnap) => {
 
     const c = docSnap.data();
+    const isMine =
+  currentUser?.email?.split("@")[0] === c.writer;
 
     const div = document.createElement("div");
     div.className = "comment";

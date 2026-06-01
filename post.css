@@ -473,3 +473,29 @@ cursor:pointer;
 .like-btn.liked{
   color:#fff200;
 }
+
+.comment{
+  padding:12px;
+  border-radius:12px;
+  background:#fafafa;
+  margin-bottom:10px;
+}
+
+.comment-box{
+  display:flex;
+  gap:10px;
+}
+
+.comment-right{
+  flex:1;
+}
+
+.comment-meta{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.like-btn{
+  margin-left:auto;
+}

@@ -122,7 +122,9 @@ location.href = "board.html";
 if(fontSizeSelect){
   fontSizeSelect.addEventListener("change", ()=>{
 
-    const selected = window.getSelection().toString();
+    const selected = window.getSelection()?.toString() || "";
+
+    if(!selected) return;
 
     document.execCommand(
       "insertHTML",
@@ -132,7 +134,6 @@ if(fontSizeSelect){
 
   });
 }
-
 
 
 if(textColor){

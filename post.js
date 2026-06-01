@@ -167,25 +167,33 @@ ${isMine ? `
 }
 
 /* ================= ADD COMMENT ================= */
+commentBtn.addEventListener("click", async ()=>{
 
-commentBtn.addEventListener("click", async () => {
+  if(!currentUser){
+    alert("로그인 필요");
+    return;
+  }
 
-  if (!commentText.value.trim()) return;
+  if(!postId){
+    alert("게시글 ID 없음");
+    return;
+  }
+
+  if(!commentText.value.trim()) return;
 
   await addDoc(
-  collection(db, "boards", postId, "comments"),
-  {
-    text: commentText.value,
-    writer: currentUser?.email?.split("@")[0] || "익명",
-    createdAt: serverTimestamp(),
-    likes: 0 ,  // ⭐ 이거 한 줄 추가
-    likedBy: []   // ⭐ 추가
-  }
-);
+    collection(db, "boards", postId, "comments"),
+    {
+      text: commentText.value,
+      writer: currentUser.email.split("@")[0],
+      createdAt: serverTimestamp()
+    }
+  );
 
   commentText.value = "";
   loadComments();
 });
+
 
 /* ================= DELETE COMMENT ================= */
 

@@ -112,3 +112,12 @@ editBtn.addEventListener("click", ()=>{
     `editor.html?id=${postId}`;
 
 });
+
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";

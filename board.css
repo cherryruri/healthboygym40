@@ -159,3 +159,23 @@ color:#888;
   color:#fff200;
   transform:translateY(-2px) scale(1.03);
 }
+
+/* 게시판 페이지 모바일 하단바 active 원형 제거 */
+@media(max-width:768px){
+
+  .bottom-nav-item.active::before{
+    width:28px;
+    height:2px;
+    top:7px;
+    border-radius:999px;
+  }
+
+  .bottom-nav-item.active{
+    transform:none;
+  }
+
+  .bottom-nav-item.active .bottom-icon{
+    transform:none;
+  }
+
+}

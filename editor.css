@@ -311,3 +311,15 @@ width:36px;
 height:34px;
 border-radius:6px;
 }
+
+.editor-toolbar button,
+.editor-toolbar select {
+  background:#fff;
+  color:#111;
+  border:1px solid #ddd;
+}
+
+.editor-toolbar button:hover {
+  background:#f3f3f3; /* 너무 강한 검정 제거 */
+  color:#111;
+}

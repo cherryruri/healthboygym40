@@ -248,20 +248,5 @@ if(editId){
   }
 }
 
-if(editId){
 
-  await updateDoc(doc(db,"boards",editId), {
-    title,
-    content
-  });
-
-}else{
-
-  await addDoc(collection(db,"boards"), {
-    title,
-    content,
-    createdAt: serverTimestamp()
-  });
-
-}
 

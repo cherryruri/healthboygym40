@@ -118,25 +118,27 @@ color:#888;
 
 
 
-
 @media(max-width:768px){
 
-.board-header h1{
-font-size:34px;
+  .board-header h1{
+    font-size:34px;
+  }
+
+  .board-item{
+    padding:16px;
+  }
+
+  .write-btn{
+    width:86px;
+    height:42px;
+    margin:28px 0 0 auto;
+    border-radius:999px;
+  }
+
 }
 
-.board-item{
-padding:16px;
-}
 
-.write-btn{
-right:20px;
-bottom:20px;
-width:60px;
-height:60px;
-}
 
-}
 
 /* 게시판 페이지 PC 위젯 눌림/포커스 보정 */
 .pc-widget-item,

@@ -53,6 +53,9 @@ document.querySelectorAll(".editor-toolbar button[data-command]").forEach(btn=>{
 });
 
 const linkBtn = document.getElementById("linkBtn");
+const unlinkBtn = document.getElementById("unlinkBtn");
+const fontSizeSelect = document.getElementById("fontSizeSelect");
+
 
 if(linkBtn){
   linkBtn.addEventListener("click", ()=>{

@@ -1,0 +1,281 @@
+
+#myWelcome{
+  display:none;
+}
+
+
+
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+background:#050505;
+color:#fff;
+font-family:'Pretendard',sans-serif;
+}
+
+.mypage{
+min-height:100vh;
+padding:22px;
+}
+
+.mypage-header{
+display:flex;
+align-items:center;
+justify-content:space-between;
+height:60px;
+}
+
+.back-btn{
+color:#fff;
+text-decoration:none;
+font-size:40px;
+line-height:1;
+}
+
+.mypage-header h1{
+font-size:20px;
+font-weight:900;
+}
+
+.profile-area{
+padding:60px 0;
+text-align:center;
+}
+
+.profile-image{
+margin-bottom:24px;
+}
+
+.my-avatar{
+width:120px;
+height:120px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+margin:0 auto;
+
+border-radius:36px;
+
+background:linear-gradient(145deg,#111,#1d1d1d);
+
+color:#fff200;
+font-size:48px;
+font-weight:900;
+}
+
+.profile-area h2{
+font-size:34px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.profile-area p{
+color:rgba(255,255,255,.45);
+font-size:14px;
+}
+
+.section-divider{
+height:10px;
+background:#0d0d0d;
+margin:0 -22px;
+}
+
+.info-section{
+padding-top:34px;
+}
+
+.info-section h3{
+font-size:28px;
+font-weight:900;
+margin-bottom:28px;
+}
+
+.info-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+min-height:72px;
+
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.info-row span{
+color:rgba(255,255,255,.45);
+font-size:16px;
+font-weight:700;
+}
+
+.info-row strong{
+color:#fff;
+font-size:17px;
+font-weight:800;
+text-align:right;
+}
+
+.logout-btn{
+width:100%;
+height:58px;
+
+margin-top:40px;
+
+border:none;
+border-radius:18px;
+
+background:#fff200;
+color:#000;
+
+font-size:16px;
+font-weight:900;
+}
+
+/* welcome */
+
+
+
+.my-welcome{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#000;
+}
+
+.welcome-text{
+  text-align:center;
+}
+
+.welcome-text h1{
+  color:#fff;
+
+  font-size:18px;
+  font-weight:700;
+  letter-spacing:-0.03em;
+
+  opacity:0;
+  animation:helloFade .9s ease forwards;
+}
+
+.welcome-text p{
+  color:#fff;
+
+  font-size:34px;
+  font-weight:900;
+  line-height:1.35;
+  letter-spacing:-0.06em;
+
+  margin-top:18px;
+
+  opacity:0;
+  animation:helloFade .9s ease forwards;
+  animation-delay:.9s;
+}
+
+@keyframes helloFade{
+  from{
+    opacity:0;
+    transform:translateY(18px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+
+
+
+
+@media(min-width:768px){
+
+.mypage{
+max-width:500px;
+margin:auto;
+}
+
+}
+
+
+
+
+/* 심플 안녕하세요 페이드 UI */
+.my-welcome{
+  background:#000; /* 전체 배경 검정 */
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  inset:0;
+  position:fixed;
+  z-index:9999;
+}
+
+.my-welcome .welcome-text{
+  color:#fff;
+  font-size:36px;
+  font-weight:900;
+  text-align:center;
+}
+
+.my-welcome .welcome-text p{
+  font-size:24px;
+  margin-top:16px;
+  font-weight:700;
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 0.8s ease, transform 0.8s ease;
+}
+
+/* JS에서 순차로 show 클래스 추가 */
+.my-welcome.show p:nth-child(1){
+  opacity:1;
+  transform:translateY(0);
+  transition-delay:0s;
+}
+.my-welcome.show p:nth-child(2){
+  opacity:1;
+  transform:translateY(0);
+  transition-delay:1s;
+}
+
+
+@media(max-width:768px){
+  .mobile-bottom-nav{
+    display:grid;
+  }
+}
+
+@media(max-width:768px){
+
+  .mobile-bottom-nav{
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+
+    width:100% !important;
+    height:72px !important;
+
+    display:grid !important;
+    grid-template-columns:repeat(4,1fr) !important;
+
+    background:#0b0b0c !important;
+    border-top:1px solid rgba(255,255,255,.06) !important;
+
+    z-index:999999 !important;
+  }
+
+}

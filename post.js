@@ -218,9 +218,22 @@ commentList.addEventListener("click", async (e)=>{
     const ref = doc(db,"boards",postId,"comments",id);
     const snap = await getDoc(ref);
 
-    await updateDoc(ref,{
-      likes: (snap.data().likes || 0) + 1
-    });
+const data = snap.data();
+
+const userId = currentUser?.email;
+
+let likedBy = data.likedBy || [];
+
+if(likedBy.includes(userId)){
+  return; // 이미 눌렀으면 종료
+}
+
+likedBy.push(userId);
+
+await updateDoc(ref,{
+  likes: likedBy.length,
+  likedBy: likedBy
+});
 
     loadComments();
   }

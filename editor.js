@@ -228,6 +228,8 @@ async function loadPostForEdit(){
   titleInput.value = post.title;
   contentBox.innerHTML = post.content;
 
+    submitBtn.textContent = "수정하기";
+
 }
 
 const editId = new URLSearchParams(location.search).get("id");
@@ -262,3 +264,4 @@ if(editId){
   });
 
 }
+

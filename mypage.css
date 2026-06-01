@@ -281,5 +281,6 @@ margin:auto;
 }
 
 body.welcoming .mobile-bottom-nav{
-  display:none !important;
+  opacity:0;
+  pointer-events:none;
 }

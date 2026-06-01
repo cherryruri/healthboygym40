@@ -60,7 +60,6 @@ document.body.classList.add("loaded");
 
 
 
-
   const userId = user.email ? user.email.split("@")[0] : "회원";
 
 

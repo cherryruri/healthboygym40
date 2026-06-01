@@ -38,11 +38,65 @@ const avatar = document.querySelector(".my-avatar");
 const mypageRoot = document.getElementById("mypageRoot");
 const myWelcome = document.getElementById("myWelcome");
 
+
 function setText(el, value){
   if(el) el.textContent = value || "-";
 }
 
-function showMypage(){
+onAuthStateChanged(auth, async (user)=>{
+
+const isFirstWelcome = sessionStorage.getItem("welcomeShown");
+
+
+
+
+if(!user){
+  location.href = "login.html";
+  return;
+}
+
+document.body.classList.add("loaded");
+
+
+
+
+
+  const userId = user.email ? user.email.split("@")[0] : "회원";
+
+
+  
+const showWelcome = sessionStorage.getItem("showWelcomeOnce");
+
+if(showWelcome === "yes"){
+document.body.classList.add("welcoming");
+
+
+sessionStorage.removeItem("showWelcomeOnce");
+
+  if(myWelcome){
+    myWelcome.style.display = "flex";
+  }
+
+  if(mypageRoot){
+    mypageRoot.style.display = "none";
+  }
+
+  setTimeout(()=>{
+
+    if(myWelcome){
+      myWelcome.style.display = "none";
+    }
+
+    if(mypageRoot){
+      mypageRoot.style.display = "block";
+    }
+document.body.classList.remove("welcoming");
+
+
+  },4200);
+
+}else{
+
   if(myWelcome){
     myWelcome.style.display = "none";
   }
@@ -50,42 +104,15 @@ function showMypage(){
   if(mypageRoot){
     mypageRoot.style.display = "block";
   }
-
-  document.body.classList.remove("welcoming");
+document.body.classList.remove("welcoming");
 }
 
-onAuthStateChanged(auth, async (user)=>{
 
-  if(!user){
-    location.href = "login.html";
-    return;
-  }
 
-  document.body.classList.add("loaded");
 
-  const userId = user.email ? user.email.split("@")[0] : "회원";
-  const showWelcome = sessionStorage.getItem("showWelcomeOnce");
 
-  if(showWelcome === "yes"){
 
-    document.body.classList.add("welcoming");
-    sessionStorage.removeItem("showWelcomeOnce");
 
-    if(myWelcome){
-      myWelcome.style.display = "flex";
-    }
-
-    if(mypageRoot){
-      mypageRoot.style.display = "none";
-    }
-
-    setTimeout(()=>{
-      showMypage();
-    },4200);
-
-  }else{
-    showMypage();
-  }
 
   setText(myName, `${userId}님`);
   setText(myId, user.email);
@@ -147,6 +174,9 @@ if(logoutBtn){
   });
 }
 
+
+/* 여기부터 추가 */
+
 const mypageBtn = document.getElementById("mypageBtn");
 
 if(mypageBtn){
@@ -159,5 +189,7 @@ if(mypageBtn){
     }else{
       location.href = "login.html";
     }
+
   });
 }
+

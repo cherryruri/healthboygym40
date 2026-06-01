@@ -55,7 +55,7 @@ if(!user){
   return;
 }
 
-
+document.body.classList.add("loaded");
 
 
 

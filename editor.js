@@ -178,7 +178,7 @@ if(dividerSelect){
       case "diamond":
         html = `
           <div style="margin:30px 0;text-align:center;color:#888;">
-            ───── ◇ ─────
+            ─────────────── ◇ ───────────────
           </div>
         `;
       break;
@@ -186,7 +186,7 @@ if(dividerSelect){
       case "dots":
         html = `
           <div style="margin:30px 0;text-align:center;color:#888;">
-            • • • • •
+            • • • • • • • • • • • • • • • • • • • • • • • • •
           </div>
         `;
       break;

@@ -5,14 +5,20 @@ import {
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
-
-
 import {
   getFirestore,
   doc,
   getDoc,
-  deleteDoc
+  deleteDoc,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+
+/* ================= FIREBASE ================= */
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -28,11 +34,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-let currentUser = null;
-let currentPost = null;
+/* ================= STATE ================= */
 
-const params = new URLSearchParams(location.search);
-const postId = params.get("id");
+let currentUser = null;
+
+const postId = new URLSearchParams(location.search).get("id");
 
 const titleEl = document.getElementById("postTitle");
 const writerEl = document.getElementById("postWriter");
@@ -40,97 +46,44 @@ const dateEl = document.getElementById("postDate");
 const contentEl = document.getElementById("postContent");
 const statusEl = document.getElementById("postStatus");
 
-const actionsEl = document.getElementById("postActions");
-const deleteBtn = document.getElementById("deletePostBtn");
-const editBtn = document.getElementById("editPostBtn");
-
-onAuthStateChanged(auth, async (user)=>{
-  currentUser = user;
-  await loadPost();
-});
-
-async function loadPost(){
-
-  if(!postId) return;
-
-  const snap = await getDoc(doc(db,"boards",postId));
-
-  if(!snap.exists()){
-    alert("삭제되었거나 존재하지 않는 글입니다.");
-    location.href = "board.html";
-    return;
-  }
-
-  currentPost = snap.data();
-
-  titleEl.textContent = currentPost.title;
-  writerEl.textContent = currentPost.writerId || "회원";
-
-  if(currentPost.createdAt?.toDate){
-    dateEl.textContent =
-      currentPost.createdAt.toDate().toLocaleDateString("ko-KR");
-  }
-
-const isWriter =
-  currentUser &&
-  currentPost.writerUid === currentUser.uid;
-
-if(currentPost.isSecret && !isWriter){
-  contentEl.innerHTML = `
-    <div class="secret-message">
-      비공개 글입니다.<br>
-      작성자만 내용을 확인할 수 있습니다.
-    </div>
-  `;
-}else{
-  contentEl.innerHTML = currentPost.content;
-}
-
-  statusEl.textContent =
-    currentPost.isPublic ? "공개글" : "비밀글";
-
-  if(
-    currentUser &&
-    currentPost.writerUid === currentUser.uid
-  ){
-    actionsEl.classList.add("show");
-  }
-}
-
-deleteBtn.addEventListener("click", async ()=>{
-
-  if(!confirm("정말 삭제하시겠습니까?")) return;
-
-  await deleteDoc(doc(db,"boards",postId));
-
-  alert("삭제되었습니다.");
-
-  location.href = "board.html";
-});
-
-editBtn.addEventListener("click", ()=>{
-
-  location.href =
-    `editor.html?id=${postId}`;
-
-});
-
-import {
-  collection,
-  addDoc,
-  getDocs,
-  query,
-  orderBy,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-
 const commentList = document.getElementById("commentList");
 const commentText = document.getElementById("commentText");
 const commentBtn = document.getElementById("commentBtn");
 
-async function loadComments(){
+/* ================= LOAD POST ================= */
 
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  loadPost();
+  loadComments();
+});
 
+async function loadPost() {
+
+  const snap = await getDoc(doc(db, "boards", postId));
+
+  if (!snap.exists()) {
+    alert("없는 글입니다");
+    location.href = "board.html";
+    return;
+  }
+
+  const data = snap.data();
+
+  titleEl.textContent = data.title;
+  writerEl.textContent = data.writerId || "회원";
+  contentEl.innerHTML = data.content;
+
+  if (data.createdAt?.toDate) {
+    dateEl.textContent = data.createdAt.toDate().toLocaleDateString("ko-KR");
+  }
+
+  statusEl.textContent = data.isPublic ? "공개글" : "비밀글";
+}
+
+/* ================= COMMENTS ================= */
+
+async function loadComments() {
 
   commentList.innerHTML = "";
 
@@ -141,46 +94,56 @@ async function loadComments(){
 
   const snap = await getDocs(q);
 
-  snap.forEach(doc=>{
+  snap.forEach((docSnap) => {
 
-
-    div.innerHTML = `
-  <div class="comment-box">
-    <div class="comment-left">
-      <div class="avatar">${(c.writer || "U").charAt(0)}</div>
-    </div>
-
-    <div class="comment-right">
-      <div class="comment-meta">
-        <span class="writer">${c.writer}</span>
-        <span class="time">${timeAgo(c.createdAt)}</span>
-      </div>
-
-      <div class="comment-text">
-        ${c.text}
-      </div>
-    </div>
-  </div>
-`;
-    const c = doc.data();
+    const c = docSnap.data();
 
     const div = document.createElement("div");
     div.className = "comment";
 
+    const isMine =
+      currentUser?.email?.split("@")[0] === c.writer;
 
+    div.innerHTML = `
+      <div class="comment-box">
 
+        <div class="comment-left">
+          <div class="avatar">
+            ${(c.writer || "U").charAt(0).toUpperCase()}
+          </div>
+        </div>
 
+        <div class="comment-right">
 
+          <div class="comment-meta">
+            <span class="writer">${c.writer}</span>
+            <span class="time">${timeAgo(c.createdAt)}</span>
+          </div>
 
+          <div class="comment-text">
+            ${c.text}
+          </div>
 
+          ${isMine ? `
+            <button class="delete-comment-btn" data-id="${docSnap.id}">
+              삭제
+            </button>
+          ` : ""}
+
+        </div>
+
+      </div>
+    `;
 
     commentList.appendChild(div);
   });
 }
 
-commentBtn.addEventListener("click", async ()=>{
+/* ================= ADD COMMENT ================= */
 
-  if(!commentText.value.trim()) return;
+commentBtn.addEventListener("click", async () => {
+
+  if (!commentText.value.trim()) return;
 
   await addDoc(
     collection(db, "boards", postId, "comments"),
@@ -193,31 +156,36 @@ commentBtn.addEventListener("click", async ()=>{
 
   commentText.value = "";
   loadComments();
-
-
 });
 
-loadComments();
-commentList.addEventListener("click", async (e)=>{
+/* ================= DELETE COMMENT ================= */
 
-  if(e.target.classList.contains("delete-comment-btn")){
+commentList.addEventListener("click", async (e) => {
+
+  if (e.target.classList.contains("delete-comment-btn")) {
 
     const id = e.target.dataset.id;
 
-    await deleteDoc(doc(db,"boards",postId,"comments",id));
+    await deleteDoc(doc(db, "boards", postId, "comments", id));
 
     loadComments();
   }
-
 });
 
-const timeAgo = (timestamp) => {
+/* ================= TIME ================= */
+
+function timeAgo(timestamp) {
+
+  if (!timestamp) return "";
+
   const now = new Date();
-  const time = timestamp?.toDate ? timestamp.toDate() : new Date();
+  const time = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+
   const diff = Math.floor((now - time) / 1000);
 
-  if(diff < 60) return "방금 전";
-  if(diff < 3600) return Math.floor(diff/60) + "분 전";
-  if(diff < 86400) return Math.floor(diff/3600) + "시간 전";
-  return Math.floor(diff/86400) + "일 전";
-};
+  if (diff < 60) return "방금 전";
+  if (diff < 3600) return Math.floor(diff / 60) + "분 전";
+  if (diff < 86400) return Math.floor(diff / 3600) + "시간 전";
+
+  return Math.floor(diff / 86400) + "일 전";
+}

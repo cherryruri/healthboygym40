@@ -54,12 +54,21 @@
     <input type="text" id="postTitle" class="editor-title-input" placeholder="제목을 입력하세요">
 <div class="editor-toolbar">
 
-  <select id="fontSizeSelect">
-    <option value="">폰트 사이즈</option>
-    <option value="3">보통</option>
-    <option value="4">크게</option>
-    <option value="5">아주 크게</option>
-  </select>
+<select id="fontSizeSelect">
+  <option value="14">14</option>
+  <option value="15" selected>15</option>
+  <option value="16">16</option>
+  <option value="18">18</option>
+  <option value="20">20</option>
+  <option value="24">24</option>
+  <option value="28">28</option>
+  <option value="32">32</option>
+</select>
+
+
+
+
+
 
   <button type="button" data-command="bold"><b>B</b></button>
   <button type="button" data-command="underline"><u>U</u></button>
@@ -71,9 +80,7 @@
 
   <button type="button" data-command="insertUnorderedList">• 목록</button>
   <button type="button" data-command="insertOrderedList">1. 목록</button>
-
-  <button type="button" id="linkBtn">링크</button>
-  <button type="button" id="unlinkBtn">링크해제</button>
+<button type="button" id="insertHrBtn">―</button>
 
   <input type="color" id="textColor" title="글자색">
 <input type="color" id="backColor" title="배경색">

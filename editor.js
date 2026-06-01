@@ -98,3 +98,20 @@ submitBtn.addEventListener("click", async ()=>{
 
   location.href = `board.html?board=${board}`;
 });
+
+if(unlinkBtn){
+  unlinkBtn.addEventListener("click", ()=>{
+    document.execCommand("unlink", false, null);
+    contentBox.focus();
+  });
+}
+
+if(fontSizeSelect){
+  fontSizeSelect.addEventListener("change", ()=>{
+    if(fontSizeSelect.value){
+      document.execCommand("fontSize", false, fontSizeSelect.value);
+      contentBox.focus();
+      fontSizeSelect.value = "";
+    }
+  });
+}

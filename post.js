@@ -296,3 +296,30 @@ deleteBtn.addEventListener("click", async () => {
   alert("삭제되었습니다.");
   location.href = "board.html";
 });
+
+
+
+commentList.addEventListener("click", async (e)=>{
+
+  const id = e.target.dataset.id;
+
+  // 삭제
+  if(e.target.classList.contains("delete-comment-btn")){
+    await deleteDoc(doc(db,"boards",postId,"comments",id));
+    loadComments();
+  }
+
+  // 수정
+  if(e.target.classList.contains("edit-comment-btn")){
+
+    const newText = prompt("댓글 수정");
+
+    if(!newText) return;
+
+    await updateDoc(doc(db,"boards",postId,"comments",id),{
+      text:newText
+    });
+
+    loadComments();
+  }
+});

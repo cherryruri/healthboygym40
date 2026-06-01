@@ -147,3 +147,55 @@ if(backColor){
     contentBox.focus();
   });
 }
+
+const dividerSelect = document.getElementById("dividerSelect");
+
+if(dividerSelect){
+  dividerSelect.addEventListener("change", ()=>{
+
+    let html = "";
+
+    switch(dividerSelect.value){
+
+      case "line":
+        html = `
+          <div style="margin:30px 0;text-align:center;">
+            <hr style="border:none;border-top:1px solid #ccc;">
+          </div>
+        `;
+      break;
+
+      case "double":
+        html = `
+          <div style="margin:30px 0;text-align:center;">
+            <hr style="border:none;border-top:3px solid #777;width:120px;">
+          </div>
+        `;
+      break;
+
+      case "diamond":
+        html = `
+          <div style="margin:30px 0;text-align:center;color:#888;">
+            ───── ◇ ─────
+          </div>
+        `;
+      break;
+
+      case "dots":
+        html = `
+          <div style="margin:30px 0;text-align:center;color:#888;">
+            • • • • •
+          </div>
+        `;
+      break;
+    }
+
+    if(html){
+      document.execCommand("insertHTML", false, html);
+    }
+
+    dividerSelect.value = "";
+    contentBox.focus();
+
+  });
+}

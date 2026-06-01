@@ -16,6 +16,7 @@ import {
   query,
   orderBy,
   serverTimestamp
+  
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 /* ================= FIREBASE ================= */
@@ -105,6 +106,11 @@ async function loadComments() {
       currentUser?.email?.split("@")[0] === c.writer;
 
     div.innerHTML = `
+<button class="like-btn" data-id="${docSnap.id}">
+  ❤️ ${c.likes || 0}
+</button>
+
+
       <div class="comment-box">
 
         <div class="comment-left">
@@ -190,3 +196,21 @@ function timeAgo(timestamp) {
 
   return Math.floor(diff / 86400) + "일 전";
 }
+
+commentList.addEventListener("click", async (e)=>{
+
+  if(e.target.classList.contains("like-btn")){
+
+    const id = e.target.dataset.id;
+
+    const ref = doc(db,"boards",postId,"comments",id);
+    const snap = await getDoc(ref);
+
+    await updateDoc(ref,{
+      likes: (snap.data().likes || 0) + 1
+    });
+
+    loadComments();
+  }
+
+});

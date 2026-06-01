@@ -142,23 +142,15 @@ async function loadComments(){
   const snap = await getDocs(q);
 
   snap.forEach(doc=>{
-    const c = doc.data();
-
-    const div = document.createElement("div");
-    div.className = "comment";
 
 
     div.innerHTML = `
   <div class="comment-box">
-
     <div class="comment-left">
-      <div class="avatar">
-        ${(c.writer || "U").charAt(0).toUpperCase()}
-      </div>
+      <div class="avatar">${(c.writer || "U").charAt(0)}</div>
     </div>
 
     <div class="comment-right">
-
       <div class="comment-meta">
         <span class="writer">${c.writer}</span>
         <span class="time">${timeAgo(c.createdAt)}</span>
@@ -167,17 +159,15 @@ async function loadComments(){
       <div class="comment-text">
         ${c.text}
       </div>
-
-      ${isMine ? `
-        <button class="delete-comment-btn" data-id="${doc.id}">
-          삭제
-        </button>
-      ` : ""}
-
     </div>
-
   </div>
 `;
+    const c = doc.data();
+
+    const div = document.createElement("div");
+    div.className = "comment";
+
+
 
 
 const isMe = currentUser?.email?.split("@")[0] === c.writer;
@@ -188,28 +178,7 @@ div.classList.add(isMe ? "me" : "other");
     const isMe = currentUser?.email?.split("@")[0] === c.writer;
 div.classList.add(isMe ? "me" : "other");
 
- div.innerHTML = `
-  <div class="comment-box">
-    
-    <div class="comment-left">
-      <div class="avatar">
-       ${(c.writer || "U").charAt(0).toUpperCase()}
-      </div>
-    </div>
 
-    <div class="comment-right">
-      <div class="comment-meta">
-        <span class="writer">${c.writer}</span>
-  <span class="time">${timeAgo(c.createdAt)}</span>
-      </div>
-
-      <div class="comment-text">
-        ${c.text}
-      </div>
-    </div>
-
-  </div>
-`;
 
     commentList.appendChild(div);
   });

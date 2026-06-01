@@ -8,12 +8,10 @@ import {
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs,
   query,
   where,
-  orderBy,
-  serverTimestamp
+  orderBy
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -31,25 +29,10 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentUser = null;
-let currentBoard = "free";
-
-const boardNames = {
-  free:"수내점자유게시판",
-  praise:"칭찬합니다",
-  news:"수내점소식",
-  review:"PT회원 실제 후기",
-  worry:"운동사춘기 호소글"
-};
+let currentBoard = new URLSearchParams(location.search).get("board") || "free";
 
 const postList = document.getElementById("postList");
 const writeBtn = document.getElementById("writeBtn");
-
-const writeModal = document.getElementById("writeModal");
-const writeClose = document.getElementById("writeClose");
-const writeBoardName = document.getElementById("writeBoardName");
-const postTitle = document.getElementById("postTitle");
-const postContent = document.getElementById("postContent");
-const submitPost = document.getElementById("submitPost");
 
 onAuthStateChanged(auth, (user)=>{
   currentUser = user;
@@ -57,15 +40,16 @@ onAuthStateChanged(auth, (user)=>{
 });
 
 document.querySelectorAll(".board-tab").forEach(tab=>{
-  tab.addEventListener("click", ()=>{
+  if(tab.dataset.board === currentBoard){
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
+  }
 
+  tab.addEventListener("click", ()=>{
     currentBoard = tab.dataset.board;
 
-    if(writeBoardName){
-      writeBoardName.textContent = boardNames[currentBoard];
-    }
+    document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
 
     loadPosts();
   });
@@ -73,62 +57,13 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
 
 if(writeBtn){
   writeBtn.addEventListener("click", ()=>{
-
     if(!currentUser){
       alert("로그인한 회원만 글을 쓸 수 있습니다.");
       location.href = "login.html";
       return;
     }
 
-    if(writeBoardName){
-      writeBoardName.textContent = boardNames[currentBoard];
-    }
-
-    if(postTitle) postTitle.value = "";
-    if(postContent) postContent.value = "";
-
-    writeModal.classList.add("show");
-  });
-}
-
-if(writeClose){
-  writeClose.addEventListener("click", ()=>{
-    writeModal.classList.remove("show");
-  });
-}
-
-if(submitPost){
-  submitPost.addEventListener("click", async ()=>{
-
-    const title = postTitle.value.trim();
-    const content = postContent.value.trim();
-
-    if(!title){
-      alert("제목을 입력해주세요.");
-      return;
-    }
-
-    if(!content){
-      alert("내용을 입력해주세요.");
-      return;
-    }
-
-    await addDoc(collection(db, "boards"), {
-      board: currentBoard,
-      title: title,
-      content: content,
-      writerId: currentUser.email.split("@")[0],
-      writerUid: currentUser.uid,
-      isSecret: true,
-      isPublic: false,
-      isNotice: false,
-      createdAt: serverTimestamp()
-    });
-
-    alert("글이 등록되었습니다. 관리자 공개 전까지 비밀글입니다.");
-
-    writeModal.classList.remove("show");
-    loadPosts();
+    location.href = `editor.html?board=${currentBoard}`;
   });
 }
 
@@ -171,21 +106,24 @@ async function loadPosts(){
     row.className = "board-row board-post";
 
     row.innerHTML = `
-      <div>${no}</div>
-      <div class="board-title">🔒 ${post.title}</div>
+      <div>${post.isNotice ? "공지" : no}</div>
+      <div class="board-title">${post.isPublic ? "" : "🔒"} ${post.title}</div>
       <div>${post.writerId || "회원"}</div>
       <div>${date}</div>
     `;
 
     row.addEventListener("click", ()=>{
       if(currentUser && currentUser.uid === post.writerUid){
-        alert(`${post.title}\n\n${post.content}`);
+        alert(`${post.title}\n\n${post.content.replace(/<[^>]*>/g, "")}`);
       }else{
         alert("비밀글입니다. 관리자 공개 후 확인할 수 있습니다.");
       }
     });
 
     postList.appendChild(row);
-    no--;
+
+    if(!post.isNotice){
+      no--;
+    }
   });
 }

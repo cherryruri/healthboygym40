@@ -91,8 +91,7 @@ submitBtn.addEventListener("click", async ()=>{
     isNotice: false,
     createdAt: serverTimestamp()
   });
-
-  alert("글이 등록되었습니다. 관리자 공개 전까지 비밀글입니다.");
+alert("글이 등록되었습니다. 비공개 글은 작성자만 내용을 확인할 수 있습니다.");
 
   location.href = `board.html?board=${board}`;
 });

@@ -162,3 +162,52 @@ outline:none;
 .editor-toolbar button{
 min-width:38px;
 }
+
+/* ===== 에디터 페이지 네이버카페 느낌 수정 ===== */
+
+body{
+background:#fff;
+color:#111;
+}
+
+.editor-page{
+background:#fff;
+}
+
+.editor-card{
+border-radius:0;
+box-shadow:none;
+border:1px solid #ddd;
+}
+
+.editor-title-input{
+background:#fff;
+color:#111;
+}
+
+.editor-toolbar{
+background:#f7f7f7;
+border-bottom:1px solid #ddd;
+}
+
+.editor-content{
+display:block;
+background:#fff;
+color:#111;
+min-height:420px;
+border-top:1px solid #eee;
+}
+
+.editor-content:empty:before{
+content:attr(data-placeholder);
+color:#999;
+}
+
+.editor-actions{
+background:#fff;
+}
+
+.editor-toolbar select,
+.editor-toolbar button{
+border-radius:4px;
+}

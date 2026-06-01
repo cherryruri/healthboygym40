@@ -55,6 +55,8 @@ document.querySelectorAll(".editor-toolbar button[data-command]").forEach(btn=>{
 const linkBtn = document.getElementById("linkBtn");
 const unlinkBtn = document.getElementById("unlinkBtn");
 const fontSizeSelect = document.getElementById("fontSizeSelect");
+const textColor = document.getElementById("textColor");
+const backColor = document.getElementById("backColor");
 
 
 if(linkBtn){
@@ -113,5 +115,19 @@ if(fontSizeSelect){
       contentBox.focus();
       fontSizeSelect.value = "";
     }
+  });
+}
+
+if(textColor){
+  textColor.addEventListener("input", ()=>{
+    document.execCommand("foreColor", false, textColor.value);
+    contentBox.focus();
+  });
+}
+
+if(backColor){
+  backColor.addEventListener("input", ()=>{
+    document.execCommand("hiliteColor", false, backColor.value);
+    contentBox.focus();
   });
 }

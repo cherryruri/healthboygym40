@@ -121,9 +121,14 @@ async function loadComments() {
         <div class="comment-right">
 
           <div class="comment-meta">
+
+            <span class="writer">${c.writer}</span>
+  <span class="time">${timeAgo(c.createdAt)}</span>
+
           <button class="like-btn" data-id="${docSnap.id}">
-  ❤️ ${c.likes || 0}
-</button>
+           ❤️ ${c.likes || 0}
+          </button>
+          
             <span class="writer">${c.writer}</span>
             <span class="time">${timeAgo(c.createdAt)}</span>
           </div>

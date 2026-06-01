@@ -121,3 +121,32 @@ import {
   orderBy,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+
+const commentList = document.getElementById("commentList");
+const commentText = document.getElementById("commentText");
+const commentBtn = document.getElementById("commentBtn");
+
+async function loadComments(){
+
+  commentList.innerHTML = "";
+
+  const q = query(
+    collection(db, "boards", postId, "comments"),
+    orderBy("createdAt", "asc")
+  );
+
+  const snap = await getDocs(q);
+
+  snap.forEach(doc=>{
+    const c = doc.data();
+
+    const div = document.createElement("div");
+    div.className = "comment";
+
+    div.innerHTML = `
+      <b>${c.writer}</b> : ${c.text}
+    `;
+
+    commentList.appendChild(div);
+  });
+}

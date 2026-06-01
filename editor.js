@@ -108,15 +108,31 @@ if(unlinkBtn){
   });
 }
 
-if(fontSizeSelect){
-  fontSizeSelect.addEventListener("change", ()=>{
-    if(fontSizeSelect.value){
-      document.execCommand("fontSize", false, fontSizeSelect.value);
-      contentBox.focus();
-      fontSizeSelect.value = "";
-    }
+
+const insertHrBtn = document.getElementById("insertHrBtn");
+
+if(insertHrBtn){
+  insertHrBtn.addEventListener("click", ()=>{
+    document.execCommand("insertHTML", false, "<hr>");
+    contentBox.focus();
   });
 }
+
+if(fontSizeSelect){
+  fontSizeSelect.addEventListener("change", ()=>{
+    document.execCommand(
+      "insertHTML",
+      false,
+      `<span style="font-size:${fontSizeSelect.value}px">${window.getSelection()}</span>`
+    );
+  });
+}
+
+
+
+
+
+
 
 if(textColor){
   textColor.addEventListener("input", ()=>{

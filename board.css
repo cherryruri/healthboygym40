@@ -179,3 +179,16 @@ color:#888;
   }
 
 }
+
+@media(max-width:768px){
+
+  .mobile-bottom-nav{
+    display:grid;
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index:999999;
+  }
+
+}

@@ -114,7 +114,7 @@ submitBtn.addEventListener("click", async ()=>{
 
   alert("글이 등록되었습니다.");
 }
-
+});
 location.href = "board.html";
 
 

@@ -86,10 +86,24 @@ submitBtn.addEventListener("click", async ()=>{
     return;
   }
 
+  if(editId){
+
+  await updateDoc(
+    doc(db,"boards",editId),
+    {
+      title,
+      content
+    }
+  );
+
+  alert("수정되었습니다.");
+
+}else{
+
   await addDoc(collection(db, "boards"), {
-    board: board,
-    title: title,
-    content: content,
+    board,
+    title,
+    content,
     writerId: currentUser.email.split("@")[0],
     writerUid: currentUser.uid,
     isSecret: true,
@@ -97,11 +111,11 @@ submitBtn.addEventListener("click", async ()=>{
     isNotice: false,
     createdAt: serverTimestamp()
   });
-alert("글이 등록되었습니다. 비공개 글은 작성자만 내용을 확인할 수 있습니다.");
 
-  location.href = `board.html?board=${board}`;
-});
+  alert("글이 등록되었습니다.");
+}
 
+location.href = "board.html";
 
 
 

@@ -50,52 +50,55 @@
 
 
 
-
-
 <section class="board-page">
 
   <div class="board-header">
-    <h1>게시판</h1>
-    <p>헬스보이짐 수내점 소식과 회원 커뮤니티</p>
+    <h1>BOARD</h1>
+    <p>헬스보이짐 수내점 회원 게시판</p>
   </div>
 
-  <div class="board-search">
-    <input type="text" placeholder="검색어를 입력하세요">
+  <div class="board-tabs">
+    <button class="board-tab active" data-board="free">수내점자유게시판</button>
+    <button class="board-tab" data-board="praise">칭찬합니다</button>
+    <button class="board-tab" data-board="news">수내점소식</button>
+    <button class="board-tab" data-board="review">PT회원 실제 후기</button>
+    <button class="board-tab" data-board="worry">운동사춘기 호소글</button>
   </div>
 
-  <div class="board-list">
+  <div class="board-table">
+    <div class="board-row board-head">
+      <div>No</div>
+      <div>제목</div>
+      <div>글쓴이</div>
+      <div>작성시간</div>
+    </div>
 
-    <a href="#" class="board-item">
-      <span class="board-no">공지</span>
-      <div class="board-content">
-        <h3>헬스보이짐 수내점 이용 안내</h3>
-        <p>2026.06.02</p>
-      </div>
-    </a>
-
-    <a href="#" class="board-item">
-      <span class="board-no">1</span>
-      <div class="board-content">
-        <h3>게시판 테스트 글입니다.</h3>
-        <p>2026.06.02</p>
-      </div>
-    </a>
-
-    <a href="#" class="board-item">
-      <span class="board-no">2</span>
-      <div class="board-content">
-        <h3>PT 후기 게시판 준비중입니다.</h3>
-        <p>2026.06.02</p>
-      </div>
-    </a>
-
+    <div id="noticeList"></div>
+    <div id="postList"></div>
   </div>
 
-  <button class="write-btn">
-    글쓰기
-  </button>
+  <div class="board-bottom">
+    <input type="text" id="boardSearch" placeholder="Search">
+    <button id="writeBtn" class="write-btn">글쓰기</button>
+  </div>
+
+  <div id="pagination" class="pagination"></div>
 
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- PC FLOATING WIDGET -->
 <nav class="pc-floating-widget">
@@ -173,6 +176,9 @@
 </nav>
 
 
+
+<script type="module" src="firebase-index.js?v=1"></script>
+<script type="module" src="board.js?v=1"></script>
 
 
 </body>

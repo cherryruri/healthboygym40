@@ -212,3 +212,151 @@ color:#888;
   }
 
 }
+
+/* ===== 게시판 탭/표 디자인 추가 ===== */
+
+.board-tabs{
+display:flex;
+justify-content:center;
+gap:28px;
+margin-bottom:42px;
+border-bottom:1px solid #111;
+padding-bottom:26px;
+overflow-x:auto;
+white-space:nowrap;
+}
+
+.board-tab{
+border:none;
+background:none;
+color:#777;
+font-size:14px;
+font-weight:900;
+cursor:pointer;
+position:relative;
+padding:8px 0;
+}
+
+.board-tab.active{
+color:#111;
+}
+
+.board-tab.active::after{
+content:"";
+position:absolute;
+left:50%;
+bottom:-6px;
+transform:translateX(-50%);
+width:26px;
+height:3px;
+background:#fff200;
+border-radius:999px;
+}
+
+.board-table{
+border-top:2px solid #111;
+}
+
+.board-row{
+display:grid;
+grid-template-columns:70px 1fr 120px 120px;
+align-items:center;
+min-height:46px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+.board-row > div{
+padding:0 12px;
+}
+
+.board-head{
+font-size:13px;
+font-weight:900;
+color:#555;
+}
+
+.board-title{
+font-weight:800;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.board-bottom{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+margin-top:24px;
+}
+
+#boardSearch{
+width:260px;
+height:40px;
+border:1px solid #ddd;
+padding:0 14px;
+font-size:13px;
+outline:none;
+}
+
+.pagination{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:7px;
+margin-top:28px;
+}
+
+.pagination button{
+min-width:34px;
+height:34px;
+border:1px solid #ddd;
+background:#fff;
+color:#111;
+font-weight:800;
+cursor:pointer;
+}
+
+.pagination button.active{
+background:#111;
+color:#fff200;
+border-color:#111;
+}
+
+@media(max-width:768px){
+
+.board-tabs{
+justify-content:flex-start;
+gap:22px;
+margin-bottom:28px;
+padding-bottom:20px;
+}
+
+.board-tab{
+font-size:13px;
+}
+
+.board-row{
+grid-template-columns:42px 1fr 58px 74px;
+min-height:44px;
+font-size:12px;
+}
+
+.board-row > div{
+padding:0 6px;
+}
+
+.board-head{
+font-size:11px;
+}
+
+.board-bottom{
+justify-content:space-between;
+}
+
+#boardSearch{
+width:calc(100% - 94px);
+}
+
+}

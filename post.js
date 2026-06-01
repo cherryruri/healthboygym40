@@ -157,7 +157,7 @@ div.classList.add(isMe ? "me" : "other");
     <div class="comment-right">
       <div class="comment-meta">
         <span class="writer">${c.writer}</span>
-        <span class="time">방금 전</span>
+  <span class="time">${timeAgo(c.createdAt)}</span>
       </div>
 
       <div class="comment-text">

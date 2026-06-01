@@ -142,6 +142,8 @@ async function loadComments(){
 
     const div = document.createElement("div");
     div.className = "comment";
+    const isMe = currentUser?.email?.split("@")[0] === c.writer;
+div.classList.add(isMe ? "me" : "other");
 
  div.innerHTML = `
   <div class="comment-box">

@@ -57,6 +57,10 @@ const unlinkBtn = document.getElementById("unlinkBtn");
 const fontSizeSelect = document.getElementById("fontSizeSelect");
 const textColor = document.getElementById("textColor");
 const backColor = document.getElementById("backColor");
+const textColorBtn = document.getElementById("textColorBtn");
+const backColorBtn = document.getElementById("backColorBtn");
+const clearColorBtn = document.getElementById("clearColorBtn");
+
 
 
 if(linkBtn){

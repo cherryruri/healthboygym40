@@ -113,12 +113,8 @@ async function loadPosts(){
     `;
 
     row.addEventListener("click", ()=>{
-      if(currentUser && currentUser.uid === post.writerUid){
-        alert(`${post.title}\n\n${post.content.replace(/<[^>]*>/g, "")}`);
-      }else{
-        alert("비밀글입니다. 관리자 공개 후 확인할 수 있습니다.");
-      }
-    });
+  location.href = `post.html?id=${docSnap.id}`;
+});
 
     postList.appendChild(row);
 

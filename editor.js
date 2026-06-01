@@ -205,3 +205,17 @@ if(clearColorBtn){
     contentBox.focus();
   });
 }
+
+async function loadPostForEdit(){
+
+  const snap =
+    await getDoc(doc(db,"boards",editId));
+
+  if(!snap.exists()) return;
+
+  const post = snap.data();
+
+  titleInput.value = post.title;
+  contentBox.innerHTML = post.content;
+
+}

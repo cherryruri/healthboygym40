@@ -68,6 +68,8 @@ document.body.classList.add("loaded");
 const showWelcome = sessionStorage.getItem("showWelcomeOnce");
 
 if(showWelcome === "yes"){
+document.body.classList.add("welcoming");
+
 
 sessionStorage.removeItem("showWelcomeOnce");
 
@@ -88,6 +90,8 @@ sessionStorage.removeItem("showWelcomeOnce");
     if(mypageRoot){
       mypageRoot.style.display = "block";
     }
+document.body.classList.remove("welcoming");
+
 
   },4200);
 
@@ -100,7 +104,7 @@ sessionStorage.removeItem("showWelcomeOnce");
   if(mypageRoot){
     mypageRoot.style.display = "block";
   }
-
+document.body.classList.remove("welcoming");
 }
 
 

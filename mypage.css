@@ -279,3 +279,7 @@ margin:auto;
   }
 
 }
+
+body.welcoming .mobile-bottom-nav{
+  display:none !important;
+}

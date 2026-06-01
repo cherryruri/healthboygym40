@@ -229,6 +229,9 @@ async function loadPostForEdit(){
   contentBox.innerHTML = post.content;
 
     submitBtn.textContent = "수정하기";
+    submitBtn.style.background = "#444";
+
+
 
 }
 

@@ -301,3 +301,13 @@ justify-content:center;
 font-size:14px;
 font-weight:700;
 }
+
+.editor-toolbar select{
+padding:0 8px;
+}
+
+.color-btn{
+width:36px;
+height:34px;
+border-radius:6px;
+}

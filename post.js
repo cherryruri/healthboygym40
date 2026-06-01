@@ -169,6 +169,7 @@ commentBtn.addEventListener("click", async () => {
     writer: currentUser?.email?.split("@")[0] || "익명",
     createdAt: serverTimestamp(),
     likes: 0   // ⭐ 이거 한 줄 추가
+      likedBy: []   // ⭐ 추가
   }
 );
 

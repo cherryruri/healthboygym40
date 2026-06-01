@@ -9,8 +9,11 @@ import {
   getFirestore,
   collection,
   addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+  serverTimestamp,
+  doc,
+  getDoc,
+  updateDoc
+}from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",

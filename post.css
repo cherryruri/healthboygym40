@@ -1,0 +1,112 @@
+.post-page{
+max-width:1000px;
+margin:auto;
+padding:140px 20px 120px;
+}
+
+.post-card{
+background:#fff;
+border:1px solid #eee;
+border-radius:24px;
+padding:34px;
+box-shadow:0 20px 50px rgba(0,0,0,.06);
+}
+
+.post-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:24px;
+}
+
+.back-list{
+color:#111;
+font-weight:900;
+text-decoration:none;
+}
+
+.post-status{
+padding:8px 14px;
+border-radius:999px;
+background:#111;
+color:#fff200;
+font-size:12px;
+font-weight:900;
+}
+
+.post-card h1{
+font-size:34px;
+font-weight:900;
+margin-bottom:16px;
+}
+
+.post-meta{
+display:flex;
+gap:14px;
+color:#777;
+font-size:13px;
+font-weight:700;
+padding-bottom:24px;
+border-bottom:1px solid #eee;
+}
+
+.post-content{
+min-height:320px;
+padding:30px 0;
+font-size:16px;
+line-height:1.9;
+}
+
+.post-actions{
+display:none;
+justify-content:flex-end;
+gap:10px;
+border-top:1px solid #eee;
+padding-top:20px;
+}
+
+.post-actions.show{
+display:flex;
+}
+
+.post-actions button{
+width:86px;
+height:42px;
+border:none;
+border-radius:999px;
+font-weight:900;
+cursor:pointer;
+}
+
+#editPostBtn{
+background:#111;
+color:#fff;
+}
+
+#deletePostBtn{
+background:#f1f1f1;
+color:#111;
+}
+
+@media(max-width:768px){
+.post-page{
+padding:110px 14px 110px;
+}
+
+.post-card{
+padding:24px 18px;
+border-radius:20px;
+}
+
+.post-card h1{
+font-size:26px;
+}
+
+.post-actions{
+flex-direction:column;
+}
+
+.post-actions button{
+width:100%;
+}
+}

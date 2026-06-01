@@ -150,3 +150,22 @@ async function loadComments(){
     commentList.appendChild(div);
   });
 }
+
+commentBtn.addEventListener("click", async ()=>{
+
+  if(!commentText.value.trim()) return;
+
+  await addDoc(
+    collection(db, "boards", postId, "comments"),
+    {
+      text: commentText.value,
+      writer: currentUser?.email?.split("@")[0] || "익명",
+      createdAt: serverTimestamp()
+    }
+  );
+
+  commentText.value = "";
+  loadComments();
+});
+
+loadComments();

@@ -52,23 +52,30 @@
   <section class="editor-card">
 
     <input type="text" id="postTitle" class="editor-title-input" placeholder="제목을 입력하세요">
+<div class="editor-toolbar">
 
-    <div class="editor-toolbar">
-      <button type="button" data-command="bold"><b>B</b></button>
-      <button type="button" data-command="underline"><u>U</u></button>
-      <button type="button" data-command="insertUnorderedList">• 목록</button>
-      <button type="button" data-command="justifyLeft">왼쪽</button>
-      <button type="button" data-command="justifyCenter">가운데</button>
-      <button type="button" id="linkBtn">링크</button>
-    </div>
+  <select id="fontSizeSelect">
+    <option value="">폰트 사이즈</option>
+    <option value="3">보통</option>
+    <option value="4">크게</option>
+    <option value="5">아주 크게</option>
+  </select>
 
-    <div id="postContent" class="editor-content" contenteditable="true" data-placeholder="내용을 입력하세요"></div>
+  <button type="button" data-command="bold"><b>B</b></button>
+  <button type="button" data-command="underline"><u>U</u></button>
+  <button type="button" data-command="strikeThrough"><s>ABC</s></button>
 
-    <div class="editor-actions">
-      <a href="board.html" class="cancel-btn">취소</a>
-      <button type="button" id="submitPost" class="submit-btn">등록하기</button>
-    </div>
+  <button type="button" data-command="justifyLeft">왼쪽</button>
+  <button type="button" data-command="justifyCenter">가운데</button>
+  <button type="button" data-command="justifyRight">오른쪽</button>
 
+  <button type="button" data-command="insertUnorderedList">• 목록</button>
+  <button type="button" data-command="insertOrderedList">1. 목록</button>
+
+  <button type="button" id="linkBtn">링크</button>
+  <button type="button" id="unlinkBtn">링크해제</button>
+
+</div>
   </section>
 
 </main>

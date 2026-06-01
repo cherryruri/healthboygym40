@@ -170,13 +170,7 @@ async function loadComments(){
 
 
 
-const isMe = currentUser?.email?.split("@")[0] === c.writer;
-div.classList.add(isMe ? "me" : "other");
 
-
-
-    const isMe = currentUser?.email?.split("@")[0] === c.writer;
-div.classList.add(isMe ? "me" : "other");
 
 
 

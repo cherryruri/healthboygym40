@@ -17,6 +17,7 @@ import {
   query,
   orderBy,
   serverTimestamp
+  setDoc
   
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
@@ -105,8 +106,7 @@ async function loadComments() {
     const div = document.createElement("div");
     div.className = "comment";
 
-    const isMine =
-      currentUser?.email?.split("@")[0] === c.writer;
+  
 
     div.innerHTML = `
 

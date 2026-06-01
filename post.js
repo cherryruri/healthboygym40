@@ -6,13 +6,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
 
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  deleteDoc
-} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-
 
 import {
   getFirestore,
@@ -137,6 +130,8 @@ const commentBtn = document.getElementById("commentBtn");
 
 async function loadComments(){
 
+
+
   commentList.innerHTML = "";
 
   const q = query(
@@ -235,10 +230,23 @@ commentBtn.addEventListener("click", async ()=>{
 
   commentText.value = "";
   loadComments();
+
+
 });
 
 loadComments();
+commentList.addEventListener("click", async (e)=>{
 
+  if(e.target.classList.contains("delete-comment-btn")){
+
+    const id = e.target.dataset.id;
+
+    await deleteDoc(doc(db,"boards",postId,"comments",id));
+
+    loadComments();
+  }
+
+});
 
 const timeAgo = (timestamp) => {
   const now = new Date();

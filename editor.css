@@ -286,3 +286,9 @@ font-size:13px;
 cursor:pointer;
 transition:.15s;
 }
+
+.editor-toolbar button:hover{
+background:#111;
+color:#fff;
+border-color:#111;
+}

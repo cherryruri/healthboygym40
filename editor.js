@@ -34,8 +34,8 @@ let currentUser = null;
 const titleInput = document.getElementById("postTitle");
 const contentBox = document.getElementById("postContent");
 const submitBtn = document.getElementById("submitPost");
-
 const params = new URLSearchParams(location.search);
+const board = params.get("board") || "free";
 const editId = params.get("id");
 
 onAuthStateChanged(auth, (user)=>{

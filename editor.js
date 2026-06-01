@@ -194,3 +194,22 @@ if(dividerSelect){
 
   });
 }
+
+if(textColorBtn && textColor){
+  textColorBtn.addEventListener("click", ()=>{
+    textColor.click();
+  });
+}
+
+if(backColorBtn && backColor){
+  backColorBtn.addEventListener("click", ()=>{
+    backColor.click();
+  });
+}
+
+if(clearColorBtn){
+  clearColorBtn.addEventListener("click", ()=>{
+    document.execCommand("removeFormat", false, null);
+    contentBox.focus();
+  });
+}

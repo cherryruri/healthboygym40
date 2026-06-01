@@ -121,7 +121,6 @@ async function loadComments() {
         <div class="comment-right">
 
 
-
 <div class="comment-meta">
 
   <span class="writer">${c.writer}</span>
@@ -132,10 +131,6 @@ async function loadComments() {
   </button>
 
 </div>
-
-
-
-
 
 
 

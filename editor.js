@@ -232,21 +232,6 @@ async function loadPostForEdit(){
 
 }
 
-const editId = new URLSearchParams(location.search).get("id");
-
-if(editId){
-  const snap = await getDoc(doc(db,"boards",editId));
-
-  if(snap.exists()){
-    const data = snap.data();
-
-    titleInput.value = data.title;
-    contentBox.innerHTML = data.content;
-
-    // 수정 모드 표시
-    submitBtn.textContent = "수정하기";
-  }
-}
 
 
 

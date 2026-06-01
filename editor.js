@@ -109,15 +109,6 @@ if(unlinkBtn){
 }
 
 
-const insertHrBtn = document.getElementById("insertHrBtn");
-
-if(insertHrBtn){
-  insertHrBtn.addEventListener("click", ()=>{
-    document.execCommand("insertHTML", false, "<hr>");
-    contentBox.focus();
-  });
-}
-
 if(fontSizeSelect){
   fontSizeSelect.addEventListener("change", ()=>{
     document.execCommand(

@@ -240,3 +240,60 @@ cursor:pointer;
   background:#fff200;
   color:#000;
 }
+
+
+.comment-section{
+  margin-top:40px;
+  border-top:1px solid #eee;
+  padding-top:20px;
+}
+
+.comment{
+  margin-bottom:14px;
+}
+
+.comment-box{
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:10px 0;
+}
+
+.comment-left .avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#111;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:14px;
+}
+
+.comment-right{
+  flex:1;
+}
+
+.comment-meta{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-bottom:4px;
+}
+
+.comment-meta .writer{
+  font-weight:900;
+  font-size:13px;
+}
+
+.comment-meta .time{
+  font-size:12px;
+  color:#999;
+}
+
+.comment-text{
+  font-size:14px;
+  line-height:1.5;
+}

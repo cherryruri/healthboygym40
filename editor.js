@@ -36,7 +36,7 @@ const contentBox = document.getElementById("postContent");
 const submitBtn = document.getElementById("submitPost");
 
 const params = new URLSearchParams(location.search);
-const board = params.get("board") || "free";
+const editId = params.get("id");
 
 onAuthStateChanged(auth, (user)=>{
   if(!user){
@@ -46,6 +46,9 @@ onAuthStateChanged(auth, (user)=>{
   }
 
   currentUser = user;
+    if(editId){
+    loadPostForEdit();
+  }
 });
 
 document.querySelectorAll(".editor-toolbar button[data-command]").forEach(btn=>{

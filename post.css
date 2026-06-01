@@ -460,3 +460,16 @@ cursor:pointer;
 .like-btn.liked {
   color: #fff200; /* 노란색 */
 }
+
+
+.like-btn{
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:14px;
+  margin-left:auto;
+}
+
+.like-btn.liked{
+  color:#fff200;
+}

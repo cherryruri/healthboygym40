@@ -126,9 +126,11 @@ async function loadComments() {
   <span class="writer">${c.writer}</span>
   <span class="time">${timeAgo(c.createdAt)}</span>
 
-  <button class="like-btn" data-id="${docSnap.id}">
-    ❤️ ${c.likes || 0}
-  </button>
+const isLiked = c.likedBy?.includes(currentUser?.email);
+
+<button class="like-btn ${isLiked ? "liked" : ""}" data-id="${docSnap.id}">
+  ${isLiked ? "💛" : "🤍"} ${c.likes || 0}
+</button>
 
 </div>
 

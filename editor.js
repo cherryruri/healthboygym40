@@ -52,8 +52,8 @@ document.querySelectorAll(".editor-toolbar button[data-command]").forEach(btn=>{
   });
 });
 
-const linkBtn = document.getElementById("linkBtn");
-const unlinkBtn = document.getElementById("unlinkBtn");
+
+
 const fontSizeSelect = document.getElementById("fontSizeSelect");
 const textColor = document.getElementById("textColor");
 const backColor = document.getElementById("backColor");
@@ -63,15 +63,7 @@ const clearColorBtn = document.getElementById("clearColorBtn");
 
 
 
-if(linkBtn){
-  linkBtn.addEventListener("click", ()=>{
-    const url = prompt("링크 주소를 입력하세요.");
-    if(url){
-      document.execCommand("createLink", false, url);
-      contentBox.focus();
-    }
-  });
-}
+
 
 submitBtn.addEventListener("click", async ()=>{
 
@@ -105,12 +97,7 @@ submitBtn.addEventListener("click", async ()=>{
   location.href = `board.html?board=${board}`;
 });
 
-if(unlinkBtn){
-  unlinkBtn.addEventListener("click", ()=>{
-    document.execCommand("unlink", false, null);
-    contentBox.focus();
-  });
-}
+
 
 
 if(fontSizeSelect){

@@ -112,7 +112,19 @@ async function loadPosts(){
       <div>${date}</div>
     `;
 
-  row.addEventListener("click", ()=>{
+row.addEventListener("click", ()=>{
+
+  const post = docSnap.data();
+
+  const isWriter =
+    currentUser &&
+    currentUser.uid === post.writerUid;
+
+  if(post.isSecret && !isWriter){
+    alert("🔒 비밀글입니다. 작성자만 볼 수 있어요.");
+    return;
+  }
+
   location.href = `post.html?id=${docSnap.id}`;
 });
 

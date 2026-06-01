@@ -275,3 +275,22 @@ likeBtn.addEventListener("click", async () => {
 
 // 초기 로드
 loadLikeStatus();
+
+const editBtn = document.getElementById("editPostBtn");
+const deleteBtn = document.getElementById("deletePostBtn");
+
+// 수정
+editBtn.addEventListener("click", () => {
+  location.href = `editor.html?id=${postId}`;
+});
+
+// 삭제
+deleteBtn.addEventListener("click", async () => {
+
+  if(!confirm("정말 삭제하시겠습니까?")) return;
+
+  await deleteDoc(doc(db,"boards",postId));
+
+  alert("삭제되었습니다.");
+  location.href = "board.html";
+});

@@ -144,6 +144,37 @@ async function loadComments(){
     div.className = "comment";
 
 
+    div.innerHTML = `
+  <div class="comment-box">
+
+    <div class="comment-left">
+      <div class="avatar">
+        ${(c.writer || "U").charAt(0).toUpperCase()}
+      </div>
+    </div>
+
+    <div class="comment-right">
+
+      <div class="comment-meta">
+        <span class="writer">${c.writer}</span>
+        <span class="time">${timeAgo(c.createdAt)}</span>
+      </div>
+
+      <div class="comment-text">
+        ${c.text}
+      </div>
+
+      ${isMine ? `
+        <button class="delete-comment-btn" data-id="${doc.id}">
+          삭제
+        </button>
+      ` : ""}
+
+    </div>
+
+  </div>
+`;
+
 
 const isMe = currentUser?.email?.split("@")[0] === c.writer;
 div.classList.add(isMe ? "me" : "other");

@@ -100,20 +100,14 @@ async function loadComments() {
   snap.forEach((docSnap) => {
 
     const c = docSnap.data();
-    const isMine =
-  currentUser?.email?.split("@")[0] === c.writer;
 
+const isMine = currentUser?.email?.split("@")[0] === c.writer;
 const isLiked = c.likedBy?.includes(currentUser?.email);
-  
 
-    const div = document.createElement("div");
-    div.className = "comment";
+const div = document.createElement("div");
+div.className = "comment";
 
-  
-
-    div.innerHTML = `
-
-
+div.innerHTML = `
 
       <div class="comment-box">
 

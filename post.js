@@ -101,6 +101,9 @@ async function loadComments() {
 
     const c = docSnap.data();
     const isMine =
+  currentUser?.email?.split("@")[0] === c.writer;
+
+const isLiked = c.likedBy?.includes(currentUser?.email);
   
 
     const div = document.createElement("div");

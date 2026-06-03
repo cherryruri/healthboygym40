@@ -445,11 +445,10 @@ body.welcoming .mobile-bottom-nav{
     bottom:40px;
 
     width:170px;
-    height:52px;
-
-    background:#fff200;
-    color:#000;
-    border-radius:999px;
+     height:62px;
+  background:#fff200;
+  color:#000;
+  border-radius:999px;
   }
 }
 

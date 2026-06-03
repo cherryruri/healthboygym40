@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내가 쓴 댓글</title>
 
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=2">
 <link rel="stylesheet" href="board.css?v=2">
 </head>
 
@@ -13,6 +13,7 @@
 
 <header>
   <nav class="navbar">
+
     <div class="logo">
       <a href="index.html">HEALTHBOYGYM</a>
     </div>
@@ -26,83 +27,58 @@
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="index.html#faq">FAQ</a></li>
+
+      <li class="login-menu" id="userMenu">
+        <a href="login.html" id="loginLink">LOGIN</a>
+        <button id="logoutBtn" style="display:none;">LOGOUT</button>
+      </li>
     </ul>
 
-    <a href="mypage.html" class="download-btn">마이페이지로 돌아가기</a>
+    <a href="mypage.html" class="download-btn">
+      마이페이지로 돌아가기
+    </a>
+
+    <button class="mobile-menu-btn">☰</button>
+
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="mobile-side-menu">
+
+      <div class="mobile-side-top">
+        <button class="mobile-close">×</button>
+      </div>
+
+      <a href="login.html" class="mobile-profile-card" id="mobileProfileCard">
+        <div class="mobile-profile-avatar">
+          <span>👤</span>
+        </div>
+
+        <div class="mobile-profile-info">
+          <strong id="mobileProfileName">LOGIN</strong>
+          <p id="mobileProfileText">로그인 후 마이페이지를 이용해보세요.</p>
+        </div>
+      </a>
+
+      <a href="index.html#about">센터 소개</a>
+      <a href="index.html#brand">브랜드 소개</a>
+      <a href="index.html#facility">시설 투어</a>
+      <a href="index.html#pass">올패스 안내</a>
+      <a href="index.html#trainer">트레이너 소개</a>
+      <a href="index.html#hours">운영 시간</a>
+      <a href="index.html#location">오시는 길</a>
+      <a href="index.html#faq">FAQ</a>
+
+      <a href="./login.html" id="mobileLoginLink">LOGIN</a>
+      <button id="mobileLogoutBtn" style="display:none;">LOGOUT</button>
+
+      <a class="mobile-side-reserve" href="https://map.naver.com" target="_blank">
+        네이버 문의 및 예약 바로가기
+      </a>
+
+    </div>
+
   </nav>
 </header>
-
-
-<button class="mobile-menu-btn">
-  ☰
-</button>
-
-<div class="mobile-menu-overlay"></div>
-
-<div class="mobile-side-menu">
-
-  
-
-
-
-  <div class="mobile-side-top">
-
-  <button class="mobile-close">
-    ×
-  </button>
-
-</div>
-
-
-<a href="login.html" class="mobile-profile-card" id="mobileProfileCard">
-  <div class="mobile-profile-avatar">
-    <span>👤</span>
-  </div>
-
-  <div class="mobile-profile-info">
-    <strong id="mobileProfileName">LOGIN</strong>
-    <p id="mobileProfileText">로그인 후 마이페이지를 이용해보세요.</p>
-  </div>
-</a>
-
-
-
-
-
-
-
-
-
-<a href="index.html#about">센터 소개</a>
-<a href="index.html#brand">브랜드 소개</a>
-<a href="index.html#facility">시설 투어</a>
-<a href="index.html#pass">올패스 안내</a>
-<a href="index.html#trainer">트레이너 소개</a>
-<a href="index.html#hours">운영 시간</a>
-<a href="index.html#location">오시는 길</a>
-<a href="index.html#faq">FAQ</a>
-
- 
-
-<a href="./login.html" id="mobileLoginLink" onclick="location.href='./login.html';">
-  LOGIN
-</a>
-<button id="mobileLogoutBtn" style="display:none;">LOGOUT</button>
-
-
-
-  <a
-    class="mobile-side-reserve"
-    href="https://map.naver.com"
-    target="_blank"
-  >
-    네이버 문의 및 예약 바로가기
-  </a>
-
-</div>
-
-
-
 
 <section class="board-page">
 
@@ -124,10 +100,6 @@
 
 </section>
 
-<script type="module" src="my-comments.js?v=1"></script>
-<script src="script.js"></script>
-
-<!-- PC FLOATING WIDGET -->
 <nav class="pc-floating-widget">
 
   <a href="index.html" class="pc-widget-item" data-label="HOME" aria-label="홈">
@@ -148,11 +120,9 @@
 
 </nav>
 
-
-<!-- 모바일 하단 고정바 -->
 <nav class="mobile-bottom-nav">
 
-  <a href="#" class="bottom-nav-item active" aria-label="홈">
+  <a href="./index.html" class="bottom-nav-item" aria-label="홈">
     <span class="bottom-icon">
       <svg viewBox="0 0 24 24">
         <path d="M3 10.8L12 3.8l9 7v9.4a1 1 0 0 1-1 1h-5.2v-6.3H9.2v6.3H4a1 1 0 0 1-1-1v-9.4z"/>
@@ -161,7 +131,7 @@
     <span class="bottom-label">홈</span>
   </a>
 
-<a href="board.html" class="bottom-nav-item" aria-label="게시판">
+  <a href="board.html" class="bottom-nav-item" aria-label="게시판">
     <span class="bottom-icon">
       <svg viewBox="0 0 24 24">
         <path d="M4 5.5h16v10.8H8.6L4 20.5v-15z"/>
@@ -185,7 +155,7 @@
     <span class="bottom-label">이벤트</span>
   </a>
 
-<a href="mypage.html" class="bottom-nav-item" aria-label="마이페이지">
+  <a href="mypage.html" class="bottom-nav-item active" aria-label="마이페이지">
     <span class="bottom-icon">
       <svg viewBox="0 0 24 24">
         <path d="M12 12.2a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2z"/>
@@ -196,6 +166,9 @@
   </a>
 
 </nav>
+
+<script type="module" src="my-comments.js?v=2"></script>
+<script src="script.js?v=2"></script>
 
 </body>
 </html>

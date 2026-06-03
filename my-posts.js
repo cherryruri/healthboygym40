@@ -92,10 +92,13 @@ onAuthStateChanged(auth, async(user)=>{
   <a href="post.html?id=${post.id}" class="board-row my-post-row">
         <div>${posts.length-index}</div>
 
-        <div>
-          ${post.title || "제목 없음"}
-        </div>
-
+<div>
+  ${
+    (post.title || "제목 없음").length > 12
+      ? (post.title || "제목 없음").substring(0,12) + "..."
+      : (post.title || "제목 없음")
+  }
+</div>
         <div>
           ${post.writerId || post.writer || "-"}
         </div>

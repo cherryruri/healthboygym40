@@ -306,5 +306,7 @@ window.checkVerifyCode = function(){
     return;
   }
 
-  msg.textContent = "인증되었습니다.";
+phoneVerified = true;
+msg.textContent = "인증되었습니다.";
+msg.style.color = "#fff200";
 }

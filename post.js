@@ -199,6 +199,44 @@ commentList.addEventListener("click", async (e) => {
   }
 });
 
+
+
+/* ================= EDIT COMMENT ================= */
+
+commentList.addEventListener("click", async (e) => {
+  if(!e.target.classList.contains("edit-comment-btn")) return;
+
+  const id = e.target.dataset.id;
+
+  const ref = doc(db, "boards", postId, "comments", id);
+  const snap = await getDoc(ref);
+
+  if(!snap.exists()) return;
+
+  const oldText = snap.data().text || "";
+  const newText = prompt("댓글을 수정하세요.", oldText);
+
+  if(newText === null) return;
+
+  if(!newText.trim()){
+    alert("댓글 내용을 입력해주세요.");
+    return;
+  }
+
+  await updateDoc(ref, {
+    text: newText.trim()
+  });
+
+  loadComments();
+});
+
+
+
+
+
+
+
+
 /* ================= TIME ================= */
 
 function timeAgo(timestamp) {

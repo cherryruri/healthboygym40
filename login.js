@@ -28,7 +28,7 @@ function updateSignupPage(){
 
   const fill = document.querySelector(".progress-fill");
 if(fill){
-  fill.style.width = `${signupPageIndex * 20}%`;
+fill.style.width = `${signupPageIndex * 16.6}%`;
 }
 
 }
@@ -131,7 +131,7 @@ if(signupPageIndex === 5){
 
 
   
-if(signupPageIndex < 5){
+if(signupPageIndex < 6){
     signupPageIndex++;
     updateSignupPage();
   }

@@ -313,9 +313,9 @@ async function loadMyDashboard(user){
     }else{
       myComments.slice(0,3).forEach(comment=>{
         myCommentList.innerHTML += `
-          <a class="dash-item" href="post.html?id=${comment.postId}">
-            <strong>${comment.postTitle}</strong><br>
-            <span>${comment.text}</span>
+        <a class="dash-item" href="post.html?id=${comment.postId}">
+  ${comment.text || "댓글 내용 없음"}
+</a>
           </a>
         `;
       });

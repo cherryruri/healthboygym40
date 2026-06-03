@@ -217,40 +217,82 @@ async function loadMyDashboard(user){
   const joinedDate = document.getElementById("joinedDate");
 
   const userId = user.email.split("@")[0];
+  const userEmail = user.email;
 
   if(myPostList){
     myPostList.innerHTML = "게시물 불러오는 중...";
   }
 
   if(myCommentList){
-    myCommentList.innerHTML = "댓글 불러오는 중...";
+    myCommentList.innerHTML = `
+      <div class="dash-item">댓글 목록은 다음 단계에서 연결할게요.</div>
+    `;
   }
 
-  const postQ = query(
-    collection(db, "boards"),
-  where("writer", "==", userId),
-    orderBy("createdAt", "desc")
-  );
+  const postSnap = await getDocs(collection(db, "boards"));
 
-  const postSnap = await getDocs(postQ);
+  let myPosts = [];
+
+  postSnap.forEach(docSnap => {
+    const post = docSnap.data();
+
+    const isMine =
+      post.writer === userId ||
+      post.writerId === userId ||
+      post.email === userEmail ||
+      post.writerEmail === userEmail;
+
+    if(isMine){
+      myPosts.push({
+        id: docSnap.id,
+        ...post
+      });
+    }
+  });
+
+  myPosts.sort((a,b)=>{
+    const at = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
+    const bt = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+    return bt - at;
+  });
 
   if(myPostList){
     myPostList.innerHTML = "";
 
-    if(postSnap.empty){
+    if(myPosts.length === 0){
       myPostList.innerHTML = `<div class="dash-item">작성한 게시물이 없습니다.</div>`;
     }else{
-      postSnap.forEach(docSnap=>{
-        const post = docSnap.data();
-
+      myPosts.slice(0,3).forEach(post=>{
         myPostList.innerHTML += `
-          <a class="dash-item" href="post.html?id=${docSnap.id}">
+          <a class="dash-item" href="post.html?id=${post.id}">
             ${post.title || "제목 없음"}
           </a>
         `;
       });
     }
   }
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if(userSnap.exists()){
+    const data = userSnap.data();
+
+    if(data.createdAt?.toDate){
+      const created = data.createdAt.toDate();
+      const now = new Date();
+      const diff = Math.floor((now - created) / (1000 * 60 * 60 * 24)) + 1;
+
+      if(joinedDays){
+        joinedDays.textContent = `${diff}일째`;
+      }
+
+      if(joinedDate){
+        joinedDate.textContent = `${created.toLocaleDateString("ko-KR")} 가입`;
+      }
+    }
+  }
+}
 
   if(myCommentList){
     myCommentList.innerHTML = `

@@ -208,18 +208,6 @@ font-weight:900;
 
 
 
-@media(min-width:768px){
-
-.mypage{
-max-width:500px;
-margin:auto;
-}
-
-}
-
-
-
-
 /* 심플 안녕하세요 페이드 UI */
 .my-welcome{
   background:#000; /* 전체 배경 검정 */
@@ -565,6 +553,3 @@ body.welcoming .mobile-bottom-nav{
   }
 }
 
-body{
-  background:red;
-}

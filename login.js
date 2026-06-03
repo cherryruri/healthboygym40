@@ -99,6 +99,21 @@ if(signupPageIndex === 3){
 }
 
 
+if(signupPageIndex === 4){
+
+  const p1 = document.getElementById("phone1").value.trim();
+  const p2 = document.getElementById("phone2").value.trim();
+  const p3 = document.getElementById("phone3").value.trim();
+
+  const phone = p1 + p2 + p3;
+
+  if(phone.length !== 11){
+    alert("휴대폰 번호를 정확히 입력해주세요.");
+    return;
+  }
+
+}
+
 
 
 

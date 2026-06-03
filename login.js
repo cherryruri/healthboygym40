@@ -70,6 +70,27 @@ if(signupPageIndex === 1){
 }
 
 
+if(signupPageIndex === 2){
+
+  const checkedInterests = document.querySelectorAll(
+    'input[name="interest"]:checked'
+  );
+
+  if(checkedInterests.length < 1){
+    alert("관심있는 분야를 1개 이상 선택해주세요.");
+    return;
+  }
+
+}
+
+
+
+
+
+
+
+
+
 
   
   if(signupPageIndex < 3){

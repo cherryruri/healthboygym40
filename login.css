@@ -1080,3 +1080,11 @@ body{
   font-size:13px;
   margin-bottom:20px;
 }
+
+#loginBox .login-back-text{
+  display:none;
+}
+
+#loginBox .sub-btn{
+  position:static;
+}

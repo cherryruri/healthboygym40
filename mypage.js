@@ -228,7 +228,7 @@ async function loadMyDashboard(user){
 
   const postQ = query(
     collection(db, "boards"),
-    where("writerId", "==", userId),
+  where("writer", "==", userId),
     orderBy("createdAt", "desc")
   );
 

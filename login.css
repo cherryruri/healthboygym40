@@ -1172,3 +1172,38 @@ body{
 #recaptcha-container{
   display:none;
 }
+
+.terms-simple{
+  margin:12px 0 14px;
+}
+
+.terms-simple label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:8px;
+
+  font-size:12px;
+  font-weight:700;
+  color:rgba(255,255,255,.72);
+}
+
+.terms-simple input[type="checkbox"]{
+  width:16px;
+  height:16px;
+  margin:0;
+}
+
+.terms-simple details{
+  margin-top:8px;
+  font-size:12px;
+  color:rgba(255,255,255,.55);
+  line-height:1.6;
+}
+
+.terms-simple summary{
+  cursor:pointer;
+  color:#fff200;
+  font-weight:900;
+  margin-bottom:8px;
+}

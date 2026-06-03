@@ -1102,3 +1102,22 @@ body{
 #signupBox[data-page="3"] .info-start{
   margin-top:0;
 }
+
+
+.verify-btn{
+  width:100%;
+  height:56px;
+
+  border:none;
+  border-radius:16px;
+
+  background:#fff200;
+  color:#111;
+
+  font-size:14px;
+  font-weight:900;
+
+  cursor:pointer;
+
+  margin-top:12px;
+}

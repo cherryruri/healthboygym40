@@ -462,3 +462,21 @@ border-radius:20px;
 height:230px;
 }
 }
+
+.my-post-row{
+  text-decoration:none;
+  color:#111;
+}
+
+.my-post-row:hover{
+  background:#f7f7f7;
+}
+
+.my-post-row div{
+  color:#111;
+}
+
+.my-post-row:hover div:nth-child(2){
+  color:#111;
+  text-decoration:underline;
+}

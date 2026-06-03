@@ -521,18 +521,36 @@ cursor:pointer;
   color:#fff;
 }
 
+
+
+
 .comment-edit-input{
   width:100%;
-  min-height:70px;
+  min-height:90px;
+
+  display:block;
+
   margin-top:8px;
-  padding:10px 12px;
+
+  padding:14px;
+
   border:1px solid #ddd;
-  border-radius:10px;
-  resize:none;
+  border-radius:14px;
+
+  resize:vertical;
+
   font-size:14px;
-  font-family:inherit;
-  outline:none;
+  line-height:1.6;
+
+  box-sizing:border-box;
 }
+
+
+
+
+
+
+
 
 .comment-edit-input:focus{
   border-color:#111;
@@ -565,19 +583,6 @@ cursor:pointer;
   color:#555;
 }
 
-
-.comment-edit-input{
-  width:100%;
-  min-height:70px;
-  margin-top:8px;
-  padding:10px 12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  resize:none;
-  font-family:inherit;
-  font-size:14px;
-  outline:none;
-}
 
 .comment-edit-actions{
   display:flex;

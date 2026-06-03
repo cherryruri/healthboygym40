@@ -24,6 +24,21 @@ function updateSignupPage(){
   if(signupBox){
     signupBox.dataset.page = signupPageIndex;
   }
+
+  const fill = document.querySelector(".progress-fill");
+  const steps = document.querySelectorAll(".progress-step span");
+
+  if(fill){
+    fill.style.width = `${signupPageIndex * 25}%`;
+  }
+
+  steps.forEach((step,index)=>{
+    step.classList.toggle(
+      "active",
+      index + 1 <= signupPageIndex
+    );
+  });
+
 }
 
 window.showSignup = function(){

@@ -3,6 +3,7 @@ const signupBox = document.getElementById("signupBox");
 const forgotBox = document.getElementById("forgotBox");
 
 let signupPageIndex = 1;
+let phoneVerified = false;
 
 function hideAll(){
   if(loginBox) loginBox.classList.remove("active");

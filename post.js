@@ -201,35 +201,57 @@ commentList.addEventListener("click", async (e) => {
 
 
 
+
+
 /* ================= EDIT COMMENT ================= */
 
-commentList.addEventListener("click", async (e) => {
-  if(!e.target.classList.contains("edit-comment-btn")) return;
+commentList.addEventListener("click", async (e)=>{
 
-  const id = e.target.dataset.id;
+  if(e.target.classList.contains("edit-comment-btn")){
 
-  const ref = doc(db, "boards", postId, "comments", id);
-  const snap = await getDoc(ref);
+    const comment = e.target.closest(".comment");
+    const textEl = comment.querySelector(".comment-text");
+    const oldText = textEl.textContent.trim();
+    const id = e.target.dataset.id;
 
-  if(!snap.exists()) return;
+    textEl.innerHTML = `
+      <textarea class="comment-edit-input">${oldText}</textarea>
 
-  const oldText = snap.data().text || "";
-  const newText = prompt("댓글을 수정하세요.", oldText);
+      <div class="comment-edit-actions">
+        <button class="save-comment-btn" data-id="${id}">저장</button>
+        <button class="cancel-comment-btn">취소</button>
+      </div>
+    `;
 
-  if(newText === null) return;
-
-  if(!newText.trim()){
-    alert("댓글 내용을 입력해주세요.");
     return;
   }
 
-  await updateDoc(ref, {
-    text: newText.trim()
-  });
+  if(e.target.classList.contains("save-comment-btn")){
 
-  loadComments();
+    const id = e.target.dataset.id;
+    const comment = e.target.closest(".comment");
+    const textarea = comment.querySelector(".comment-edit-input");
+    const newText = textarea.value.trim();
+
+    if(!newText){
+      alert("댓글 내용을 입력해주세요.");
+      return;
+    }
+
+    await updateDoc(doc(db, "boards", postId, "comments", id), {
+      text: newText
+    });
+
+    loadComments();
+    return;
+  }
+
+  if(e.target.classList.contains("cancel-comment-btn")){
+    loadComments();
+    return;
+  }
+
 });
-
 
 
 
@@ -392,4 +414,4 @@ commentList.addEventListener("click", async (e)=>{
     loadComments();
   }
 
-});
+});/* ================= EDIT COMMENT ================= */

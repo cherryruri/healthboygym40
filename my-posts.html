@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>내가 쓴 게시물</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="board.css?v=2">
+</head>
+
+<body class="loaded">
+
+<header>
+  <nav class="navbar">
+    <div class="logo">
+      <a href="index.html">HEALTHBOYGYM</a>
+    </div>
+
+    <ul class="menu">
+      <li><a href="index.html#about">센터 소개</a></li>
+      <li><a href="index.html#brand">브랜드 소개</a></li>
+      <li><a href="index.html#facility">시설 투어</a></li>
+      <li><a href="index.html#pass">올패스 안내</a></li>
+      <li><a href="index.html#trainer">트레이너 소개</a></li>
+      <li><a href="index.html#hours">운영 시간</a></li>
+      <li><a href="index.html#location">오시는 길</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+    </ul>
+
+    <a href="mypage.html" class="download-btn">마이페이지로 돌아가기</a>
+  </nav>
+</header>
+
+<section class="board-page">
+
+  <div class="board-header">
+    <h1>MY POSTS</h1>
+    <p>내가 작성한 게시물</p>
+  </div>
+
+  <div class="board-table">
+    <div class="board-row board-head">
+      <div>No</div>
+      <div>제목</div>
+      <div>글쓴이</div>
+      <div>작성시간</div>
+    </div>
+
+    <div id="myPostList"></div>
+  </div>
+
+</section>
+
+<script type="module" src="my-posts.js?v=1"></script>
+
+</body>
+</html>

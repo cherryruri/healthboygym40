@@ -138,6 +138,11 @@ document.body.classList.remove("welcoming");
       setText(infoPhone, phone || data.phone || "-");
       setText(infoMember, data.isGymMember === "yes" ? "헬스보이짐 회원" : "비회원");
       setText(infoRole, data.role === "admin" ? "관리자" : "일반 회원");
+      const adminMenu = document.getElementById("adminMenu");
+
+if(adminMenu && data.role === "admin"){
+  adminMenu.style.display = "flex";
+}
 
       if(data.name && myName){
         myName.textContent = `${data.name}님`;

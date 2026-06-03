@@ -917,3 +917,54 @@ body{
   transition:.35s;
 }
 
+/* ===== 회원여부 카드 ===== */
+
+.member-cards{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:24px;
+}
+
+.member-card{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  height:68px;
+
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:18px;
+
+  background:rgba(255,255,255,.04);
+
+  cursor:pointer;
+
+  transition:.25s;
+}
+
+.member-card:hover{
+  border-color:#fff200;
+  transform:translateY(-2px);
+}
+
+.member-card input{
+  display:none;
+}
+
+.member-card span{
+  font-size:18px;
+  font-weight:800;
+  color:#fff;
+}
+
+.member-card:has(input:checked){
+  border-color:#fff200;
+  background:rgba(255,242,0,.12);
+  box-shadow:0 0 0 1px #fff200 inset;
+}
+
+.member-card:has(input:checked) span{
+  color:#fff200;
+}

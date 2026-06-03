@@ -51,6 +51,10 @@ window.showForgot = function(){
 
 window.nextSignupPage = function(){
 
+
+
+
+  
 if(signupPageIndex === 1){
 
   const selected = document.querySelector(
@@ -83,7 +87,16 @@ if(signupPageIndex === 2){
 
 }
 
+if(signupPageIndex === 3){
 
+  const name = document.getElementById("signupName").value.trim();
+
+  if(!name){
+    alert("이름을 입력해주세요.");
+    return;
+  }
+
+}
 
 
 

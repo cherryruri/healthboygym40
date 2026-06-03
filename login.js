@@ -99,18 +99,8 @@ if(signupPageIndex === 3){
 
 }
 
-
 if(signupPageIndex === 4){
-if(signupPageIndex === 5){
 
-  const ok = checkPasswordLive();
-
-  if(!ok){
-    alert("비밀번호 조건을 확인해주세요.");
-    return;
-  }
-
-}
   const p1 = document.getElementById("phone1").value.trim();
   const p2 = document.getElementById("phone2").value.trim();
   const p3 = document.getElementById("phone3").value.trim();
@@ -122,11 +112,18 @@ if(signupPageIndex === 5){
     return;
   }
 
-
-
-
 }
 
+if(signupPageIndex === 5){
+
+  const ok = checkPasswordLive();
+
+  if(!ok){
+    alert("비밀번호 조건을 확인해주세요.");
+    return;
+  }
+
+}
 
 
 

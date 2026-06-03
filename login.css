@@ -1207,3 +1207,118 @@ body{
   font-weight:900;
   margin-bottom:8px;
 }
+
+/* ===== 약관 디자인 ===== */
+
+.agree-card{
+  display:block;
+  cursor:pointer;
+  margin:20px 0;
+}
+
+.agree-card input{
+  display:none;
+}
+
+.agree-card-inner{
+  display:flex;
+  align-items:center;
+  gap:16px;
+
+  padding:18px;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+
+  transition:.25s;
+}
+
+.agree-card:hover .agree-card-inner{
+  border-color:#fff200;
+}
+
+.agree-check{
+  width:34px;
+  height:34px;
+
+  border-radius:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.08);
+
+  color:#888;
+
+  font-size:18px;
+  font-weight:900;
+
+  flex-shrink:0;
+}
+
+.agree-card input:checked + .agree-card-inner{
+  border-color:#fff200;
+  background:rgba(255,242,0,.08);
+}
+
+.agree-card input:checked + .agree-card-inner .agree-check{
+  background:#fff200;
+  color:#000;
+}
+
+.agree-card strong{
+  display:block;
+
+  font-size:18px;
+  font-weight:900;
+
+  color:#fff;
+
+  margin-bottom:3px;
+}
+
+.agree-card p{
+  margin:0;
+
+  color:rgba(255,255,255,.5);
+
+  font-size:12px;
+}
+
+.terms-detail{
+  margin-bottom:12px;
+}
+
+.terms-detail summary{
+  cursor:pointer;
+
+  padding:12px 0;
+
+  color:#fff;
+
+  font-size:15px;
+  font-weight:900;
+}
+
+.terms-detail summary:hover{
+  color:#fff200;
+}
+
+.terms-box{
+  max-height:120px;
+  overflow-y:auto;
+
+  padding:14px;
+
+  border-radius:16px;
+
+  background:rgba(255,255,255,.04);
+
+  color:rgba(255,255,255,.6);
+
+  font-size:12px;
+  line-height:1.7;
+}

@@ -165,10 +165,10 @@ const interests = Array.from(
   document.querySelectorAll('input[name="interest"]:checked')
 ).map(input => input.value);
 
+const isGymMember = document.querySelector('input[name="isGymMember"]:checked')?.value || "yes";
+
 const agree1 = document.getElementById("agree1").checked;
 const agree2 = document.getElementById("agree2").checked;
-
-const isGymMember = document.querySelector('input[name="isGymMember"]:checked')?.value || "yes";
 
 const role = "user";
 

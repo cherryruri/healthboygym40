@@ -9,7 +9,12 @@ import {
 import {
   getFirestore,
   doc,
-  getDoc
+  getDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -155,12 +160,16 @@ if(adminMenu && data.role === "admin"){
         avatar.textContent = data.name.charAt(0);
       }
 
+
     }else{
       setText(infoName, userId);
       setText(infoPhone, "-");
       setText(infoMember, "-");
       setText(infoRole, "일반 회원");
     }
+
+   loadMyDashboard(user);
+
 
   }catch(error){
     console.error(error);
@@ -200,3 +209,75 @@ if(mypageBtn){
   });
 }
 
+async function loadMyDashboard(user){
+
+  const myPostList = document.getElementById("myPostList");
+  const myCommentList = document.getElementById("myCommentList");
+  const joinedDays = document.getElementById("joinedDays");
+  const joinedDate = document.getElementById("joinedDate");
+
+  const userId = user.email.split("@")[0];
+
+  if(myPostList){
+    myPostList.innerHTML = "게시물 불러오는 중...";
+  }
+
+  if(myCommentList){
+    myCommentList.innerHTML = "댓글 불러오는 중...";
+  }
+
+  const postQ = query(
+    collection(db, "boards"),
+    where("writerId", "==", userId),
+    orderBy("createdAt", "desc")
+  );
+
+  const postSnap = await getDocs(postQ);
+
+  if(myPostList){
+    myPostList.innerHTML = "";
+
+    if(postSnap.empty){
+      myPostList.innerHTML = `<div class="dash-item">작성한 게시물이 없습니다.</div>`;
+    }else{
+      postSnap.forEach(docSnap=>{
+        const post = docSnap.data();
+
+        myPostList.innerHTML += `
+          <a class="dash-item" href="post.html?id=${docSnap.id}">
+            ${post.title || "제목 없음"}
+          </a>
+        `;
+      });
+    }
+  }
+
+  if(myCommentList){
+    myCommentList.innerHTML = `
+      <div class="dash-item">
+        댓글 목록은 다음 단계에서 연결할게요.
+      </div>
+    `;
+  }
+
+  const userRef = doc(db, "users", user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if(userSnap.exists()){
+    const data = userSnap.data();
+
+    if(data.createdAt?.toDate){
+      const created = data.createdAt.toDate();
+      const now = new Date();
+      const diff = Math.floor((now - created) / (1000 * 60 * 60 * 24)) + 1;
+
+      if(joinedDays){
+        joinedDays.textContent = `${diff}일째`;
+      }
+
+      if(joinedDate){
+        joinedDate.textContent = `${created.toLocaleDateString("ko-KR")} 가입`;
+      }
+    }
+  }
+}

@@ -224,6 +224,82 @@
 
 </div>
 
+<div class="signup-page" data-page="5">
+
+  <div class="account-start">
+
+    <h2>아이디와 비밀번호를<br>설정해주세요</h2>
+
+    <p>앞으로 로그인할 때 사용됩니다.</p>
+
+    <div class="id-row">
+
+      <input
+        type="text"
+        id="signupId"
+        placeholder="아이디"
+      >
+
+      <button
+        type="button"
+        onclick="checkSignupId()"
+      >
+        중복확인
+      </button>
+
+    </div>
+
+    <p id="idCheckMsg" class="id-check-msg"></p>
+
+    <div class="password-wrap">
+
+      <input
+        type="password"
+        id="signupPassword"
+        placeholder="비밀번호"
+      >
+
+      <button
+        type="button"
+        onclick="togglePassword('signupPassword', this)"
+      >
+        👁
+      </button>
+
+    </div>
+
+    <p id="passwordGuide" class="password-guide"></p>
+    <p id="passwordStrength" class="password-msg"></p>
+
+    <div class="password-wrap">
+
+      <input
+        type="password"
+        id="signupPasswordConfirm"
+        placeholder="비밀번호 확인"
+      >
+
+      <button
+        type="button"
+        onclick="togglePassword('signupPasswordConfirm', this)"
+      >
+        👁
+      </button>
+
+    </div>
+
+    <p id="passwordMatch" class="password-msg"></p>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+
 
 
 

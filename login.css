@@ -1088,3 +1088,6 @@ body{
 #loginBox .sub-btn{
   position:static;
 }
+.info-start{
+  margin-top:-120px;
+}

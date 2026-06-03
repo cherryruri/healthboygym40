@@ -6,7 +6,9 @@ import {
   createUserWithEmailAndPassword,
   browserLocalPersistence,
   browserSessionPersistence,
-  setPersistence
+  setPersistence,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
 import {

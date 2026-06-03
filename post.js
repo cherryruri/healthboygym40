@@ -125,7 +125,6 @@ div.innerHTML = `
   <span class="writer">${c.writer}</span>
   <span class="time">${timeAgo(c.createdAt)}</span>
 
-const isLiked = c.likedBy?.includes(currentUser?.email);
 
 <button class="like-btn ${isLiked ? "liked" : ""}" data-id="${docSnap.id}">
   ${isLiked ? "💛" : "🤍"} ${c.likes || 0}

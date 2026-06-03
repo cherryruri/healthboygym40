@@ -270,16 +270,24 @@ const userId = currentUser?.email;
 
 let likedBy = data.likedBy || [];
 
-if(likedBy.includes(userId)){
-  return; // 이미 눌렀으면 종료
-}
 
-likedBy.push(userId);
+
+if(likedBy.includes(userId)){
+  likedBy = likedBy.filter(email => email !== userId);
+}else{
+  likedBy.push(userId);
+}
 
 await updateDoc(ref,{
   likes: likedBy.length,
   likedBy: likedBy
 });
+
+
+
+
+
+
 
     loadComments();
   }

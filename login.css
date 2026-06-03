@@ -523,15 +523,6 @@ body{
   color:#fff;
 }
 
-/* 회원가입 버튼 */
-#signupBox .signup-real-btn{
-  display:block;
-  margin-top:14px;
-}
-
-#signupBox[data-page="3"] .signup-real-btn{
-  display:block;
-}
 
 /* row */
 .id-row,
@@ -1396,4 +1387,13 @@ body{
 .terms-box::-webkit-scrollbar-thumb{
   background:#fff200;
   border-radius:999px;
+}
+
+#signupBox .signup-real-btn{
+  display:none;
+}
+
+#signupBox[data-page="6"] .signup-real-btn{
+  display:block;
+  margin-top:14px;
 }

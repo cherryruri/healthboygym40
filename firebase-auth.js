@@ -247,10 +247,11 @@ const role = "user";
       name: name,
       phone: phone,
       role: role,
-      birth: `${birthYear}-${birthMonth}-${birthDay}`,
-      gender: gender,
-      address: address,
-      addressDetail: addressDetail,
+     interests: interests,
+      isGymMember: isGymMember,
+
+
+
       createdAt: serverTimestamp()
     });
 

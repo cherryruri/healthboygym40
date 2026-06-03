@@ -51,6 +51,9 @@ window.showForgot = function(){
 
 window.nextSignupPage = function(){
 
+
+
+
   if(signupPageIndex === 1){
     const ok = checkPasswordLive();
 
@@ -60,6 +63,10 @@ window.nextSignupPage = function(){
     }
   }
 
+
+
+
+  
   if(signupPageIndex < 3){
     signupPageIndex++;
     updateSignupPage();

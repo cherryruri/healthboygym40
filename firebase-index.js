@@ -2,8 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebas
 
 import {
   getAuth,
-  onAuthStateChanged,
-  signOut
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  setPersistence,
+  RecaptchaVerifier,
+  signInWithPhoneNumber
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
 const firebaseConfig = {

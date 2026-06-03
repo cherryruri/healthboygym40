@@ -925,3 +925,21 @@ body.welcoming .mobile-bottom-nav{
     margin-top:22px;
   }
 }
+
+/* 로그아웃 버튼 PC 위치 수정 */
+@media(min-width:769px){
+
+  .logout-btn{
+    position:static;
+    display:block;
+
+    max-width:1280px;
+    width:100%;
+    height:62px;
+
+    margin:24px auto 0;
+
+    border-radius:999px;
+  }
+
+}

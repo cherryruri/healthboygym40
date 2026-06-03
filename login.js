@@ -282,9 +282,14 @@ window.showVerifyInput = function(){
 
   const codeInput = document.getElementById("verifyCode");
   const msg = document.getElementById("verifyMsg");
+  const checkBtn = document.querySelector(".verify-check-btn");
 
   codeInput.style.display = "block";
   msg.style.display = "block";
 
   msg.textContent = "인증번호를 입력해주세요.";
+
+
+
+
 }

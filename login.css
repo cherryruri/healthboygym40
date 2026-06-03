@@ -525,7 +525,8 @@ body{
 
 /* 회원가입 버튼 */
 #signupBox .signup-real-btn{
-  display:none;
+  display:block;
+  margin-top:14px;
 }
 
 #signupBox[data-page="3"] .signup-real-btn{

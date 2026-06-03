@@ -1104,3 +1104,29 @@ body.welcoming .mobile-bottom-nav{
     color:#fff;
   }
 }
+/* ===== PC 마이페이지 상단 구조 ===== */
+
+.top-profile-wrap{
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:24px;
+  margin-bottom:24px;
+}
+
+.profile-area{
+  margin:0;
+}
+
+.info-section{
+  margin:0;
+}
+
+/* 모바일은 기존 유지 */
+
+@media(max-width:768px){
+
+  .top-profile-wrap{
+    display:block;
+  }
+
+}

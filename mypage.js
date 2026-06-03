@@ -125,6 +125,7 @@ document.body.classList.remove("welcoming");
     console.log("현재UID", user.uid);
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
+console.log("문서존재", userSnap.exists());
 
     if(userSnap.exists()){
       const data = userSnap.data();

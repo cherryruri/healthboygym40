@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 페이지</title>
+
+<link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+<main class="admin-page">
+
+  <header class="admin-header">
+    <div>
+      <p>HEALTHBOYGYM SUNAE</p>
+      <h1>회원 관리</h1>
+    </div>
+
+    <a href="index.html">사이트로 돌아가기</a>
+  </header>
+
+  <section class="admin-stats">
+    <div>
+      <span>전체 회원</span>
+      <strong id="totalUsers">0명</strong>
+    </div>
+
+    <div>
+      <span>관리자</span>
+      <strong id="adminUsers">0명</strong>
+    </div>
+  </section>
+
+  <section class="admin-card">
+
+    <div class="admin-card-top">
+      <h2>가입 회원 목록</h2>
+      <input type="text" id="userSearch" placeholder="이름, 아이디, 전화번호 검색">
+    </div>
+
+    <div class="user-table">
+      <div class="user-row user-head">
+        <div>이름</div>
+        <div>아이디</div>
+        <div>전화번호</div>
+        <div>관심분야</div>
+        <div>가입일</div>
+        <div>권한</div>
+      </div>
+
+      <div id="userList"></div>
+    </div>
+
+  </section>
+
+</main>
+
+<script type="module" src="admin.js"></script>
+
+</body>
+</html>

@@ -55,85 +55,78 @@
     <div></div>
   </header>
 
+
+
+
+  <section class="mypage-grid">
+
   <section class="profile-area">
+    <div class="profile-image">
+      <span class="my-avatar">N</span>
+    </div>
 
-
-<div class="profile-image">
-  <span class="my-avatar">N</span>
-</div>
-
-<h2 id="myName">회원님</h2>
-<p id="myId">HEALTHBOYGYM SUNAE</p>
-
-
+    <h2 id="myName">회원님</h2>
+    <p id="myId">HEALTHBOYGYM SUNAE</p>
   </section>
-
-
-
-
-  <div class="section-divider"></div>
 
   <section class="info-section">
+    <h3>기본정보</h3>
 
+    <div class="info-row">
+      <span>이름</span>
+      <strong id="infoName">-</strong>
+    </div>
 
-<h3>기본정보</h3>
+    <div class="info-row">
+      <span>아이디</span>
+      <strong id="infoId">-</strong>
+    </div>
 
-<div class="info-row">
-  <span>이름</span>
-  <strong id="infoName">-</strong>
-</div>
+    <div class="info-row">
+      <span>전화번호</span>
+      <strong id="infoPhone">-</strong>
+    </div>
 
-<div class="info-row">
-  <span>아이디</span>
-  <strong id="infoId">-</strong>
-</div>
+    <div class="info-row">
+      <span>회원 여부</span>
+      <strong id="infoMember">-</strong>
+    </div>
 
-<div class="info-row">
-  <span>전화번호</span>
-  <strong id="infoPhone">-</strong>
-</div>
+    <div class="info-row">
+      <span>권한</span>
+      <strong id="infoRole">-</strong>
+    </div>
 
-<div class="info-row">
-  <span>회원 여부</span>
-  <strong id="infoMember">-</strong>
-</div>
+    <div class="info-actions">
+      <button type="button">개인정보 수정</button>
+      <button type="button">비밀번호 수정</button>
+      <button type="button" class="danger">탈퇴하기</button>
+    </div>
+  </section>
 
-<div class="info-row">
-  <span>권한</span>
-  <strong id="infoRole">-</strong>
-</div>
+  <section class="mypage-dashboard">
 
-<div class="info-row admin-only" id="adminMenu" style="display:none;">
-  <span>관리자 메뉴</span>
-  <strong>
-    <a href="admin.html" class="admin-link">회원 관리</a>
-  </strong>
-</div>
+    <div class="dash-card">
+      <span>MY POSTS</span>
+      <h3>내가 쓴 게시물</h3>
+      <div id="myPostList" class="dash-list">불러오는 중...</div>
+    </div>
 
+    <div class="dash-card">
+      <span>MY COMMENTS</span>
+      <h3>내가 쓴 댓글</h3>
+      <div id="myCommentList" class="dash-list">불러오는 중...</div>
+    </div>
 
+    <div class="dash-card joined-card">
+      <span>WITH HEALTHBOYGYM</span>
+      <h3>함께한 시간</h3>
+      <strong id="joinedDays">-일째</strong>
+      <p id="joinedDate">가입일 확인 중</p>
+    </div>
 
   </section>
 
-<section class="mypage-dashboard">
-
-  <div class="dash-card">
-    <span>MY POSTS</span>
-    <h3>내가 쓴 게시물</h3>
-    <div id="myPostList" class="dash-list">불러오는 중...</div>
-  </div>
-
-  <div class="dash-card">
-    <span>MY COMMENTS</span>
-    <h3>내가 쓴 댓글</h3>
-    <div id="myCommentList" class="dash-list">불러오는 중...</div>
-  </div>
-
-  <div class="dash-card joined-card">
-    <span>WITH HEALTHBOYGYM</span>
-    <h3>함께한 시간</h3>
-    <strong id="joinedDays">-일째</strong>
-    <p id="joinedDate">가입일 확인 중</p>
-  </div>
 
 </section>
 

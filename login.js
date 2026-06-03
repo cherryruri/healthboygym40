@@ -286,6 +286,7 @@ window.showVerifyInput = function(){
 
   codeInput.style.display = "block";
   msg.style.display = "block";
+  checkBtn.style.display = "block";
 
   msg.textContent = "인증번호를 입력해주세요.";
 

@@ -1091,3 +1091,17 @@ body{
 .info-start{
   margin-top:-30px;
 }
+
+
+#signupBox .signup-progress{
+  margin-top:0;
+  margin-bottom:54px;
+}
+
+#signupBox .signup-pages{
+  min-height:360px;
+}
+
+#signupBox[data-page="3"] .info-start{
+  margin-top:0;
+}

@@ -281,35 +281,3 @@ window.resetPassword = function(){
 
 updateSignupPage();
 checkPasswordLive();
-
-window.showVerifyInput = function(){
-
-  const codeInput = document.getElementById("verifyCode");
-  const msg = document.getElementById("verifyMsg");
-  const checkBtn = document.querySelector(".verify-check-btn");
-
-  codeInput.style.display = "block";
-  msg.style.display = "block";
-  checkBtn.style.display = "block";
-
-  msg.textContent = "인증번호를 입력해주세요.";
-
-
-
-
-}
-
-window.checkVerifyCode = function(){
-
-  const code = document.getElementById("verifyCode").value.trim();
-  const msg = document.getElementById("verifyMsg");
-
-  if(code.length !== 6){
-    msg.textContent = "인증번호 6자리를 입력해주세요.";
-    return;
-  }
-
-phoneVerified = true;
-msg.textContent = "인증되었습니다.";
-msg.style.color = "#fff200";
-}

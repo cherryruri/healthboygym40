@@ -294,3 +294,16 @@ window.showVerifyInput = function(){
 
 
 }
+
+window.checkVerifyCode = function(){
+
+  const code = document.getElementById("verifyCode").value.trim();
+  const msg = document.getElementById("verifyMsg");
+
+  if(code.length !== 6){
+    msg.textContent = "인증번호 6자리를 입력해주세요.";
+    return;
+  }
+
+  msg.textContent = "인증되었습니다.";
+}

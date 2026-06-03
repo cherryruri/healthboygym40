@@ -167,8 +167,7 @@ const interests = Array.from(
 
 const isGymMember = document.querySelector('input[name="isGymMember"]:checked')?.value || "yes";
 
-const agree1 = document.getElementById("agree1").checked;
-const agree2 = document.getElementById("agree2").checked;
+const agreeAll = document.getElementById("agreeAll").checked;
 
 const role = "user";
 

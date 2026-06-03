@@ -1153,3 +1153,16 @@ body{
   border-color:#fff200;
   color:#fff200;
 }
+
+.account-start h2{
+  font-size:28px;
+  line-height:1.2;
+  font-weight:900;
+  margin-bottom:10px;
+}
+
+.account-start p{
+  color:rgba(255,255,255,.55);
+  font-size:13px;
+  margin-bottom:18px;
+}

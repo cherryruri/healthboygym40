@@ -564,3 +564,7 @@ body.welcoming .mobile-bottom-nav{
     margin-top:26px;
   }
 }
+
+body{
+  background:red;
+}

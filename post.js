@@ -145,13 +145,7 @@ ${isMine ? `
   <button class="edit-comment-btn" data-id="${docSnap.id}">수정</button>
   <button class="delete-comment-btn" data-id="${docSnap.id}">삭제</button>
 ` : ""}
-
-
-          ${isMine ? `
-            <button class="delete-comment-btn" data-id="${docSnap.id}">
-              삭제
-            </button>
-          ` : ""}
+  
 
         </div>
 

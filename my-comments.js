@@ -94,7 +94,11 @@ onAuthStateChanged(auth, async(user)=>{
       <a href="post.html?id=${comment.postId}" class="board-row my-post-row">
         <div>${comments.length - index}</div>
         <div>${comment.text}</div>
-        <div>${comment.postTitle}</div>
+       <div>${
+  comment.postTitle.length > 5
+    ? comment.postTitle.substring(0,5) + "..."
+    : comment.postTitle
+}</div>
         <div>${date}</div>
       </a>
     `;

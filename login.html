@@ -240,15 +240,34 @@
     <h2>마지막 단계입니다</h2>
     <p>개인정보 처리방침 및 이용약관에 동의해주세요.</p>
 
-    <label class="agree-row">
-      <input type="checkbox" id="agree1">
-      <span>개인정보 수집 및 이용 동의 (필수)</span>
-    </label>
+    <label class="agree-card">
+  <input type="checkbox" id="agreeAll">
 
-    <label class="agree-row">
-      <input type="checkbox" id="agree2">
-      <span>서비스 이용약관 동의 (필수)</span>
-    </label>
+  <div class="agree-card-inner">
+    <span class="agree-check">✓</span>
+
+    <div>
+      <strong>네, 모두 동의합니다.</strong>
+      <p>이용약관 및 개인정보 처리방침에 동의합니다.</p>
+    </div>
+  </div>
+</label>
+
+<details class="terms-detail">
+  <summary>이용약관 (필수)</summary>
+
+  <div class="terms-box">
+    헬스보이짐 수내점 서비스 이용을 위한 약관 내용...
+  </div>
+</details>
+
+<details class="terms-detail">
+  <summary>개인정보 처리방침 (필수)</summary>
+
+  <div class="terms-box">
+    이름, 전화번호, 아이디를 회원 관리 목적으로 수집합니다...
+  </div>
+</details>
 
     <details class="terms-detail">
       <summary>약관 자세히 보기</summary>

@@ -93,7 +93,7 @@ if(signupPageIndex === 2){
 
 
   
-  if(signupPageIndex < 3){
+if(signupPageIndex < 5){
     signupPageIndex++;
     updateSignupPage();
   }

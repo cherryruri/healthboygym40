@@ -968,3 +968,22 @@ body{
 .member-card:has(input:checked) span{
   color:#fff200;
 }
+
+.login-back-text{
+  display:block;
+  margin:14px 0 0 auto;
+
+  border:none;
+  background:none;
+
+  color:rgba(255,255,255,.6);
+
+  font-size:13px;
+  font-weight:800;
+
+  cursor:pointer;
+}
+
+.login-back-text:hover{
+  color:#fff200;
+}

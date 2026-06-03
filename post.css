@@ -564,3 +564,43 @@ cursor:pointer;
   background:#eee;
   color:#555;
 }
+
+
+.comment-edit-input{
+  width:100%;
+  min-height:70px;
+  margin-top:8px;
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  resize:none;
+  font-family:inherit;
+  font-size:14px;
+  outline:none;
+}
+
+.comment-edit-actions{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+}
+
+.save-comment-btn,
+.cancel-comment-btn{
+  border:none;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.save-comment-btn{
+  background:#111;
+  color:#fff;
+}
+
+.cancel-comment-btn{
+  background:#eee;
+  color:#777;
+}

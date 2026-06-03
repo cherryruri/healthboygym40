@@ -278,3 +278,13 @@ window.resetPassword = function(){
 updateSignupPage();
 checkPasswordLive();
 
+window.showVerifyInput = function(){
+
+  const codeInput = document.getElementById("verifyCode");
+  const msg = document.getElementById("verifyMsg");
+
+  codeInput.style.display = "block";
+  msg.style.display = "block";
+
+  msg.textContent = "인증번호를 입력해주세요.";
+}

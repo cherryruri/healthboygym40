@@ -161,21 +161,16 @@ window.signup = async function(){
   const name = cleanText(document.getElementById("signupName").value);
   const phone = getPhone();
 
-  const birthYear = document.getElementById("birthYear").value.trim();
-  const birthMonth = document.getElementById("birthMonth").value.trim();
-  const birthDay = document.getElementById("birthDay").value.trim();
-  const gender = document.getElementById("signupGender").value;
-  const address = document.getElementById("signupAddress").value.trim();
-  const addressDetail = document.getElementById("signupAddressDetail").value.trim();
+const interests = Array.from(
+  document.querySelectorAll('input[name="interest"]:checked')
+).map(input => input.value);
 
-  const agree1 = document.getElementById("agree1").checked;
-  const agree2 = document.getElementById("agree2").checked;
-  const adminCode = document.getElementById("adminCode").value.trim();
+const isGymMember = document.querySelector('input[name="isGymMember"]:checked')?.value || "yes";
 
-const role =
-  adminCode === "healthboy0909!!!"
-    ? "admin"
-    : "user";
+const role = "user";
+
+
+
 
 
 

@@ -276,3 +276,89 @@ window.location.href = "./mypage.html";
     alert("회원가입 오류 : " + error.code);
   }
 };
+
+function getPhoneNumberForFirebase(){
+  const phone = getPhone();
+
+  if(phone.length !== 11){
+    alert("휴대폰 번호를 정확히 입력해주세요.");
+    return null;
+  }
+
+  return "+82" + phone.substring(1);
+}
+
+function setupRecaptcha(){
+  if(window.recaptchaVerifier) return;
+
+  window.recaptchaVerifier = new RecaptchaVerifier(
+    auth,
+    "recaptcha-container",
+    {
+      size: "invisible"
+    }
+  );
+}
+
+window.showVerifyInput = async function(){
+
+  const phoneNumber = getPhoneNumberForFirebase();
+  if(!phoneNumber) return;
+
+  const codeInput = document.getElementById("verifyCode");
+  const msg = document.getElementById("verifyMsg");
+  const checkBtn = document.querySelector(".verify-check-btn");
+
+  try{
+    setupRecaptcha();
+
+    confirmationResult = await signInWithPhoneNumber(
+      auth,
+      phoneNumber,
+      window.recaptchaVerifier
+    );
+
+    codeInput.style.display = "block";
+    msg.style.display = "block";
+    checkBtn.style.display = "block";
+
+    msg.textContent = "인증번호를 발송했습니다.";
+    msg.style.color = "#fff200";
+
+  }catch(error){
+    console.log(error);
+    alert("인증번호 발송 오류 : " + error.code);
+  }
+};
+
+window.checkVerifyCode = async function(){
+
+  const code = document.getElementById("verifyCode").value.trim();
+  const msg = document.getElementById("verifyMsg");
+
+  if(code.length !== 6){
+    msg.textContent = "인증번호 6자리를 입력해주세요.";
+    msg.style.color = "#ff6565";
+    return;
+  }
+
+  if(!confirmationResult){
+    msg.textContent = "먼저 인증번호 받기를 눌러주세요.";
+    msg.style.color = "#ff6565";
+    return;
+  }
+
+  try{
+    await confirmationResult.confirm(code);
+
+    window.phoneVerified = true;
+
+    msg.textContent = "인증되었습니다.";
+    msg.style.color = "#fff200";
+
+  }catch(error){
+    console.log(error);
+    msg.textContent = "인증번호가 올바르지 않습니다.";
+    msg.style.color = "#ff6565";
+  }
+};

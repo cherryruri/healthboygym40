@@ -200,41 +200,45 @@
 </div>
 
 
-
 <div class="signup-page" data-page="5">
 
   <div class="account-start">
 
     <h2>아이디와 비밀번호를<br>설정해주세요</h2>
-
     <p>앞으로 로그인할 때 사용됩니다.</p>
 
     <div class="id-row">
-
-      <input
-        type="text"
-        id="signupId"
-        placeholder="아이디"
-      >
-
-      <button
-        type="button"
-        onclick="checkSignupId()"
-      >
-        중복확인
-      </button>
-
+      <input type="text" id="signupId" placeholder="아이디">
+      <button type="button" onclick="checkSignupId()">중복확인</button>
     </div>
+
+    <p id="idCheckMsg" class="id-check-msg"></p>
+
+    <div class="password-wrap">
+      <input type="password" id="signupPassword" placeholder="비밀번호">
+      <button type="button" onclick="togglePassword('signupPassword', this)">👁</button>
+    </div>
+
+    <p id="passwordGuide" class="password-guide"></p>
+    <p id="passwordStrength" class="password-msg"></p>
+
+    <div class="password-wrap">
+      <input type="password" id="signupPasswordConfirm" placeholder="비밀번호 확인">
+      <button type="button" onclick="togglePassword('signupPasswordConfirm', this)">👁</button>
+    </div>
+
+    <p id="passwordMatch" class="password-msg"></p>
+
+  </div>
+
+</div>
 
 <div class="signup-page" data-page="6">
 
   <div class="terms-start">
 
     <h2>마지막 단계입니다</h2>
-
-    <p>
-      개인정보 처리방침 및 이용약관에 동의해주세요.
-    </p>
+    <p>개인정보 처리방침 및 이용약관에 동의해주세요.</p>
 
     <label class="agree-row">
       <input type="checkbox" id="agree1">
@@ -246,110 +250,30 @@
       <span>서비스 이용약관 동의 (필수)</span>
     </label>
 
-    <button
-      type="button"
-      class="main-btn signup-real-btn"
-      onclick="signup()"
-    >
+    <details class="terms-detail">
+      <summary>약관 자세히 보기</summary>
+
+      <p>
+        헬스보이짐 수내점은 회원가입, 회원 확인, 게시판 및 마이페이지 이용,
+        서비스 안내를 위해 아이디, 이름, 휴대폰 번호, 관심 분야, 회원 여부를 수집합니다.
+        수집한 개인정보는 회원 탈퇴 요청 시 또는 서비스 제공 목적 달성 시까지 보관하며,
+        보관 목적이 끝난 경우 지체 없이 파기합니다.
+      </p>
+
+      <p>
+        회원은 타인의 정보를 도용하거나 허위 정보를 입력해서는 안 되며,
+        게시판 이용 시 타인을 비방하거나 센터 운영에 피해를 주는 글을 작성할 수 없습니다.
+        부적절한 이용이 확인될 경우 게시글 삭제 또는 이용 제한이 될 수 있습니다.
+      </p>
+    </details>
+
+    <button type="button" class="main-btn signup-real-btn" onclick="signup()">
       가입하기
     </button>
 
   </div>
 
 </div>
-
-
-    
-
-    <p id="idCheckMsg" class="id-check-msg"></p>
-
-    <div class="password-wrap">
-
-      <input
-        type="password"
-        id="signupPassword"
-        placeholder="비밀번호"
-      >
-
-      <button
-        type="button"
-        onclick="togglePassword('signupPassword', this)"
-      >
-        👁
-      </button>
-
-    </div>
-
-    <p id="passwordGuide" class="password-guide"></p>
-    <p id="passwordStrength" class="password-msg"></p>
-
-    <div class="password-wrap">
-
-      <input
-        type="password"
-        id="signupPasswordConfirm"
-        placeholder="비밀번호 확인"
-      >
-
-      <button
-        type="button"
-        onclick="togglePassword('signupPasswordConfirm', this)"
-      >
-        👁
-      </button>
-
-    </div>
-
-<div class="terms-simple">
-
-  <label>
-    <input type="checkbox" id="agree1">
-    <span>개인정보 수집 및 이용에 동의합니다.</span>
-  </label>
-
-  <label>
-    <input type="checkbox" id="agree2">
-    <span>서비스 이용약관에 동의합니다.</span>
-  </label>
-
-  <details>
-    <summary>약관 자세히 보기</summary>
-
-    <p>
-      헬스보이짐 수내점은 회원가입, 회원 확인, 게시판 및 마이페이지 이용,
-      서비스 안내를 위해 아이디, 이름, 휴대폰 번호, 관심 분야, 회원 여부를 수집합니다.
-      수집한 개인정보는 회원 탈퇴 요청 시 또는 서비스 제공 목적 달성 시까지 보관하며,
-      보관 목적이 끝난 경우 지체 없이 파기합니다.
-    </p>
-
-    <p>
-      회원은 타인의 정보를 도용하거나 허위 정보를 입력해서는 안 되며,
-      게시판 이용 시 타인을 비방하거나 센터 운영에 피해를 주는 글을 작성할 수 없습니다.
-      부적절한 이용이 확인될 경우 게시글 삭제 또는 이용 제한이 될 수 있습니다.
-    </p>
-  </details>
-
-</div>
-
-
-
-    <p id="passwordMatch" class="password-msg"></p>
-   
-
-  </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
 
 
       <div class="auth-box" id="forgotBox">

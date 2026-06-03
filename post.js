@@ -318,39 +318,39 @@ await updateDoc(ref,{
 
 const likeBtn = document.getElementById("likeBtn");
 
-// 게시글 좋아요 상태 가져오기
-let liked = false;
+if(likeBtn){
 
-async function loadLikeStatus() {
-  if (!currentUser || !postId) return;
+  let liked = false;
 
-  const likeSnap = await getDoc(doc(db, "boards", postId, "likes", currentUser.uid));
-  liked = likeSnap.exists();
-  likeBtn.classList.toggle("liked", liked);
+  async function loadLikeStatus() {
+    if (!currentUser || !postId) return;
+
+    const likeSnap = await getDoc(doc(db, "boards", postId, "likes", currentUser.uid));
+    liked = likeSnap.exists();
+    likeBtn.classList.toggle("liked", liked);
+  }
+
+  likeBtn.addEventListener("click", async () => {
+    if (!currentUser) {
+      alert("로그인 후 좋아요 가능합니다.");
+      return;
+    }
+
+    const likeRef = doc(db, "boards", postId, "likes", currentUser.uid);
+
+    if (liked) {
+      await deleteDoc(likeRef);
+      liked = false;
+    } else {
+      await setDoc(likeRef, { createdAt: serverTimestamp() });
+      liked = true;
+    }
+
+    likeBtn.classList.toggle("liked", liked);
+  });
+
+  loadLikeStatus();
 }
-
-// 클릭 이벤트
-likeBtn.addEventListener("click", async () => {
-  if (!currentUser) {
-    alert("로그인 후 좋아요 가능합니다.");
-    return;
-  }
-
-  const likeRef = doc(db, "boards", postId, "likes", currentUser.uid);
-
-  if (liked) {
-    await deleteDoc(likeRef);
-    liked = false;
-  } else {
-    await setDoc(likeRef, { createdAt: serverTimestamp() });
-    liked = true;
-  }
-
-  likeBtn.classList.toggle("liked", liked);
-});
-
-// 초기 로드
-loadLikeStatus();
 
 const editBtn = document.getElementById("editPostBtn");
 const deleteBtn = document.getElementById("deletePostBtn");

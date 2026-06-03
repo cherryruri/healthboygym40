@@ -349,3 +349,71 @@ async function loadMyDashboard(user){
     }
   }
 }
+
+const editProfileBtn = document.getElementById("editProfileBtn");
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+
+if(editProfileBtn){
+  editProfileBtn.addEventListener("click", async ()=>{
+
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const newName = prompt("이름을 입력해주세요.");
+    if(!newName) return;
+
+    const newPhone = prompt("전화번호를 입력해주세요. 예: 01012345678");
+    if(!newPhone) return;
+
+    await updateDoc(doc(db, "users", user.uid), {
+      name: newName,
+      phone: newPhone
+    });
+
+    alert("개인정보가 수정되었습니다.");
+    location.reload();
+  });
+}
+
+if(changePasswordBtn){
+  changePasswordBtn.addEventListener("click", async ()=>{
+
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const newPassword = prompt("새 비밀번호를 입력해주세요. 8자 이상 권장");
+    if(!newPassword) return;
+
+    try{
+      await updatePassword(user, newPassword);
+      alert("비밀번호가 변경되었습니다.");
+    }catch(error){
+      alert("보안을 위해 다시 로그인 후 변경해주세요.");
+      location.href = "login.html";
+    }
+  });
+}
+
+if(deleteAccountBtn){
+  deleteAccountBtn.addEventListener("click", async ()=>{
+
+    const user = auth.currentUser;
+    if(!user) return;
+
+    const ok = confirm("정말 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
+    if(!ok) return;
+
+    try{
+      await deleteDoc(doc(db, "users", user.uid));
+      await deleteUser(user);
+
+      alert("회원 탈퇴가 완료되었습니다.");
+      location.href = "index.html";
+
+    }catch(error){
+      alert("보안을 위해 다시 로그인 후 탈퇴해주세요.");
+      location.href = "login.html";
+    }
+  });
+}

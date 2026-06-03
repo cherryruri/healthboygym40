@@ -122,6 +122,7 @@ document.body.classList.remove("welcoming");
   }
 
   try{
+    console.log("현재UID", user.uid);
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
 

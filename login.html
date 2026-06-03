@@ -88,28 +88,37 @@
           <button type="button" class="signup-arrow next" onclick="nextSignupPage()">›</button>
 
           <div class="signup-page active" data-page="1">
-            <div class="id-row">
-              <input type="text" id="signupId" placeholder="아이디">
-              <button type="button" onclick="checkSignupId()">중복확인</button>
-            </div>
 
-            <p id="idCheckMsg" class="id-check-msg"></p>
+  <div class="member-start">
+    <h2>헬스보이짐 수내점<br>회원님인가요?</h2>
+    <p>수내점 등록 회원만 게시판과 마이페이지를 이용할 수 있습니다.</p>
 
-            <div class="password-wrap">
-              <input type="password" id="signupPassword" placeholder="비밀번호">
-              <button type="button" onclick="togglePassword('signupPassword', this)">👁</button>
-            </div>
+    <div class="member-choice">
+      <label>
+        <input type="radio" name="isGymMember" value="yes">
+        <span>예, 수내점 회원입니다</span>
+      </label>
 
-            <p id="passwordGuide" class="password-guide"></p>
-            <p id="passwordStrength" class="password-msg"></p>
+      <label>
+        <input type="radio" name="isGymMember" value="no">
+        <span>아니요</span>
+      </label>
+    </div>
 
-            <div class="password-wrap">
-              <input type="password" id="signupPasswordConfirm" placeholder="비밀번호 확인">
-              <button type="button" onclick="togglePassword('signupPasswordConfirm', this)">👁</button>
-            </div>
+    <p id="memberCheckMsg" class="member-check-msg"></p>
+  </div>
 
-            <p id="passwordMatch" class="password-msg"></p>
-          </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 
           <div class="signup-page" data-page="2">
             <input type="text" id="signupName" placeholder="이름">

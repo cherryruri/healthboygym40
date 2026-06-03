@@ -29,14 +29,14 @@ const userList = document.getElementById("userList");
 
 async function loadUsers(){
 
-  const snap = await getDocs(collection(db,"users"));
+  const snap = await getDocs(collection(db, "users"));
 
   let total = 0;
   let adminCount = 0;
 
   userList.innerHTML = "";
 
-  snap.forEach(docSnap=>{
+  snap.forEach(docSnap => {
 
     const user = docSnap.data();
 
@@ -50,39 +50,29 @@ async function loadUsers(){
       ? user.interests.join(", ")
       : "-";
 
+    const createdAt = user.createdAt?.toDate
+      ? user.createdAt.toDate().toLocaleString("ko-KR")
+      : "-";
+
     userList.innerHTML += `
       <div class="user-row user-item">
-
         <div>${user.name || "-"}</div>
-
-        <div>${user.signupId || "-"}</div>
-
+        <div>${user.signupId || user.id || "-"}</div>
         <div>${user.phone || "-"}</div>
-
         <div>${interests}</div>
-
-        <div>${user.createdAt || "-"}</div>
-
-        <div class="${
-          user.role === "admin"
-            ? "role-admin"
-            : "role-user"
-        }">
+        <div>${createdAt}</div>
+        <div class="${user.role === "admin" ? "role-admin" : "role-user"}">
           ${user.role || "user"}
         </div>
-
       </div>
     `;
   });
 
-  document.getElementById("totalUsers").textContent =
-    `${total}명`;
-
-  document.getElementById("adminUsers").textContent =
-    `${adminCount}명`;
+  document.getElementById("totalUsers").textContent = `${total}명`;
+  document.getElementById("adminUsers").textContent = `${adminCount}명`;
 }
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth, async (user) => {
 
   if(!user){
     alert("로그인이 필요합니다.");
@@ -90,5 +80,5 @@ onAuthStateChanged(auth, async(user)=>{
     return;
   }
 
-  loadUsers();
+  await loadUsers();
 });

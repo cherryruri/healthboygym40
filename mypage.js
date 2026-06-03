@@ -322,4 +322,3 @@ async function loadMyDashboard(user){
       }
     }
   }
-}

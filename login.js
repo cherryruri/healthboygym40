@@ -51,18 +51,23 @@ window.showForgot = function(){
 
 window.nextSignupPage = function(){
 
+if(signupPageIndex === 1){
 
+  const selected = document.querySelector(
+    'input[name="isGymMember"]:checked'
+  );
 
-
-  if(signupPageIndex === 1){
-    const ok = checkPasswordLive();
-
-    if(!ok){
-      alert("비밀번호는 8~13자리 / 영문자 + 숫자 + 특수문자를 포함하고 비밀번호 확인과 일치해야 합니다.");
-      return;
-    }
+  if(!selected){
+    alert("회원 여부를 선택해주세요.");
+    return;
   }
 
+  if(selected.value === "no"){
+    alert("수내점 등록 회원만 이용 가능합니다.");
+    return;
+  }
+
+}
 
 
 

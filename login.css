@@ -917,31 +917,3 @@ body{
   transition:.35s;
 }
 
-.progress-step{
-  display:flex;
-  justify-content:space-between;
-}
-
-.progress-step span{
-
-  width:34px;
-  height:34px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-
-  background:rgba(255,255,255,.08);
-
-  color:rgba(255,255,255,.55);
-
-  font-size:13px;
-  font-weight:900;
-}
-
-.progress-step span.active{
-  background:#fff200;
-  color:#000;
-}

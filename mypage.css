@@ -645,3 +645,42 @@ body.welcoming .mobile-bottom-nav{
     text-overflow:ellipsis;
   }
 }
+
+@media(max-width:768px){
+
+  .dash-card{
+    overflow:hidden;
+  }
+
+  .dash-title-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  .dash-title-row a{
+    flex-shrink:0;
+    font-size:12px;
+    color:#888;
+    text-decoration:none;
+    font-weight:900;
+    letter-spacing:.08em;
+  }
+
+  .dash-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    overflow:hidden;
+  }
+
+  .dash-item{
+    width:100%;
+    max-width:100%;
+    display:block;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}

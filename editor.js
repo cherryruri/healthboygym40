@@ -86,7 +86,7 @@ submitBtn.addEventListener("click", async ()=>{
     return;
   }
 
-  if(editId){
+if(editId){
 
   await updateDoc(
     doc(db,"boards",editId),
@@ -97,6 +97,8 @@ submitBtn.addEventListener("click", async ()=>{
   );
 
   alert("수정되었습니다.");
+  location.href = `post.html?id=${editId}`;
+  return;
 
 }else{
 

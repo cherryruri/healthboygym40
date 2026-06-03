@@ -553,3 +553,129 @@ body.welcoming .mobile-bottom-nav{
   }
 }
 
+
+
+/* ===== PC 마이페이지 레이아웃 다시 정리 ===== */
+
+@media(min-width:769px){
+
+  body{
+    background:#f4f4f4;
+    color:#111;
+  }
+
+  .mypage{
+    width:100%;
+    min-height:auto;
+    padding:90px 40px 120px;
+    display:block;
+  }
+
+  .mypage-header{
+    max-width:1180px;
+    margin:0 auto 50px;
+
+    height:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+
+  .mypage-header h1{
+    color:#111;
+    font-size:42px;
+    font-weight:900;
+  }
+
+  .mypage-header h1::before{
+    content:"HEALTHBOYGYM";
+    display:block;
+    color:#fff200;
+    font-size:13px;
+    letter-spacing:2px;
+    margin-bottom:10px;
+  }
+
+  .back-btn{
+    color:#111;
+    font-size:34px;
+  }
+
+  .profile-area{
+    max-width:1180px;
+    margin:0 auto 24px;
+    padding:36px;
+
+    display:flex;
+    align-items:center;
+    gap:28px;
+    text-align:left;
+
+    background:#fff;
+    border-radius:28px;
+    border:1px solid #eee;
+  }
+
+  .profile-image{
+    margin:0;
+  }
+
+  .my-avatar{
+    width:96px;
+    height:96px;
+    border-radius:24px;
+    background:#111;
+    color:#fff200;
+    font-size:36px;
+  }
+
+  .profile-area h2{
+    color:#111;
+    font-size:34px;
+    margin:0 0 8px;
+  }
+
+  .profile-area p{
+    color:#777;
+  }
+
+  .info-section{
+    max-width:1180px;
+    margin:0 auto;
+    padding:36px;
+
+    background:#fff;
+    border-radius:28px;
+    border:1px solid #eee;
+  }
+
+  .info-section h3{
+    color:#111;
+    font-size:28px;
+  }
+
+  .info-row{
+    background:#fafafa;
+    border:1px solid #eee;
+    border-radius:16px;
+    padding:0 22px;
+    margin-bottom:12px;
+  }
+
+  .info-row span{
+    color:#777;
+  }
+
+  .info-row strong{
+    color:#111;
+  }
+
+  .logout-btn{
+    display:block;
+    max-width:1180px;
+    width:100%;
+    margin:26px auto 0;
+    height:56px;
+    border-radius:999px;
+  }
+}

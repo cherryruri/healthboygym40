@@ -499,3 +499,68 @@ cursor:pointer;
 .like-btn{
   margin-left:auto;
 }
+
+
+.edit-comment-btn,
+.delete-comment-btn{
+  margin-top:6px;
+  margin-right:6px;
+  padding:4px 8px;
+  border:none;
+  border-radius:999px;
+  background:#f1f1f1;
+  color:#777;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.edit-comment-btn:hover,
+.delete-comment-btn:hover{
+  background:#111;
+  color:#fff;
+}
+
+.comment-edit-input{
+  width:100%;
+  min-height:70px;
+  margin-top:8px;
+  padding:10px 12px;
+  border:1px solid #ddd;
+  border-radius:10px;
+  resize:none;
+  font-size:14px;
+  font-family:inherit;
+  outline:none;
+}
+
+.comment-edit-input:focus{
+  border-color:#111;
+}
+
+.comment-edit-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:6px;
+  margin-top:8px;
+}
+
+.save-comment-btn,
+.cancel-comment-btn{
+  padding:6px 12px;
+  border:none;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.save-comment-btn{
+  background:#111;
+  color:#fff;
+}
+
+.cancel-comment-btn{
+  background:#eee;
+  color:#555;
+}

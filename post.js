@@ -349,24 +349,37 @@ deleteBtn.addEventListener("click", async () => {
   location.href = "board.html";
 });
 
-
-
 commentList.addEventListener("click", async (e)=>{
 
   const id = e.target.dataset.id;
 
-  // 삭제
-  if(e.target.classList.contains("delete-comment-btn")){
-    await deleteDoc(doc(db,"boards",postId,"comments",id));
-    loadComments();
-  }
-
-  // 수정
   if(e.target.classList.contains("edit-comment-btn")){
 
-    const newText = prompt("댓글 수정");
+    const comment = e.target.closest(".comment");
+    const textEl = comment.querySelector(".comment-text");
+    const oldText = textEl.textContent.trim();
 
-    if(!newText) return;
+    textEl.innerHTML = `
+      <textarea class="comment-edit-input">${oldText}</textarea>
+      <div class="comment-edit-actions">
+        <button class="save-comment-btn" data-id="${id}">저장</button>
+        <button class="cancel-comment-btn">취소</button>
+      </div>
+    `;
+
+    e.target.style.display = "none";
+  }
+
+  if(e.target.classList.contains("save-comment-btn")){
+
+    const comment = e.target.closest(".comment");
+    const textarea = comment.querySelector(".comment-edit-input");
+    const newText = textarea.value.trim();
+
+    if(!newText){
+      alert("댓글 내용을 입력해주세요.");
+      return;
+    }
 
     await updateDoc(doc(db,"boards",postId,"comments",id),{
       text:newText
@@ -374,4 +387,9 @@ commentList.addEventListener("click", async (e)=>{
 
     loadComments();
   }
+
+  if(e.target.classList.contains("cancel-comment-btn")){
+    loadComments();
+  }
+
 });

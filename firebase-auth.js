@@ -34,6 +34,8 @@ const db = getFirestore(app);
 let idChecked = false;
 let idAvailable = false;
 let checkedId = "";
+let confirmationResult = null;
+window.phoneVerified = false;
 
 function cleanId(id){
   return id.trim().toLowerCase();

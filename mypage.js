@@ -3,7 +3,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebas
 import {
   getAuth,
   onAuthStateChanged,
-  signOut
+  signOut,
+  updatePassword,
+  deleteUser
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
 
 import {

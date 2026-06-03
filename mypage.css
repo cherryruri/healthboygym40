@@ -1130,3 +1130,32 @@ body.welcoming .mobile-bottom-nav{
   }
 
 }
+
+/* ===== 프로필 + 기본정보 가로 배치 ===== */
+
+@media(min-width:769px){
+
+  .top-profile-wrap{
+    display:grid;
+    grid-template-columns:280px 1fr;
+    gap:24px;
+    margin-bottom:24px;
+  }
+
+  .profile-area{
+    margin:0;
+    height:100%;
+  }
+
+  .info-section{
+    margin:0;
+    height:100%;
+  }
+
+  .mypage-dashboard{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:24px;
+  }
+
+}

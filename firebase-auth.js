@@ -201,10 +201,10 @@ const role = "user";
     return;
   }
 
-  if(!agree1 || !agree2){
-    alert("개인정보 및 이용약관에 동의해주세요.");
-    return;
-  }
+if(!agreeAll){
+  alert("개인정보 및 이용약관에 동의해주세요.");
+  return;
+}
 
   const email = makeEmail(id);
   const memberKey = getMemberKey(name, phone);

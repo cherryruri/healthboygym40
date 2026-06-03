@@ -208,7 +208,6 @@ if(mypageBtn){
 
   });
 }
-
 async function loadMyDashboard(user){
 
   const myPostList = document.getElementById("myPostList");
@@ -225,7 +224,9 @@ async function loadMyDashboard(user){
 
   if(myCommentList){
     myCommentList.innerHTML = `
-      <div class="dash-item">댓글 목록은 다음 단계에서 연결할게요.</div>
+      <div class="dash-item">
+        댓글 목록은 다음 단계에서 연결할게요.
+      </div>
     `;
   }
 
@@ -233,7 +234,8 @@ async function loadMyDashboard(user){
 
   let myPosts = [];
 
-  postSnap.forEach(docSnap => {
+  postSnap.forEach(docSnap=>{
+
     const post = docSnap.data();
 
     const isMine =
@@ -248,77 +250,81 @@ async function loadMyDashboard(user){
         ...post
       });
     }
+
   });
 
   myPosts.sort((a,b)=>{
-    const at = a.createdAt?.toDate ? a.createdAt.toDate().getTime() : 0;
-    const bt = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
+
+    const at =
+      a.createdAt?.toDate
+        ? a.createdAt.toDate().getTime()
+        : 0;
+
+    const bt =
+      b.createdAt?.toDate
+        ? b.createdAt.toDate().getTime()
+        : 0;
+
     return bt - at;
+
   });
 
   if(myPostList){
+
     myPostList.innerHTML = "";
 
     if(myPosts.length === 0){
-      myPostList.innerHTML = `<div class="dash-item">작성한 게시물이 없습니다.</div>`;
+
+      myPostList.innerHTML =
+      `<div class="dash-item">
+        작성한 게시물이 없습니다.
+      </div>`;
+
     }else{
+
       myPosts.slice(0,3).forEach(post=>{
+
         myPostList.innerHTML += `
           <a class="dash-item" href="post.html?id=${post.id}">
             ${post.title || "제목 없음"}
           </a>
         `;
+
       });
+
     }
+
   }
 
-  const userRef = doc(db, "users", user.uid);
+  const userRef = doc(db,"users",user.uid);
   const userSnap = await getDoc(userRef);
 
   if(userSnap.exists()){
+
     const data = userSnap.data();
 
     if(data.createdAt?.toDate){
+
       const created = data.createdAt.toDate();
       const now = new Date();
-      const diff = Math.floor((now - created) / (1000 * 60 * 60 * 24)) + 1;
+
+      const diff =
+      Math.floor(
+        (now - created) /
+        (1000 * 60 * 60 * 24)
+      ) + 1;
 
       if(joinedDays){
         joinedDays.textContent = `${diff}일째`;
       }
 
       if(joinedDate){
-        joinedDate.textContent = `${created.toLocaleDateString("ko-KR")} 가입`;
+        joinedDate.textContent =
+        `${created.toLocaleDateString("ko-KR")} 가입`;
       }
+
     }
+
   }
+
 }
-
-  if(myCommentList){
-    myCommentList.innerHTML = `
-      <div class="dash-item">
-        댓글 목록은 다음 단계에서 연결할게요.
-      </div>
-    `;
-  }
-
-  const userRef = doc(db, "users", user.uid);
-  const userSnap = await getDoc(userRef);
-
-  if(userSnap.exists()){
-    const data = userSnap.data();
-
-    if(data.createdAt?.toDate){
-      const created = data.createdAt.toDate();
-      const now = new Date();
-      const diff = Math.floor((now - created) / (1000 * 60 * 60 * 24)) + 1;
-
-      if(joinedDays){
-        joinedDays.textContent = `${diff}일째`;
-      }
-
-      if(joinedDate){
-        joinedDate.textContent = `${created.toLocaleDateString("ko-KR")} 가입`;
-      }
-    }
-  }

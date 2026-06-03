@@ -88,9 +88,8 @@ onAuthStateChanged(auth, async(user)=>{
         .toLocaleDateString("ko-KR");
     }
 
-    list.innerHTML += `
-      <a href="post.html?id=${post.id}" class="board-row">
-
+  list.innerHTML += `
+  <a href="post.html?id=${post.id}" class="board-row my-post-row">
         <div>${posts.length-index}</div>
 
         <div>

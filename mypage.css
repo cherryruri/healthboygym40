@@ -699,26 +699,3 @@ body.welcoming .mobile-bottom-nav{
   vertical-align:middle;
 }
 
-
-@media(max-width:768px){
-
-  .mobile-menu-btn{
-    position:fixed;
-    top:112px;
-    right:24px;
-    left:auto;
-    z-index:1000000;
-  }
-
-
-
-  .mypage > .mypage-header{
-    margin-top:0;
-    margin-bottom:28px;
-  }
-
-  .mypage-header h1{
-    transform:none;
-  }
-
-}

@@ -415,3 +415,23 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
 });
+const eventPopup = document.getElementById("eventPopup");
+const closeEventPopup = document.getElementById("closeEventPopup");
+const hideTodayPopup = document.getElementById("hideTodayPopup");
+
+if(eventPopup){
+  const isHidden = localStorage.getItem("eventPopupHidden");
+
+  if(isHidden === "yes"){
+    eventPopup.style.display = "none";
+  }
+
+  closeEventPopup?.addEventListener("click",()=>{
+    eventPopup.style.display = "none";
+  });
+
+  hideTodayPopup?.addEventListener("click",()=>{
+    localStorage.setItem("eventPopupHidden","yes");
+    eventPopup.style.display = "none";
+  });
+}

@@ -413,25 +413,29 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
   });
+  
+    const eventPopup = document.getElementById("eventPopup");
+  const closeEventPopup = document.getElementById("closeEventPopup");
+  const hideTodayPopup = document.getElementById("hideTodayPopup");
 
-});
-const eventPopup = document.getElementById("eventPopup");
-const closeEventPopup = document.getElementById("closeEventPopup");
-const hideTodayPopup = document.getElementById("hideTodayPopup");
+  if(eventPopup){
+    if(localStorage.getItem("eventPopupHidden") === "yes"){
+      eventPopup.style.display = "none";
+    }
 
-if(eventPopup){
-  const isHidden = localStorage.getItem("eventPopupHidden");
+    if(closeEventPopup){
+      closeEventPopup.addEventListener("click", function(){
+        eventPopup.style.display = "none";
+      });
+    }
 
-  if(isHidden === "yes"){
-    eventPopup.style.display = "none";
+    if(hideTodayPopup){
+      hideTodayPopup.addEventListener("click", function(){
+        localStorage.setItem("eventPopupHidden", "yes");
+        eventPopup.style.display = "none";
+      });
+    }
   }
 
-  closeEventPopup?.addEventListener("click",()=>{
-    eventPopup.style.display = "none";
-  });
+});
 
-  hideTodayPopup?.addEventListener("click",()=>{
-    localStorage.setItem("eventPopupHidden","yes");
-    eventPopup.style.display = "none";
-  });
-}

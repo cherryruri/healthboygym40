@@ -435,7 +435,6 @@ document.addEventListener("DOMContentLoaded", function(){
         eventPopup.style.display = "none";
       });
     }
-  }
 
 });
 

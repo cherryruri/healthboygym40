@@ -414,27 +414,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   });
   
-    const eventPopup = document.getElementById("eventPopup");
-  const closeEventPopup = document.getElementById("closeEventPopup");
-  const hideTodayPopup = document.getElementById("hideTodayPopup");
-
-  if(eventPopup){
-    if(localStorage.getItem("eventPopupHidden") === "yes"){
-      eventPopup.style.display = "none";
-    }
-
-    if(closeEventPopup){
-      closeEventPopup.addEventListener("click", function(){
-        eventPopup.style.display = "none";
-      });
-    }
-
-    if(hideTodayPopup){
-      hideTodayPopup.addEventListener("click", function(){
-        localStorage.setItem("eventPopupHidden", "yes");
-        eventPopup.style.display = "none";
-      });
-    }
+   
 
 });
 

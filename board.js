@@ -40,18 +40,32 @@ onAuthStateChanged(auth, (user)=>{
   loadPosts();
 });
 
+/* ─────────────────────────────────────────────────────────
+   [수정 및 추가 구간] 메뉴 탭 설정 및 클릭 시 타이틀 애니메이션 교체
+   ───────────────────────────────────────────────────────── */
 document.querySelectorAll(".board-tab").forEach(tab=>{
   if(tab.dataset.board === currentBoard){
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
   }
 
-  tab.addEventListener("click", ()=>{
+  tab.addEventListener("click", function(){
     currentBoard = tab.dataset.board;
 
+    // 1. 모든 탭에서 active 클래스 제거 후 선택된 탭에만 부여
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
 
+    // 2. ✨ 우측 상단 제목 가져와서 글자 변경 + 페이드 효과 넣기
+    const boardTitle = document.querySelector(".board-header h1");
+    if (boardTitle) {
+      boardTitle.classList.remove("fade-in-text");      // 애니메이션 클래스 초기화
+      void boardTitle.offsetWidth;                      // 브라우저가 리셋을 인지하도록 유도
+      boardTitle.textContent = tab.textContent.trim();  // 누른 메뉴의 이름을 타이틀에 대입
+      boardTitle.classList.add("fade-in-text");         // 애니메이션 시작 클래스 부여
+    }
+
+    // 3. 변경된 게시판 데이터 리로드
     loadPosts();
   });
 });
@@ -84,9 +98,9 @@ async function loadPosts(){
 
   if(snap.empty){
     postList.innerHTML = `
-      <div class="board-row">
+      <div class=\"board-row\">
         <div>-</div>
-        <div class="board-title">등록된 글이 없습니다.</div>
+        <div class=\"board-title\">등록된 글이 없습니다.</div>
         <div>-</div>
         <div>-</div>
       </div>
@@ -108,7 +122,7 @@ async function loadPosts(){
 
 row.innerHTML = `
   <div>${post.isNotice ? "공지" : no}</div>
-  <div class="board-title">${post.isPublic ? "" : "🔒"} ${post.title}</div>
+  <div class=\"board-title\">${post.isPublic ? "" : "🔒"} ${post.title}</div>
   <div>${post.writerId || "회원"}</div>
   <div>${date}</div>
   <div>${post.views || 0}</div>

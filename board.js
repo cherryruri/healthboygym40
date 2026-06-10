@@ -106,12 +106,13 @@ async function loadPosts(){
     const row = document.createElement("div");
     row.className = "board-row board-post";
 
-    row.innerHTML = `
-      <div>${post.isNotice ? "공지" : no}</div>
-      <div class="board-title">${post.isPublic ? "" : "🔒"} ${post.title}</div>
-      <div>${post.writerId || "회원"}</div>
-      <div>${date}</div>
-    `;
+row.innerHTML = `
+  <div>${post.isNotice ? "공지" : no}</div>
+  <div class="board-title">${post.isPublic ? "" : "🔒"} ${post.title}</div>
+  <div>${post.writerId || "회원"}</div>
+  <div>${date}</div>
+  <div>${post.views || 0}</div>
+`;
 
 row.addEventListener("click", ()=>{
 

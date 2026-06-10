@@ -31,7 +31,7 @@ const db = getFirestore(app);
 let currentUser = null;
 let currentBoard = new URLSearchParams(location.search).get("board") || "free";
 
-// 🌟 페이징 관련 변수 추가
+// 🌟 페이징 관련 변수
 let allPosts = [];       // 불러온 전체 게시글을 저장할 배열
 let currentPage = 1;     // 현재 가리키고 있는 페이지 번호
 const postsPerPage = 20; // ⚡ 한 페이지에 보여줄 게시글 수 (20개 고정)
@@ -66,7 +66,7 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
       boardTitle.classList.add("fade-in-text");
     }
 
-    currentPage = 1; // ⚡ 게시판을 바꿀 때는 1페이지부터 보여주기
+    currentPage = 1; // 게시판을 바꿀 때는 1페이지부터 보여주기
     loadPosts();
   });
 });
@@ -82,7 +82,7 @@ if(writeBtn){
   });
 }
 
-// 🌟 데이터베이스에서 게시글을 긁어오는 핵심 함수
+// 데이터베이스에서 게시글을 긁어오는 함수
 async function loadPosts(){
   if(!postList) return;
 
@@ -107,10 +107,12 @@ async function loadPosts(){
         <div>-</div>
       </div>
     `;
+    // 글이 하나도 없을 때도 최소한 < 1 > 번호판은 유지되도록 처리
+    setupPagination();
     return;
   }
 
-  // 1. 전체 게시글 데이터를 배열에 먼저 파싱해서 담아둡니다.
+  // 전체 게시글 데이터를 배열에 먼저 담기
   allPosts = [];
   snap.forEach(docSnap => {
     allPosts.push({
@@ -119,22 +121,20 @@ async function loadPosts(){
     });
   });
 
-  // 2. 쪼개진 해당 페이지의 게시글을 렌더링하는 함수 호출
+  // 해당 페이지의 게시글 렌더링
   renderPage(currentPage);
 }
 
-// 🌟 20개씩 쪼개서 화면에 표출하고 하단 버튼을 그리는 함수
+// 20개씩 쪼개서 화면에 표출하는 함수
 function renderPage(page) {
+  if (!postList) return;
   postList.innerHTML = "";
   
-  // 시작 인덱스와 끝 인덱스 계산 (예: 1페이지는 0번째부터 19번째글까지)
   const startIndex = (page - 1) * postsPerPage;
   const endIndex = Math.min(startIndex + postsPerPage, allPosts.length);
   
-  // 전체 No 번호 계산 (최신 글이 가장 큰 번호를 가짐)
   let no = allPosts.length - startIndex;
 
-  // 3. 20개 구간에 해당되는 데이터만 꺼내서 한 줄씩 화면에 생성
   for (let i = startIndex; i < endIndex; i++) {
     const docId = allPosts[i].id;
     const post = allPosts[i].data;
@@ -170,27 +170,27 @@ function renderPage(page) {
     }
   }
 
-  // 4. 하단 페이지 네이션 버튼 생성 호출
+  // 하단 페이지 네이션 버튼 생성
   setupPagination();
 }
 
-// 🌟 하단에 < 1 2 3 > 버튼을 동적으로 그려주는 함수
+// 🌟 하단에 < 1 2 3 > 버튼을 동적으로 그려주는 함수 (개수 적어도 출력 보장 커스텀)
 function setupPagination() {
   if (!paginationContainer) return;
   paginationContainer.innerHTML = "";
 
-  const totalPages = Math.ceil(allPosts.length / postsPerPage);
-  if (totalPages <= 1) return; // 20개가 안 되어서 1페이지만 존재하면 번호판을 숨김
+  // 글이 없거나 적어도 무조건 최소 1페이지는 그려지도록 계산
+  const totalPages = Math.ceil(allPosts.length / postsPerPage) || 1; 
 
   // [이전 페이지 < ] 버튼 생성
   const prevBtn = document.createElement("button");
   prevBtn.innerHTML = "&lt;";
-  prevBtn.disabled = currentPage === 1; // 1페이지면 비활성화
+  prevBtn.disabled = currentPage === 1; 
   prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
       renderPage(currentPage);
-      window.scrollTo(0, 0); // 페이지 이동 시 스크롤 상단으로 이동
+      window.scrollTo(0, 0); 
     }
   });
   paginationContainer.appendChild(prevBtn);
@@ -200,7 +200,7 @@ function setupPagination() {
     const pageBtn = document.createElement("button");
     pageBtn.innerText = i;
     if (i === currentPage) {
-      pageBtn.className = "active"; // 현재 보고 있는 페이지면 강조 표시
+      pageBtn.className = "active"; 
     }
 
     pageBtn.addEventListener("click", () => {
@@ -214,7 +214,7 @@ function setupPagination() {
   // [다음 페이지 > ] 버튼 생성
   const nextBtn = document.createElement("button");
   nextBtn.innerHTML = "&gt;";
-  nextBtn.disabled = currentPage === totalPages; // 마지막 페이지면 비활성화
+  nextBtn.disabled = currentPage === totalPages; 
   nextBtn.addEventListener("click", () => {
     if (currentPage < totalPages) {
       currentPage++;

@@ -23,7 +23,6 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 40px;
-  /* [수정 완료] 주석 오타로 전체 코드가 깨지던 부분 수정 */
 }
 
 .board-main {
@@ -53,66 +52,51 @@ body {
   max-width: 720px;
 }
 
-/* ===== 3. 왼쪽 사이드바 (메뉴 노란 밑줄 애니메이션 추가 버전) ===== */
+
+/* ===== 3. 왼쪽 사이드바 ===== */
 .board-sidebar {
-  background: #0f0f10;         /* 묵직하게 가라앉는 미니멀 다크 배경 */
-  border: 1px solid #1f1f22;    /* 정밀하고 은은한 미니멀 경계선 */
-  border-radius: 14px;         /* 현대적이고 깔끔한 곡률 */
-  padding: 16px 10px;          /* 내부 컴팩트 여백 */
+  background: #fafafa;         /* 연한 회색 배경 */
+  border: 1px solid #eee;      /* 부드러운 테두리 */
+  border-radius: 16px;         /* 둥근 상자 스타일 */
+  padding: 24px 16px;          /* 내부 여백 */
   height: auto;
-  align-self: stretch;         /* 오른쪽 테이블과 높이 연장 맞춤 */
+  align-self: stretch;         /* 오른쪽 게시판과 같은 높이로 자동 연장 */
 }
 
 /* 사이드바 내부 탭 스타일 */
 .board-sidebar .board-tab {
-  display: block;              
+  display: block;
   width: 100%;
   border: none;
   background: none;
-  color: #77777c;              /* 기본 상태: 다크 그레이 톤 */
+  color: #555;
   text-align: left;
-  padding: 14px 18px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 16px 20px;
+  font-size: 15px;
+  font-weight: 700;
   text-decoration: none;
   border-radius: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
   position: relative;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* 🌟 [추가] 왼쪽 메뉴 아래에 깔릴 노란 밑줄 기본 세팅 */
-.board-sidebar .board-tab::after {
-  content: "";
-  position: absolute;
-  bottom: 8px;                 /* 글자 바로 아래에 오도록 조절 */
-  left: 18px;
-  width: 40px;                 /* 밑줄의 길이 */
-  height: 2px;                 /* 밑줄 두께 */
-  background-color: #fff200;   /* 헬스보이짐 시그니처 옐로우 */
-  transform: scaleX(0);        /* 평소에는 안보이게 숨김 */
-  transform-origin: bottom left;
-  transition: transform 0.25s ease-out;
-}
-
-/* 🌟 [추가] 메뉴에 마우스를 올렸을 때(Hover) 노란 밑줄이 스르륵 생김 */
+/* 마우스 올렸을 때 */
 .board-sidebar .board-tab:hover {
-  color: #fff;
-}
-.board-sidebar .board-tab:hover::after {
-  transform: scaleX(1);        /* 밑줄 애니메이션 작동 */
+  background: #f0f0f0;
+  color: #111;
 }
 
-/* 🌟 [추가] 현재 선택된 활성화 메뉴 스타일 (화이트 반전 + 노란밑줄 고정) */
+/* 활성화 상태 (선택된 메뉴) */
 .board-sidebar .board-tab.active {
-  background: #ffffff !important; 
-  color: #000000 !important;      
-  font-weight: 800;
+  background: #111;            /* 검은색 배경 반전 */
+  color: #fff200;              /* 글자 노란색 */
 }
+
+/* 화살표 가리기 */
 .board-sidebar .board-tab.active::after {
-  background-color: #000000;   /* 흰 배경일 때는 밑줄이 검은색으로 나오면 시크합니다. 만약 노란색을 원하시면 이 줄을 지워주세요! */
-  transform: scaleX(1) !important; /* 밑줄 상시 표시 */
+  display: none !important;
 }
 
 
@@ -123,166 +107,4 @@ body {
 
 @keyframes titleFadeIn {
   from {
-    opacity: 0;
-    transform: translateY(-4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
-.board-table {
-  border-top: 2px solid #111;
-}
-
-.board-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 140px 140px 80px;
-  align-items: center;
-  min-height: 62px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.board-row:hover {
-  background: #fcfcfc;
-}
-
-.board-row > div {
-  padding: 0 10px;
-}
-
-.board-head {
-  font-size: 12px;
-  font-weight: 900;
-  color: #666;
-}
-
-/* [수정 완료] 게시글 제목 목록은 깔끔하게 유지 (노란 밑줄 제거) */
-.board-title {
-  font-weight: 700;
-  color: #111;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-  padding-bottom: 4px;
-}
-
-.my-post-row {
-  text-decoration: none;
-  color: #111;
-}
-
-.my-post-row:hover {
-  background: #f7f7f7;
-}
-
-
-/* ===== 5. 하단 유틸리티 (검색, 페이징, 글쓰기 버튼) ===== */
-.board-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 35px;
-}
-
-#boardSearch {
-  width: 320px;
-  height: 44px;
-  border: 1px solid #ddd;
-  padding: 0 16px;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-#boardSearch:focus {
-  border-color: #111;
-}
-
-.write-btn {
-  display: block;
-  width: 90px;
-  height: 42px;
-  border: none;
-  border-radius: 999px;
-  background: #111;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-}
-
-.write-btn:hover {
-  background: #fff200;
-  color: #000;
-  transform: translateY(-2px);
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 25px;
-}
-
-.pagination button {
-  width: 34px;
-  height: 34px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #111;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.pagination button.active {
-  background: #111;
-  color: #fff200;
-  border-color: #111;
-}
-
-
-/* ===== 6. 반응형 미디어 쿼리 ===== */
-@media(max-width: 768px) {
-  .board-page {
-    padding: 110px 20px 80px; 
-  }
-
-  .board-layout {
-    grid-template-columns: 1fr; 
-    gap: 24px;
-  }
-
-  .board-header h1 {
-    font-size: 32px;
-  }
-
-  .board-row {
-    grid-template-columns: 50px 1fr 90px; 
-    font-size: 13px;
-  }
-
-  .board-bottom {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-
-  #boardSearch {
-    width: 100%;
-  }
-
-  .write-btn {
-    width: 100%;
-    margin-top: 8px;
-  }
-}
+    opacity: 0

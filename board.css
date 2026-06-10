@@ -442,28 +442,36 @@ height:230px;
   text-decoration:underline;
 }
 
+
+
 .board-layout{
 display:grid;
-grid-template-columns:210px 1fr;
-gap:42px;
+grid-template-columns:220px 1fr;
+gap:35px;
+align-items:start;
 }
+
 .board-sidebar{
 background:#000;
-min-height:640px;
-padding:40px 0;
+padding:30px 0;
+height:fit-content;
 }
 
-
 .board-sidebar .board-tab{
-  width:100%;
-  border:none;
-  background:none;
-  color:#fff;
-  text-align:left;
-  padding:24px 32px;
-  font-size:20px;
-  font-weight:900;
-  cursor:pointer;
+width:100%;
+border:none;
+background:none;
+color:#fff;
+text-align:left;
+padding:18px 24px;
+font-size:16px;
+font-weight:900;
+cursor:pointer;
+transition:.2s;
+}
+
+.board-sidebar .board-tab:hover{
+color:#fff200;
 }
 
 .board-sidebar .board-tab.active{
@@ -474,46 +482,78 @@ position:relative;
 .board-sidebar .board-tab.active::after{
 content:"→";
 position:absolute;
-right:24px;
+right:20px;
 top:50%;
 transform:translateY(-50%);
-font-size:22px;
-font-weight:900;
-color:#fff200;
+font-size:18px;
 }
 
 .board-main{
-  width:100%;
+width:100%;
 }
 
 .board-header{
 text-align:left;
-padding-left:0;
-border:none;
-margin-bottom:50px;
+border-left:6px solid #111;
+padding-left:18px;
+margin-bottom:35px;
 }
-
 
 .board-header h1{
-font-size:56px;
+font-size:42px;
 font-weight:900;
-letter-spacing:-0.06em;
-margin-bottom:18px;
+margin-bottom:10px;
+letter-spacing:-0.04em;
 }
-
 
 .board-header p{
-font-size:15px;
-line-height:2;
+font-size:14px;
+line-height:1.8;
 color:#666;
-max-width:850px;
+max-width:720px;
 }
 
+.board-table{
+border-top:2px solid #111;
+}
+
+.board-row{
+display:grid;
+grid-template-columns:70px 1fr 120px 120px 80px;
+align-items:center;
+min-height:54px;
+border-bottom:1px solid #eee;
+font-size:13px;
+}
+
+.board-row > div{
+padding:0 10px;
+}
+
+.board-head{
+font-size:11px;
+font-weight:900;
+color:#666;
+}
+
+.board-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:25px;
+}
+
+#boardSearch{
+width:280px;
+height:42px;
+border:1px solid #ddd;
+padding:0 14px;
+font-size:13px;
+}
 
 .write-btn{
-width:92px;
-height:44px;
-margin:0;
+width:90px;
+height:42px;
 border:none;
 border-radius:999px;
 background:#111;
@@ -521,11 +561,30 @@ color:#fff;
 font-size:13px;
 font-weight:900;
 cursor:pointer;
-box-shadow:0 12px 28px rgba(0,0,0,.2);
 }
 
 .write-btn:hover{
 background:#fff200;
 color:#000;
-transform:translateY(-2px);
+}
+
+.pagination{
+display:flex;
+justify-content:center;
+gap:8px;
+margin-top:25px;
+}
+
+.pagination button{
+width:34px;
+height:34px;
+border:1px solid #ddd;
+background:#fff;
+cursor:pointer;
+}
+
+.pagination button.active{
+background:#111;
+color:#fff200;
+border-color:#111;
 }

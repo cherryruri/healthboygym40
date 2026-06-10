@@ -292,9 +292,9 @@ border-color:#111;
 
 
 .board-row{
-grid-template-columns:42px 1fr 58px 74px;
-min-height:44px;
-font-size:12px;
+grid-template-columns:60px 1fr 120px 120px 80px;
+min-height:52px;
+font-size:13px;
 }
 
 .board-row > div{

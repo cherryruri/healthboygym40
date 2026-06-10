@@ -32,9 +32,9 @@ let currentUser = null;
 let currentBoard = new URLSearchParams(location.search).get("board") || "free";
 
 // 페이징 관련 변수
-let allPosts = [];       // 불러온 전체 게시글을 저장할 배열
-let currentPage = 1;     // 현재 가리키고 있는 페이지 번호
-const postsPerPage = 20; // 한 페이지에 보여줄 게시글 수 (20개 고정)
+let allPosts = [];       
+let currentPage = 1;     
+const postsPerPage = 20; // ⚡ 한 페이지에 게시글 20개씩 노출 고정!
 
 const postList = document.getElementById("postList");
 const paginationContainer = document.getElementById("pagination");
@@ -66,7 +66,7 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
       boardTitle.classList.add("fade-in-text");
     }
 
-    currentPage = 1; // 게시판을 바꿀 때는 1페이지부터 보여주기
+    currentPage = 1; 
     loadPosts();
   });
 });
@@ -82,7 +82,6 @@ if(writeBtn){
   });
 }
 
-// 데이터베이스에서 게시글을 긁어오는 함수
 async function loadPosts(){
   if(!postList) return;
 
@@ -107,13 +106,11 @@ async function loadPosts(){
         <div>-</div>
       </div>
     `;
-    // 글이 하나도 없을 때도 빈 배열로 세팅한 후 1~5번 페이지가 나오도록 유도
     allPosts = [];
     setupPagination();
     return;
   }
 
-  // 전체 게시글 데이터를 배열에 먼저 담기
   allPosts = [];
   snap.forEach(docSnap => {
     allPosts.push({
@@ -122,16 +119,13 @@ async function loadPosts(){
     });
   });
 
-  // 해당 페이지의 게시글 렌더링
   renderPage(currentPage);
 }
 
-// 20개씩 쪼개서 화면에 표출하는 함수
 function renderPage(page) {
   if (!postList) return;
   postList.innerHTML = "";
   
-  // 글이 비어있다면 게시글 목록 렌더링을 건너뛰고 페이징만 생성합니다.
   if (allPosts.length === 0) {
     setupPagination();
     return;
@@ -177,22 +171,17 @@ function renderPage(page) {
     }
   }
 
-  // 하단 페이지 네이션 버튼 생성
   setupPagination();
 }
 
-// 🌟 하단에 << < 1 2 3 4 5 > >> 버튼을 동적으로 그려주는 함수
 function setupPagination() {
   if (!paginationContainer) return;
   paginationContainer.innerHTML = "";
 
-  // 실제 존재하는 데이터 기반의 페이지 수 계산
   const actualTotalPages = Math.ceil(allPosts.length / postsPerPage) || 1; 
-  
-  // 글이 부족해도 항상 5페이지까지는 강제로 숫자가 채워지도록 고정
   const displayTotalPages = Math.max(actualTotalPages, 5); 
 
-  // 1. [맨 처음으로 <<] 버튼 생성
+  // 1. [<<]
   const firstBtn = document.createElement("button");
   firstBtn.innerHTML = "&lt;&lt;";
   firstBtn.className = "page-arrow";
@@ -206,7 +195,7 @@ function setupPagination() {
   });
   paginationContainer.appendChild(firstBtn);
 
-  // 2. [이전 페이지 <] 버튼 생성
+  // 2. [<]
   const prevBtn = document.createElement("button");
   prevBtn.innerHTML = "&lt;";
   prevBtn.className = "page-arrow";
@@ -220,17 +209,16 @@ function setupPagination() {
   });
   paginationContainer.appendChild(prevBtn);
 
-  // 3. [숫자 1, 2, 3, 4, 5] 버튼 생성
+  // 3. [1 2 3 4 5]
   for (let i = 1; i <= displayTotalPages; i++) {
     const pageBtn = document.createElement("button");
     pageBtn.innerText = i;
     
-    // 실제 글 데이터가 없는 가상의 더미 페이지 번호 연하게 스타일 처리
     if (i > actualTotalPages) {
       pageBtn.classList.add("dummy-page");
-      pageBtn.disabled = true; // 실제 글이 없으므로 누를 수 없게 방어
+      pageBtn.disabled = true; 
     } else if (i === currentPage) {
-      pageBtn.className = "active"; // 현재 보고 있는 페이지 활성화
+      pageBtn.className = "active"; 
     }
 
     pageBtn.addEventListener("click", () => {
@@ -243,7 +231,7 @@ function setupPagination() {
     paginationContainer.appendChild(pageBtn);
   }
 
-  // 4. [다음 페이지 >] 버튼 생성
+  // 4. [>]
   const nextBtn = document.createElement("button");
   nextBtn.innerHTML = "&gt;";
   nextBtn.className = "page-arrow";
@@ -257,7 +245,7 @@ function setupPagination() {
   });
   paginationContainer.appendChild(nextBtn);
 
-  // 5. [맨 끝으로 >>] 버튼 생성
+  // 5. [>>]
   const lastBtn = document.createElement("button");
   lastBtn.innerHTML = "&gt;&gt;";
   lastBtn.className = "page-arrow";

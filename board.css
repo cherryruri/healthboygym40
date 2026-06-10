@@ -443,11 +443,10 @@ height:230px;
 }
 
 .board-layout{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:60px;
+display:grid;
+grid-template-columns:210px 1fr;
+gap:42px;
 }
-
 .board-sidebar{
 background:#000;
 min-height:780px;

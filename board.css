@@ -288,8 +288,8 @@ border-color:#111;
 
 
 .board-row{
-grid-template-columns:60px 1fr 120px 120px 80px;
-min-height:52px;
+grid-template-columns:80px 1fr 140px 140px 100px;
+min-height:58px;
 font-size:13px;
 }
 

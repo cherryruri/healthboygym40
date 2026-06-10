@@ -1,619 +1,151 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+/* ===== 1. 기본 초기화 및 레이아웃 ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body{
-font-family:'Pretendard',sans-serif;
-background:#fff;
-color:#111;
+body {
+  font-family: 'Pretendard', sans-serif;
+  background: #fff;
+  color: #111;
+  letter-spacing: -0.04em;
 }
-.board-page{
-max-width:1450px;
-margin:auto;
-padding: 160px 40px 120px;
-}
-
-.board-header{
-text-align:center;
-margin-bottom:50px;
-}
-
-.board-header h1{
-font-size:48px;
-font-weight:900;
-margin-bottom:12px;
-}
-
-.board-header p{
-color:#777;
-}
-
-.board-search{
-margin-bottom:30px;
-}
-
-.board-search input{
-width:100%;
-height:56px;
-border:1px solid #ddd;
-padding:0 18px;
-font-size:15px;
-}
-
-.board-list{
-border-top:2px solid #111;
-}
-
-.board-item{
-display:flex;
-align-items:center;
-gap:20px;
-
-padding:20px;
-
-border-bottom:1px solid #eee;
-
-text-decoration:none;
-color:#111;
-
-transition:.25s;
-}
-
-.board-item:hover{
-background:#f8f8f8;
-}
-
-.board-no{
-width:70px;
-font-weight:700;
-color:#888;
-}
-
-.board-content{
-flex:1;
-}
-
-.board-content h3{
-font-size:17px;
-margin-bottom:6px;
-}
-
-.board-content p{
-font-size:13px;
-color:#888;
-}
-
-
-.write-btn{
-  display:block;
-
-  width:86px;
-  height:42px;
-
-  margin:34px 0 0 auto;
-
-  border:none;
-  border-radius:999px;
-
-  background:#111;
-  color:#fff;
-
-  font-size:13px;
-  font-weight:900;
-
-  cursor:pointer;
-
-  box-shadow:0 10px 24px rgba(0,0,0,.18);
-}
-
-.write-btn:hover{
-  background:#fff200;
-  color:#000;
-  transform:translateY(-2px);
-}
-
-
-
-
-@media(max-width:768px){
-
-  .board-header h1{
-    font-size:34px;
-  }
-
-  .board-item{
-    padding:16px;
-  }
-
-  .write-btn{
-    width:86px;
-    height:42px;
-    margin:28px 0 0 auto;
-    border-radius:999px;
-  }
-
-}
-
-
-
-
-/* 게시판 페이지 PC 위젯 눌림/포커스 보정 */
-.pc-widget-item,
-.pc-widget-item:visited,
-.pc-widget-item:focus,
-.pc-widget-item:active{
-  width:54px;
-  height:54px;
-  border-radius:50%;
-  background:rgba(18,18,18,.38);
-  color:rgba(255,255,255,.86);
-  outline:none;
-  transform:none;
-}
-
-.pc-widget-item:hover{
-  background:rgba(255,255,255,.12);
-  color:#fff200;
-  transform:translateY(-2px) scale(1.03);
-}
-
-/* 게시판 페이지 모바일 하단바 active 원형 제거 */
-@media(max-width:768px){
-
-  .bottom-nav-item.active::before{
-    width:28px;
-    height:2px;
-    top:7px;
-    border-radius:999px;
-  }
-
-  .bottom-nav-item.active{
-    transform:none;
-  }
-
-  .bottom-nav-item.active .bottom-icon{
-    transform:none;
-  }
-
-}
-
-@media(max-width:768px){
-
-  .mobile-bottom-nav{
-    display:grid;
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    z-index:999999;
-  }
-
-}
-
-@media(max-width:768px){
-
-  .mobile-bottom-nav{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-
-    width:100%;
-    height:72px;
-
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-
-    background:#0b0b0c;
-    border-top:1px solid rgba(255,255,255,.06);
-  }
-
-}
-
-/* ===== 게시판 탭/표 디자인 추가 ===== */
-
-
-
-.board-table{
-border-top:2px solid #111;
-}
-
-.board-row{
-display:grid;
-grid-template-columns:70px 1fr 120px 120px 80px;
-column-gap:12px;
-align-items:center;
-min-height:46px;
-border-bottom:1px solid #eee;
-font-size:14px;
-}
-
-.board-head{
-font-size:13px;
-font-weight:900;
-color:#555;
-}
-
-.board-title{
-font-weight:800;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-}
-
-.board-bottom{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:12px;
-margin-top:24px;
-}
 
-#boardSearch{
-width:260px;
-height:40px;
-border:1px solid #ddd;
-padding:0 14px;
-font-size:13px;
-outline:none;
+/* 상단 고정 헤더와의 간격을 확보하기 위해 padding-top을 충분히 제공 */
+.board-page {
+  max-width: 1450px;
+  margin: auto;
+  padding: 160px 40px 120px;
 }
 
-.pagination{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:7px;
-margin-top:28px;
+.board-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr; /* 사이드바 가로를 살짝 더 넓게 조절 */
+  gap: 40px;
+  align-items: start;
 }
 
-.pagination button{
-min-width:34px;
-height:34px;
-border:1px solid #ddd;
-background:#fff;
-color:#111;
-font-weight:800;
-cursor:pointer;
+.board-main {
+  width: 100%;
 }
 
-.pagination button.active{
-background:#111;
-color:#fff200;
-border-color:#111;
-}
-
-
-
-.board-row{
-grid-template-columns:80px 1fr 140px 140px 100px;
-min-height:58px;
-font-size:13px;
-}
-
-.board-row > div{
-padding:0 6px;
-}
-
-.board-head{
-font-size:11px;
-}
-
-.board-bottom{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:16px;
-margin-top:34px;
-}
-
-#boardSearch{
-width:320px;
-height:44px;
-border:1px solid #ddd;
-padding:0 16px;
-font-size:13px;
-outline:none;
-}
-
-#boardSearch:focus{
-border-color:#111;
-}
-
-
-/* ===== 글쓰기 모달 ===== */
-
-.write-modal{
-display:none;
-position:fixed;
-inset:0;
-z-index:999999;
-background:rgba(0,0,0,.55);
-align-items:center;
-justify-content:center;
-padding:20px;
-}
-
-.write-modal.show{
-display:flex;
-}
-
-.write-box{
-width:min(92vw,620px);
-background:#fff;
-border-radius:24px;
-padding:34px;
-box-shadow:0 30px 90px rgba(0,0,0,.3);
-position:relative;
-}
-
-.write-close{
-position:absolute;
-right:22px;
-top:18px;
-border:none;
-background:none;
-font-size:28px;
-font-weight:900;
-cursor:pointer;
-}
-
-.write-box h2{
-font-size:32px;
-font-weight:900;
-margin-bottom:6px;
-}
-
-#writeBoardName{
-font-size:14px;
-font-weight:800;
-color:#777;
-margin-bottom:24px;
-}
-
-#postTitle{
-width:100%;
-height:52px;
-border:1px solid #ddd;
-padding:0 16px;
-font-size:15px;
-font-weight:700;
-margin-bottom:14px;
-outline:none;
-}
-
-#postContent{
-width:100%;
-height:260px;
-border:1px solid #ddd;
-padding:16px;
-font-size:15px;
-font-family:'Pretendard',sans-serif;
-resize:none;
-outline:none;
-line-height:1.7;
-}
-
-.submit-post{
-width:100%;
-height:54px;
-margin-top:18px;
-border:none;
-border-radius:999px;
-background:#111;
-color:#fff;
-font-size:15px;
-font-weight:900;
-cursor:pointer;
-}
-
-.submit-post:hover{
-background:#fff200;
-color:#000;
-}
-
-@media(max-width:768px){
-.write-box{
-padding:28px 20px;
-border-radius:20px;
-}
-
-#postContent{
-height:230px;
-}
-}
-
-.my-post-row{
-  text-decoration:none;
-  color:#111;
-}
-
-.my-post-row:hover{
-  background:#f7f7f7;
-}
-
-.my-post-row div{
-  color:#111;
-}
-
-.my-post-row:hover div:nth-child(2){
-  color:#111;
-  text-decoration:underline;
-}
-
-
-
-.board-layout{
-display:grid;
-grid-template-columns:220px 1fr;
-gap:35px;
-align-items:start;
-}
-
-.board-sidebar{
-background:#000;
-padding:30px 0;
-height:fit-content;
-}
-
-.board-sidebar .board-tab{
-width:100%;
-border:none;
-background:none;
-color:#fff;
-text-align:left;
-padding:18px 24px;
-font-size:16px;
-font-weight:900;
-cursor:pointer;
-transition:.2s;
-}
-
-.board-sidebar .board-tab:hover{
-color:#fff200;
-}
-
-.board-sidebar .board-tab.active{
-color:#fff200;
-position:relative;
-}
-
-.board-sidebar .board-tab.active::after{
-content:"→";
-position:absolute;
-right:20px;
-top:50%;
-transform:translateY(-50%);
-font-size:18px;
-}
-
-.board-main{
-width:100%;
-}
-
-.board-header{
-text-align:left;
-border-left:6px solid #111;
-padding-left:18px;
-margin-bottom:35px;
-}
-
-.board-header h1{
-font-size:42px;
-font-weight:900;
-margin-bottom:10px;
-letter-spacing:-0.04em;
-}
-
-.board-header p{
-font-size:14px;
-line-height:1.8;
-color:#666;
-max-width:720px;
-}
-
-.board-table{
-border-top:2px solid #111;
-}
-
-.board-row{
-display:grid;
-grid-template-columns:70px 1fr 120px 120px 80px;
-align-items:center;
-min-height:54px;
-border-bottom:1px solid #eee;
-font-size:13px;
-}
 
-.board-row > div{
-padding:0 10px;
+/* ===== 2. 상단 헤더 타이틀 영역 ===== */
+.board-header {
+  text-align: left;
+  border-left: 6px solid #111;
+  padding-left: 18px;
+  margin-bottom: 35px;
 }
 
-.board-head{
-font-size:11px;
-font-weight:900;
-color:#666;
+.board-header h1 {
+  font-size: 42px;
+  font-weight: 900;
+  margin-bottom: 10px;
+  letter-spacing: -0.04em;
 }
 
-.board-bottom{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:25px;
+.board-header p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #666;
+  max-width: 720px;
 }
 
-#boardSearch{
-width:280px;
-height:42px;
-border:1px solid #ddd;
-padding:0 14px;
-font-size:13px;
-}
-
-.write-btn{
-width:90px;
-height:42px;
-border:none;
-border-radius:999px;
-background:#111;
-color:#fff;
-font-size:13px;
-font-weight:900;
-cursor:pointer;
-}
-
-.write-btn:hover{
-background:#fff200;
-color:#000;
-}
-
-.pagination{
-display:flex;
-justify-content:center;
-gap:8px;
-margin-top:25px;
-}
-
-.pagination button{
-width:34px;
-height:34px;
-border:1px solid #ddd;
-background:#fff;
-cursor:pointer;
-}
-
-.pagination button.active{
-background:#111;
-color:#fff200;
-border-color:#111;
-}
 
-/* 사이드바 박스 자체의 스타일 조정 */
-.board-aside {
-  background: #fafafa; /* 연한 회색 배경으로 깔끔하게 */
-  border: 1px solid #eee;
-  border-radius: 16px;
-  padding: 30px 24px; /* 내부 여백을 늘려 상자를 더 크게 만듦 */
-  min-height: 400px; /* 상자가 세로로 더 길어지도록 최소 높이 설정 */
+/* ===== 3. 왼쪽 사이드바 (박스 형태 및 링크) ===== */
+.board-sidebar {
+  background: #fafafa;         /* 연한 회색 배경으로 변경 */
+  border: 1px solid #eee;      /* 부드러운 테두리 */
+  border-radius: 16px;         /* 둥근 상자 스타일 */
+  padding: 24px 16px;          /* 내부 여백 늘림 */
+  min-height: 420px;           /* 상자가 세로로 더 길어지도록 최소 높이 설정 */
+  height: fit-content;
 }
 
-/* 사이드바 내의 메뉴 링크 스타일 */
-.board-aside a {
+/* 사이드바 내부 탭 공통 스타일 */
+.board-sidebar .board-tab {
   display: block;
-  position: relative;
-  padding: 16px 20px; /* 각 메뉴의 간격을 넓혀 시원하게 */
-  color: #555;
-  font-size: 15px;
+  width: 100%;
+  border: none;
+  background: none;
+  color: #555;                 /* 기본 폰트 색상 */
+  text-align: left;
+  padding: 16px 20px;          /* 각 메뉴의 간격을 넓혀 시원하게 만듦 */
+  font-size: 15px;             /* 사이트 전체 디자인과 어울리는 글씨 크기 */
   font-weight: 700;
   text-decoration: none;
   border-radius: 10px;
   margin-bottom: 8px;
+  position: relative;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* 활성화된 메뉴 상태 (오른쪽 예시처럼 강조) */
-.board-aside a.active {
-  background: #111;
-  color: #fff200; /* 헬스보이짐 메인 테마색인 노란색 적용 */
+.board-sidebar .board-tab:hover {
+  background: #f0f0f0;
+  color: #111;
 }
+
+/* 원하는 활성화 상태 스타일 (오른쪽 예시 반영) */
+.board-sidebar .board-tab.active {
+  background: #111;            /* 활성화 시 검은 상자 */
+  color: #fff200;              /* 헬스보이짐 고유 시그니처 노란색 텍스트 */
+}
+
+/* 활성화 상태일 때 옆에 생기는 화살표 스타일 보정 */
+.board-sidebar .board-tab.active::after {
+  content: "→";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  font-weight: 300;            /* 화살표가 너무 두껍지 않도록 슬림하게 설정 */
+  color: #fff200;
+}
+
+
+/* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
+.board-table {
+  border-top: 2px solid #111;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 140px 140px 80px; /* 열 간격 정렬 */
+  align-items: center;
+  min-height: 62px;            /* 행 높이를 키워 답답함 해소 */
+  border-bottom: 1px solid #eee;
+  font-size: 14px;             /* 기존 13px에서 14px로 변경하여 가독성 업 */
+}
+
+.board-row > div {
+  padding: 0 10px;
+}
+
+/* 리스트 상단 분류(번호, 제목, 작성자 등) 헤더 스타일 */
+.board-head {
+  font-size: 12px;
+  font-weight: 900;
+  color: #666;
+}
+
+/* 게시글 제목 */
+.board-title {
+  font-weight: 700;
+  color: #111;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 내가 쓴 게시물 링크 행 효과 */
+.my-post-row {
+  text-decoration: none;
+  color: #111;
+}
+
+.my-post-row:hover {
+  background:

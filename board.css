@@ -7,7 +7,7 @@
 
 body {
   font-family: 'Pretendard', sans-serif;
-  background: #fff;
+  background: #fafafa; /* 완전 백색 대신 미세한 연회색 배경으로 카드들을 돋보이게 함 */
   color: #111;
   letter-spacing: -0.04em;
 }
@@ -20,7 +20,7 @@ body {
 
 .board-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 260px 1fr; /* 사이드바에 조금 더 안정감 부여 */
   gap: 70px; 
   align-items: start; 
 }
@@ -29,38 +29,42 @@ body {
   width: 100%;
 }
 
-/* ===== 2. 상단 헤더 타이틀 영역 ===== */
+/* ===== 2. 상단 헤더 타이틀 영역 (트렌디 감성 보강) ===== */
 .board-header {
   text-align: left;
-  border-left: 6px solid #111;
-  padding-left: 18px;
-  margin-bottom: 35px;
+  border-left: 5px solid #111112;
+  padding-left: 20px;
+  margin-bottom: 45px;
 }
 
 .board-header h1 {
-  font-size: 42px;
+  font-size: 46px;
   font-weight: 900;
-  margin-bottom: 10px;
-  letter-spacing: -0.04em;
+  color: #111112;
+  margin-bottom: 12px;
+  letter-spacing: -0.05em;
 }
 
 .board-header p {
   font-size: 14px;
   line-height: 1.8;
-  color: #666;
+  color: #66666f;
   max-width: 720px;
+  font-weight: 500;
 }
 
-/* ===== 3. 왼쪽 사이드바 (마우스 호버 시 노란 밑줄 버전) ===== */
+/* ===== 3. 왼쪽 사이드바 (글래스모피즘 & 네온 임팩트 효과) ===== */
 .board-sidebar {
-  background: #111112;         
-  border: 1px solid #1f1f22;    
-  border-radius: 16px;         
-  padding: 24px 16px;          
+  background: linear-gradient(145deg, #141416, #1d1d22); /* 뻔한 블랙 대신 깊이감 있는 그라데이션 */
+  border: 1px solid rgba(255, 255, 255, 0.05);    
+  border-radius: 20px; /* 더 둥글고 트렌디하게 */
+  padding: 28px 18px;          
   width: 100%;
-  height: 1200px;              
+  height: auto; /* 무조건 1200px 대신 콘텐츠가 늘어날 수 있도록 자연스럽게 처리 */
+  min-height: 520px;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* 바닥에 부드러운 그림자 */
 }
 
 .board-sidebar .board-tab {
@@ -68,141 +72,192 @@ body {
   width: 100%;
   border: none;
   background: none;
-  color: #77777c;              
+  color: #8a8a93;              
   text-align: left;
-  padding: 16px 20px;
+  padding: 18px 22px;
   font-size: 15px;
   font-weight: 700;
   text-decoration: none;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  border-radius: 12px;
+  margin-bottom: 10px;
   position: relative;          
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* 마우스 올렸을 때의 힙한 발광 효과 */
 .board-sidebar .board-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   color: #fff !important;      
+  padding-left: 26px; /* 살짝 오른쪽으로 밀리는 위트 있는 모션 */
 }
 
 /* 마우스 올릴 때 슥 늘어나는 하단 노란 밑줄 효과 */
 .board-sidebar .board-tab::after {
   content: "";
   position: absolute;
-  bottom: 10px;                
-  left: 20px;                  
+  bottom: 12px;                
+  left: 22px;                  
   width: 0;                    
   height: 2px;                 
   background-color: #fff200;   
-  transition: width 0.25s ease;
+  transition: width 0.3s ease;
 }
 
 .board-sidebar .board-tab:hover::after {
-  width: 80px;                 
+  width: 40px; /* 너무 길지 않고 포인트만 주도록 조율 */
 }
 
+/* 활성화 상태 (럭셔리 화이트 반전 카드룩) */
 .board-sidebar .board-tab.active {
   background: #ffffff !important; 
   color: #000000 !important;      
   font-weight: 800;
-  text-decoration: none !important; 
+  box-shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+  padding-left: 24px;
 }
 
 .board-sidebar .board-tab.active::after,
 .board-sidebar .board-tab.active::before {
   display: none !important;
   content: none !important;
-  opacity: 0 !important;
 }
 
-/* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
+/* ===== 4. 게시판 리스트 / 테이블 영역 (네오 미니멀리즘 입체 카드룩) ===== */
 .board-table {
-  border-top: 2px solid #111;
+  border-top: 2px solid #111112;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
 }
 
+/* 헤더 행 */
+.board-row.board-head {
+  background: #fdfdfd;
+  border-bottom: 2px solid #eeeef2;
+  min-height: 54px;
+}
+
+.board-head div {
+  font-size: 13px;
+  font-weight: 800;
+  color: #888893;
+  text-transform: uppercase;
+}
+
+/* 일반 게시글 행 */
 .board-row {
   display: grid;
   grid-template-columns: 80px 1fr 140px 140px 80px;
   align-items: center;
-  min-height: 62px;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
+  min-height: 68px; /* 조금 더 시원하게 늘린 높이 */
+  border-bottom: 1px solid #f0f0f5;
+  font-size: 14.5px;
+  color: #33333a;
+  transition: all 0.25s ease;
+  background: #fff;
 }
 
-.board-row:hover {
-  background: #fcfcfc;
+/* 🌟 [핵심 변경] 마우스 오버 시 행 전체가 입체적으로 스르륵 떠오르는 고급 효과 */
+.board-row:not(.board-head):hover {
+  background: #ffffff;
+  transform: translateY(-2px); /* 공중으로 띄우기 */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06); /* 그림자 뿜기 */
+  border-bottom-color: transparent;
+  z-index: 2;
+  cursor: pointer;
 }
 
 .board-row > div {
-  padding: 0 10px;
+  padding: 0 16px;
 }
 
-.board-head {
-  font-size: 12px;
-  font-weight: 900;
-  color: #666;
+/* 번호 정렬 디자인 */
+.board-row > div:first-child {
+  color: #aaa;
+  font-weight: 600;
+  font-size: 13px;
 }
 
+/* 🌟 제목 영역 트렌디 폰트 두께 및 네이밍 */
 .board-title {
   font-weight: 700;
-  color: #111;
+  color: #111112;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
+  transition: color 0.2s;
 }
 
-/* ===== 5. 하단 원본 유틸리티 바 (예쁜 원래 디자인 복원) ===== */
+.board-row:hover .board-title {
+  color: #000; /* 호버 시 글자색 조금 더 딥하게 */
+}
+
+/* 공지사항 전용 뱃지 스타일 구현 */
+.board-row div:first-child:has(span), 
+.board-row div:contains("공지") {
+  color: #ff3b30 !important;
+  font-weight: 800;
+}
+
+/* ===== 5. 하단 원본 유틸리티 바 (예쁜 원래 디자인 골격 유지 + 디테일 깎기) ===== */
 .board-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 35px;
+  padding: 0 5px;
 }
 
-/* 원본의 예쁜 연회색 둥근 검색창 디자인 */
+/* 예쁜 연회색 둥근 검색창 (포커스 시 네온 보더 인풋 효과 보강) */
 #boardSearch {
-  width: 260px;
-  padding: 10px 16px;
-  border: 1px solid #e2e2e7;
-  border-radius: 8px;
+  width: 280px;
+  padding: 12px 18px;
+  border: 1px solid #e5e5ea;
+  border-radius: 10px;
   font-size: 14px;
-  background-color: #fafafa;
+  font-weight: 600;
+  background-color: #f6f6f9;
+  color: #111;
   outline: none;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
 }
 
 #boardSearch:focus {
-  border-color: #111;
+  border-color: #111112;
   background-color: #fff;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.04);
 }
 
-/* 원본의 시크한 블랙 글쓰기 버튼 디자인 */
+/* 시크한 블랙 글쓰기 버튼 (미세하게 커지고 짱짱한 감성 장착) */
 .write-btn {
   background-color: #111112;
   color: #fff;
   border: none;
-  padding: 12px 28px;
-  border-radius: 8px;
+  padding: 13px 32px;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
 .write-btn:hover {
   background-color: #2c2c2e;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* ===== 6. 하단 페이지 숫자 (테두리 없는 세련된 선명 누드 디자인) ===== */
+/* ===== 6. 하단 페이지 숫자 (세련된 선명 누드 디자인 고도화) ===== */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;                 
-  margin-top: 40px;
+  gap: 12px;                 
+  margin-top: 50px;
 }
 
 .pagination button {
@@ -210,142 +265,140 @@ body {
   border: none !important;     
   box-shadow: none !important;
   outline: none !important;
-  color: #88888f !important;                 
+  color: #9a9a9f !important;                 
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
   position: relative;
   transition: all 0.2s ease;
 }
 
 .pagination button:hover:not(:disabled) {
   color: #111112 !important;
+  background-color: rgba(0, 0, 0, 0.03) !important; /* 가볍게 감싸지는 원형 셰입느낌 */
 }
 
-/* 선택된 현재 숫자: 진하게 강조 + 하단 노란 도트 포인트 */
+/* 선택된 현재 숫자: 진하게 강조 + 하단 노란 도트 포인트 확실하게 */
 .pagination button.active {
   color: #111112 !important;   
   font-weight: 800 !important;   
+  background-color: rgba(0, 0, 0, 0.02) !important;
 }
 
 .pagination button.active::after {
   content: "";
   position: absolute;
-  bottom: 0px;
+  bottom: 2px; /* 도트 위치 정교화 */
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
   background-color: #fff200;   
   border-radius: 50%;
+  box-shadow: 0 0 6px #fff200; /* 미세하게 빛나는 야간 효과 */
 }
 
 .pagination button.page-arrow {
   font-size: 12px;
   color: #55555a !important;
-  font-weight: 700;
+  font-weight: 800;
 }
 
 .pagination button.dummy-page {
-  color: #e2e2e7 !important;
-  cursor: default;
-}
-
-.pagination button:disabled {
-  opacity: 0.2 !important;
+  color: #e5e5ea !important;
   cursor: not-allowed;
 }
 
+.pagination button:disabled {
+  opacity: 0.15 !important;
+  cursor: not-allowed;
+}
+
+
 /* ==========================================================================
-   🌟 모바일 화면 전용 디자인 (화면 폭 768px 이하일 때만 적용)
+   🌟 이전에 짜두었던 모바일 폰 스와이프 전용 레이아웃 매끄럽게 결합
    ========================================================================== */
 @media (max-width: 768px) {
-  
-  /* 1. PC용 가로 그리드 레이아웃을 위아래로 일렬 정렬 */
   .board-layout {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    padding: 0;
   }
 
-  /* 2. 상단 타이틀 주변 여백 조정 */
   .board-page {
-    padding: 100px 20px 100px; /* 헤더에 가리지 않게 상단 여백 조율 */
+    padding: 110px 20px 100px; 
+  }
+
+  .board-header {
+    border-left-width: 4px;
+    margin-bottom: 25px;
   }
 
   .board-header h1 {
-    font-size: 28px; /* 모바일에 맞게 글자 크기 축소 */
+    font-size: 30px; 
   }
 
-  /* 3. [핵심] 세로형 사이드바를 모바일용 가로 스크롤 상단 바형태로 대변신 */
   .board-sidebar {
-    background: #111112;         
-    border-radius: 12px;         
-    padding: 10px;          
-    width: 100%;
-    height: auto; /* 고정 높이 해제 */
-    
-    /* 메뉴들을 가로 한 줄로 배치하고, 넘치면 손가락으로 슥슥 밀 수 있게(스크롤) 설정 */
     flex-direction: row !important;
     overflow-x: auto;
     white-space: nowrap;
     gap: 8px;
-    
-    /* 모바일 부드러운 스크롤 */
+    height: auto;
+    min-height: auto;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
     -webkit-overflow-scrolling: touch; 
   }
 
-  /* 모바일 스크롤바가 안 이쁘게 노출되는 현상 방지 (숨김 처리) */
   .board-sidebar::-webkit-scrollbar {
     display: none;
   }
 
-  /* 4. 가로 바 내부의 버튼 메뉴 디자인 세련되게 조정 */
   .board-sidebar .board-tab {
     display: inline-block;
-    width: auto; /* 너비 자동 설정 */
-    padding: 10px 16px !important;
-    margin-bottom: 0 !important; /* 아래 공백 제거 */
-    font-size: 13px;
-    font-weight: 700;
+    width: auto; 
+    padding: 12px 18px !important;
+    margin-bottom: 0 !important; 
+    font-size: 13.5px;
     border-radius: 8px;
-    flex-shrink: 0; /* 글자가 좁아져서 찌그러지는 현상 절대 방어 */
+    flex-shrink: 0; 
   }
 
-  /* 모바일에서는 호버 밑줄 애니메이션이 오히려 지저분하므로 비활성화 */
+  .board-sidebar .board-tab:hover {
+    padding-left: 18px; /* 모바일 밀림현상 방어 */
+  }
+
   .board-sidebar .board-tab::after {
     display: none !important;
   }
 
-  /* 5. 현재 활성화된(선택된) 모바일 메뉴 강조 룩 */
-  .board-sidebar .board-tab.active {
-    background: #ffffff !important;
-    color: #000000 !important;
+  .board-row {
+    grid-template-columns: 50px 1fr 90px; 
+    min-height: 64px;
   }
   
-  /* 6. 테이블 및 푸터(검색창, 글쓰기) 모바일 최적화 */
-  .board-row {
-    grid-template-columns: 50px 1fr 90px; /* 모바일에서는 작성시간, 조회수 과감히 숨기거나 조율 */
-  }
   .board-row > div:nth-child(4),
   .board-row > div:nth-child(5) {
-    display: none; /* 모바일에서 화면 미어터짐 방지를 위해 작성시간/조회수 숨김 */
+    display: none; 
   }
   
   .board-bottom {
-    flex-direction: column; /* 검색창과 글쓰기를 위아래로 배정 */
+    flex-direction: column; 
     gap: 12px;
     align-items: stretch;
+    margin-top: 25px;
   }
   
   #boardSearch {
-    width: 100%; /* 검색창 꽉 차게 */
+    width: 100%; 
   }
   
   .write-btn {
-    width: 100%; /* 글쓰기 버튼 꽉 차게 */
+    width: 100%; 
     text-align: center;
+    padding: 14px;
   }
 }

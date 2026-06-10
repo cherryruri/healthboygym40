@@ -23,7 +23,7 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 40px;
-  align-items: start;
+  /*align-items: start;
 }
 
 .board-main {

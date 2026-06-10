@@ -261,3 +261,49 @@ body {
     margin-top: 8px;
   }
 }
+
+/* ===== 5. 하단 유틸리티 - 페이징 버튼 고급화 ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 40px;          /* 테이블과의 적절한 간격 배치 */
+}
+
+.pagination button {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e2e7;
+  background: #ffffff;
+  color: #55555a;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 6px;        /* 미니멀한 라운딩 처리 */
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+/* 마우스 올렸을 때 */
+.pagination button:hover:not(:disabled) {
+  background: #f4f4f5;
+  color: #111;
+  border-color: #adad93;
+}
+
+/* 🌟 현재 선택된 페이지 숫자 버튼 테마 스타일 (블랙 카드 반전) */
+.pagination button.active {
+  background: #111112 !important;
+  color: #fff200 !important; /* 헬스보이짐 시그니처 옐로우 포인트 */
+  border-color: #111112 !important;
+}
+
+/* 비활성화 상태 버튼 (첫 페이지에서 < 누르거나 마지막 페이지에서 > 누를 때) */
+.pagination button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background: #fbfbfb;
+}

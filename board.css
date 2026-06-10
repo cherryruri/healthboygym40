@@ -52,16 +52,17 @@ body {
   max-width: 720px;
 }
 
-/* ===== 3. 왼쪽 사이드바 (아래로 꽉 차게 늘리기 수정) ===== */
+/* ===== 3. 왼쪽 사이드바 (높이 아래로 길게 고정 수정) ===== */
 .board-sidebar {
   background: #111112;         /* 묵직하고 힙한 다크 그레이 배경 */
   border: 1px solid #1f1f22;    /* 은은한 미니멀 경계선 */
   border-radius: 16px;         /* 깔끔한 곡률 */
   padding: 24px 16px;          /* 내부 여백 */
   
-  /* 🌟 아래로 꽉 늘리도록 높이 속성 변경 */
-  height: 100%;                
-  min-height: 500px;           /* 게시글이 없을 때도 최소한 이만큼은 유지되도록 보장 */
+  /* 🌟 다른 메뉴를 눌러도 높이가 출렁이지 않게 최소 높이를 길게 고정 */
+  height: auto;                
+  min-height: 700px;           /* 700px 정도로 길게 잡으면 화면에 꽉 차고 안정감 있습니다 */
+  
   display: flex;
   flex-direction: column;
 }
@@ -97,7 +98,6 @@ body {
   color: #000000 !important;      
   font-weight: 800;
 }
-
 
 /* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
 .board-table {

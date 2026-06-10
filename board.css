@@ -23,7 +23,7 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 40px;
-  /*align-items: start;
+  /* [수정 완료] 주석 오타로 전체 코드가 깨지던 부분 수정 */
 }
 
 .board-main {
@@ -52,51 +52,67 @@ body {
   color: #666;
   max-width: 720px;
 }
-/* ===== 3. 왼쪽 사이드바 (시크 미니멀 다크 커스텀) ===== */
+
+/* ===== 3. 왼쪽 사이드바 (메뉴 노란 밑줄 애니메이션 추가 버전) ===== */
 .board-sidebar {
-  background: #0f0f10;         /* 뜨지 않고 묵직하게 가라앉는 미니멀 다크 배경 */
+  background: #0f0f10;         /* 묵직하게 가라앉는 미니멀 다크 배경 */
   border: 1px solid #1f1f22;    /* 정밀하고 은은한 미니멀 경계선 */
   border-radius: 14px;         /* 현대적이고 깔끔한 곡률 */
-  padding: 12px 8px;           /* 내부 컴팩트 여백 */
+  padding: 16px 10px;          /* 내부 컴팩트 여백 */
   height: auto;
   align-self: stretch;         /* 오른쪽 테이블과 높이 연장 맞춤 */
 }
 
 /* 사이드바 내부 탭 스타일 */
 .board-sidebar .board-tab {
-  display: block;              /* 구조 붕괴를 막기 위해 블록 형태로 유지 */
+  display: block;              
   width: 100%;
   border: none;
   background: none;
-  color: #77777c;              /* 기본 상태: 고급스럽게 묻히는 다크 그레이 톤 */
+  color: #77777c;              /* 기본 상태: 다크 그레이 톤 */
   text-align: left;
   padding: 14px 18px;
   font-size: 14px;
   font-weight: 600;
   text-decoration: none;
   border-radius: 10px;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.2s ease;
 }
 
-/* 마우스 올렸을 때 (Hover) */
+/* 🌟 [추가] 왼쪽 메뉴 아래에 깔릴 노란 밑줄 기본 세팅 */
+.board-sidebar .board-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;                 /* 글자 바로 아래에 오도록 조절 */
+  left: 18px;
+  width: 40px;                 /* 밑줄의 길이 */
+  height: 2px;                 /* 밑줄 두께 */
+  background-color: #fff200;   /* 헬스보이짐 시그니처 옐로우 */
+  transform: scaleX(0);        /* 평소에는 안보이게 숨김 */
+  transform-origin: bottom left;
+  transition: transform 0.25s ease-out;
+}
+
+/* 🌟 [추가] 메뉴에 마우스를 올렸을 때(Hover) 노란 밑줄이 스르륵 생김 */
 .board-sidebar .board-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: #c5c5ca;
+  color: #fff;
+}
+.board-sidebar .board-tab:hover::after {
+  transform: scaleX(1);        /* 밑줄 애니메이션 작동 */
 }
 
-/* 🌟 선택된 활성화 메뉴 (깔끔한 반전 스타일) */
+/* 🌟 [추가] 현재 선택된 활성화 메뉴 스타일 (화이트 반전 + 노란밑줄 고정) */
 .board-sidebar .board-tab.active {
-  background: #ffffff !important; /* 깔끔하고 선명한 화이트 카드 반전 */
-  color: #000000 !important;      /* 글자는 가장 깊이감 있는 퓨어 블랙 */
+  background: #ffffff !important; 
+  color: #000000 !important;      
   font-weight: 800;
 }
-
-/* 불필요한 기본 화살표나 요소 가리기 */
 .board-sidebar .board-tab.active::after {
-  display: none !important;
+  background-color: #000000;   /* 흰 배경일 때는 밑줄이 검은색으로 나오면 시크합니다. 만약 노란색을 원하시면 이 줄을 지워주세요! */
+  transform: scaleX(1) !important; /* 밑줄 상시 표시 */
 }
 
 
@@ -108,14 +124,15 @@ body {
 @keyframes titleFadeIn {
   from {
     opacity: 0;
-    transform: translateY(-4px); /* 위에서 아래로 스르륵 부드럽게 안착 */
+    transform: translateY(-4px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
-}
+
+
 /* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
 .board-table {
   border-top: 2px solid #111;
@@ -145,33 +162,15 @@ body {
   color: #666;
 }
 
-/* 게시글 제목 언더라인 애니메이션 */
+/* [수정 완료] 게시글 제목 목록은 깔끔하게 유지 (노란 밑줄 제거) */
 .board-title {
   font-weight: 700;
   color: #111;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  position: relative;
   display: inline-block;
   padding-bottom: 4px;
-}
-
-.board-title::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 0;
-  background-color: #fff200;
-  transform: scaleX(0);
-  transform-origin: bottom left;
-  transition: transform 0.25s ease-out;
-}
-
-.board-row:hover .board-title::after {
-  transform: scaleX(1);
 }
 
 .my-post-row {

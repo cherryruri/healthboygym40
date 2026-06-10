@@ -58,7 +58,7 @@ body {
   border-radius: 16px;         
   padding: 24px 16px;          
   width: 100%;
-  height: 1200px;              /* 20개 글 기준 우측 높이 대칭 고정 */
+  height: 1200px;              
   display: flex;
   flex-direction: column;
 }
@@ -154,7 +154,7 @@ body {
   padding-bottom: 4px;
 }
 
-/* ===== 5. 하단 원본 유틸리티 바 (예쁜 원래 디자인) ===== */
+/* ===== 5. 하단 원본 유틸리티 바 (예쁜 원래 디자인 복원) ===== */
 .board-bottom {
   display: flex;
   justify-content: space-between;
@@ -162,7 +162,7 @@ body {
   margin-top: 35px;
 }
 
-/* 마음에 들어하셨던 원래 예쁜 검색창 디자인 */
+/* 원본의 예쁜 연회색 둥근 검색창 디자인 */
 #boardSearch {
   width: 260px;
   padding: 10px 16px;
@@ -179,7 +179,7 @@ body {
   background-color: #fff;
 }
 
-/* 마음에 들어하셨던 원래 예쁜 글쓰기 버튼 디자인 */
+/* 원본의 시크한 블랙 글쓰기 버튼 디자인 */
 .write-btn {
   background-color: #111112;
   color: #fff;
@@ -196,7 +196,7 @@ body {
   background-color: #2c2c2e;
 }
 
-/* ===== 6. 하단 페이지 숫자 (세련된 선명 누드 디자인) ===== */
+/* ===== 6. 하단 페이지 숫자 (테두리 없는 세련된 선명 누드 디자인) ===== */
 .pagination {
   display: flex;
   justify-content: center;
@@ -210,7 +210,7 @@ body {
   border: none !important;     
   box-shadow: none !important;
   outline: none !important;
-  color: #88888f !important;     /* 이전보다 더 선명하게 보정 */            
+  color: #88888f !important;                 
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -223,7 +223,7 @@ body {
   color: #111112 !important;
 }
 
-/* 선택된 숫자: 두껍게 강조 + 하단 노란 도트 포인트 */
+/* 선택된 현재 숫자: 진하게 강조 + 하단 노란 도트 포인트 */
 .pagination button.active {
   color: #111112 !important;   
   font-weight: 800 !important;   

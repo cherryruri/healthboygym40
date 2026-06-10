@@ -140,3 +140,42 @@ if(mypageBtn){
 }
 
 
+// ===== ABOUT US 나이키 스타일 스크롤 애니메이션 연동 구동기 =====
+window.addEventListener("scroll", () => {
+  const aboutSection = document.querySelector(".brand-about-section");
+  if (!aboutSection) return;
+
+  const sectionTop = aboutSection.offsetTop;
+  const sectionHeight = aboutSection.offsetHeight;
+  const windowHeight = window.innerHeight;
+  const scrollTop = window.scrollY;
+
+  // 섹션이 화면에 등장하기 시작하는 지점부터 완전히 끝날 때까지의 절대 스크롤 범위 계산
+  const startScroll = sectionTop;
+  const endScroll = sectionTop + sectionHeight - windowHeight;
+
+  if (scrollTop >= startScroll && scrollTop <= endScroll) {
+    // 0에서 1 사이의 진행도 계산
+    const progress = (scrollTop - startScroll) / (endScroll - startScroll);
+    
+    // 1. CSS 변수 주입하여 ABOUT US 타이틀 무빙 및 블러 연동
+    aboutSection.style.setProperty("--brand-progress", progress);
+
+    // 2. 진행도 구간별 카피(문구) 스위칭 (CSS data-copy와 결합)
+    if (progress < 0.3) {
+      aboutSection.setAttribute("data-copy", "1"); // 1번 스토리 등장
+    } else if (progress >= 0.3 && progress < 0.65) {
+      aboutSection.setAttribute("data-copy", "2"); // 2번 스토리 등장
+    } else {
+      aboutSection.setAttribute("data-copy", "3"); // 3번 스토리 등장
+    }
+  } else if (scrollTop < startScroll) {
+    // 섹션 진입 전 초기화
+    aboutSection.style.setProperty("--brand-progress", "0");
+    aboutSection.setAttribute("data-copy", "0");
+  } else if (scrollTop > endScroll) {
+    // 섹션을 완전히 지나쳤을 때 최종 상태 고정 (텍스트가 툭 끊기며 사라지는 현상 방지)
+    aboutSection.style.setProperty("--brand-progress", "1");
+    aboutSection.setAttribute("data-copy", "3");
+  }
+});

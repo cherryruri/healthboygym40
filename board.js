@@ -31,33 +31,33 @@ const db = getFirestore(app);
 let currentUser = null;
 let currentBoard = new URLSearchParams(location.search).get("board") || "free";
 
-// 🌟 각 메뉴별 맞춤형 세련된 안내 멘트 정의
+// 각 메뉴별 설명문 상시 변경용 데이터베이스
 const boardDescriptions = {
   "free": "헬스보이짐 수내점을 이용 중인 회원분들의 자유로운 건의 사항 게시판입니다. 기본적으로 비밀글로 표시 되어 있으며 빠른 시일 내에 답변드리도록 하겠습니다.",
-  "compliment": "트레이너와 직원들을 칭찬하고 따뜻한 격려를 나누는 공간입니다. 회원님의 한마디가 저희 팀에게 가장 큰 보람과 에너지가 됩니다.",
-  "notice": "헬스보이짐 수내점의 새로운 소식과 정기 휴무, 센터 운영에 관한 공식 공지사항을 안내해 드리는 공간입니다.",
+  "praise": "트레이너와 직원들을 칭찬하고 따뜻한 격려를 나누는 공간입니다. 회원님의 한마디가 저희 팀에게 가장 큰 보람과 에너지가 됩니다.",
+  "noticeboard": "헬스보이짐 수내점의 새로운 소식과 정기 휴무, 센터 운영에 관한 공식 공지사항을 안내해 드리는 공간입니다.",
   "review": "회원님들이 직접 경험하고 작성해주신 100% 리얼 운동 후기입니다. 변화된 모습과 생생한 스토리를 만나보세요!",
-  "motivation": "지치고 나태해질 때마다 꺼내보는 운동 자극 공간입니다. 매일 업데이트되는 동기부여 영상과 글로 득근 본능을 깨워보세요.",
+  "teen": "지치고 나태해질 때마다 꺼내보는 운동 자극 공간입니다. 매일 업데이트되는 동기부여 영상과 글로 득근 본능을 깨워보세요.",
   "news": "헬스보이짐 전체 지점의 핫한 소식과 프로모션, 헬스 트렌드 및 유용한 건강 정보를 가장 빠르게 전해드립니다."
 };
 
-// 페이징 관련 변수
+// 페이징 셋업 관련 변수
 let allPosts = [];       
 let currentPage = 1;     
-const postsPerPage = 20; // 한 페이지에 게시글 20개씩 노출 고정
+const postsPerPage = 20; 
 
 const postList = document.getElementById("postList");
 const paginationContainer = document.getElementById("pagination");
 const writeBtn = document.getElementById("writeBtn");
-const boardDesc = document.getElementById("boardDesc"); // 🌟 설명문 태그 가져오기
+const boardDesc = document.getElementById("boardDesc"); 
 
 onAuthStateChanged(auth, (user)=>{
   currentUser = user;
   loadPosts();
-  updateBoardInfo(); // 🌟 첫 진입 시 초기 메뉴 멘트 세팅
+  updateBoardInfo(); 
 });
 
-// 메뉴 탭 클릭 이벤트 설정 및 멘트 변경 로직
+// 메뉴 탭 스위칭 컨트롤러
 document.querySelectorAll(".board-tab").forEach(tab=>{
   if(tab.dataset.board === currentBoard){
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
@@ -70,7 +70,6 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
 
-    // 타이틀 변경 애니메이션 효과 및 글자 변경
     const boardTitle = document.querySelector(".board-header h1");
     if (boardTitle) {
       boardTitle.classList.remove("fade-in-text");
@@ -79,18 +78,15 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
       boardTitle.classList.add("fade-in-text");
     }
 
-    // 🌟 탭 클릭 시 매칭되는 안내 멘트로 실시간 전환
     updateBoardInfo();
-
     currentPage = 1; 
     loadPosts();
   });
 });
 
-// 🌟 현재 선택된 게시판에 맞춰 안내문을 교체해 주는 함수
 function updateBoardInfo() {
   if (boardDesc) {
-    boardDesc.textContent = boardDescriptions[currentBoard] || "헬스보이짐 수내점 커뮤니티입니다.";
+    boardDesc.innerHTML = boardDescriptions[currentBoard] || "헬스보이짐 수내점 커뮤니티입니다.";
   }
 }
 
@@ -232,7 +228,7 @@ function setupPagination() {
   });
   paginationContainer.appendChild(prevBtn);
 
-  // 3. [숫자들]
+  // 3. [숫자 번호판]
   for (let i = 1; i <= displayTotalPages; i++) {
     const pageBtn = document.createElement("button");
     pageBtn.innerText = i;

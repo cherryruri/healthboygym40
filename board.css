@@ -94,18 +94,6 @@ body {
   color: #fff200;              /* 헬스보이짐 고유 시그니처 노란색 텍스트 */
 }
 
-/* 활성화 상태일 때 옆에 생기는 화살표 스타일 보정 */
-.board-sidebar .board-tab.active::after {
-  content: "→";
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 16px;
-  font-weight: 300;            /* 화살표가 너무 두껍지 않도록 슬림하게 설정 */
-  color: #fff200;
-}
-
 
 /* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
 .board-table {
@@ -149,3 +137,4 @@ body {
 
 .my-post-row:hover {
   background:
+}

@@ -159,151 +159,71 @@ body {
 }
 
 
-/* ===== 5. 하단 유틸리티 (검색, 페이징, 글쓰기 버튼) ===== */
-.board-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 35px;
-}
-
-#boardSearch {
-  width: 320px;
-  height: 44px;
-  border: 1px solid #ddd;
-  padding: 0 16px;
-  font-size: 13px;
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-#boardSearch:focus {
-  border-color: #111;
-}
-
-.write-btn {
-  display: block;
-  width: 90px;
-  height: 42px;
-  border: none;
-  border-radius: 999px;
-  background: #111;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-}
-
-.write-btn:hover {
-  background: #333;
-  transform: translateY(-2px);
-}
-
-.pagination {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 25px;
-}
-
-.pagination button {
-  width: 34px;
-  height: 34px;
-  border: 1px solid #ddd;
-  background: #fff;
-  color: #111;
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.pagination button.active {
-  background: #111;
-  color: #fff;
-  border-color: #111;
-}
-
-
-/* ===== 6. 반응형 미디어 쿼리 ===== */
-@media(max-width: 768px) {
-  .board-page {
-    padding: 110px 20px 80px; 
-  }
-
-  .board-layout {
-    grid-template-columns: 1fr; 
-    gap: 24px;
-  }
-
-  .board-header h1 {
-    font-size: 32px;
-  }
-
-  .board-row {
-    grid-template-columns: 50px 1fr 90px; 
-    font-size: 13px;
-  }
-
-  .board-bottom {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
-  }
-
-  #boardSearch {
-    width: 100%;
-  }
-
-  .write-btn {
-    width: 100%;
-    margin-top: 8px;
-  }
-}
-
-/* ===== 5. 하단 유틸리티 - 페이징 버튼 고급화 ===== */
+/* ===== 5. 하단 유틸리티 - 페이징 버튼 (투박한 검은 상자 박멸 및 누드화) ===== */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  margin-top: 40px;          /* 테이블과의 적절한 간격 배치 */
+  gap: 16px;                 /* 숫자 간격을 세련되게 넓힘 */
+  margin-top: 50px;
 }
 
 .pagination button {
-  width: 36px;
-  height: 36px;
-  border: 1px solid #e2e2e7;
-  background: #ffffff;
-  color: #55555a;
-  font-size: 13px;
-  font-weight: 700;
-  border-radius: 6px;        /* 미니멀한 라운딩 처리 */
+  /* 🌟 [요청 반영] 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
+  background: none !important; 
+  border: none !important;     
+  box-shadow: none !important;
+  outline: none !important;
+  
+  /* 기본 비활성 숫자는 부드럽고 연한 흑진주 그레이 색상 */
+  color: #aaaaaf !important;                 
+  font-size: 15px;
+  font-weight: 500;
   cursor: pointer;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  padding: 6px 10px;
+  position: relative;
   transition: all 0.2s ease;
 }
 
-/* 마우스 올렸을 때 */
+/* 마우스 올렸을 때 은은하게 진해지는 효과 */
 .pagination button:hover:not(:disabled) {
-  background: #f4f4f5;
-  color: #111;
-  border-color: #adad93;
+  color: #111112 !important;
 }
 
-/* 🌟 현재 선택된 페이지 숫자 버튼 테마 스타일 (블랙 카드 반전) */
+/* 🌟 현재 선택된 활성화 페이지 숫자 디자인 (블랙 볼드 강조 + 아래 미니 옐로우 포인트 점) */
 .pagination button.active {
-  background: #111112 !important;
-  color: #fff200 !important; /* 헬스보이짐 시그니처 옐로우 포인트 */
-  border-color: #111112 !important;
+  color: #111112 !important;   /* 선명하고 진한 블랙 */
+  font-weight: 800 !important;   /* 두껍게 강조 */
 }
 
-/* 비활성화 상태 버튼 (첫 페이지에서 < 누르거나 마지막 페이지에서 > 누를 때) */
+/* 활성화된 숫자 밑에 세련되게 찍히는 미니 도트(선택 사항, 깔끔함을 위해 배치) */
+.pagination button.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  background-color: #fff200;   /* 헬스보이짐 시그니처 옐로우 포인트 */
+  border-radius: 50%;
+}
+
+/* 화살표 버튼 전용 스타일 (<<, <, >, >>) */
+.pagination button.page-arrow {
+  font-size: 12px;
+  color: #66666c !important;
+  font-weight: 700;
+}
+
+/* 글이 없어서 아직 비어있는 가상의 3, 4, 5번 더미 숫자 색상 (매우 연하게) */
+.pagination button.dummy-page {
+  color: #e2e2e7 !important;
+  cursor: default;
+}
+
+/* 맨 처음이나 끝에 도달했을 때 화살표 흐리게 처리 */
 .pagination button:disabled {
-  opacity: 0.3;
+  opacity: 0.2 !important;
   cursor: not-allowed;
-  background: #fbfbfb;
 }

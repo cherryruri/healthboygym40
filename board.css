@@ -22,7 +22,7 @@ body {
   display: grid;
   grid-template-columns: 240px 1fr;
   
-  /* 🌟 [요청 반영] 기존 40px였던 좌우 간격을 70px로 대폭 넓혀서 숨통을 시원하게 틔웁니다! */
+  /* [요청 반영] 기존 40px였던 좌우 간격을 70px로 대폭 넓혀서 숨통을 시원하게 틔웁니다! */
   gap: 70px; 
   
   align-items: start; 
@@ -47,15 +47,15 @@ body {
   letter-spacing: -0.04em;
 }
 
+/* 🌟 [오타 완벽 수정] 53번째 줄 근처의 #66px; 에러를 지우고 정상적인 컬러값(#666)으로 복구했습니다! */
 .board-header p {
   font-size: 14px;
   line-height: 1.8;
-  color: #66px;
   color: #666;
   max-width: 720px;
 }
 
-/* ===== 3. 왼쪽 사이드바 (마우스 호버 시 노란 밑줄 추가 버전) ===== */
+/* ===== 3. 왼쪽 사이드바 (마우스 호버 시 노란 밑줄 버전) ===== */
 .board-sidebar {
   background: #111112;         /* 묵직하고 힙한 다크 그레이 배경 */
   border: 1px solid #1f1f22;    /* 은은한 미니멀 경계선 */
@@ -84,18 +84,18 @@ body {
   text-decoration: none;
   border-radius: 10px;
   margin-bottom: 8px;
-  position: relative;          /* 🌟 밑줄 위치를 잡기 위한 기준점 필수 설정 */
+  position: relative;          /* 밑줄 위치를 잡기 위한 기준점 필수 설정 */
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* 🌟 [수정] 마우스 올렸을 때 (Hover) 글자색 강조 및 밑줄 생성 */
+/* 마우스 올렸을 때 (Hover) 글자색 강조 및 밑줄 생성 */
 .board-sidebar .board-tab:hover {
   background: rgba(255, 255, 255, 0.03);
   color: #fff !important;      /* 글자색을 환하게 변경 */
 }
 
-/* 🌟 [추가] 평소에는 보이지 않는 가상의 노란 밑줄선 설계 */
+/* 평소에는 보이지 않는 가상의 노란 밑줄선 설계 */
 .board-sidebar .board-tab::after {
   content: "";
   position: absolute;
@@ -107,12 +107,12 @@ body {
   transition: width 0.25s ease;/* 왼쪽에서 오른쪽으로 슥 늘어나는 애니메이션 */
 }
 
-/* 🌟 [추가] 마우스를 올리는 대기 상태(Hover)일 때 밑줄 길이가 늘어남 */
+/* 마우스를 올리는 대기 상태(Hover)일 때 밑줄 길이가 늘어남 */
 .board-sidebar .board-tab:hover::after {
   width: 80px;                 /* 글자 길이에 딱 맞춘 밑줄의 가로 너비 */
 }
 
-/* 🌟 활성화 상태 (선택된 메뉴: 흰색 상자 반전 및 밑줄 절대 금지) */
+/* 활성화 상태 (선택된 메뉴: 흰색 상자 반전 및 밑줄 절대 금지) */
 .board-sidebar .board-tab.active {
   background: #ffffff !important; 
   color: #000000 !important;      
@@ -120,7 +120,7 @@ body {
   text-decoration: none !important; /* 텍스트 밑줄 강제 제거 */
 }
 
-/* 🌟 [핵심 차단] 이미 선택되어 흰색 상자가 된 버튼에는 노란색 호버 밑줄 기능 무력화 */
+/* 이미 선택되어 흰색 상자가 된 버튼에는 노란색 호버 밑줄 기능 무력화 */
 .board-sidebar .board-tab.active::after,
 .board-sidebar .board-tab.active::before {
   display: none !important;
@@ -187,7 +187,7 @@ body {
 }
 
 .pagination button {
-  /* 🌟 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
+  /* 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
   background: none !important; 
   border: none !important;     
   box-shadow: none !important;
@@ -208,7 +208,7 @@ body {
   color: #111112 !important;
 }
 
-/* 🌟 현재 선택된 활성화 페이지 숫자 디자인 (블랙 볼드 강조 + 아래 미니 옐로우 포인트 점) */
+/* 현재 선택된 활성화 페이지 숫자 디자인 (블랙 볼드 강조 + 아래 미니 옐로우 포인트 점) */
 .pagination button.active {
   color: #111112 !important;   /* 선명하고 진한 블랙 */
   font-weight: 800 !important;   /* 두껍게 강조 */

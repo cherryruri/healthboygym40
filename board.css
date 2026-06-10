@@ -528,3 +528,19 @@ height:230px;
   font-size:14px;
   font-weight:700;
 }
+
+.board-layout{
+  display:grid !important;
+  grid-template-columns:220px 1fr !important;
+  gap:60px !important;
+}
+
+.board-sidebar{
+  display:block !important;
+  background:#000 !important;
+  min-height:650px !important;
+}
+
+.board-main{
+  display:block !important;
+}

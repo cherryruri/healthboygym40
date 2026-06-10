@@ -257,65 +257,95 @@ body {
   cursor: not-allowed;
 }
 
-/* ===== 모바일 화면 (768px 이하) 대응 ===== */
+/* ==========================================================================
+   🌟 모바일 화면 전용 디자인 (화면 폭 768px 이하일 때만 적용)
+   ========================================================================== */
 @media (max-width: 768px) {
-  /* 1. PC용 그리드 레이아웃을 해제하고 위아래 일렬로 배치 */
+  
+  /* 1. PC용 가로 그리드 레이아웃을 위아래로 일렬 정렬 */
   .board-layout {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
+    padding: 0;
   }
-  
-  /* 2. 원래 숨 막히게 길던 사이드바를 화면 하단 고정바로 변신! */
+
+  /* 2. 상단 타이틀 주변 여백 조정 */
+  .board-page {
+    padding: 100px 20px 100px; /* 헤더에 가리지 않게 상단 여백 조율 */
+  }
+
+  .board-header h1 {
+    font-size: 28px; /* 모바일에 맞게 글자 크기 축소 */
+  }
+
+  /* 3. [핵심] 세로형 사이드바를 모바일용 가로 스크롤 상단 바형태로 대변신 */
   .board-sidebar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    background: #111112;         
+    border-radius: 12px;         
+    padding: 10px;          
     width: 100%;
-    height: 60px; /* 하단바 두께 */
-    background: #111112;
-    border-radius: 0; /* 모바일 하단바는 직각이 예쁩니다 */
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding: 0 10px;
-    z-index: 999999; /* 모바일 하단 고정바(style.css)보다 더 위에 띄우기 */
+    height: auto; /* 고정 높이 해제 */
     
-    /* 메뉴들을 가로로 슥슥 넘겨볼 수 있게 스크롤 효과 뿜어주기 */
+    /* 메뉴들을 가로 한 줄로 배치하고, 넘치면 손가락으로 슥슥 밀 수 있게(스크롤) 설정 */
     flex-direction: row !important;
     overflow-x: auto;
     white-space: nowrap;
-    -webkit-overflow-scrolling: touch; /* 부드러운 모바일 스크롤 */
+    gap: 8px;
+    
+    /* 모바일 부드러운 스크롤 */
+    -webkit-overflow-scrolling: touch; 
   }
 
-  /* 3. 스크롤바는 깔끔하게 숨기기 */
+  /* 모바일 스크롤바가 안 이쁘게 노출되는 현상 방지 (숨김 처리) */
   .board-sidebar::-webkit-scrollbar {
     display: none;
   }
 
-  /* 4. 하단바 안의 메뉴 버튼들을 가로형 칩(Chip) 디자인으로 이쁘게 변경 */
+  /* 4. 가로 바 내부의 버튼 메뉴 디자인 세련되게 조정 */
   .board-sidebar .board-tab {
     display: inline-block;
-    width: auto;
-    height: 100%;
-    line-height: 60px; /* 높이 중앙 정렬 */
-    padding: 0 16px !important;
-    margin-bottom: 0 !important;
-    font-size: 14px;
-    flex-shrink: 0; /* 글자가 찌그러지지 않게 방어 */
+    width: auto; /* 너비 자동 설정 */
+    padding: 10px 16px !important;
+    margin-bottom: 0 !important; /* 아래 공백 제거 */
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    flex-shrink: 0; /* 글자가 좁아져서 찌그러지는 현상 절대 방어 */
   }
 
-  /* 5. 모바일에서는 호버 밑줄 대신 글자색 변환이 깔끔함 */
+  /* 모바일에서는 호버 밑줄 애니메이션이 오히려 지저분하므로 비활성화 */
   .board-sidebar .board-tab::after {
     display: none !important;
   }
 
-  /* 6. 게시판 본문 내용이 하단바에 가려지지 않게 바닥 패딩 넉넉히 주기 */
-  .board-page {
-    padding-bottom: 100px;
+  /* 5. 현재 활성화된(선택된) 모바일 메뉴 강조 룩 */
+  .board-sidebar .board-tab.active {
+    background: #ffffff !important;
+    color: #000000 !important;
   }
   
-  /* 7. 기존 공통 모바일 하단바(홈, 게시판, 이벤트, 마이)를 게시판 페이지에서만 숨기기 */
-  .mobile-bottom-nav {
-    display: none !important;
+  /* 6. 테이블 및 푸터(검색창, 글쓰기) 모바일 최적화 */
+  .board-row {
+    grid-template-columns: 50px 1fr 90px; /* 모바일에서는 작성시간, 조회수 과감히 숨기거나 조율 */
+  }
+  .board-row > div:nth-child(4),
+  .board-row > div:nth-child(5) {
+    display: none; /* 모바일에서 화면 미어터짐 방지를 위해 작성시간/조회수 숨김 */
+  }
+  
+  .board-bottom {
+    flex-direction: column; /* 검색창과 글쓰기를 위아래로 배정 */
+    gap: 12px;
+    align-items: stretch;
+  }
+  
+  #boardSearch {
+    width: 100%; /* 검색창 꽉 차게 */
+  }
+  
+  .write-btn {
+    width: 100%; /* 글쓰기 버튼 꽉 차게 */
+    text-align: center;
   }
 }

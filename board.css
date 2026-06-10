@@ -1,247 +1,87 @@
-/* ===== 1. 기본 초기화 및 레이아웃 (간격 확대 버전) ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Pretendard', sans-serif;
-  background: #fff;
-  color: #111;
-  letter-spacing: -0.04em;
-}
-
-.board-page {
-  max-width: 1600px; 
-  margin: auto;
-  padding: 160px 40px 120px; 
-}
-
-.board-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  
-  /* [요청 반영] 기존 40px였던 좌우 간격을 70px로 대폭 넓혀서 숨통을 시원하게 틔웁니다! */
-  gap: 70px; 
-  
-  align-items: start; 
-}
-
-.board-main {
-  width: 100%;
-}
-
-/* ===== 2. 상단 헤더 타이틀 영역 ===== */
-.board-header {
-  text-align: left;
-  border-left: 6px solid #111;
-  padding-left: 18px;
-  margin-bottom: 35px;
-}
-
-.board-header h1 {
-  font-size: 42px;
-  font-weight: 900;
-  margin-bottom: 10px;
-  letter-spacing: -0.04em;
-}
-
-/* 🌟 [오타 완벽 수정] 53번째 줄 근처의 #66px; 에러를 지우고 정상적인 컬러값(#666)으로 복구했습니다! */
-.board-header p {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #666;
-  max-width: 720px;
-}
-
-/* ===== 3. 왼쪽 사이드바 (마우스 호버 시 노란 밑줄 버전) ===== */
-.board-sidebar {
-  background: #111112;         /* 묵직하고 힙한 다크 그레이 배경 */
-  border: 1px solid #1f1f22;    /* 은은한 미니멀 경계선 */
-  border-radius: 16px;         /* 깔끔한 곡률 */
-  padding: 24px 16px;          /* 내부 여백 */
-  
-  /* 어떤 메뉴를 누르든 출렁임 없이 완벽하게 단단히 고정 */
-  width: 100%;
-  height: 1200px;              /* 1200px로 높이 고정 */
-  
+/* ===== 5. 하단 검색창 및 글쓰기 버튼 정렬 ===== */
+.board-footer-tools {
   display: flex;
-  flex-direction: column;
-}
-
-/* 사이드바 내부 탭 스타일 */
-.board-sidebar .board-tab {
-  display: block;
-  width: 100%;
-  border: none;
-  background: none;
-  color: #77777c;              /* 기본 평소 글자색 */
-  text-align: left;
-  padding: 16px 20px;
-  font-size: 15px;
-  font-weight: 700;
-  text-decoration: none;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  position: relative;          /* 밑줄 위치를 잡기 위한 기준점 필수 설정 */
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* 마우스 올렸을 때 (Hover) 글자색 강조 및 밑줄 생성 */
-.board-sidebar .board-tab:hover {
-  background: rgba(255, 255, 255, 0.03);
-  color: #fff !important;      /* 글자색을 환하게 변경 */
-}
-
-/* 평소에는 보이지 않는 가상의 노란 밑줄선 설계 */
-.board-sidebar .board-tab::after {
-  content: "";
-  position: absolute;
-  bottom: 10px;                /* 밑줄이 생길 하단 높이 */
-  left: 20px;                  /* 글자 시작 여백 패딩(20px)에 정렬 */
-  width: 0;                    /* 최초 상태는 길이 0 (숨김 상태) */
-  height: 2px;                 /* 밑줄 두께 */
-  background-color: #fff200;   /* 헬스보이짐 노란색 */
-  transition: width 0.25s ease;/* 왼쪽에서 오른쪽으로 슥 늘어나는 애니메이션 */
-}
-
-/* 마우스를 올리는 대기 상태(Hover)일 때 밑줄 길이가 늘어남 */
-.board-sidebar .board-tab:hover::after {
-  width: 80px;                 /* 글자 길이에 딱 맞춘 밑줄의 가로 너비 */
-}
-
-/* 활성화 상태 (선택된 메뉴: 흰색 상자 반전 및 밑줄 절대 금지) */
-.board-sidebar .board-tab.active {
-  background: #ffffff !important; 
-  color: #000000 !important;      
-  font-weight: 800;
-  text-decoration: none !important; /* 텍스트 밑줄 강제 제거 */
-}
-
-/* 이미 선택되어 흰색 상자가 된 버튼에는 노란색 호버 밑줄 기능 무력화 */
-.board-sidebar .board-tab.active::after,
-.board-sidebar .board-tab.active::before {
-  display: none !important;
-  content: none !important;
-  opacity: 0 !important;
-}
-
-/* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
-.board-table {
-  border-top: 2px solid #111;
-}
-
-.board-row {
-  display: grid;
-  grid-template-columns: 80px 1fr 140px 140px 80px;
+  justify-content: space-between; /* 왼쪽 검색창, 오른쪽 버튼 배치 */
   align-items: center;
-  min-height: 62px;
-  border-bottom: 1px solid #eee;
+  margin-top: 30px;
+  width: 100%;
+}
+
+/* 검색창 디자인 */
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 300px;
+}
+
+.search-container input {
+  border: none;
+  outline: none;
+  width: 100%;
   font-size: 14px;
+}
+
+/* 글쓰기 버튼 디자인 */
+.write-btn {
+  background: #111 !important;
+  color: #fff !important;
+  padding: 10px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
   transition: background 0.2s;
 }
 
-/* 마우스 오버 시 행 전체 배경색만 변경 */
-.board-row:hover {
-  background: #fcfcfc;
+.write-btn:hover {
+  background: #333 !important;
 }
 
-.board-row > div {
-  padding: 0 10px;
-}
-
-.board-head {
-  font-size: 12px;
-  font-weight: 900;
-  color: #666;
-}
-
-.board-title {
-  font-weight: 700;
-  color: #111;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  display: inline-block;
-  padding-bottom: 4px;
-}
-
-.my-post-row {
-  text-decoration: none;
-  color: #111;
-}
-
-.my-post-row:hover {
-  background: #f7f7f7;
-}
-
-/* ===== 5. 하단 유틸리티 - 페이징 버튼 (투박한 검은 상자 박멸 및 누드화) ===== */
+/* ===== 6. 하단 페이지 숫자 (가독성 개선) ===== */
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;                 /* 숫자 간격을 세련되게 넓힘 */
-  margin-top: 50px;
+  gap: 12px;
+  margin-top: 40px;
+  padding-bottom: 50px;
 }
 
 .pagination button {
-  /* 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
-  background: none !important; 
-  border: none !important;     
-  box-shadow: none !important;
-  outline: none !important;
-  
-  /* 기본 비활성 숫자는 부드럽고 연한 흑진주 그레이 색상 */
-  color: #aaaaaf !important;                 
+  background: none !important;
+  border: none !important;
+  color: #aaa !important; /* 글자색을 약간 더 진하게 변경하여 잘 보이게 함 */
   font-size: 15px;
   font-weight: 500;
   cursor: pointer;
-  padding: 6px 10px;
+  padding: 8px;
   position: relative;
-  transition: all 0.2s ease;
+  transition: all 0.2s;
 }
 
-/* 마우스 올렸을 때 은은하게 진해지는 효과 */
-.pagination button:hover:not(:disabled) {
-  color: #111112 !important;
-}
-
-/* 현재 선택된 활성화 페이지 숫자 디자인 (블랙 볼드 강조 + 아래 미니 옐로우 포인트 점) */
+/* 선택된 숫자: 진한 블랙 + 옐로우 도트 */
 .pagination button.active {
-  color: #111112 !important;   /* 선명하고 진한 블랙 */
-  font-weight: 800 !important;   /* 두껍게 강조 */
+  color: #111 !important;
+  font-weight: 800 !important;
 }
 
-/* 활성화된 숫자 밑에 세련되게 찍히는 미니 도트(선택 사항, 깔끔함을 위해 배치) */
 .pagination button.active::after {
   content: "";
   position: absolute;
   bottom: 0px;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  background-color: #fff200;   /* 헬스보이짐 시그니처 옐로우 포인트 */
+  width: 5px;
+  height: 5px;
+  background-color: #fff200;
   border-radius: 50%;
 }
 
-/* 화살표 버튼 전용 스타일 (<<, <, >, >>) */
-.pagination button.page-arrow {
-  font-size: 12px;
-  color: #66666c !important;
-  font-weight: 700;
-}
-
-/* 글이 없어서 아직 비어있는 가상의 3, 4, 5번 더미 숫자 색상 (매우 연하게) */
-.pagination button.dummy-page {
-  color: #e2e2e7 !important;
-  cursor: default;
-}
-
-/* 맨 처음이나 끝에 도달했을 때 화살표 흐리게 처리 */
+/* 비활성 숫자 및 화살표 */
 .pagination button:disabled {
-  opacity: 0.2 !important;
+  color: #ddd !important;
   cursor: not-allowed;
 }

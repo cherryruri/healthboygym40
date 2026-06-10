@@ -505,11 +505,11 @@ margin-bottom:18px;
 
 
 .board-header p{
-  line-height:1.8;
-  font-size:14px;
-  font-weight:700;
+font-size:15px;
+line-height:2;
+color:#666;
+max-width:850px;
 }
-
 
 
 .write-btn{

@@ -256,3 +256,66 @@ body {
   opacity: 0.2 !important;
   cursor: not-allowed;
 }
+
+/* ===== 모바일 화면 (768px 이하) 대응 ===== */
+@media (max-width: 768px) {
+  /* 1. PC용 그리드 레이아웃을 해제하고 위아래 일렬로 배치 */
+  .board-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  /* 2. 원래 숨 막히게 길던 사이드바를 화면 하단 고정바로 변신! */
+  .board-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 60px; /* 하단바 두께 */
+    background: #111112;
+    border-radius: 0; /* 모바일 하단바는 직각이 예쁩니다 */
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 0 10px;
+    z-index: 999999; /* 모바일 하단 고정바(style.css)보다 더 위에 띄우기 */
+    
+    /* 메뉴들을 가로로 슥슥 넘겨볼 수 있게 스크롤 효과 뿜어주기 */
+    flex-direction: row !important;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch; /* 부드러운 모바일 스크롤 */
+  }
+
+  /* 3. 스크롤바는 깔끔하게 숨기기 */
+  .board-sidebar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 4. 하단바 안의 메뉴 버튼들을 가로형 칩(Chip) 디자인으로 이쁘게 변경 */
+  .board-sidebar .board-tab {
+    display: inline-block;
+    width: auto;
+    height: 100%;
+    line-height: 60px; /* 높이 중앙 정렬 */
+    padding: 0 16px !important;
+    margin-bottom: 0 !important;
+    font-size: 14px;
+    flex-shrink: 0; /* 글자가 찌그러지지 않게 방어 */
+  }
+
+  /* 5. 모바일에서는 호버 밑줄 대신 글자색 변환이 깔끔함 */
+  .board-sidebar .board-tab::after {
+    display: none !important;
+  }
+
+  /* 6. 게시판 본문 내용이 하단바에 가려지지 않게 바닥 패딩 넉넉히 주기 */
+  .board-page {
+    padding-bottom: 100px;
+  }
+  
+  /* 7. 기존 공통 모바일 하단바(홈, 게시판, 이벤트, 마이)를 게시판 페이지에서만 숨기기 */
+  .mobile-bottom-nav {
+    display: none !important;
+  }
+}

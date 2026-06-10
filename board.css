@@ -53,16 +53,16 @@ body {
   color: #666;
   max-width: 720px;
 }
-/* ===== 3. 왼쪽 사이드바 (완벽 높이 고정 버전) ===== */
+/* ===== 3. 왼쪽 사이드바 (활성화 버튼 밑줄 완벽 박멸) ===== */
 .board-sidebar {
   background: #111112;         /* 묵직하고 힙한 다크 그레이 배경 */
   border: 1px solid #1f1f22;    /* 은은한 미니멀 경계선 */
   border-radius: 16px;         /* 깔끔한 곡률 */
   padding: 24px 16px;          /* 내부 여백 */
   
-  /* 🌟 어떤 메뉴를 누르든 출렁임 없이 완벽하게 단단히 고정되도록 크기 규격 통일 */
+  /* 어떤 메뉴를 누르든 출렁임 없이 완벽하게 단단히 고정 */
   width: 100%;
-  height: 600px;               /* 600px로 깔끔하고 확실하게 높이를 박아버립니다. */
+  height: 600px;               /* 600px로 높이 고정 */
   
   display: flex;
   flex-direction: column;
@@ -93,13 +93,21 @@ body {
   color: #fff;
 }
 
-/* 활성화 상태 (선택된 메뉴: 미니멀 화이트 반전) */
+/* 🌟 활성화 상태 (선택된 메뉴: 흰색 상자 반전 및 밑줄 절대 금지) */
 .board-sidebar .board-tab.active {
   background: #ffffff !important; 
   color: #000000 !important;      
   font-weight: 800;
+  text-decoration: none !important; /* 텍스트 밑줄 강제 제거 */
 }
 
+/* 🌟 [핵심] 활성화된 흰색 버튼 안에는 가상 요소(밑줄 등)가 절대 나오지 못하게 완전 차단 */
+.board-sidebar .board-tab.active::after,
+.board-sidebar .board-tab.active::before {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+}
 /* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
 .board-table {
   border-top: 2px solid #111;

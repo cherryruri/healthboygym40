@@ -11,10 +11,11 @@ color:#111;
 }
 
 .board-page{
-max-width:1400px;
+max-width:1200px;
 margin:auto;
-padding:140px 20px 120px;
+padding:95px 20px 120px;
 }
+
 
 .board-header{
 text-align:center;
@@ -436,14 +437,14 @@ height:230px;
 
 .board-layout{
   display:grid;
-  grid-template-columns:220px 1fr;
-  gap:60px;
+  grid-template-columns:210px 1fr;
+  gap:42px;
 }
 
 .board-sidebar{
   background:#000;
-  min-height:650px;
-  padding:26px 0;
+  min-height:640px;
+  padding:42px 0;
 }
 
 .board-sidebar .board-tab{

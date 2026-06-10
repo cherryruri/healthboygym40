@@ -469,7 +469,19 @@ padding:40px 0;
 }
 
 .board-sidebar .board-tab.active{
-  color:#fff200;
+color:#fff200;
+position:relative;
+}
+
+.board-sidebar .board-tab.active::after{
+content:"→";
+position:absolute;
+right:24px;
+top:50%;
+transform:translateY(-50%);
+font-size:22px;
+font-weight:900;
+color:#fff200;
 }
 
 .board-main{

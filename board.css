@@ -1,4 +1,4 @@
-/* ===== 1. 기본 초기화 및 레이아웃 (정밀 구조 교정) ===== */
+/* ===== 1. 기본 초기화 및 레이아웃 (정돈된 몰입형 버전) ===== */
 * {
   margin: 0;
   padding: 0;
@@ -12,24 +12,19 @@ body {
   letter-spacing: -0.04em;
 }
 
-/* 상단 고정 헤더와의 간격을 확보하기 위해 padding-top을 충분히 제공 */
 .board-page {
-  max-width: 1450px;
+  /* 🌟 1450px이 너무 갇힌 느낌이었다면, 1600px 정도로 살짝만 더 숨통을 틔워줍니다. */
+  /* 상단 네비게이션 바의 'HEALTHBOYGYM' 로고 위치와 우측 버튼 끝 라인에 딱 맞춰주면 제일 예쁩니다! */
+  max-width: 1600px; 
   margin: auto;
-  padding: 160px 40px 120px;
+  padding: 160px 40px 120px; 
 }
 
 .board-layout {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 40px;
-  
-  /* 🌟 [핵심 수정] 우측 내용 길이와 상관없이 왼쪽 메뉴바가 독자적인 고정 높이를 유지할 수 있도록 정렬 기준을 상단(start)으로 고정합니다. */
   align-items: start; 
-}
-
-.board-main {
-  width: 100%;
 }
 
 /* ===== 2. 상단 헤더 타이틀 영역 ===== */

@@ -107,4 +107,166 @@ body {
 
 @keyframes titleFadeIn {
   from {
-    opacity: 0
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
+.board-table {
+  border-top: 2px solid #111;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 140px 140px 80px;
+  align-items: center;
+  min-height: 62px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+/* 마우스 오버 시 행 전체 배경색만 변경 */
+.board-row:hover {
+  background: #fcfcfc;
+}
+
+.board-row > div {
+  padding: 0 10px;
+}
+
+.board-head {
+  font-size: 12px;
+  font-weight: 900;
+  color: #666;
+}
+
+/* ❌ 노란색 언더라인 애니메이션 관련 코드(::after)를 완전히 삭제했습니다. */
+.board-title {
+  font-weight: 700;
+  color: #111;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.my-post-row {
+  text-decoration: none;
+  color: #111;
+}
+
+.my-post-row:hover {
+  background: #f7f7f7;
+}
+
+
+/* ===== 5. 하단 유틸리티 (검색, 페이징, 글쓰기 버튼) ===== */
+.board-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 35px;
+}
+
+#boardSearch {
+  width: 320px;
+  height: 44px;
+  border: 1px solid #ddd;
+  padding: 0 16px;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#boardSearch:focus {
+  border-color: #111;
+}
+
+.write-btn {
+  display: block;
+  width: 90px;
+  height: 42px;
+  border: none;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.write-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 25px;
+}
+
+.pagination button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #111;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button.active {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+
+/* ===== 6. 반응형 미디어 쿼리 ===== */
+@media(max-width: 768px) {
+  .board-page {
+    padding: 110px 20px 80px; 
+  }
+
+  .board-layout {
+    grid-template-columns: 1fr; 
+    gap: 24px;
+  }
+
+  .board-header h1 {
+    font-size: 32px;
+  }
+
+  .board-row {
+    grid-template-columns: 50px 1fr 90px; 
+    font-size: 13px;
+  }
+
+  .board-bottom {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  #boardSearch {
+    width: 100%;
+  }
+
+  .write-btn {
+    width: 100%;
+    margin-top: 8px;
+  }
+}

@@ -1,4 +1,3 @@
-
 /* ===== 1. 기본 초기화 및 레이아웃 (간격 확대 버전) ===== */
 * {
   margin: 0;
@@ -32,6 +31,7 @@ body {
 .board-main {
   width: 100%;
 }
+
 /* ===== 2. 상단 헤더 타이틀 영역 ===== */
 .board-header {
   text-align: left;
@@ -50,10 +50,12 @@ body {
 .board-header p {
   font-size: 14px;
   line-height: 1.8;
+  color: #66px;
   color: #666;
   max-width: 720px;
 }
-/* ===== 3. 왼쪽 사이드바 (활성화 버튼 밑줄 완벽 박멸) ===== */
+
+/* ===== 3. 왼쪽 사이드바 (마우스 호버 시 노란 밑줄 추가 버전) ===== */
 .board-sidebar {
   background: #111112;         /* 묵직하고 힙한 다크 그레이 배경 */
   border: 1px solid #1f1f22;    /* 은은한 미니멀 경계선 */
@@ -62,7 +64,7 @@ body {
   
   /* 어떤 메뉴를 누르든 출렁임 없이 완벽하게 단단히 고정 */
   width: 100%;
-  height: 1200px;               /* 600px로 높이 고정 */
+  height: 1200px;              /* 1200px로 높이 고정 */
   
   display: flex;
   flex-direction: column;
@@ -82,15 +84,32 @@ body {
   text-decoration: none;
   border-radius: 10px;
   margin-bottom: 8px;
-  position: relative;
+  position: relative;          /* 🌟 밑줄 위치를 잡기 위한 기준점 필수 설정 */
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* 마우스 올렸을 때 (Hover) */
+/* 🌟 [수정] 마우스 올렸을 때 (Hover) 글자색 강조 및 밑줄 생성 */
 .board-sidebar .board-tab:hover {
   background: rgba(255, 255, 255, 0.03);
-  color: #fff;
+  color: #fff !important;      /* 글자색을 환하게 변경 */
+}
+
+/* 🌟 [추가] 평소에는 보이지 않는 가상의 노란 밑줄선 설계 */
+.board-sidebar .board-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 10px;                /* 밑줄이 생길 하단 높이 */
+  left: 20px;                  /* 글자 시작 여백 패딩(20px)에 정렬 */
+  width: 0;                    /* 최초 상태는 길이 0 (숨김 상태) */
+  height: 2px;                 /* 밑줄 두께 */
+  background-color: #fff200;   /* 헬스보이짐 노란색 */
+  transition: width 0.25s ease;/* 왼쪽에서 오른쪽으로 슥 늘어나는 애니메이션 */
+}
+
+/* 🌟 [추가] 마우스를 올리는 대기 상태(Hover)일 때 밑줄 길이가 늘어남 */
+.board-sidebar .board-tab:hover::after {
+  width: 80px;                 /* 글자 길이에 딱 맞춘 밑줄의 가로 너비 */
 }
 
 /* 🌟 활성화 상태 (선택된 메뉴: 흰색 상자 반전 및 밑줄 절대 금지) */
@@ -101,13 +120,14 @@ body {
   text-decoration: none !important; /* 텍스트 밑줄 강제 제거 */
 }
 
-/* 🌟 [핵심] 활성화된 흰색 버튼 안에는 가상 요소(밑줄 등)가 절대 나오지 못하게 완전 차단 */
+/* 🌟 [핵심 차단] 이미 선택되어 흰색 상자가 된 버튼에는 노란색 호버 밑줄 기능 무력화 */
 .board-sidebar .board-tab.active::after,
 .board-sidebar .board-tab.active::before {
   display: none !important;
   content: none !important;
   opacity: 0 !important;
 }
+
 /* ===== 4. 게시판 리스트 / 테이블 영역 ===== */
 .board-table {
   border-top: 2px solid #111;
@@ -138,7 +158,6 @@ body {
   color: #666;
 }
 
-/* ❌ 노란색 언더라인 애니메이션 관련 코드(::after)를 완전히 삭제했습니다. */
 .board-title {
   font-weight: 700;
   color: #111;
@@ -158,7 +177,6 @@ body {
   background: #f7f7f7;
 }
 
-
 /* ===== 5. 하단 유틸리티 - 페이징 버튼 (투박한 검은 상자 박멸 및 누드화) ===== */
 .pagination {
   display: flex;
@@ -169,7 +187,7 @@ body {
 }
 
 .pagination button {
-  /* 🌟 [요청 반영] 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
+  /* 🌟 배경색, 테두리선, 사각형 그림자 잔상을 완전히 투명화 처리합니다. */
   background: none !important; 
   border: none !important;     
   box-shadow: none !important;

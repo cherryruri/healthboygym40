@@ -11,7 +11,7 @@ color:#111;
 }
 
 .board-page{
-max-width:1000px;
+max-width:1400px;
 margin:auto;
 padding:140px 20px 120px;
 }
@@ -215,43 +215,7 @@ color:#888;
 
 /* ===== 게시판 탭/표 디자인 추가 ===== */
 
-.board-tabs{
-display:flex;
-justify-content:center;
-gap:28px;
-margin-bottom:42px;
-border-bottom:1px solid #111;
-padding-bottom:26px;
-overflow-x:auto;
-white-space:nowrap;
-}
 
-.board-tab{
-border:none;
-background:none;
-color:#777;
-font-size:14px;
-font-weight:900;
-cursor:pointer;
-position:relative;
-padding:8px 0;
-}
-
-.board-tab.active{
-color:#111;
-}
-
-.board-tab.active::after{
-content:"";
-position:absolute;
-left:50%;
-bottom:-6px;
-transform:translateX(-50%);
-width:26px;
-height:3px;
-background:#fff200;
-border-radius:999px;
-}
 
 .board-table{
 border-top:2px solid #111;
@@ -324,18 +288,7 @@ color:#fff200;
 border-color:#111;
 }
 
-@media(max-width:768px){
 
-.board-tabs{
-justify-content:flex-start;
-gap:22px;
-margin-bottom:28px;
-padding-bottom:20px;
-}
-
-.board-tab{
-font-size:13px;
-}
 
 .board-row{
 grid-template-columns:42px 1fr 58px 74px;
@@ -529,18 +482,3 @@ height:230px;
   font-weight:700;
 }
 
-.board-layout{
-  display:grid !important;
-  grid-template-columns:220px 1fr !important;
-  gap:60px !important;
-}
-
-.board-sidebar{
-  display:block !important;
-  background:#000 !important;
-  min-height:650px !important;
-}
-
-.board-main{
-  display:block !important;
-}

@@ -1904,83 +1904,16 @@ body.menu-open .mobile-side-menu a{
 }
 
 
-@media(max-width:768px){
-
-  .facility-item .facility-slide img{
-    filter:grayscale(100%) brightness(0.72);
-    transition:filter 1.2s ease, transform 1.2s ease;
-  }
-
-  .facility-item.color-on .facility-slide img{
-    filter:grayscale(0%) brightness(1) !important;
-  }
-
-}
 
 
 
 
-
-
-
-
-
+m
 
 
 /* ================= BOX 전용 스타일 ================= */
-.box-history {
-  --cut-top: 50%;
-  --cut-bottom: 60%;
 
-  height: 100vh;
-  display: grid;
-  place-items: center;
-  text-align: center;
-  background: #000;
-  padding: 0 1rem;
-  box-sizing: border-box;
-}
 
-.box-history .slice {
-  display: grid;
-  font-weight: 900;
-  font-size: clamp(3rem,8vw, 9rem); /* PC/모바일 공용 */
-  letter-spacing: .15em;
-  color: #fff;
-  text-transform: uppercase;
-  margin: 0;
-  position: relative;
-  user-select: none;
-}
-
-.box-history .slice__text {
-  grid-area: 1 / 1;
-  clip-path: polygon(0 0, 100% 0, 100% var(--cut-top), 0 var(--cut-bottom));
-  color: #fff;
-
-   white-space: nowrap;
-}
-
-.box-history .slice:after {
-  grid-area: 1 / 1;
-  rotate: -1deg;
-  display: inline-block;
-  content: attr(data-text);
-  user-select: none;
-  transform: translate(-.03em, .04em);
-  color: transparent;
-  background-image: linear-gradient(179deg, #000 var(--cut-top), #fff 70%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  clip-path: polygon(0 var(--cut-bottom), 100% var(--cut-top), 100% 100%, 0 100%);
-}
-
-/* 모바일 글자 크기만 조정 */
-@media screen and (max-width: 768px) {
-  .box-history .slice {
-    font-size: clamp(3rem, 14vw, 8rem);
-  }
-}
 
 
 /* ================= 모바일 트레이너 상세 스크롤 수정 ================= */

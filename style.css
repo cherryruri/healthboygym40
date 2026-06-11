@@ -1325,23 +1325,7 @@ section{
 
 }
 
-/* 모바일 시설투어 사진: 스크롤해서 보이면 컬러로 전환 */
-@media(max-width:768px){
 
-  .facility-slide img{
-  filter:grayscale(100%) brightness(0.72);
-  transition:filter 2s ease, transform 2s ease;
-}
-
-  .facility-item.color-on img{
-    filter:grayscale(0%) brightness(1);
-  }
-
-  .facility-slider:hover img{
-    transform:none;
-  }
-
-}
 /* 모바일 트레이너 사진 2열 강제 배치 */
 @media(max-width:768px){
 

@@ -3186,11 +3186,7 @@ body.menu-open .mobile-login-area{
   transform:scale(.95);
 }
 
-@media(max-width:768px){
-  .pc-floating-widget{
-    display:none;
-  }
-}
+
 
 /* 모바일 메뉴 프로필 카드 */
 .mobile-profile-card{

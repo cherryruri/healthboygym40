@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       document.body.classList.add("loaded");
 
+      initHeroExpand();
       fadeIn();
       observeCounter();
       startTyping();
@@ -38,6 +39,111 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   setTimeout(openMain, 800);
+
+
+
+  /* 메인 히어로 영상 확장 */
+  function initHeroExpand(){
+
+    const hero =
+      document.querySelector(".hero-expand-section");
+
+    if(!hero) return;
+
+    function update(){
+
+      const rect =
+        hero.getBoundingClientRect();
+
+      const scrollable =
+        Math.max(1, hero.offsetHeight - window.innerHeight);
+
+      const progress =
+        Math.max(0, Math.min(1, -rect.top / scrollable));
+
+      hero.style.setProperty(
+        "--hero-progress",
+        progress.toFixed(4)
+      );
+
+      const isMobile =
+        window.innerWidth <= 768;
+
+      const startWidth =
+        isMobile ? 62 : 36;
+
+      const startHeight =
+        18;
+
+      const startTitleHeight =
+        isMobile ? 62 : 68;
+
+      const endTitleHeight =
+        isMobile ? 46 : 48;
+
+      const radius =
+        (isMobile ? 18 : 28) * (1 - progress);
+
+      hero.style.setProperty(
+        "--hero-frame-width",
+        `${startWidth + (100 - startWidth) * progress}vw`
+      );
+
+      hero.style.setProperty(
+        "--hero-frame-height",
+        `${startHeight + (100 - startHeight) * progress}vh`
+      );
+
+      hero.style.setProperty(
+        "--hero-frame-radius",
+        `${radius}px`
+      );
+
+      hero.style.setProperty(
+        "--hero-title-opacity",
+        Math.max(0, 1 - progress * 1.15).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--hero-title-shift",
+        `${-34 * progress}px`
+      );
+
+      hero.style.setProperty(
+        "--hero-title-height",
+        `${startTitleHeight + (endTitleHeight - startTitleHeight) * progress}vh`
+      );
+
+      hero.style.setProperty(
+        "--hero-overlay",
+        (0.12 + 0.34 * progress).toFixed(4)
+      );
+
+    }
+
+    function tick(){
+
+      update();
+      requestAnimationFrame(tick);
+
+    }
+
+    tick();
+
+    window.addEventListener(
+      "scroll",
+      update,
+      { passive:true }
+    );
+
+    setInterval(update, 100);
+
+    window.addEventListener(
+      "resize",
+      update
+    );
+
+  }
 
 
 

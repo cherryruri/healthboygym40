@@ -11,14 +11,524 @@ document.addEventListener("DOMContentLoaded", function(){
     siteStarted =
       true;
 
+    placePassUnderAllPass();
     initHeroExpand();
     fadeIn();
     observeCounter();
     startTyping();
     startBrandTyping();
+    initAllPassTyping();
+    initPassMap();
     initBrandAbout();
     initCoBrandExperience();
     initFacilityTour();
+
+  }
+
+  function placePassUnderAllPass(){
+
+    const passSection =
+      document.querySelector("[data-pass-map]");
+
+    const allPassHeadline =
+      document.querySelector("#brand #inc01 .brand-cross");
+
+    if(!passSection || !allPassHeadline) return;
+
+    if(allPassHeadline.nextElementSibling === passSection) return;
+
+    allPassHeadline.insertAdjacentElement("afterend", passSection);
+
+  }
+
+  function initAllPassTyping(){
+
+    const line =
+      document.querySelector("[data-allpass-typing]");
+
+    if(!line || line.dataset.typingReady === "true") return;
+
+    const textEl =
+      line.querySelector(".brand-type-text");
+
+    const cursor =
+      line.querySelector(".brand-type-cursor");
+
+    if(!textEl) return;
+
+    line.dataset.typingReady =
+      "true";
+
+    const prefix =
+      line.dataset.prefix || "";
+
+    const wrong =
+      line.dataset.wrong || "";
+
+    const rawFinalText =
+      line.dataset.final || "";
+
+    const breakAfter =
+      line.dataset.breakAfter || "";
+
+    const finalText =
+      breakAfter && rawFinalText.includes(breakAfter)
+        ? rawFinalText.replace(`${breakAfter} `, `${breakAfter}\n`)
+        : rawFinalText;
+
+    const wait =
+      delay=>new Promise(resolve=>setTimeout(resolve, delay));
+
+    const typeText =
+      async (text, speed = 42)=>{
+
+        for(const character of Array.from(text)){
+          textEl.textContent += character;
+          await wait(speed);
+        }
+
+      };
+
+    const eraseText =
+      async (count, speed = 34)=>{
+
+        for(let i = 0; i < count; i++){
+          const current =
+            Array.from(textEl.textContent);
+
+          current.pop();
+          textEl.textContent =
+            current.join("");
+
+          await wait(speed);
+        }
+
+      };
+
+    const run =
+      async ()=>{
+
+        if(line.dataset.typed === "true") return;
+
+        line.dataset.typed =
+          "true";
+
+        textEl.textContent =
+          "";
+
+        if(cursor){
+          cursor.classList.remove("is-finished");
+        }
+
+        await wait(180);
+        await typeText(prefix, 38);
+        await typeText(wrong, 52);
+
+        if(cursor){
+          cursor.classList.add("is-thinking");
+        }
+
+        await wait(1380);
+
+        if(cursor){
+          cursor.classList.remove("is-thinking");
+        }
+
+        await eraseText(Array.from(wrong).length, 38);
+        await wait(180);
+        await typeText(finalText, 32);
+        await wait(500);
+
+        if(cursor){
+          cursor.classList.add("is-finished");
+        }
+
+      };
+
+    if("IntersectionObserver" in window){
+      const observer =
+        new IntersectionObserver((entries)=>{
+
+          entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+              observer.disconnect();
+              run();
+            }
+
+          });
+
+        },{threshold:.38});
+
+      observer.observe(line);
+      return;
+    }
+
+    run();
+
+  }
+
+  function initPassRealMap(section){
+
+    const canvas =
+      section.querySelector("[data-pass-map-canvas]");
+
+    const emptyApi = {
+      setRegion(){},
+      setBranch(){}
+    };
+
+    if(!canvas || !window.L) return emptyApi;
+
+    const regionCoordinates = {
+      "서울":[37.5665, 126.9780],
+      "경기":[37.4138, 127.5183],
+      "대전":[36.3504, 127.3845],
+      "충청":[36.6357, 127.4913],
+      "대구":[35.8714, 128.6014],
+      "부산":[35.1796, 129.0756],
+      "경상":[35.2383, 128.6924],
+      "울산":[35.5384, 129.3114],
+      "전북":[35.8242, 127.1480]
+    };
+
+    const center =
+      [36.35, 127.85];
+
+    const koreaBounds =
+      [[33.0, 124.45], [38.9, 130.9]];
+
+    const map =
+      L.map(canvas, {
+        attributionControl:false,
+        boxZoom:false,
+        doubleClickZoom:false,
+        keyboard:false,
+        scrollWheelZoom:false,
+        tap:false,
+        zoomControl:false
+      }).setView(center, 6);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom:18,
+      attribution:"© OpenStreetMap"
+    }).addTo(map);
+
+    L.control.attribution({
+      prefix:false,
+      position:"bottomright"
+    }).addAttribution("© OpenStreetMap").addTo(map);
+
+    const createIcon =
+      (region, active = false)=>L.divIcon({
+        className:`pass-leaflet-marker${active ? " is-active" : ""}`,
+        html:`<span></span><em>${region}</em>`,
+        iconAnchor:[13, 13],
+        iconSize:[26, 26]
+      });
+
+    const markers = {};
+
+    Object.entries(regionCoordinates).forEach(([region, coordinates])=>{
+      markers[region] =
+        L.marker(coordinates, {
+          icon:createIcon(region, region === "경기"),
+          keyboard:false
+        }).addTo(map);
+    });
+
+    section.classList.add("has-real-map");
+
+    const fitKorea =
+      ()=>{
+        map.fitBounds(koreaBounds, {
+          animate:true,
+          paddingBottomRight:window.innerWidth > 900 ? [80, 86] : [32, 46],
+          paddingTopLeft:window.innerWidth > 900 ? [560, 96] : [32, 46]
+        });
+      };
+
+    const setMarkerState =
+      region=>{
+        Object.entries(markers).forEach(([markerRegion, marker])=>{
+          marker.setIcon(createIcon(markerRegion, markerRegion === region));
+
+          if(markerRegion !== region){
+            marker.unbindTooltip();
+          }
+        });
+      };
+
+    const setRegion =
+      region=>{
+        if(!region || region === "전체"){
+          setMarkerState("");
+          fitKorea();
+          return;
+        }
+
+        const coordinates =
+          regionCoordinates[region];
+
+        if(!coordinates) return;
+
+        setMarkerState(region);
+        fitKorea();
+      };
+
+    const setBranch =
+      button=>{
+        if(!button) return;
+
+        const region =
+          button.dataset.region;
+
+        const branch =
+          button.dataset.branch || button.textContent.trim();
+
+        const marker =
+          markers[region];
+
+        if(!marker) return;
+
+        setRegion(region);
+        marker
+          .bindTooltip(branch, {
+            className:"pass-leaflet-tooltip",
+            direction:"top",
+            offset:[0, -18],
+            permanent:true
+          })
+          .openTooltip();
+      };
+
+    setTimeout(()=>{
+      map.invalidateSize();
+      fitKorea();
+    }, 250);
+
+    window.addEventListener("resize", ()=>{
+      map.invalidateSize();
+      fitKorea();
+    });
+
+    return {
+      setRegion,
+      setBranch
+    };
+
+  }
+
+  function initPassMap(){
+
+    const section =
+      document.querySelector("[data-pass-map]");
+
+    if(!section || section.dataset.passMapReady === "true") return;
+
+    const branchButtons =
+      Array.from(section.querySelectorAll(".pass-branch-btn"));
+
+    const regionTabs =
+      Array.from(section.querySelectorAll(".pass-region-tab"));
+
+    const pins =
+      Array.from(section.querySelectorAll(".map-pin"));
+
+    const placeName =
+      section.querySelector("[data-pass-place-name]");
+
+    const placeMeta =
+      section.querySelector("[data-pass-place-meta]");
+
+    const placeQuery =
+      section.querySelector("[data-pass-place-query]");
+
+    const placeLink =
+      section.querySelector("[data-pass-place-link]");
+
+    const infoLink =
+      section.querySelector("[data-pass-place-info]");
+
+    const reviewLink =
+      section.querySelector("[data-pass-place-review]");
+
+    const routeLink =
+      section.querySelector("[data-pass-place-route]");
+
+    const branchList =
+      section.querySelector(".pass-branch-list");
+
+    if(!branchButtons.length) return;
+
+    section.dataset.passMapReady =
+      "true";
+
+    const createNaverPlaceUrl =
+      query=>`https://map.naver.com/p/search/${encodeURIComponent(query)}`;
+
+    const realMap =
+      initPassRealMap(section);
+
+    const syncRegionState =
+      region=>{
+
+        const nextRegion =
+          region || "전체";
+
+        regionTabs.forEach(tab=>{
+          tab.classList.toggle(
+            "is-active",
+            tab.dataset.region === nextRegion
+          );
+        });
+
+        pins.forEach(pin=>{
+          pin.classList.toggle(
+            "is-active",
+            nextRegion !== "전체" && pin.dataset.region === nextRegion
+          );
+        });
+
+        branchButtons.forEach(button=>{
+          const shouldShow =
+            nextRegion === "전체" || button.dataset.region === nextRegion;
+
+          button.classList.toggle("is-hidden", !shouldShow);
+        });
+
+        realMap.setRegion(nextRegion);
+
+      };
+
+    const updatePlace =
+      button=>{
+
+        const branch =
+          button.dataset.branch || button.textContent.trim();
+
+        const region =
+          button.dataset.region || "";
+
+        const tier =
+          button.dataset.tier || "";
+
+        const query =
+          button.dataset.query || `헬스보이짐 ${branch}`;
+
+        const url =
+          createNaverPlaceUrl(query);
+
+        branchButtons.forEach(item=>{
+          item.classList.toggle("is-active", item === button);
+        });
+
+        if(placeName){
+          placeName.textContent =
+            branch;
+        }
+
+        if(placeMeta){
+          placeMeta.textContent =
+            [region, tier].filter(Boolean).join(" · ");
+        }
+
+        if(placeQuery){
+          placeQuery.textContent =
+            query;
+        }
+
+        if(placeLink){
+          placeLink.href =
+            url;
+
+          placeLink.textContent =
+            `${branch} 네이버플레이스 바로가기 >`;
+        }
+
+        if(infoLink){
+          infoLink.href =
+            url;
+        }
+
+        if(reviewLink){
+          reviewLink.href =
+            `https://search.naver.com/search.naver?query=${encodeURIComponent(`${query} 리뷰`)}`;
+        }
+
+        if(routeLink){
+          routeLink.href =
+            url;
+        }
+
+        realMap.setBranch(button);
+
+      };
+
+    const selectBranch =
+      (button, options = {})=>{
+
+        if(!button) return;
+
+        if(!options.preserveFilter){
+          syncRegionState(button.dataset.region);
+        }
+
+        updatePlace(button);
+
+      };
+
+    const setRegion =
+      region=>{
+
+        syncRegionState(region);
+
+        if(branchList){
+          branchList.scrollTop =
+            0;
+        }
+
+        const visibleButtons =
+          branchButtons.filter(button=>!button.classList.contains("is-hidden"));
+
+        const activeVisibleButton =
+          visibleButtons.find(button=>button.classList.contains("is-active"));
+
+        selectBranch(
+          activeVisibleButton || visibleButtons[0],
+          {preserveFilter:true}
+        );
+
+      };
+
+    branchButtons.forEach(button=>{
+      button.addEventListener("click", ()=>{
+        selectBranch(button);
+      });
+    });
+
+    regionTabs.forEach(tab=>{
+      tab.addEventListener("click", ()=>{
+        setRegion(tab.dataset.region);
+      });
+    });
+
+    pins.forEach(pin=>{
+      pin.addEventListener("click", ()=>{
+        setRegion(pin.dataset.region);
+      });
+    });
+
+    const defaultButton =
+      branchButtons.find(button=>button.dataset.branch === "수내점") ||
+      branchButtons[0];
+
+    const activeDefaultButton =
+      branchButtons.find(button=>button.classList.contains("is-active")) ||
+      branchButtons.find(button=>button.dataset.query === "헬스보이짐 수내점") ||
+      defaultButton;
+
+    selectBranch(activeDefaultButton);
 
   }
 
@@ -125,6 +635,53 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+  function scrollToHashTarget(){
+
+    const hash =
+      window.location.hash;
+
+    if(!hash || hash.length < 2) return;
+
+    let targetId =
+      hash.slice(1);
+
+    try{
+      targetId =
+        decodeURIComponent(targetId);
+    }catch(error){
+      targetId =
+        hash.slice(1);
+    }
+
+    const target =
+      document.getElementById(targetId);
+
+    if(!target) return;
+
+    const header =
+      document.querySelector("header");
+
+    const headerHeight =
+      header ? header.offsetHeight : 0;
+
+    const top =
+      target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+
+    window.scrollTo({
+      top:Math.max(0, top),
+      behavior:"auto"
+    });
+
+  }
+
+  function queueHashScroll(){
+
+    [80, 700, 1600].forEach(delay=>{
+      setTimeout(scrollToHashTarget, delay);
+    });
+
+  }
+
   function openMain(){
 
     const loader =
@@ -140,6 +697,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if(!loader){
       document.body.classList.add("loaded");
       startSite();
+      queueHashScroll();
       return;
     }
 
@@ -158,6 +716,7 @@ document.addEventListener("DOMContentLoaded", function(){
       document.body.classList.add("loaded");
       loader.classList.add("release");
       startSite();
+      queueHashScroll();
 
     },1250);
 

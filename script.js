@@ -194,8 +194,11 @@ document.addEventListener("DOMContentLoaded", function(){
     const clamp =
       (value, min, max)=>Math.max(min, Math.min(max, value));
 
-    const easeOut =
-      value=>1 - Math.pow(1 - value, 3);
+      const easeOut =
+        value=>1 - Math.pow(1 - value, 3);
+
+      const easeInOut =
+        value=>value * value * (3 - 2 * value);
 
     function update(){
 
@@ -224,33 +227,45 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const startWidth =
         Math.min(
-          window.innerWidth * (isMobile ? 0.72 : 0.26),
-          isMobile ? 320 : 340
+          window.innerWidth * (isMobile ? 0.72 : 0.6),
+          isMobile ? 320 : 1160
         );
 
       const startHeight =
-        isMobile ? 230 : 210;
+        isMobile ? 230 : 330;
 
       const startBottom =
-        isMobile ? -36 : -116;
+        isMobile ? -36 : -70;
 
       const expandEnd =
         isMobile ? 0.5 : 0.34;
 
       const copyStart =
-        isMobile ? 0.58 : 0.34;
+        isMobile ? 0.52 : 0.32;
 
       const copyRange =
-        isMobile ? 0.18 : 0.16;
+        isMobile ? 0.28 : 0.3;
 
       const lineStart =
-        isMobile ? 0.62 : 0.42;
+        isMobile ? 0.56 : 0.38;
+
+      const lineStep =
+        isMobile ? 0.05 : 0.065;
+
+      const lineRange =
+        isMobile ? 0.32 : 0.36;
+
+      const underlineStart =
+        lineStart + lineStep + lineRange * 0.78;
+
+      const underlineRange =
+        isMobile ? 0.12 : 0.18;
 
       const expand =
         easeOut(clamp(progress / expandEnd, 0, 1));
 
       const copyProgress =
-        easeOut(clamp((progress - copyStart) / copyRange, 0, 1));
+        easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const introProgress =
         easeOut(clamp(progress / 0.24, 0, 1));
@@ -271,7 +286,10 @@ document.addEventListener("DOMContentLoaded", function(){
         startBottom * (1 - expand);
 
       const lineReveal =
-        index=>`${(easeOut(clamp((progress - (lineStart + index * 0.055)) / 0.24, 0, 1)) * 100).toFixed(1)}%`;
+        index=>`${(easeInOut(clamp((progress - (lineStart + index * lineStep)) / lineRange, 0, 1)) * 100).toFixed(1)}%`;
+
+      const underlineProgress =
+        easeInOut(clamp((progress - underlineStart) / underlineRange, 0, 1));
 
       hero.style.setProperty(
         "--hero-frame-width",
@@ -324,6 +342,11 @@ document.addEventListener("DOMContentLoaded", function(){
           lineReveal(i)
         );
       }
+
+      hero.style.setProperty(
+        "--hero-underline",
+        underlineProgress.toFixed(4)
+      );
 
       hero.style.setProperty(
         "--hero-scroll-opacity",

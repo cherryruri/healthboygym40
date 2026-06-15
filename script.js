@@ -1,6 +1,130 @@
 document.addEventListener("DOMContentLoaded", function(){
 
   /* 로더 */
+  let siteStarted =
+    false;
+
+  function startSite(){
+
+    if(siteStarted) return;
+
+    siteStarted =
+      true;
+
+    initHeroExpand();
+    fadeIn();
+    observeCounter();
+    startTyping();
+    startBrandTyping();
+    initBrandAbout();
+    initCoBrandExperience();
+    initFacilityTour();
+
+  }
+
+  function prepareIntroCaption(){
+
+    const caption =
+      document.querySelector(".intro-desc[data-caption-reveal]");
+
+    if(!caption || caption.dataset.prepared === "true") return;
+
+    const lines =
+      caption.querySelectorAll(".intro-desc-line");
+
+    let captionIndex =
+      0;
+
+    lines.forEach((line, lineIndex)=>{
+
+      const source =
+        line.dataset.text || line.textContent.trim();
+
+      line.textContent =
+        "";
+
+      line.setAttribute("aria-hidden", "true");
+
+      Array.from(source).forEach((character)=>{
+
+        const letter =
+          document.createElement("span");
+
+        const isSpace =
+          character === " ";
+
+        letter.className =
+          isSpace ? "desc-char is-space" : "desc-char";
+
+        letter.textContent =
+          isSpace ? "\u00a0" : character;
+
+        letter.style.setProperty(
+          "--caption-index",
+          captionIndex
+        );
+
+        line.appendChild(letter);
+
+        captionIndex +=
+          isSpace ? .45 : 1;
+
+      });
+
+      if(lineIndex < lines.length - 1){
+        captionIndex +=
+          5;
+      }
+
+    });
+
+    caption.classList.add("is-split");
+    caption.dataset.prepared =
+      "true";
+
+  }
+
+  function setLoaderTarget(){
+
+    const loader =
+      document.querySelector(".logo-screen");
+
+    const loaderLogo =
+      document.querySelector(".loader-logo");
+
+    const headerLogo =
+      document.querySelector(".logo a");
+
+    if(!loader || !loaderLogo || !headerLogo) return;
+
+    const logoRect =
+      headerLogo.getBoundingClientRect();
+
+    const loaderRect =
+      loaderLogo.getBoundingClientRect();
+
+    const targetScale =
+      loaderRect.width > 0
+        ? Math.min(.75, Math.max(.2, logoRect.width / loaderRect.width))
+        : .28;
+
+    loader.style.setProperty(
+      "--loader-target-x",
+      `${logoRect.left + logoRect.width / 2}px`
+    );
+
+    loader.style.setProperty(
+      "--loader-target-y",
+      `${logoRect.top + logoRect.height / 2}px`
+    );
+
+    loader.style.setProperty(
+      "--loader-target-scale",
+      targetScale.toFixed(4)
+    );
+
+  }
+
   function openMain(){
 
     const loader =
@@ -9,36 +133,53 @@ document.addEventListener("DOMContentLoaded", function(){
     const mainContent =
       document.querySelector(".main-content");
 
-    if(loader){
-      loader.classList.add("zoom-out");
+    if(mainContent){
+      mainContent.style.display = "block";
     }
+
+    if(!loader){
+      document.body.classList.add("loaded");
+      startSite();
+      return;
+    }
+
+    setLoaderTarget();
+
+    requestAnimationFrame(()=>{
+
+      setLoaderTarget();
+      document.body.classList.add("loader-docking");
+      loader.classList.add("dock-to-logo");
+
+    });
 
     setTimeout(()=>{
 
-      if(loader){
-        loader.style.display = "none";
-      }
-
-      if(mainContent){
-        mainContent.style.display = "block";
-      }
-
       document.body.classList.add("loaded");
+      loader.classList.add("release");
+      startSite();
 
-      initHeroExpand();
-      fadeIn();
-      observeCounter();
-      startTyping();
-      startBrandTyping();
-      initBrandAbout();
-      initCoBrandExperience();
-      initFacilityTour();
+    },1250);
 
-    },600);
+    setTimeout(()=>{
+
+      loader.style.display = "none";
+
+    },2000);
 
   }
 
-  setTimeout(openMain, 800);
+  window.addEventListener("resize", ()=>{
+
+    if(!document.body.classList.contains("loaded")){
+      setLoaderTarget();
+    }
+
+  });
+
+  prepareIntroCaption();
+
+  setTimeout(openMain, 1350);
 
 
 

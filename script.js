@@ -83,21 +83,33 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const startWidth =
         Math.min(
-          window.innerWidth * (isMobile ? 0.58 : 0.26),
-          isMobile ? 300 : 340
+          window.innerWidth * (isMobile ? 0.72 : 0.26),
+          isMobile ? 320 : 340
         );
 
       const startHeight =
-        isMobile ? 170 : 210;
+        isMobile ? 230 : 210;
 
       const startBottom =
-        isMobile ? -92 : -116;
+        isMobile ? -36 : -116;
+
+      const expandEnd =
+        isMobile ? 0.5 : 0.34;
+
+      const copyStart =
+        isMobile ? 0.58 : 0.34;
+
+      const copyRange =
+        isMobile ? 0.18 : 0.16;
+
+      const lineStart =
+        isMobile ? 0.62 : 0.42;
 
       const expand =
-        easeOut(clamp(progress / 0.34, 0, 1));
+        easeOut(clamp(progress / expandEnd, 0, 1));
 
       const copyProgress =
-        easeOut(clamp((progress - 0.34) / 0.16, 0, 1));
+        easeOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const introProgress =
         easeOut(clamp(progress / 0.24, 0, 1));
@@ -118,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function(){
         startBottom * (1 - expand);
 
       const lineReveal =
-        index=>`${(easeOut(clamp((progress - (0.42 + index * 0.055)) / 0.24, 0, 1)) * 100).toFixed(1)}%`;
+        index=>`${(easeOut(clamp((progress - (lineStart + index * 0.055)) / 0.24, 0, 1)) * 100).toFixed(1)}%`;
 
       hero.style.setProperty(
         "--hero-frame-width",

@@ -324,6 +324,13 @@ header {
   transform:translateY(0);
 }
 
+.intro .intro-inner.fade,
+.intro .intro-inner.fade.show{
+  opacity:var(--hero-title-opacity);
+  transform:translateY(var(--hero-title-shift));
+  transition:none;
+}
+
 /* 숫자 섹션 */
 .stats-section {
   background:#000;
@@ -1449,6 +1456,13 @@ section{
   .fade.show{
     opacity:1;
     transform:none;
+  }
+
+  .intro .intro-inner.fade,
+  .intro .intro-inner.fade.show{
+    opacity:var(--hero-title-opacity);
+    transform:translateY(var(--hero-title-shift));
+    transition:none;
   }
 
 }

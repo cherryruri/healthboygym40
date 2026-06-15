@@ -410,6 +410,20 @@ document.addEventListener("DOMContentLoaded", function(){
 
     setActive(0);
 
+    if(window.innerWidth <= 768){
+
+      ScrollTrigger.create({
+        trigger:"#facilityTour .cont",
+        start:"top top",
+        end:"bottom bottom",
+        pin:"#facilityTour .img_inner",
+        pinSpacing:false,
+        anticipatePin:1,
+        invalidateOnRefresh:true,
+      });
+
+    }
+
     texts.forEach((text, i)=>{
 
       ScrollTrigger.create({

@@ -3215,6 +3215,7 @@ body.menu-open .mobile-login-area{
 }
 
 #facilityTour .cont{
+  position:relative;
   transition:all .3s;
   background:#000;
 }
@@ -3281,6 +3282,7 @@ body.menu-open .mobile-login-area{
 #facilityTour .txt_box{
   position:relative;
   z-index:10;
+  margin-top:-100vh;
   color:#fff;
 }
 

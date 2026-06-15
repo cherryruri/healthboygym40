@@ -30,6 +30,8 @@ document.addEventListener("DOMContentLoaded", function(){
       startTyping();
       startBrandTyping();
       initBrandAbout();
+      initCoBrandExperience();
+      initFacilityTour();
 
     },600);
 
@@ -296,6 +298,270 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+
+
+
+  /* co1162-res 브랜드 섹션 */
+  function initCoBrandExperience(){
+
+    const section =
+      document.querySelector("#brand #inc01");
+
+    if(!section) return;
+
+    if(window.Swiper){
+      new Swiper("#brand #inc01 .all_slider", {
+        loop:true,
+        speed:1000,
+        slidesPerView:1.5,
+        spaceBetween:20,
+        slideActiveClass:"on",
+        centeredSlides:true,
+        autoplay:{
+          delay:2500,
+          disableOnInteraction:false,
+        },
+        breakpoints:{
+          481:{
+            slidesPerView:2,
+            spaceBetween:30,
+          },
+          769:{
+            slidesPerView:3.5,
+            spaceBetween:30,
+          },
+          1025:{
+            slidesPerView:4,
+            spaceBetween:40,
+          },
+          1441:{
+            slidesPerView:4.5,
+            spaceBetween:50,
+          },
+        },
+      });
+    }
+
+    if(window.feather){
+      feather.replace();
+    }
+
+    if(!window.gsap || !window.ScrollTrigger) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.to("#brand #inc01 .brand-cross .txt", {
+      x:0,
+      scrollTrigger:{
+        trigger:"#brand #inc01 .brand-cross",
+        start:"top bottom",
+        end:"center center",
+        scrub:1,
+      },
+    });
+
+  }
+
+
+
+  /* 시설 투어 */
+  function initFacilityTour(){
+
+    const section =
+      document.querySelector("#facilityTour");
+
+    if(!section || !window.gsap || !window.ScrollTrigger) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const imgs =
+      document.querySelectorAll("#facilityTour .img_box li");
+
+    const texts =
+      document.querySelectorAll("#facilityTour .txt_box li");
+
+    if(!imgs.length || !texts.length) return;
+
+    imgs.forEach(img=>{
+
+      const photos =
+        img.querySelectorAll("span");
+
+      if(!photos.length) return;
+
+      photos[0].classList.add("photo-on");
+
+    });
+
+    const lastIndex =
+      texts.length - 1;
+
+    function setActive(index){
+
+      imgs.forEach(img=>img.classList.remove("on"));
+      texts.forEach(text=>text.classList.remove("on"));
+
+      if(imgs[index]){
+        imgs[index].classList.add("on");
+      }
+
+      if(texts[index]){
+        texts[index].classList.add("on");
+      }
+
+    }
+
+    setActive(0);
+
+    texts.forEach((text, i)=>{
+
+      ScrollTrigger.create({
+        trigger:text,
+        start:"top 40%",
+        end:"bottom 0%",
+        onEnterBack:()=>setActive(i),
+        onLeave:()=>{
+          if(i < lastIndex){
+            setActive(i + 1);
+          }
+        },
+      });
+
+    });
+
+    const modal =
+      document.querySelector(".facility-photo-modal");
+
+    const modalImg =
+      modal && modal.querySelector("img");
+
+    const modalCaption =
+      modal && modal.querySelector("p");
+
+    const modalClose =
+      modal && modal.querySelector(".facility-modal-close");
+
+    const modalPrev =
+      modal && modal.querySelector(".facility-modal-nav.prev");
+
+    const modalNext =
+      modal && modal.querySelector(".facility-modal-nav.next");
+
+    let modalPhotos = [];
+    let modalPhotoIndex = 0;
+
+    function getPhotoSrc(photo){
+
+      const bg =
+        window.getComputedStyle(photo).backgroundImage;
+
+      return bg.replace(/^url\(["']?/, "").replace(/["']?\)$/, "");
+
+    }
+
+    function renderModalPhoto(){
+
+      if(!modalImg || !modalPhotos.length) return;
+
+      modalImg.src =
+        getPhotoSrc(modalPhotos[modalPhotoIndex]);
+
+    }
+
+    function openFacilityModal(index){
+
+      if(!modal || !modalImg || !modalCaption) return;
+
+      const activeImg =
+        imgs[index];
+
+      modalPhotos =
+        activeImg
+          ? Array.from(activeImg.querySelectorAll("span"))
+          : [];
+
+      if(!modalPhotos.length) return;
+
+      modalPhotoIndex = 0;
+      renderModalPhoto();
+      modalImg.alt =
+        texts[index].querySelector("h2")?.textContent || "시설 사진";
+      modalCaption.textContent = modalImg.alt;
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+
+    }
+
+    function closeFacilityModal(){
+
+      if(!modal) return;
+
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+
+    }
+
+    texts.forEach((text, index)=>{
+
+      const button =
+        text.querySelector(".facility-view-btn");
+
+      if(button){
+        button.addEventListener("click", ()=>{
+          openFacilityModal(index);
+        });
+      }
+
+    });
+
+    if(modal){
+      modal.addEventListener("click", (event)=>{
+        if(event.target === modal){
+          closeFacilityModal();
+        }
+      });
+    }
+
+    if(modalClose){
+      modalClose.addEventListener("click", closeFacilityModal);
+    }
+
+    if(modalPrev){
+      modalPrev.addEventListener("click", ()=>{
+        if(!modalPhotos.length) return;
+        modalPhotoIndex =
+          (modalPhotoIndex - 1 + modalPhotos.length) % modalPhotos.length;
+        renderModalPhoto();
+      });
+    }
+
+    if(modalNext){
+      modalNext.addEventListener("click", ()=>{
+        if(!modalPhotos.length) return;
+        modalPhotoIndex =
+          (modalPhotoIndex + 1) % modalPhotos.length;
+        renderModalPhoto();
+      });
+    }
+
+    window.addEventListener("keydown", (event)=>{
+      if(event.key === "Escape"){
+        closeFacilityModal();
+      }
+
+      if(!modal || !modal.classList.contains("is-open")) return;
+
+      if(event.key === "ArrowLeft" && modalPrev){
+        modalPrev.click();
+      }
+
+      if(event.key === "ArrowRight" && modalNext){
+        modalNext.click();
+      }
+    });
+
+  }
 
 
 

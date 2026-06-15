@@ -50,6 +50,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(!hero) return;
 
+    const clamp =
+      (value, min, max)=>Math.max(min, Math.min(max, value));
+
+    const easeOut =
+      value=>1 - Math.pow(1 - value, 3);
+
     function update(){
 
       const rect =
@@ -69,29 +75,59 @@ document.addEventListener("DOMContentLoaded", function(){
       const isMobile =
         window.innerWidth <= 768;
 
+      const headerOffset =
+        isMobile ? 76 : 88;
+
+      const availableHeight =
+        Math.max(360, window.innerHeight - headerOffset);
+
       const startWidth =
-        isMobile ? 62 : 36;
+        Math.min(
+          window.innerWidth * (isMobile ? 0.58 : 0.26),
+          isMobile ? 300 : 340
+        );
 
       const startHeight =
-        18;
+        isMobile ? 170 : 210;
 
-      const startTitleHeight =
-        isMobile ? 62 : 68;
+      const startBottom =
+        isMobile ? -92 : -116;
 
-      const endTitleHeight =
-        isMobile ? 46 : 48;
+      const expand =
+        easeOut(clamp(progress / 0.34, 0, 1));
+
+      const copyProgress =
+        easeOut(clamp((progress - 0.34) / 0.16, 0, 1));
+
+      const introProgress =
+        easeOut(clamp(progress / 0.24, 0, 1));
+
+      const scrollProgress =
+        clamp(progress / 0.18, 0, 1);
 
       const radius =
-        (isMobile ? 18 : 28) * (1 - progress);
+        (isMobile ? 20 : 28) * (1 - expand);
+
+      const frameWidth =
+        startWidth + (window.innerWidth - startWidth) * expand;
+
+      const frameHeight =
+        startHeight + (availableHeight - startHeight) * expand;
+
+      const frameBottom =
+        startBottom * (1 - expand);
+
+      const lineReveal =
+        index=>`${(easeOut(clamp((progress - (0.42 + index * 0.055)) / 0.24, 0, 1)) * 100).toFixed(1)}%`;
 
       hero.style.setProperty(
         "--hero-frame-width",
-        `${startWidth + (100 - startWidth) * progress}vw`
+        `${frameWidth}px`
       );
 
       hero.style.setProperty(
         "--hero-frame-height",
-        `${startHeight + (100 - startHeight) * progress}vh`
+        `${frameHeight}px`
       );
 
       hero.style.setProperty(
@@ -100,23 +136,50 @@ document.addEventListener("DOMContentLoaded", function(){
       );
 
       hero.style.setProperty(
+        "--hero-frame-bottom",
+        `${frameBottom}px`
+      );
+
+      hero.style.setProperty(
         "--hero-title-opacity",
-        Math.max(0, 1 - progress * 1.15).toFixed(4)
+        (1 - introProgress).toFixed(4)
       );
 
       hero.style.setProperty(
         "--hero-title-shift",
-        `${-34 * progress}px`
+        `${-42 * introProgress}px`
       );
 
       hero.style.setProperty(
         "--hero-title-height",
-        `${startTitleHeight + (endTitleHeight - startTitleHeight) * progress}vh`
+        `${62 - 14 * introProgress}vh`
+      );
+
+      hero.style.setProperty(
+        "--hero-copy-opacity",
+        copyProgress.toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--hero-copy-y",
+        `${64 - 64 * copyProgress}px`
+      );
+
+      for(let i = 0; i < 4; i++){
+        hero.style.setProperty(
+          `--hero-line-${i + 1}`,
+          lineReveal(i)
+        );
+      }
+
+      hero.style.setProperty(
+        "--hero-scroll-opacity",
+        (1 - scrollProgress).toFixed(4)
       );
 
       hero.style.setProperty(
         "--hero-overlay",
-        (0.12 + 0.34 * progress).toFixed(4)
+        (0.12 + 0.5 * copyProgress).toFixed(4)
       );
 
     }

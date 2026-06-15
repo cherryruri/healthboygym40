@@ -126,15 +126,23 @@ header {
 /* 인트로 */
 .intro {
   --hero-progress:0;
-  --hero-frame-width:36vw;
-  --hero-frame-height:18vh;
+  --hero-frame-width:320px;
+  --hero-frame-height:210px;
+  --hero-frame-bottom:-116px;
   --hero-frame-radius:28px;
   --hero-title-opacity:1;
   --hero-title-shift:0px;
-  --hero-title-height:68vh;
+  --hero-title-height:62vh;
+  --hero-copy-opacity:0;
+  --hero-copy-y:64px;
+  --hero-line-1:0%;
+  --hero-line-2:0%;
+  --hero-line-3:0%;
+  --hero-line-4:0%;
+  --hero-scroll-opacity:1;
   --hero-overlay:.12;
   position:relative;
-  height:175vh;
+  height:260vh;
   overflow:visible;
   background:#fff;
   color:#000;
@@ -152,7 +160,7 @@ header {
 .hero-video-frame{
   position:absolute;
   left:50%;
-  bottom:clamp(28px, 7vh, 72px);
+  bottom:var(--hero-frame-bottom);
   z-index:1;
   width:var(--hero-frame-width);
   height:var(--hero-frame-height);
@@ -221,6 +229,60 @@ header {
   font-weight:600;
 }
 
+.intro-statement{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:3;
+  width:min(900px, 86vw);
+  color:#fff;
+  opacity:var(--hero-copy-opacity);
+  transform:translate(-50%, calc(-50% + var(--hero-copy-y)));
+  pointer-events:none;
+  text-align:center;
+}
+
+.intro-reveal-copy p{
+  font-size:clamp(25px, 2.45vw, 38px);
+  line-height:1.65;
+  font-weight:850;
+  letter-spacing:0;
+  word-break:keep-all;
+}
+
+.intro-reveal-copy .reveal-line{
+  --line-progress:0%;
+  display:block;
+  background:
+    linear-gradient(
+      90deg,
+      #fff 0%,
+      #fff var(--line-progress),
+      rgba(255,255,255,.32) var(--line-progress),
+      rgba(255,255,255,.32) 100%
+    );
+  background-clip:text;
+  -webkit-background-clip:text;
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+}
+
+.intro-reveal-copy .reveal-line:nth-child(1){
+  --line-progress:var(--hero-line-1);
+}
+
+.intro-reveal-copy .reveal-line:nth-child(2){
+  --line-progress:var(--hero-line-2);
+}
+
+.intro-reveal-copy .reveal-line:nth-child(3){
+  --line-progress:var(--hero-line-3);
+}
+
+.intro-reveal-copy .reveal-line:nth-child(4){
+  --line-progress:var(--hero-line-4);
+}
+
 .scroll-down {
   position:absolute;
   left:50%;
@@ -232,7 +294,7 @@ header {
   font-size:11px;
   font-weight:900;
   letter-spacing:1px;
-  opacity:var(--hero-progress);
+  opacity:var(--hero-scroll-opacity);
 }
 
 .scroll-arrow {
@@ -940,7 +1002,7 @@ footer {
   }
 
   .intro {
-    height:165vh;
+    height:235vh;
     padding:0;
   }
 
@@ -950,7 +1012,7 @@ footer {
   }
 
   .hero-video-frame{
-    bottom:28px;
+    bottom:var(--hero-frame-bottom);
   }
 
   .intro-inner{
@@ -969,6 +1031,16 @@ footer {
 
   .intro-desc {
     font-size:15px;
+  }
+
+  .intro-statement{
+    width:min(330px, 86vw);
+  }
+
+  .intro-reveal-copy p{
+    font-size:24px;
+    line-height:1.55;
+    font-weight:850;
   }
 
   .stats-section {
@@ -2801,6 +2873,16 @@ body.menu-open .mobile-login-area{
     padding-bottom:72px;
   }
 
+}
+
+@media(max-width:768px){
+  html{
+    overflow-x:visible;
+  }
+
+  body{
+    overflow-x:hidden;
+  }
 }
 
 /* ================= PC FLOATING WIDGET - APPLE NIKE ================= */

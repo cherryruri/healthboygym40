@@ -126,12 +126,14 @@ header {
   position:absolute;
   left:50%;
   top:50%;
+  --logo-slant:-7deg;
   display:block;
   white-space:nowrap;
+  padding:0 .18em 0 .06em;
   font-size:64px;
   line-height:.86;
   font-weight:950;
-  font-style:italic;
+  font-style:normal;
   letter-spacing:0;
   color:transparent;
   background:
@@ -150,7 +152,7 @@ header {
   -webkit-text-fill-color:transparent;
   filter:blur(10px) brightness(.65);
   opacity:0;
-  transform:translate(-50%, -50%) scale(1);
+  transform:translate(-50%, -50%) scale(1) skewX(var(--logo-slant));
   text-shadow:0 0 34px rgba(255,255,255,.18);
   animation:
     loaderLogoReveal 1.05s cubic-bezier(.19,1,.22,1) .22s forwards,
@@ -169,7 +171,7 @@ header {
   top:var(--loader-target-y);
   opacity:.98;
   filter:blur(0) brightness(.95);
-  transform:translate(-50%, -50%) scale(var(--loader-target-scale));
+  transform:translate(-50%, -50%) scale(var(--loader-target-scale)) skewX(var(--logo-slant));
   text-shadow:none;
 }
 
@@ -1615,7 +1617,11 @@ section{
 
 .logo a,
 #logo-text{
-  font-style: italic;
+  display:inline-block;
+  padding-right:.08em;
+  font-style:normal;
+  transform:skewX(-7deg);
+  transform-origin:center;
 }
 /* 모바일에서 스크롤 시 섹션 안 보이는 문제 해결 */
 /* 모바일에서 fade 강제 표시 (안정버전) */

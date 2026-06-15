@@ -4875,15 +4875,15 @@ body.menu-open .mobile-login-area{
   top:var(--y);
 }
 
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="서울"]{--x:36%;--y:25%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="경기"]{--x:39%;--y:30.5%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="충청"]{--x:41.5%;--y:42.5%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="대전"]{--x:43.5%;--y:50%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="전북"]{--x:39%;--y:61%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="대구"]{--x:62.5%;--y:62%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="경상"]{--x:62.5%;--y:74%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="울산"]{--x:75%;--y:69%}
-#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="부산"]{--x:72%;--y:77%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="서울"]{--x:34.5%;--y:25%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="경기"]{--x:38.5%;--y:29.5%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="충청"]{--x:38.5%;--y:39.5%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="대전"]{--x:41%;--y:46%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="전북"]{--x:37.5%;--y:55%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="대구"]{--x:52%;--y:55%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="경상"]{--x:53.5%;--y:64.5%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="울산"]{--x:58.5%;--y:62.5%}
+#brand #inc01 > .pass-map-section .pass-map-frame .map-pin[data-region="부산"]{--x:58.5%;--y:67%}
 
 @media (max-width:1180px){
   #brand #inc01 > .pass-map-section .pass-map-frame {

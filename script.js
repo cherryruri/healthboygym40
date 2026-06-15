@@ -393,9 +393,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     });
 
-    const lastIndex =
-      texts.length - 1;
-
     function setActive(index){
 
       imgs.forEach(img=>img.classList.remove("on"));
@@ -417,14 +414,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
       ScrollTrigger.create({
         trigger:text,
-        start:"top 40%",
-        end:"bottom 0%",
+        start:"top 62%",
+        end:"bottom 38%",
+        onEnter:()=>setActive(i),
         onEnterBack:()=>setActive(i),
-        onLeave:()=>{
-          if(i < lastIndex){
-            setActive(i + 1);
-          }
-        },
       });
 
     });

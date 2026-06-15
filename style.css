@@ -3229,11 +3229,13 @@ body.menu-open .mobile-login-area{
   top:0;
   z-index:0;
   overflow:hidden;
+  height:100vh;
 }
 
 #facilityTour .img_box{
   overflow:hidden;
-  position:relative;
+  position:absolute;
+  inset:0;
   width:100%;
   height:100vh;
   margin:0 auto;
@@ -3434,6 +3436,23 @@ body.menu-open .mobile-login-area{
 }
 
 @media (max-width:768px){
+  #facilityTour .img_inner{
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+
+  #facilityTour .img_box{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100vh;
+  }
+
+  #facilityTour .txt_box{
+    margin-top:-100vh;
+  }
+
   #facilityTour .txt_box h2{font-size:22px}
   #facilityTour .txt_box li div{white-space:pre-line}
 }

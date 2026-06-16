@@ -796,6 +796,9 @@ document.addEventListener("DOMContentLoaded", function(){
     const revealKeys =
       new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End"]);
 
+    const closeKeys =
+      new Set(["ArrowUp", "PageUp", "Home", "Escape"]);
+
     const smoothStep =
       value=>value * value * (3 - 2 * value);
 
@@ -884,10 +887,10 @@ document.addEventListener("DOMContentLoaded", function(){
           smoothStep(progress);
 
         const boxProgress =
-          clamp((progress - .58) / .34, 0, 1);
+          clamp((progress - .32) / .54, 0, 1);
 
         const radius =
-          999 * (1 - boxProgress) + 18 * boxProgress;
+          14 * (1 - boxProgress) + 4 * boxProgress;
 
         const scale =
           .16 + eased * 320;
@@ -900,10 +903,35 @@ document.addEventListener("DOMContentLoaded", function(){
         transition.style.setProperty("--pass-transition-radius", `${radius.toFixed(1)}px`);
         transition.style.setProperty("--pass-transition-shadow", clamp(progress * 1.2, 0, 1).toFixed(3));
 
-        if(progress >= .76){
+        if(progress >= .88){
           locator.classList.add("is-revealed");
+        }else{
+          locator.classList.remove("is-revealed");
         }
       };
+
+    const closeReveal =
+      ()=>{
+        if(!revealComplete && !revealStarted) return false;
+
+        revealStarted =
+          false;
+        revealComplete =
+          false;
+        revealProgress =
+          0;
+
+        locator.classList.remove("is-revealed");
+        transition.classList.remove("is-playing", "is-complete");
+        document.documentElement.classList.remove("pass-reveal-playing", "pass-reveal-complete");
+        applyRevealProgress(0);
+        window.scrollTo(0, brandTop());
+
+        return true;
+      };
+
+    const isLocatorAtTop =
+      ()=>locator.scrollTop <= 2;
 
     let revealStarted =
       false;
@@ -911,19 +939,39 @@ document.addEventListener("DOMContentLoaded", function(){
     let revealComplete =
       false;
 
-    let revealFrame =
-      null;
+    let revealProgress =
+      0;
 
     let touchStartY =
       0;
 
-    const playReveal =
+    const completeReveal =
       ()=>{
 
-        if(revealStarted || revealComplete || !isTypingComplete() || !isIntroScene()) return false;
+        revealProgress =
+          1;
+        revealComplete =
+          true;
+        revealStarted =
+          false;
+        applyRevealProgress(1);
+        transition.classList.add("is-complete");
+        locator.classList.add("is-revealed");
+        document.documentElement.classList.remove("pass-reveal-playing");
+        document.documentElement.classList.add("pass-reveal-complete");
+        keepIntroLocked();
+
+      };
+
+    const beginReveal =
+      ()=>{
+
+        if(revealComplete || revealStarted || !isTypingComplete() || !isIntroScene()) return false;
 
         revealStarted =
           true;
+        revealProgress =
+          Math.max(revealProgress, .01);
 
         setOrbOrigin();
         keepIntroLocked();
@@ -933,75 +981,53 @@ document.addEventListener("DOMContentLoaded", function(){
         transition.classList.add("is-playing");
         document.documentElement.classList.add("pass-reveal-playing");
 
-        const duration =
-          1880;
+        return true;
 
-        let startedAt =
-          null;
+      };
 
-        const animate =
-          timestamp=>{
-            if(startedAt === null){
-              startedAt =
-                timestamp;
-            }
+    const driveReveal =
+      (delta, divisor = 1800)=>{
 
-            keepIntroLocked();
+        if(!revealStarted && !beginReveal()) return false;
 
-            const progress =
-              clamp((timestamp - startedAt) / duration, 0, 1);
+        const limitedDelta =
+          Math.max(-220, Math.min(220, delta));
 
-            applyRevealProgress(progress);
+        revealProgress =
+          clamp(revealProgress + limitedDelta / divisor, 0, 1);
 
-            if(progress < 1){
-              revealFrame =
-                window.requestAnimationFrame(animate);
-              return;
-            }
+        keepIntroLocked();
+        applyRevealProgress(revealProgress);
 
-            revealFrame =
-              null;
-            revealComplete =
-              true;
-            revealStarted =
-              false;
-            applyRevealProgress(1);
-            transition.classList.add("is-complete");
-            locator.classList.add("is-revealed");
-            document.documentElement.classList.remove("pass-reveal-playing");
-            document.documentElement.classList.add("pass-reveal-complete");
-            keepIntroLocked();
-          };
-
-        revealFrame =
-          window.requestAnimationFrame(animate);
+        if(revealProgress >= 1){
+          completeReveal();
+        }else if(revealProgress <= 0){
+          closeReveal();
+        }
 
         return true;
 
       };
 
-    const holdRevealScene =
+    const onWheel =
       event=>{
+        if(revealComplete){
+          if(event.deltaY < 0 && isLocatorAtTop()){
+            event.preventDefault();
+            closeReveal();
+          }
+          return;
+        }
 
         if(revealStarted){
           event.preventDefault();
-          keepIntroLocked();
-          return true;
+          driveReveal(event.deltaY, 1900);
+          return;
         }
-
-        return false;
-
-      };
-
-    const onWheel =
-      event=>{
-        if(revealComplete) return;
-
-        if(holdRevealScene(event)) return;
 
         if(event.deltaY > 0 && isTypingComplete() && isIntroScene()){
           event.preventDefault();
-          playReveal();
+          driveReveal(event.deltaY, 1900);
         }
       };
 
@@ -1015,34 +1041,60 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const onTouchMove =
       event=>{
-        if(revealComplete) return;
-
-        if(holdRevealScene(event)) return;
-
         const currentY =
           event.touches && event.touches.length
             ? event.touches[0].clientY
             : touchStartY;
 
+        if(revealComplete){
+          if(currentY - touchStartY > 10 && isLocatorAtTop()){
+            event.preventDefault();
+            closeReveal();
+          }
+          return;
+        }
+
+        if(revealStarted){
+          event.preventDefault();
+          driveReveal(touchStartY - currentY, 980);
+          touchStartY =
+            currentY;
+          return;
+        }
+
         if(touchStartY - currentY > 8 && isTypingComplete() && isIntroScene()){
           event.preventDefault();
-          playReveal();
+          driveReveal(touchStartY - currentY, 980);
+          touchStartY =
+            currentY;
         }
       };
 
     const onKeyDown =
       event=>{
-        if(revealComplete) return;
+        if(revealComplete){
+          if(closeKeys.has(event.key) && isLocatorAtTop()){
+            event.preventDefault();
+            closeReveal();
+          }
+          return;
+        }
 
         if(revealStarted && revealKeys.has(event.key)){
           event.preventDefault();
-          keepIntroLocked();
+          driveReveal(230, 1900);
+          return;
+        }
+
+        if(revealStarted && closeKeys.has(event.key)){
+          event.preventDefault();
+          driveReveal(-230, 1900);
           return;
         }
 
         if(revealKeys.has(event.key) && isTypingComplete() && isIntroScene()){
           event.preventDefault();
-          playReveal();
+          driveReveal(230, 1900);
         }
       };
 
@@ -1050,17 +1102,23 @@ document.addEventListener("DOMContentLoaded", function(){
       ()=>{
         if(revealStarted || revealComplete){
           keepIntroLocked();
+          return;
+        }
+
+        const top =
+          brandTop();
+
+        const viewportHeight =
+          window.innerHeight || document.documentElement.clientHeight || 1;
+
+        if(isTypingComplete() && window.pageYOffset > top + 2 && window.pageYOffset < top + viewportHeight * 1.25){
+          window.scrollTo(0, top);
+          driveReveal(90, 1900);
         }
       };
 
     const onResize =
       ()=>{
-        if(revealFrame){
-          window.cancelAnimationFrame(revealFrame);
-          revealFrame =
-            null;
-        }
-
         setOrbOrigin();
 
         if(revealComplete){
@@ -1076,6 +1134,20 @@ document.addEventListener("DOMContentLoaded", function(){
     window.addEventListener("scroll", onScroll, {passive:true});
     window.addEventListener("resize", onResize);
     document.addEventListener("allpassTypingComplete", setOrbOrigin);
+
+    const header =
+      document.querySelector("header");
+
+    if(header){
+      header.addEventListener("click", event=>{
+        const link =
+          event.target.closest("a");
+
+        if(link && revealComplete){
+          closeReveal();
+        }
+      }, true);
+    }
 
     setOrbOrigin();
     applyRevealProgress(0);
@@ -2373,8 +2445,8 @@ document.addEventListener("DOMContentLoaded", function(){
       new Swiper("#brand #inc01 .all_slider", {
         loop:true,
         speed:1000,
-        slidesPerView:1.5,
-        spaceBetween:20,
+        slidesPerView:"auto",
+        spaceBetween:18,
         slideActiveClass:"on",
         centeredSlides:true,
         autoplay:{
@@ -2383,20 +2455,16 @@ document.addEventListener("DOMContentLoaded", function(){
         },
         breakpoints:{
           481:{
-            slidesPerView:2,
-            spaceBetween:30,
+            spaceBetween:22,
           },
           769:{
-            slidesPerView:3.5,
-            spaceBetween:30,
+            spaceBetween:28,
           },
           1025:{
-            slidesPerView:4,
-            spaceBetween:40,
+            spaceBetween:34,
           },
           1441:{
-            slidesPerView:4.5,
-            spaceBetween:50,
+            spaceBetween:42,
           },
         },
       });

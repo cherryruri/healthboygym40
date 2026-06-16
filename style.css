@@ -11,6 +11,19 @@ body {
   overflow-x:hidden;
 }
 
+html.allpass-scroll-locked,
+html.allpass-scroll-locked body {
+  overscroll-behavior:contain;
+}
+
+html.pass-reveal-playing,
+html.pass-reveal-playing body,
+html.pass-reveal-complete,
+html.pass-reveal-complete body {
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+
 :root {--yellow:#fff200;}
 
 header {
@@ -670,17 +683,134 @@ body.loaded .intro-desc:not(.is-split) .intro-desc-line:nth-child(2){
   margin-top:10px;
 }
 
+.pass-transition-panel {
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  min-height:0;
+  margin:0;
+  background:transparent;
+  overflow:hidden;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  --pass-origin-x:50vw;
+  --pass-origin-y:50vh;
+  --pass-transition-scale:.2;
+  --pass-transition-opacity:0;
+  --pass-transition-radius:999px;
+  --pass-transition-shadow:0;
+}
+
+.pass-transition-panel.is-playing,
+.pass-transition-panel.is-complete {
+  opacity:1;
+  visibility:visible;
+}
+
+.pass-transition-sticky {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:auto;
+  overflow:hidden;
+  pointer-events:none;
+}
+
+.pass-transition-orb {
+  display:block;
+  position:absolute;
+  left:var(--pass-origin-x);
+  top:var(--pass-origin-y);
+  width:18px;
+  height:18px;
+  border-radius:var(--pass-transition-radius);
+  background:
+    radial-gradient(circle at 48% 48%, #181a1f 0%, #08090b 66%, #020203 100%);
+  box-shadow:
+    0 0 calc(var(--pass-transition-shadow) * 80px) rgba(0,0,0,.36),
+    0 34px calc(var(--pass-transition-shadow) * 120px) rgba(0,0,0,.34);
+  opacity:var(--pass-transition-opacity);
+  transform:translate(-50%, -50%) scale(var(--pass-transition-scale));
+  transform-origin:center;
+  will-change:transform, opacity, border-radius, box-shadow;
+}
+
 .pass-locator-section {
+  position:fixed;
+  inset:0;
+  z-index:100001;
+  min-height:100svh;
   min-height:100vh;
-  padding:96px 0 120px;
+  margin:0;
+  padding:clamp(102px, 12vh, 150px) 0 120px;
   background:#101114;
   color:#f7f7f7;
   font-family:'Pretendard', Arial, sans-serif;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateY(0);
+  transition:opacity .85s ease, visibility .85s ease;
+}
+
+.pass-locator-section.is-revealed {
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
 }
 
 .pass-locator-container {
+  position:relative;
+  z-index:1;
   width:min(1280px, calc(100% - 48px));
   margin:0 auto;
+  opacity:0;
+  transform:translateY(46px);
+  transition:opacity .95s ease, transform .95s ease;
+  will-change:opacity, transform;
+}
+
+.pass-locator-section.is-revealed .pass-locator-container {
+  opacity:1;
+  transform:translateY(0);
+}
+
+.pass-locator-controls,
+.pass-locator-map-shell,
+.pass-selected-block,
+.pass-recommend-panel,
+.pass-result-card {
+  opacity:0;
+  transform:translateY(32px);
+  transition:opacity .82s ease, transform .82s ease;
+}
+
+.pass-locator-section.is-revealed .pass-locator-controls,
+.pass-locator-section.is-revealed .pass-locator-map-shell,
+.pass-locator-section.is-revealed .pass-selected-block,
+.pass-locator-section.is-revealed .pass-recommend-panel,
+.pass-locator-section.is-revealed .pass-result-card {
+  opacity:1;
+  transform:translateY(0);
+}
+
+.pass-locator-section.is-revealed .pass-locator-controls {
+  transition-delay:.08s;
+}
+
+.pass-locator-section.is-revealed .pass-locator-map-shell {
+  transition-delay:.18s;
+}
+
+.pass-locator-section.is-revealed .pass-selected-block,
+.pass-locator-section.is-revealed .pass-recommend-panel,
+.pass-locator-section.is-revealed .pass-result-card {
+  transition-delay:.26s;
 }
 
 .pass-locator-back {
@@ -4408,8 +4538,9 @@ body.menu-open .mobile-login-area{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  min-height:56vh;
-  padding:112px 20px 88px;
+  min-height:100svh;
+  min-height:100vh;
+  padding:clamp(96px, 11vh, 148px) 20px clamp(92px, 10vh, 132px);
   font-family:'Pretendard', Arial, sans-serif;
   font-size:clamp(34px, 4.2vw, 60px);
   font-weight:850;
@@ -4783,7 +4914,11 @@ body.menu-open .mobile-login-area{
 }
 
 @media (max-width:1440px){
-  #brand #inc01 .brand-cross{min-height:52vh;font-size:clamp(32px, 4vw, 54px)}
+  #brand #inc01 .brand-cross{
+    min-height:100svh;
+    min-height:100vh;
+    font-size:clamp(32px, 4vw, 54px);
+  }
   #brand #inc01 .list{display:block}
 }
 
@@ -4797,8 +4932,9 @@ body.menu-open .mobile-login-area{
 
 @media (max-width:768px){
   #brand #inc01 .brand-cross{
-    min-height:44vh;
-    padding:82px 16px 58px;
+    min-height:100svh;
+    min-height:100vh;
+    padding:92px 16px 72px;
     font-size:clamp(27px, 6.4vw, 38px);
   }
   #brand #inc01 .brand-cross .l_txt{transform:translateX(-72px)}
@@ -4822,8 +4958,9 @@ body.menu-open .mobile-login-area{
 
 @media (max-width:480px){
   #brand #inc01 .brand-cross{
-    min-height:38vh;
-    padding:66px 14px 44px;
+    min-height:100svh;
+    min-height:100vh;
+    padding:88px 14px 72px;
     font-size:clamp(23px, 7vw, 30px);
   }
   #brand #inc01 .brand-cross .l_txt{transform:translateX(-32px)}
@@ -4841,7 +4978,11 @@ body.menu-open .mobile-login-area{
 }
 
 @media (max-width:390px){
-  #brand #inc01 .brand-cross{font-size:25px}
+  #brand #inc01 .brand-cross{
+    min-height:100svh;
+    min-height:100vh;
+    font-size:25px;
+  }
   #brand #inc01 .brand-cross .l_txt{transform:translateX(-24px)}
   #brand #inc01 .brand-cross .r_txt{transform:translateX(24px)}
   #brand #inc01 .brand-cross .brand-type-line{

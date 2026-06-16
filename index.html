@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
-<link rel="stylesheet" href="style.css?v=20260617-pass-locator">
+<link rel="stylesheet" href="style.css?v=20260617-pass-fixed-reveal">
 <link rel="stylesheet" href="css/swiper.min.css">
 </head>
 <body>
@@ -203,18 +203,14 @@
       </p>
     </div>
 
+    <div class="pass-transition-panel" data-pass-transition aria-hidden="true">
+      <div class="pass-transition-sticky">
+        <span class="pass-transition-orb" data-pass-transition-orb></span>
+      </div>
+    </div>
+
     <section class="pass-locator-section" data-pass-locator aria-label="헬스보이짐 올패스 지점찾기">
       <div class="pass-locator-container">
-        <a class="pass-locator-back" href="#brand" aria-label="올패스 안내 상단으로 이동">
-          <i data-feather="arrow-left"></i>
-          <span>홈으로 가기</span>
-        </a>
-
-        <div class="pass-locator-title">
-          <h2>내가 가는 곳, 바로 내 헬스장!</h2>
-          <p>현재 위치 또는 원하는 지역을 선택해 가장 가까운 헬스보이짐 지점을 찾아보세요.</p>
-        </div>
-
         <div class="pass-locator-controls">
           <label>
             <span>지역별 검색</span>
@@ -1145,8 +1141,8 @@
 <script src="js/gsap.min.js"></script>
 <script src="js/ScrollTrigger.min.js"></script>
 <script src="js/feather.min.js"></script>
-<script src="js/pass-branches.js?v=20260617-pass-locator"></script>
-<script src="script.js?v=20260617-pass-locator"></script>
+<script src="js/pass-branches.js?v=20260617-pass-fixed-reveal"></script>
+<script src="script.js?v=20260617-pass-fixed-reveal"></script>
 <script type="module" src="firebase-auth.js"></script>
 
 </body>

@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function(){
     startBrandTyping();
     initAllPassTyping();
     initPassBranchLocator();
+    initAllPassLocatorReveal();
     initPassMap();
     initBrandAbout();
     initCoBrandExperience();
@@ -761,6 +762,326 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+  function initAllPassLocatorReveal(){
+
+    const transition =
+      document.querySelector("[data-pass-transition]");
+
+    const locator =
+      document.querySelector("[data-pass-locator]");
+
+    const orb =
+      transition ? transition.querySelector("[data-pass-transition-orb]") : null;
+
+    const brandCross =
+      document.querySelector("#brand #inc01 .brand-cross");
+
+    if(!transition || !locator || !orb || !brandCross || transition.dataset.revealReady === "true") return;
+
+    transition.dataset.revealReady =
+      "true";
+
+    const clamp =
+      (value, min, max)=>Math.min(Math.max(value, min), max);
+
+    const typingLine =
+      document.querySelector("[data-allpass-typing]");
+
+    const typingText =
+      typingLine ? typingLine.querySelector(".brand-type-text") : null;
+
+    const prefixText =
+      typingLine ? String(typingLine.dataset.prefix || "").trimEnd() : "";
+
+    const revealKeys =
+      new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End"]);
+
+    const smoothStep =
+      value=>value * value * (3 - 2 * value);
+
+    const setOrbOrigin =
+      ()=>{
+
+        let targetRect =
+          null;
+
+        if(typingText && typingText.firstChild && typingText.firstChild.nodeType === Node.TEXT_NODE){
+          const fullText =
+            typingText.textContent || "";
+
+          const prefixIndex =
+            prefixText ? fullText.indexOf(prefixText) : -1;
+
+          if(prefixIndex > -1){
+            const characterIndex =
+              Math.max(prefixIndex, prefixIndex + prefixText.length - 1);
+
+            try{
+              const range =
+                document.createRange();
+
+              range.setStart(typingText.firstChild, characterIndex);
+              range.setEnd(typingText.firstChild, characterIndex + 1);
+              targetRect =
+                range.getBoundingClientRect();
+              range.detach();
+            }catch(error){
+              targetRect =
+                null;
+            }
+          }
+        }
+
+        if((!targetRect || !targetRect.width) && typingLine){
+          targetRect =
+            typingLine.getBoundingClientRect();
+        }
+
+        if(!targetRect) return;
+
+        transition.style.setProperty("--pass-origin-x", `${targetRect.left + targetRect.width / 2}px`);
+        transition.style.setProperty("--pass-origin-y", `${targetRect.top + targetRect.height / 2}px`);
+
+      };
+
+    const brandTop =
+      ()=>Math.round(brandCross.getBoundingClientRect().top + window.pageYOffset);
+
+    const keepIntroLocked =
+      ()=>{
+        const top =
+          brandTop();
+
+        if(Math.abs(window.pageYOffset - top) > 2){
+          window.scrollTo(0, top);
+        }
+      };
+
+    const isTypingComplete =
+      ()=>lineIsComplete() || document.documentElement.classList.contains("allpass-typing-complete");
+
+    function lineIsComplete(){
+      return Boolean(typingLine && typingLine.dataset.typingComplete === "true");
+    }
+
+    const isIntroScene =
+      ()=>{
+        const rect =
+          brandCross.getBoundingClientRect();
+
+        const viewportHeight =
+          window.innerHeight || document.documentElement.clientHeight || 1;
+
+        return rect.top <= viewportHeight * .18 && rect.bottom >= viewportHeight * .52;
+      };
+
+    const applyRevealProgress =
+      value=>{
+        const progress =
+          clamp(value, 0, 1);
+
+        const eased =
+          smoothStep(progress);
+
+        const boxProgress =
+          clamp((progress - .58) / .34, 0, 1);
+
+        const radius =
+          999 * (1 - boxProgress) + 18 * boxProgress;
+
+        const scale =
+          .16 + eased * 320;
+
+        const opacity =
+          clamp(progress * 3.4, 0, 1);
+
+        transition.style.setProperty("--pass-transition-scale", scale.toFixed(3));
+        transition.style.setProperty("--pass-transition-opacity", opacity.toFixed(3));
+        transition.style.setProperty("--pass-transition-radius", `${radius.toFixed(1)}px`);
+        transition.style.setProperty("--pass-transition-shadow", clamp(progress * 1.2, 0, 1).toFixed(3));
+
+        if(progress >= .76){
+          locator.classList.add("is-revealed");
+        }
+      };
+
+    let revealStarted =
+      false;
+
+    let revealComplete =
+      false;
+
+    let revealFrame =
+      null;
+
+    let touchStartY =
+      0;
+
+    const playReveal =
+      ()=>{
+
+        if(revealStarted || revealComplete || !isTypingComplete() || !isIntroScene()) return false;
+
+        revealStarted =
+          true;
+
+        setOrbOrigin();
+        keepIntroLocked();
+        locator.scrollTop =
+          0;
+        locator.classList.remove("is-revealed");
+        transition.classList.add("is-playing");
+        document.documentElement.classList.add("pass-reveal-playing");
+
+        const duration =
+          1880;
+
+        let startedAt =
+          null;
+
+        const animate =
+          timestamp=>{
+            if(startedAt === null){
+              startedAt =
+                timestamp;
+            }
+
+            keepIntroLocked();
+
+            const progress =
+              clamp((timestamp - startedAt) / duration, 0, 1);
+
+            applyRevealProgress(progress);
+
+            if(progress < 1){
+              revealFrame =
+                window.requestAnimationFrame(animate);
+              return;
+            }
+
+            revealFrame =
+              null;
+            revealComplete =
+              true;
+            revealStarted =
+              false;
+            applyRevealProgress(1);
+            transition.classList.add("is-complete");
+            locator.classList.add("is-revealed");
+            document.documentElement.classList.remove("pass-reveal-playing");
+            document.documentElement.classList.add("pass-reveal-complete");
+            keepIntroLocked();
+          };
+
+        revealFrame =
+          window.requestAnimationFrame(animate);
+
+        return true;
+
+      };
+
+    const holdRevealScene =
+      event=>{
+
+        if(revealStarted){
+          event.preventDefault();
+          keepIntroLocked();
+          return true;
+        }
+
+        return false;
+
+      };
+
+    const onWheel =
+      event=>{
+        if(revealComplete) return;
+
+        if(holdRevealScene(event)) return;
+
+        if(event.deltaY > 0 && isTypingComplete() && isIntroScene()){
+          event.preventDefault();
+          playReveal();
+        }
+      };
+
+    const onTouchStart =
+      event=>{
+        touchStartY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : 0;
+      };
+
+    const onTouchMove =
+      event=>{
+        if(revealComplete) return;
+
+        if(holdRevealScene(event)) return;
+
+        const currentY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : touchStartY;
+
+        if(touchStartY - currentY > 8 && isTypingComplete() && isIntroScene()){
+          event.preventDefault();
+          playReveal();
+        }
+      };
+
+    const onKeyDown =
+      event=>{
+        if(revealComplete) return;
+
+        if(revealStarted && revealKeys.has(event.key)){
+          event.preventDefault();
+          keepIntroLocked();
+          return;
+        }
+
+        if(revealKeys.has(event.key) && isTypingComplete() && isIntroScene()){
+          event.preventDefault();
+          playReveal();
+        }
+      };
+
+    const onScroll =
+      ()=>{
+        if(revealStarted || revealComplete){
+          keepIntroLocked();
+        }
+      };
+
+    const onResize =
+      ()=>{
+        if(revealFrame){
+          window.cancelAnimationFrame(revealFrame);
+          revealFrame =
+            null;
+        }
+
+        setOrbOrigin();
+
+        if(revealComplete){
+          applyRevealProgress(1);
+          keepIntroLocked();
+        }
+      };
+
+    window.addEventListener("wheel", onWheel, {passive:false});
+    window.addEventListener("touchstart", onTouchStart, {passive:true});
+    window.addEventListener("touchmove", onTouchMove, {passive:false});
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("scroll", onScroll, {passive:true});
+    window.addEventListener("resize", onResize);
+    document.addEventListener("allpassTypingComplete", setOrbOrigin);
+
+    setOrbOrigin();
+    applyRevealProgress(0);
+
+  }
+
   function initAllPassTyping(){
 
     const line =
@@ -795,6 +1116,106 @@ document.addEventListener("DOMContentLoaded", function(){
       breakAfter && rawFinalText.includes(breakAfter)
         ? rawFinalText.replace(`${breakAfter} `, `${breakAfter}\n`)
         : rawFinalText;
+
+    const brandCross =
+      line.closest(".brand-cross");
+
+    const scrollLockKeys =
+      new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End"]);
+
+    let releaseAllPassScrollLock =
+      null;
+
+    const startAllPassScrollLock =
+      ()=>{
+
+        if(!brandCross || releaseAllPassScrollLock) return;
+
+        const lockTop =
+          Math.round(brandCross.getBoundingClientRect().top + window.pageYOffset);
+
+        let touchStartY =
+          0;
+
+        const clampToIntro =
+          ()=>{
+            if(window.pageYOffset > lockTop + 2){
+              window.scrollTo(0, lockTop);
+            }
+          };
+
+        const shouldHold =
+          ()=>window.pageYOffset >= lockTop - 3;
+
+        const onWheel =
+          event=>{
+            if(event.deltaY > 0 && shouldHold()){
+              event.preventDefault();
+              clampToIntro();
+            }
+          };
+
+        const onTouchStart =
+          event=>{
+            touchStartY =
+              event.touches && event.touches.length
+                ? event.touches[0].clientY
+                : 0;
+          };
+
+        const onTouchMove =
+          event=>{
+            const currentY =
+              event.touches && event.touches.length
+                ? event.touches[0].clientY
+                : touchStartY;
+
+            if(touchStartY - currentY > 0 && shouldHold()){
+              event.preventDefault();
+              clampToIntro();
+            }
+          };
+
+        const onKeyDown =
+          event=>{
+            if(scrollLockKeys.has(event.key) && shouldHold()){
+              event.preventDefault();
+              clampToIntro();
+            }
+          };
+
+        const onScroll =
+          ()=>clampToIntro();
+
+        window.scrollTo(0, lockTop);
+        document.documentElement.classList.add("allpass-scroll-locked");
+
+        window.addEventListener("wheel", onWheel, {passive:false});
+        window.addEventListener("touchstart", onTouchStart, {passive:true});
+        window.addEventListener("touchmove", onTouchMove, {passive:false});
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("scroll", onScroll, {passive:true});
+
+        releaseAllPassScrollLock =
+          ()=>{
+            window.removeEventListener("wheel", onWheel);
+            window.removeEventListener("touchstart", onTouchStart);
+            window.removeEventListener("touchmove", onTouchMove);
+            window.removeEventListener("keydown", onKeyDown);
+            window.removeEventListener("scroll", onScroll);
+            document.documentElement.classList.remove("allpass-scroll-locked");
+            releaseAllPassScrollLock =
+              null;
+          };
+
+      };
+
+    const stopAllPassScrollLock =
+      ()=>{
+        if(releaseAllPassScrollLock){
+          releaseAllPassScrollLock();
+        }
+      };
 
     const wait =
       delay=>new Promise(resolve=>setTimeout(resolve, delay));
@@ -833,34 +1254,47 @@ document.addEventListener("DOMContentLoaded", function(){
         line.dataset.typed =
           "true";
 
+        startAllPassScrollLock();
+
         textEl.textContent =
           "";
 
-        if(cursor){
-          cursor.classList.remove("is-finished");
-        }
+        try{
 
-        await wait(180);
-        await typeText(prefix, 38);
-        await typeText(wrong, 52);
+          if(cursor){
+            cursor.classList.remove("is-finished");
+          }
 
-        if(cursor){
-          cursor.classList.add("is-thinking");
-        }
+          await wait(180);
+          await typeText(prefix, 38);
+          await typeText(wrong, 52);
 
-        await wait(1380);
+          if(cursor){
+            cursor.classList.add("is-thinking");
+          }
 
-        if(cursor){
-          cursor.classList.remove("is-thinking");
-        }
+          await wait(1380);
 
-        await eraseText(Array.from(wrong).length, 38);
-        await wait(180);
-        await typeText(finalText, 32);
-        await wait(500);
+          if(cursor){
+            cursor.classList.remove("is-thinking");
+          }
 
-        if(cursor){
-          cursor.classList.add("is-finished");
+          await eraseText(Array.from(wrong).length, 38);
+          await wait(180);
+          await typeText(finalText, 32);
+          await wait(500);
+
+          if(cursor){
+            cursor.classList.add("is-finished");
+          }
+
+          line.dataset.typingComplete =
+            "true";
+          document.documentElement.classList.add("allpass-typing-complete");
+          document.dispatchEvent(new CustomEvent("allpassTypingComplete"));
+
+        }finally{
+          stopAllPassScrollLock();
         }
 
       };

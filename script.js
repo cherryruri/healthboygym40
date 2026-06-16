@@ -12,7 +12,10 @@ document.addEventListener("DOMContentLoaded", function(){
       true;
 
     placePassUnderAllPass();
+    placeReviewsAfterIntro();
+    prepareIntroStatementWords();
     initHeroExpand();
+    initReviewCoverPanel();
     fadeIn();
     observeCounter();
     startTyping();
@@ -24,6 +27,42 @@ document.addEventListener("DOMContentLoaded", function(){
     initBrandAbout();
     initCoBrandExperience();
     initFacilityTour();
+
+  }
+
+  function placeReviewsAfterIntro(){
+
+    const brandArticle =
+      document.querySelector("#brand #inc01");
+
+    const brandCross =
+      brandArticle ? brandArticle.querySelector(".brand-cross") : null;
+
+    const reviewBg =
+      brandArticle ? brandArticle.querySelector(".bg_wrap") : null;
+
+    const reviewList =
+      brandArticle ? brandArticle.querySelector(".list") : null;
+
+    const heroSticky =
+      document.querySelector(".hero-expand-sticky");
+
+    if(!brandArticle || !brandCross || !reviewList) return;
+
+    reviewList.classList.add("review-cover-panel");
+
+    if(heroSticky && reviewList.parentElement !== heroSticky){
+      heroSticky.appendChild(reviewList);
+      return;
+    }
+
+    if(heroSticky) return;
+
+    if(reviewBg){
+      brandArticle.insertBefore(reviewBg, brandCross);
+    }
+
+    brandArticle.insertBefore(reviewList, brandCross);
 
   }
 
@@ -1198,7 +1237,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const viewportHeight =
           window.innerHeight || document.documentElement.clientHeight || 1;
 
-        if(isTypingComplete() && window.pageYOffset > top + 2 && window.pageYOffset < top + viewportHeight * 1.25){
+        if(isTypingComplete() && isIntroScene() && window.pageYOffset > top + 2 && window.pageYOffset < top + viewportHeight * 1.25){
           window.scrollTo(0, top);
           driveReveal(90, 1900);
         }
@@ -1907,6 +1946,119 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+  function prepareIntroStatementWords(){
+
+    const lines =
+      document.querySelectorAll(".intro-reveal-copy .reveal-line");
+
+    if(!lines.length) return;
+
+    lines.forEach(line=>{
+
+      if(line.dataset.wordPrepared === "true") return;
+
+      const source =
+        line.dataset.text || line.textContent.trim();
+
+      if(!source) return;
+
+      line.dataset.text =
+        source;
+
+      line.textContent =
+        "";
+
+      line.classList.add("has-word-reveal");
+
+      source
+        .split(/\s+/)
+        .filter(Boolean)
+        .forEach(word=>{
+
+          const wordEl =
+            document.createElement("span");
+
+          wordEl.className =
+            "reveal-word";
+
+          wordEl.textContent =
+            word;
+
+          wordEl.style.setProperty("--word-fill", "0%");
+
+          line.appendChild(wordEl);
+
+        });
+
+      line.dataset.wordPrepared =
+        "true";
+
+    });
+
+  }
+
+  function initReviewCoverPanel(){
+
+    const panel =
+      document.querySelector(".hero-expand-sticky .review-cover-panel") ||
+      document.querySelector("#brand #inc01 .review-cover-panel");
+
+    if(!panel) return;
+
+    const hero =
+      document.querySelector(".hero-expand-section");
+
+    const clamp =
+      (value, min, max)=>Math.max(min, Math.min(max, value));
+
+    const easeInOut =
+      value=>value * value * (3 - 2 * value);
+
+    function update(){
+
+      if(!hero) return;
+
+      const rect =
+        hero.getBoundingClientRect();
+
+      const scrollable =
+        Math.max(1, hero.offsetHeight - window.innerHeight);
+
+      const heroProgress =
+        clamp(-rect.top / scrollable, 0, 1);
+
+      const start =
+        window.innerWidth <= 768 ? .76 : .74;
+
+      const end =
+        window.innerWidth <= 768 ? .97 : .95;
+
+      const progress =
+        clamp((heroProgress - start) / (end - start), 0, 1);
+
+      const eased =
+        easeInOut(progress);
+
+      panel.style.setProperty(
+        "--review-cover-x",
+        `${((1 - eased) * 100).toFixed(2)}vw`
+      );
+
+      panel.style.opacity =
+        (0.42 + eased * 0.58).toFixed(4);
+
+      panel.classList.toggle("is-visible", progress > 0.02);
+      panel.classList.toggle("is-covered", progress > .96);
+
+    }
+
+    update();
+
+    window.addEventListener("scroll", update, {passive:true});
+    window.addEventListener("resize", update);
+
+  }
+
   function setLoaderTarget(){
 
     const loader =
@@ -2063,6 +2215,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(!hero) return;
 
+    const revealWords =
+      Array.from(hero.querySelectorAll(".intro-reveal-copy .reveal-word"));
+
     const clamp =
       (value, min, max)=>Math.max(min, Math.min(max, value));
 
@@ -2128,6 +2283,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const lineRange =
         isMobile ? 0.32 : 0.36;
+
+      const wordStart =
+        isMobile ? 0.55 : 0.36;
+
+      const wordStep =
+        isMobile ? 0.047 : 0.043;
+
+      const wordRange =
+        isMobile ? 0.088 : 0.075;
 
       const underlineStart =
         lineStart + lineStep + lineRange * 0.78;
@@ -2216,6 +2380,24 @@ document.addEventListener("DOMContentLoaded", function(){
           lineReveal(i)
         );
       }
+
+      revealWords.forEach((word, index)=>{
+
+        const wordProgress =
+          easeInOut(clamp((progress - (wordStart + index * wordStep)) / wordRange, 0, 1));
+
+        word.style.setProperty(
+          "--word-fill",
+          `${(wordProgress * 100).toFixed(1)}%`
+        );
+
+        word.style.opacity =
+          (0.34 + wordProgress * 0.66).toFixed(4);
+
+        word.style.transform =
+          `translateY(${((1 - wordProgress) * 10).toFixed(2)}px)`;
+
+      });
 
       hero.style.setProperty(
         "--hero-underline",
@@ -2528,8 +2710,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(!section) return;
 
-    if(window.Swiper){
-      new Swiper("#brand #inc01 .all_slider", {
+    const reviewSlider =
+      document.querySelector(".review-cover-panel .all_slider") ||
+      document.querySelector("#brand #inc01 .all_slider");
+
+    if(window.Swiper && reviewSlider){
+      new Swiper(reviewSlider, {
         loop:true,
         speed:1000,
         slidesPerView:"auto",

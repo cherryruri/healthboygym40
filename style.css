@@ -3561,6 +3561,61 @@ body.menu-open .mobile-login-area{
 #brand #inc01 .list .bg03 a{background-image:url('img/main/inc01/img05.jpg')}
 #brand #inc01 .list .bg04 a{background-image:url('img/main/inc01/img01.jpg')}
 #brand #inc01 .list .bg05 a{background-image:url('img/main/inc01/img02.jpg')}
+#brand #inc01 .list .review01 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.44) 48%, rgba(0,0,0,.78) 100%),
+    url('img/main/inc01/review01.jpg');
+  background-position:center 34%;
+}
+
+#brand #inc01 .list .review02 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.38) 48%, rgba(0,0,0,.78) 100%),
+    url('img/main/inc01/review02.jpg');
+  background-position:center 42%;
+}
+
+#brand #inc01 .list .review03 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.38) 48%, rgba(0,0,0,.78) 100%),
+    url('img/main/inc01/review03.jpg');
+  background-position:center 46%;
+}
+
+#brand #inc01 .list .review04 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,.42) 46%, rgba(0,0,0,.82) 100%),
+    url('img/main/inc01/review04.jpg');
+  background-position:center 48%;
+}
+
+#brand #inc01 .list .review05 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.4) 48%, rgba(0,0,0,.8) 100%),
+    url('img/main/inc01/review05.jpg');
+  background-position:center 45%;
+}
+
+#brand #inc01 .list .review06 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.36) 48%, rgba(0,0,0,.78) 100%),
+    url('img/main/inc01/review06.jpg');
+  background-position:center 48%;
+}
+
+#brand #inc01 .list .review07 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.42) 48%, rgba(0,0,0,.82) 100%),
+    url('img/main/inc01/review07.jpg');
+  background-position:center 44%;
+}
+
+#brand #inc01 .list .review08 a{
+  background-image:
+    linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.4) 48%, rgba(0,0,0,.82) 100%),
+    url('img/main/inc01/review08.jpg');
+  background-position:center 48%;
+}
 
 #brand #inc01 .brand-cross{
   overflow:hidden;
@@ -3707,6 +3762,8 @@ body.menu-open .mobile-login-area{
   border-radius:13px;
   background-size:cover;
   background-position:center;
+  color:#fff;
+  text-decoration:none;
   transition:all .5s;
 }
 
@@ -3750,6 +3807,188 @@ body.menu-open .mobile-login-area{
   color:#fff;
   background:rgba(0,0,0,.2);
   transition:all .5s;
+}
+
+#brand #inc01 .list .review-slide a:after{
+  width:100%;
+  background:linear-gradient(180deg, rgba(0,0,0,.02) 0%, rgba(0,0,0,.18) 48%, rgba(0,0,0,.76) 100%);
+}
+
+#brand #inc01 .list .review-slide a,
+#brand #inc01 .list .review-slide a *,
+#brand #inc01 .list .review-slide a:hover,
+#brand #inc01 .list .review-slide a:hover *{
+  text-decoration:none !important;
+  border-bottom:0 !important;
+}
+
+#brand #inc01 .list .review-slide .review-card-text{
+  position:absolute;
+  left:18px;
+  right:18px;
+  bottom:42px;
+  z-index:20;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  min-height:244px;
+  opacity:1;
+  color:#fff;
+  line-height:normal;
+  white-space:normal;
+  transition:bottom .45s ease;
+}
+
+#brand #inc01 .list .review-slide .review-title{
+  display:block;
+  margin-bottom:5px;
+  min-height:28px;
+  font-size:22px;
+  font-weight:850;
+  line-height:1.25;
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.46);
+  word-break:keep-all;
+}
+
+#brand #inc01 .list .review-slide .review-meta{
+  position:static;
+  display:block;
+  width:auto;
+  height:auto;
+  margin:0 0 14px;
+  min-height:17px;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  font-size:12px;
+  font-weight:650;
+  line-height:1.35;
+  color:rgba(255,255,255,.74);
+  -webkit-text-fill-color:rgba(255,255,255,.74);
+  text-shadow:0 2px 12px rgba(0,0,0,.4);
+  word-break:keep-all;
+  opacity:1;
+  right:auto;
+  bottom:auto;
+  margin-left:0;
+  text-align:left;
+}
+
+#brand #inc01 .list .review-slide .review-copy{
+  position:relative;
+  display:-webkit-box;
+  overflow:hidden;
+  opacity:1;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  min-height:77px;
+  max-height:77px;
+  padding-right:2px;
+  font-size:17px;
+  line-height:1.5;
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  text-shadow:0 2px 18px rgba(0,0,0,.42);
+  white-space:normal;
+  transform:translateY(0);
+  transition:max-height .45s ease, font-size .35s ease;
+}
+
+#brand #inc01 .list .review-slide .review-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:18px;
+  min-height:54px;
+  opacity:.92;
+}
+
+#brand #inc01 .list .review-slide .review-tags span{
+  position:static;
+  display:inline-flex;
+  align-items:center;
+  width:auto;
+  height:auto;
+  margin:0;
+  padding:5px 8px;
+  border-radius:6px;
+  background:rgba(255,255,255,.16);
+  color:rgba(255,255,255,.9);
+  -webkit-text-fill-color:rgba(255,255,255,.9);
+  font-size:11px;
+  font-weight:750;
+  line-height:1;
+  letter-spacing:0;
+  text-shadow:none;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  opacity:1;
+  right:auto;
+  bottom:auto;
+}
+
+#brand #inc01 .list .review-slide .review-tags span::before{
+  content:attr(data-icon);
+  margin-right:5px;
+  font-size:12px;
+  line-height:1;
+}
+
+#brand #inc01 .list .review-slide .review-more{
+  position:static;
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  gap:8px;
+  width:auto;
+  height:auto;
+  max-height:0;
+  margin-top:0;
+  padding:0;
+  border-radius:0;
+  background:transparent;
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  font-size:15px;
+  font-weight:800;
+  line-height:1;
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity .3s ease, transform .3s ease, max-height .3s ease, margin-top .3s ease;
+}
+
+#brand #inc01 .list .review-slide .review-more svg{
+  width:18px;
+  height:18px;
+  stroke-width:2.6;
+}
+
+@media(hover:hover){
+  #brand #inc01 .list .review-slide a:hover:after{
+    background:linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.56) 34%, rgba(0,0,0,.88) 100%);
+  }
+
+  #brand #inc01 .list .review-slide a:hover .review-card-text{
+    bottom:34px;
+  }
+
+  #brand #inc01 .list .review-slide a:hover .review-copy{
+    -webkit-line-clamp:6;
+    min-height:133px;
+    max-height:154px;
+    font-size:15px;
+    line-height:1.48;
+  }
+
+  #brand #inc01 .list .review-slide a:hover .review-more{
+    max-height:20px;
+    margin-top:14px;
+    opacity:1;
+    transform:translateY(0);
+  }
 }
 
 @media(hover:hover){

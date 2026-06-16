@@ -920,6 +920,10 @@ document.addEventListener("DOMContentLoaded", function(){
           false;
         revealProgress =
           0;
+        closePull =
+          0;
+        nextPull =
+          0;
 
         locator.classList.remove("is-revealed");
         transition.classList.remove("is-playing", "is-complete");
@@ -933,6 +937,39 @@ document.addEventListener("DOMContentLoaded", function(){
     const isLocatorAtTop =
       ()=>locator.scrollTop <= 2;
 
+    const isLocatorAtBottom =
+      ()=>locator.scrollTop + locator.clientHeight >= locator.scrollHeight - 4;
+
+    const exitRevealTo =
+      target=>{
+        revealStarted =
+          false;
+        revealComplete =
+          false;
+        revealProgress =
+          0;
+        closePull =
+          0;
+
+        locator.classList.remove("is-revealed");
+        transition.classList.remove("is-playing", "is-complete");
+        document.documentElement.classList.remove("pass-reveal-playing", "pass-reveal-complete");
+        applyRevealProgress(0);
+
+        if(target){
+          const header =
+            document.querySelector("header");
+
+          const offset =
+            header ? header.offsetHeight : 0;
+
+          const top =
+            target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+          window.scrollTo({top, behavior:"smooth"});
+        }
+      };
+
     let revealStarted =
       false;
 
@@ -943,6 +980,12 @@ document.addEventListener("DOMContentLoaded", function(){
       0;
 
     let touchStartY =
+      0;
+
+    let closePull =
+      0;
+
+    let nextPull =
       0;
 
     const completeReveal =
@@ -1014,7 +1057,27 @@ document.addEventListener("DOMContentLoaded", function(){
         if(revealComplete){
           if(event.deltaY < 0 && isLocatorAtTop()){
             event.preventDefault();
-            closeReveal();
+            closePull += Math.abs(event.deltaY);
+            nextPull =
+              0;
+
+            if(closePull > 900){
+              closeReveal();
+            }
+          }else if(event.deltaY > 0 && isLocatorAtBottom()){
+            event.preventDefault();
+            nextPull += event.deltaY;
+            closePull =
+              0;
+
+            if(nextPull > 1200){
+              exitRevealTo(document.querySelector("#facility"));
+            }
+          }else{
+            closePull =
+              0;
+            nextPull =
+              0;
           }
           return;
         }
@@ -1049,7 +1112,31 @@ document.addEventListener("DOMContentLoaded", function(){
         if(revealComplete){
           if(currentY - touchStartY > 10 && isLocatorAtTop()){
             event.preventDefault();
-            closeReveal();
+            closePull += currentY - touchStartY;
+            nextPull =
+              0;
+            touchStartY =
+              currentY;
+
+            if(closePull > 260){
+              closeReveal();
+            }
+          }else if(touchStartY - currentY > 10 && isLocatorAtBottom()){
+            event.preventDefault();
+            nextPull += touchStartY - currentY;
+            closePull =
+              0;
+            touchStartY =
+              currentY;
+
+            if(nextPull > 420){
+              exitRevealTo(document.querySelector("#facility"));
+            }
+          }else{
+            closePull =
+              0;
+            nextPull =
+              0;
           }
           return;
         }

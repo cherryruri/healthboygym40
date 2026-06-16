@@ -27,7 +27,15 @@ html.pass-reveal-complete header {
   z-index:100010;
 }
 
-:root {--yellow:#fff200;}
+:root {
+  --yellow:#fff200;
+  --text-xs:12px;
+  --text-sm:14px;
+  --text-md:16px;
+  --text-lg:20px;
+  --text-xl:28px;
+  --text-display:42px;
+}
 
 header {
   background:#fff;
@@ -65,16 +73,24 @@ header {
   list-style:none;
 }
 
-.menu li {margin:0;}
+.menu li {
+  display:flex;
+  align-items:center;
+  margin:0;
+}
 
 .menu a {
+  display:flex;
+  align-items:center;
+  min-height:24px;
   color:#111;
-  font-size:13px;
+  font-size:var(--text-xs);
   font-weight:900;
   text-decoration:none;
   position:relative;
   padding-bottom:5px;
   white-space:nowrap;
+  line-height:1;
 }
 
 .menu a::after {
@@ -90,13 +106,22 @@ header {
 
 .menu a:hover::after {width:100%;}
 
+.login-menu{
+  align-items:center;
+}
+
+.login-menu a,
+.login-menu button{
+  transform:translateY(1px);
+}
+
 .download-btn {
   flex:0 0 auto;
   border:1px solid #000;
   padding:11px 22px;
   color:#000;
   text-decoration:none;
-  font-size:13px;
+  font-size:var(--text-xs);
   font-weight:900;
   white-space:nowrap;
 }
@@ -1590,6 +1615,583 @@ body.loaded .intro-desc:not(.is-split) .intro-desc-line:nth-child(2){
   }
 }
 
+
+/* all pass locator - editorial map UI */
+.pass-locator-section{
+  padding:clamp(88px, 10vh, 118px) 0 clamp(34px, 5vh, 62px);
+  background:#0d0f13;
+}
+
+.pass-locator-container{
+  display:grid;
+  grid-template-columns:minmax(220px, .7fr) minmax(300px, .88fr) minmax(520px, 1.55fr);
+  grid-template-rows:auto minmax(0, 1fr);
+  grid-template-areas:
+    "intro controls map"
+    "intro results map";
+  gap:24px 30px;
+  width:min(1380px, calc(100% - 72px));
+  min-height:calc(100svh - 150px);
+  align-items:center;
+}
+
+.pass-locator-intro{
+  grid-area:intro;
+  align-self:center;
+  padding-bottom:36px;
+}
+
+.pass-locator-intro span{
+  display:inline-flex;
+  margin-bottom:16px;
+  color:rgba(255,255,255,.42);
+  font-size:var(--text-xs);
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.pass-locator-intro h2{
+  color:#fff;
+  font-size:clamp(32px, 3vw, var(--text-display));
+  font-weight:900;
+  line-height:1.12;
+  letter-spacing:0;
+}
+
+.pass-locator-intro p{
+  width:min(300px, 100%);
+  margin-top:20px;
+  color:rgba(255,255,255,.72);
+  font-size:var(--text-sm);
+  font-weight:750;
+  line-height:1.65;
+  word-break:keep-all;
+}
+
+.pass-locator-controls{
+  grid-area:controls;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:18px;
+  align-self:end;
+  margin:0;
+  padding:0;
+  background:transparent;
+}
+
+.pass-locator-controls label > span{
+  margin-bottom:9px;
+  color:rgba(255,255,255,.8);
+  font-size:var(--text-xs);
+  font-weight:900;
+}
+
+.pass-locator-controls select,
+.pass-locator-controls input,
+.pass-location-button{
+  height:56px;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:8px;
+  background:#090b0f;
+  color:#fff;
+  font-size:var(--text-sm);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.pass-locator-controls select:focus,
+.pass-locator-controls input:focus{
+  border-color:rgba(164,190,210,.66);
+  outline:0;
+  box-shadow:0 0 0 4px rgba(164,190,210,.09);
+}
+
+.pass-search-field svg{
+  bottom:17px;
+  color:rgba(255,255,255,.5);
+}
+
+.pass-location-button{
+  justify-content:flex-start;
+  padding:0 16px;
+  border-color:rgba(255,255,255,.14);
+  color:#fff;
+  background:linear-gradient(135deg, #18202a, #0b0d12);
+}
+
+.pass-location-button:hover{
+  background:#1e2b38;
+  color:#fff;
+  border-color:rgba(176,202,222,.48);
+}
+
+.pass-location-button.is-error{
+  border-color:#e17575;
+  color:#f0b6b6;
+}
+
+.pass-locator-map-shell{
+  grid-area:map;
+  align-self:center;
+  height:min(70vh, 660px);
+  min-height:520px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:0;
+  background:#9fc7df;
+  box-shadow:0 28px 80px rgba(0,0,0,.34);
+}
+
+.pass-fallback-map{
+  background:
+    radial-gradient(circle at 68% 20%, rgba(255,255,255,.42), transparent 22%),
+    linear-gradient(135deg, #b9dbef 0%, #9cc9e5 54%, #82b8d8 100%);
+}
+
+.pass-fallback-korea{
+  left:51%;
+  top:49%;
+  width:min(34vw, 500px);
+  height:min(64vh, 560px);
+  min-width:350px;
+  opacity:.9;
+}
+
+.pass-fallback-map > p{
+  color:rgba(11,17,24,.52);
+  font-size:11px;
+}
+
+.pass-locator-fallback-marker,
+.pass-locator-marker{
+  width:24px;
+  min-width:24px;
+  height:24px;
+  min-height:24px;
+  padding:0;
+  border:2px solid rgba(255,255,255,.95);
+  border-radius:999px 999px 999px 4px;
+  background:#101820;
+  box-shadow:0 9px 22px rgba(0,0,0,.26);
+  transform:translate(-50%, -50%) rotate(-45deg);
+}
+
+.pass-locator-fallback-marker::before,
+.pass-locator-marker::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+  transform:translate(-50%, -50%);
+}
+
+.pass-locator-fallback-marker::after,
+.pass-locator-marker::after{
+  content:attr(aria-label);
+  position:absolute;
+  left:22px;
+  top:-8px;
+  min-width:max-content;
+  max-width:150px;
+  padding:7px 9px;
+  border-radius:8px;
+  background:rgba(12,15,20,.92);
+  color:#fff;
+  font-size:11px;
+  font-weight:850;
+  line-height:1.1;
+  opacity:0;
+  pointer-events:none;
+  transform:rotate(45deg) translateY(4px);
+  transition:opacity .18s ease, transform .18s ease;
+  box-shadow:0 12px 24px rgba(0,0,0,.22);
+}
+
+.pass-locator-fallback-marker strong,
+.pass-locator-fallback-marker span,
+.pass-locator-marker strong,
+.pass-locator-marker span{
+  display:none;
+}
+
+.pass-locator-fallback-marker:hover,
+.pass-locator-fallback-marker.is-active,
+.pass-locator-marker:hover{
+  transform:translate(-50%, -50%) rotate(-45deg) scale(1.18);
+  box-shadow:0 14px 28px rgba(0,0,0,.32);
+}
+
+.pass-locator-fallback-marker:hover::after,
+.pass-locator-fallback-marker.is-active::after,
+.pass-locator-marker:hover::after{
+  opacity:1;
+  transform:rotate(45deg) translateY(0);
+}
+
+.pass-marker-s-premium,
+.pass-marker-premium,
+.pass-marker-gold,
+.pass-marker-silver,
+.pass-marker-black{
+  background:#111820;
+  color:#fff;
+}
+
+.pass-marker-premium{background:#24384b}
+.pass-marker-gold{background:#2e3740}
+.pass-marker-silver{background:#53606d}
+.pass-marker-s-premium{background:#182f3f}
+
+.pass-map-detail{
+  left:20px;
+  right:20px;
+  bottom:20px;
+  min-height:0;
+  border:1px solid rgba(255,255,255,.14);
+  border-top:1px solid rgba(255,255,255,.18);
+  border-radius:18px;
+  background:rgba(15,17,22,.92);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 24px 70px rgba(0,0,0,.34);
+}
+
+.pass-detail-media{
+  width:138px;
+  min-width:138px;
+  background:linear-gradient(145deg, rgba(145,169,188,.18), rgba(255,255,255,.04));
+}
+
+.pass-detail-media span{
+  color:#fff;
+  font-size:40px;
+}
+
+.pass-detail-media strong{
+  color:rgba(255,255,255,.72);
+}
+
+.pass-detail-body{
+  padding:22px 54px 22px 24px;
+}
+
+.pass-detail-head h3{
+  font-size:21px;
+}
+
+.pass-detail-head span,
+.pass-result-info em,
+.pass-plan-card small{
+  background:rgba(255,255,255,.1);
+  color:#e8eef3;
+}
+
+.pass-detail-tags span{
+  border-color:rgba(255,255,255,.15);
+  color:rgba(255,255,255,.78);
+}
+
+.pass-detail-actions button,
+.pass-detail-actions a{
+  min-height:42px;
+  border-radius:8px;
+  border-color:rgba(255,255,255,.22);
+  background:#f4f7fa;
+  color:#111;
+}
+
+.pass-detail-actions a{
+  background:transparent;
+  color:#fff;
+}
+
+.pass-detail-close{
+  background:rgba(255,255,255,.1);
+}
+
+.pass-result-card{
+  grid-area:results;
+  align-self:start;
+  border-color:rgba(255,255,255,.12);
+  border-radius:8px;
+  background:#090b0f;
+}
+
+.pass-result-toggle{
+  min-height:44px;
+  padding:0 12px;
+  background:#090b0f;
+  color:rgba(255,255,255,.9);
+  font-size:13px;
+}
+
+.pass-result-list{
+  max-height:210px;
+  padding:4px;
+  border-top-color:rgba(255,255,255,.1);
+}
+
+.pass-result-item{
+  gap:10px;
+  padding:9px 8px;
+  border-radius:7px;
+}
+
+.pass-result-item:hover,
+.pass-result-item:focus-visible{
+  background:#141820;
+}
+
+.pass-result-info strong{
+  font-size:12px;
+}
+
+.pass-result-info span,
+.pass-result-info small{
+  margin-top:3px;
+  font-size:10px;
+}
+
+.pass-result-info small{
+  color:#b7c4cf;
+}
+
+.pass-result-item > button{
+  min-height:28px;
+  padding:0 9px;
+  border-radius:6px;
+  font-size:11px;
+}
+
+.pass-selected-block{
+  display:none !important;
+}
+
+.pass-recommend-panel{
+  grid-area:recommend;
+}
+
+.pass-selected-block,
+.pass-recommend-panel{
+  align-self:start;
+  border-color:rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);
+}
+
+.pass-selected-block h3,
+.pass-recommend-panel h3{
+  font-size:15px;
+}
+
+@media (max-width:1080px){
+  .pass-locator-section{
+    padding:76px 0 0;
+  }
+
+  .pass-locator-container{
+    display:block;
+    width:100%;
+    min-height:100svh;
+  }
+
+  .pass-locator-intro{
+    position:absolute;
+    left:22px;
+    top:92px;
+    z-index:5;
+    width:min(280px, calc(100% - 44px));
+    padding:0;
+    pointer-events:none;
+  }
+
+  .pass-locator-intro span{
+    margin-bottom:10px;
+    color:rgba(15,25,35,.46);
+    font-size:10px;
+  }
+
+  .pass-locator-intro h2{
+    color:#111820;
+    font-size:30px;
+    text-shadow:0 1px 20px rgba(255,255,255,.34);
+  }
+
+  .pass-locator-intro p{
+    display:none;
+  }
+
+  .pass-locator-map-shell{
+    height:100svh;
+    min-height:100vh;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  .pass-fallback-korea{
+    top:37%;
+    width:390px;
+    min-width:330px;
+    height:440px;
+  }
+
+  .pass-locator-fallback-marker,
+  .pass-locator-marker{
+    width:20px;
+    min-width:20px;
+    height:20px;
+    min-height:20px;
+  }
+
+  .pass-locator-controls,
+  .pass-result-card,
+  .pass-selected-block,
+  .pass-recommend-panel{
+    position:relative;
+    z-index:10;
+    width:calc(100% - 28px);
+    margin:0 auto;
+  }
+
+  .pass-locator-controls{
+    margin-top:calc(-44vh);
+    padding:20px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:24px 24px 0 0;
+    background:rgba(247,249,251,.94);
+    color:#111;
+    box-shadow:0 -24px 60px rgba(0,0,0,.24);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .pass-locator-controls label > span{
+    color:#111820;
+    font-size:var(--text-xs);
+  }
+
+  .pass-locator-controls select,
+  .pass-locator-controls input,
+  .pass-location-button{
+    height:48px;
+    border-color:rgba(17,24,39,.14);
+    background:#fff;
+    color:#111820;
+  }
+
+  .pass-location-button{
+    justify-content:center;
+    background:#111820;
+    color:#fff;
+  }
+
+  .pass-result-card{
+    border:0;
+    border-radius:0 0 20px 20px;
+    background:rgba(247,249,251,.94);
+    box-shadow:0 22px 48px rgba(0,0,0,.18);
+  }
+
+  .pass-result-toggle{
+    background:transparent;
+    color:#111820;
+  }
+
+  .pass-result-list{
+    max-height:210px;
+    border-top-color:rgba(17,24,39,.08);
+  }
+
+  .pass-result-info strong{
+    color:#111820;
+  }
+
+  .pass-result-info span,
+  .pass-result-info small{
+    color:#586273;
+  }
+
+  .pass-result-item:hover,
+  .pass-result-item:focus-visible{
+    background:rgba(17,24,39,.06);
+  }
+
+  .pass-result-item > button{
+    border-color:rgba(17,24,39,.14);
+    color:#111820;
+  }
+
+  .pass-map-detail{
+    left:14px;
+    right:14px;
+    bottom:18px;
+    max-height:42vh;
+    flex-direction:column;
+    border-radius:22px;
+  }
+
+  .pass-detail-media{
+    display:none;
+  }
+
+  .pass-detail-body{
+    padding:20px 48px 20px 20px;
+  }
+
+  .pass-selected-block,
+  .pass-recommend-panel{
+    display:none;
+  }
+}
+
+@media (max-width:560px){
+  .pass-locator-section{
+    padding-top:62px;
+  }
+
+  .pass-locator-intro{
+    top:80px;
+  }
+
+  .pass-locator-intro h2{
+    font-size:27px;
+  }
+
+  .pass-fallback-korea{
+    top:34%;
+    width:335px;
+    min-width:300px;
+  }
+
+  .pass-locator-controls{
+    width:calc(100% - 20px);
+    margin-top:calc(-48vh);
+    padding:16px;
+    border-radius:22px 22px 0 0;
+    gap:12px;
+  }
+
+  .pass-locator-controls select,
+  .pass-locator-controls input,
+  .pass-location-button{
+    height:44px;
+    font-size:13px;
+  }
+
+  .pass-result-card{
+    width:calc(100% - 20px);
+  }
+
+  .pass-result-list{
+    max-height:176px;
+  }
+
+  .pass-map-detail{
+    bottom:10px;
+  }
+}
 
 /* 올패스 */
 .pass-section {
@@ -5153,11 +5755,49 @@ body.menu-open .mobile-login-area{
     font-size:18px;
   }
 
-  #brand #inc01 .list .review-slide .review-copy{
+#brand #inc01 .list .review-slide .review-copy{
     min-height:82px;
     max-height:82px;
     font-size:13px;
   }
+}
+
+/* site type scale */
+#brand #inc01 .list h2,
+#facilityTour .txt_box h2,
+.trainer-title,
+.hours-left h2,
+.faq-new-title h2,
+.brand-about-title h2{
+  font-size:clamp(30px, 3.8vw, 46px);
+  line-height:1.16;
+  letter-spacing:0;
+}
+
+.trainer-basic h3,
+.trainer-detail h3,
+.pass-detail-head h3,
+.pass-result-toggle,
+.review-title{
+  font-size:var(--text-lg);
+  line-height:1.25;
+}
+
+.trainer-sub,
+.hours-left p,
+.faq-new-title p,
+.brand-about-title p,
+.brand-about-copy p{
+  font-size:var(--text-md);
+  line-height:1.65;
+}
+
+.menu a,
+.download-btn,
+.pass-locator-intro span,
+.pass-locator-controls label > span,
+.review-meta{
+  font-size:var(--text-xs);
 }
 
 /* ================= facility tour section ================= */

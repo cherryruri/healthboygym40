@@ -3550,6 +3550,166 @@ body.menu-open .mobile-login-area{
   white-space:normal;
 }
 
+#brand #inc01 .brand-cross .brand-allpass-reveal{
+  width:min(980px, 90vw);
+  margin-top:22px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  color:#202020;
+  font-size:clamp(21px, 2.25vw, 34px);
+  line-height:1.42;
+  font-weight:850;
+}
+
+#brand #inc01 .brand-cross .brand-allpass-line{
+  position:relative;
+  z-index:2;
+  font-size:1em;
+  font-weight:850;
+  line-height:1.42;
+  transition:
+    transform 1.05s cubic-bezier(.19,1,.22,1),
+    opacity .75s ease;
+}
+
+#brand #inc01 .brand-cross .brand-allpass-line-top{
+  transform:translateY(34px);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-line-bottom{
+  display:flex;
+  flex-direction:column;
+  transform:translateY(-34px);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-map{
+  width:min(660px, 82vw);
+  height:0;
+  margin:0;
+  overflow:hidden;
+  opacity:0;
+  transform:scale(.92);
+  transform-origin:center;
+  transition:
+    height 1.15s cubic-bezier(.19,1,.22,1),
+    margin .95s cubic-bezier(.19,1,.22,1),
+    opacity .8s ease .16s,
+    transform 1.05s cubic-bezier(.19,1,.22,1);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-map-inner{
+  position:relative;
+  width:100%;
+  height:clamp(220px, 30vw, 350px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 48% 42%, rgba(255,242,0,.28), transparent 32%),
+    linear-gradient(135deg, #f6f7f1 0%, #e7ebf4 100%);
+  box-shadow:0 26px 80px rgba(0,0,0,.15);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-map-inner::before{
+  content:"90+";
+  position:absolute;
+  left:28px;
+  top:22px;
+  color:rgba(0,0,0,.08);
+  font-size:clamp(54px, 8vw, 104px);
+  line-height:.8;
+  font-weight:950;
+  letter-spacing:0;
+}
+
+#brand #inc01 .brand-cross .brand-allpass-map img{
+  position:relative;
+  z-index:1;
+  width:auto;
+  height:86%;
+  object-fit:contain;
+  opacity:.72;
+  filter:grayscale(1) contrast(.94) brightness(1.08);
+}
+
+#brand #inc01 .brand-cross .brand-map-pin{
+  position:absolute;
+  z-index:3;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:42px;
+  height:28px;
+  padding:0 10px;
+  border-radius:999px;
+  background:#111;
+  color:#fff;
+  font-size:12px;
+  font-weight:900;
+  line-height:1;
+  opacity:0;
+  transform:translate(-50%, -50%) scale(.72);
+  box-shadow:0 10px 22px rgba(0,0,0,.24);
+  transition:
+    opacity .56s ease,
+    transform .72s cubic-bezier(.19,1,.22,1);
+}
+
+#brand #inc01 .brand-cross .brand-map-pin::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:100%;
+  height:100%;
+  border-radius:inherit;
+  background:rgba(17,17,17,.16);
+  transform:translate(-50%, -50%) scale(1);
+  animation:brandPinPulse 2.2s ease-in-out infinite;
+  z-index:-1;
+}
+
+#brand #inc01 .brand-cross .brand-map-pin-seoul{left:45%;top:26%}
+#brand #inc01 .brand-cross .brand-map-pin-gyeonggi{left:49%;top:34%}
+#brand #inc01 .brand-cross .brand-map-pin-daejeon{left:50%;top:50%}
+#brand #inc01 .brand-cross .brand-map-pin-daegu{left:62%;top:63%}
+#brand #inc01 .brand-cross .brand-map-pin-busan{left:67%;top:76%}
+
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-allpass-line{
+  transform:translateY(0);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-allpass-map{
+  height:clamp(220px, 30vw, 350px);
+  margin:28px 0 30px;
+  opacity:1;
+  transform:scale(1);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin{
+  opacity:1;
+  transform:translate(-50%, -50%) scale(1);
+}
+
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin-seoul{transition-delay:.34s}
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin-gyeonggi{transition-delay:.46s}
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin-daejeon{transition-delay:.58s}
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin-daegu{transition-delay:.7s}
+#brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-map-pin-busan{transition-delay:.82s}
+
+@keyframes brandPinPulse{
+  0%, 100%{
+    opacity:.3;
+    transform:translate(-50%, -50%) scale(1);
+  }
+  50%{
+    opacity:0;
+    transform:translate(-50%, -50%) scale(1.9);
+  }
+}
+
 .brand-type-text{
   display:inline;
   white-space:pre-line;
@@ -3726,6 +3886,36 @@ body.menu-open .mobile-login-area{
     font-size:clamp(17px, 3.8vw, 24px);
     line-height:1.5;
   }
+  #brand #inc01 .brand-cross .brand-allpass-reveal{
+    width:min(520px, 88vw);
+    font-size:clamp(17px, 3.8vw, 24px);
+    line-height:1.5;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-line{
+    line-height:1.5;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-line-top{
+    transform:translateY(24px);
+  }
+  #brand #inc01 .brand-cross .brand-allpass-line-bottom{
+    transform:translateY(-24px);
+  }
+  #brand #inc01 .brand-cross .brand-allpass-map{
+    width:min(420px, 88vw);
+  }
+  #brand #inc01 .brand-cross .brand-allpass-map-inner,
+  #brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-allpass-map{
+    height:230px;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-allpass-map{
+    margin:22px 0 24px;
+  }
+  #brand #inc01 .brand-cross .brand-map-pin{
+    min-width:36px;
+    height:24px;
+    padding:0 8px;
+    font-size:11px;
+  }
   #brand #inc01 .list{
     height:auto;
     padding:80px 0 90px;
@@ -3750,6 +3940,23 @@ body.menu-open .mobile-login-area{
     width:min(340px, 86vw);
     font-size:16px;
     line-height:1.55;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-reveal{
+    width:min(350px, 88vw);
+    font-size:16px;
+    line-height:1.55;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-map{
+    width:min(350px, 88vw);
+  }
+  #brand #inc01 .brand-cross .brand-allpass-map-inner,
+  #brand #inc01 .brand-cross .brand-allpass-reveal.is-visible .brand-allpass-map{
+    height:210px;
+  }
+  #brand #inc01 .brand-cross .brand-allpass-map-inner::before{
+    left:18px;
+    top:16px;
+    font-size:54px;
   }
   #brand #inc01 .list h2{margin-bottom:30px;padding:0 18px;font-size:24px}
   #brand #inc01 .list h3{font-size:17px}

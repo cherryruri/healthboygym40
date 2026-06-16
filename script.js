@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
     startTyping();
     startBrandTyping();
     initAllPassTyping();
+    initAllPassMapReveal();
     initPassMap();
     initBrandAbout();
     initCoBrandExperience();
@@ -165,6 +166,44 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     run();
+
+  }
+
+  function initAllPassMapReveal(){
+
+    const reveal =
+      document.querySelector("[data-allpass-map-reveal]");
+
+    if(!reveal || reveal.dataset.revealReady === "true") return;
+
+    reveal.dataset.revealReady =
+      "true";
+
+    const show =
+      ()=>{
+        reveal.classList.add("is-visible");
+      };
+
+    if("IntersectionObserver" in window){
+      const observer =
+        new IntersectionObserver((entries)=>{
+
+          entries.forEach(entry=>{
+
+            if(entry.isIntersecting){
+              observer.disconnect();
+              show();
+            }
+
+          });
+
+        },{threshold:.42});
+
+      observer.observe(reveal);
+      return;
+    }
+
+    show();
 
   }
 

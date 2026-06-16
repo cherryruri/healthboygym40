@@ -786,15 +786,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const startWidth =
         Math.min(
-          window.innerWidth * (isMobile ? 0.72 : 0.6),
-          isMobile ? 320 : 1160
+          window.innerWidth * (isMobile ? 0.84 : 0.7),
+          isMobile ? 360 : 1360
         );
 
       const startHeight =
-        isMobile ? 230 : 330;
+        isMobile
+          ? clamp(availableHeight * 0.36, 220, 260)
+          : clamp(availableHeight * 0.48, 340, 450);
 
       const startBottom =
-        isMobile ? -36 : -70;
+        isMobile ? -24 : -45;
 
       const expandEnd =
         isMobile ? 0.5 : 0.34;

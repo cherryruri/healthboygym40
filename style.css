@@ -233,9 +233,9 @@ header {
 /* 인트로 */
 .intro {
   --hero-progress:0;
-  --hero-frame-width:min(60vw, 1160px);
-  --hero-frame-height:330px;
-  --hero-frame-bottom:-70px;
+  --hero-frame-width:min(70vw, 1360px);
+  --hero-frame-height:clamp(340px, 48vh, 450px);
+  --hero-frame-bottom:-45px;
   --hero-frame-radius:28px;
   --hero-title-opacity:1;
   --hero-title-shift:0px;
@@ -1517,6 +1517,9 @@ footer {
   .intro {
     height:235vh;
     padding:0;
+    --hero-frame-width:min(84vw, 360px);
+    --hero-frame-height:clamp(220px, 36vh, 260px);
+    --hero-frame-bottom:-24px;
   }
 
   .hero-expand-sticky{

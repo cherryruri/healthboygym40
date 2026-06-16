@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function(){
     startTyping();
     startBrandTyping();
     initAllPassTyping();
+    initPassBranchLocator();
     initPassMap();
     initBrandAbout();
     initCoBrandExperience();
@@ -38,6 +39,725 @@ document.addEventListener("DOMContentLoaded", function(){
     if(allPassHeadline.nextElementSibling === passSection) return;
 
     allPassHeadline.insertAdjacentElement("afterend", passSection);
+
+  }
+
+  function initPassBranchLocator(){
+
+    const section =
+      document.querySelector("[data-pass-locator]");
+
+    if(!section || section.dataset.locatorReady === "true") return;
+
+    const branches =
+      Array.isArray(window.HEALTHBOY_PASS_BRANCHES)
+        ? window.HEALTHBOY_PASS_BRANCHES.filter(branch=>branch && branch.name)
+        : [];
+
+    if(!branches.length) return;
+
+    section.dataset.locatorReady =
+      "true";
+
+    const tierOrder =
+      ["S Premium", "Premium", "Gold", "Silver", "Black"];
+
+    const tierRank =
+      tierOrder.reduce((rank, tier, index)=>{
+        rank[tier] = index;
+        return rank;
+      }, {});
+
+    const planInfo = [
+      {tier:"S Premium", name:"S-프리미엄 올패스", price:180000, link:"https://bmarket.broj.co.kr/products/253448"},
+      {tier:"Premium", name:"프리미엄 올패스", price:152000, link:"https://bmarket.broj.co.kr/products/253852"},
+      {tier:"Gold", name:"골드 올패스", price:124000, link:"https://bmarket.broj.co.kr/products/254133"},
+      {tier:"Silver", name:"실버 올패스", price:110000, link:"https://bmarket.broj.co.kr/products/254326"},
+      {tier:"Black", name:"블랙 올패스", price:99000, link:"https://bmarket.broj.co.kr/products/254414"}
+    ];
+
+    const refs = {
+      region:section.querySelector("[data-pass-region]"),
+      tier:section.querySelector("[data-pass-tier]"),
+      search:section.querySelector("[data-pass-search]"),
+      nearby:section.querySelector("[data-pass-nearby]"),
+      naverMap:section.querySelector("[data-pass-naver-map]"),
+      fallbackMap:section.querySelector("[data-pass-fallback-map]"),
+      fallbackMarkers:section.querySelector("[data-pass-fallback-markers]"),
+      detail:section.querySelector("[data-pass-detail]"),
+      detailClose:section.querySelector("[data-pass-detail-close]"),
+      detailName:section.querySelector("[data-pass-detail-name]"),
+      detailTier:section.querySelector("[data-pass-detail-tier]"),
+      detailBadge:section.querySelector("[data-pass-detail-badge]"),
+      detailAddress:section.querySelector("[data-pass-detail-address]"),
+      detailHours:section.querySelector("[data-pass-detail-hours]"),
+      detailParking:section.querySelector("[data-pass-detail-parking]"),
+      detailLink:section.querySelector("[data-pass-detail-link]"),
+      selectCurrent:section.querySelector("[data-pass-select-current]"),
+      selectedCount:section.querySelector("[data-pass-selected-count]"),
+      selectedList:section.querySelector("[data-pass-selected-list]"),
+      recommend:section.querySelector("[data-pass-recommend]"),
+      planCards:section.querySelector("[data-pass-plan-cards]"),
+      resultTitle:section.querySelector("[data-pass-result-title]"),
+      resultToggle:section.querySelector("[data-pass-result-toggle]"),
+      resultList:section.querySelector("[data-pass-result-list]")
+    };
+
+    const regionOrder =
+      ["서울", "경기", "대전", "충남", "충북", "부산", "울산", "경남", "전북", "대구"];
+
+    const selectedIds =
+      new Set();
+
+    const naverMarkers =
+      new Map();
+
+    const fallbackMarkers =
+      new Map();
+
+    let naverMap =
+      null;
+
+    let activeBranch =
+      null;
+
+    let nearbyBranches =
+      [];
+
+    const branchById =
+      new Map(branches.map(branch=>[branch.id, branch]));
+
+    const normalize =
+      value=>String(value || "").toLowerCase().replace(/\s+/g, "");
+
+    const naverUrl =
+      branch=>branch.naverUrl || `https://map.naver.com/p/search/${encodeURIComponent(branch.name)}`;
+
+    const canUsePlan =
+      (planTier, branch)=>tierRank[planTier] <= tierRank[branch.tier];
+
+    const getRecommendedTier =
+      ()=>{
+        const selectedBranches =
+          Array.from(selectedIds).map(id=>branchById.get(id)).filter(Boolean);
+
+        if(!selectedBranches.length) return null;
+
+        return selectedBranches.reduce((best, branch)=>{
+          if(!best) return branch.tier;
+          return tierRank[branch.tier] < tierRank[best] ? branch.tier : best;
+        }, null);
+      };
+
+    const option =
+      (value, label)=>new Option(label, value);
+
+    if(refs.region){
+      refs.region.append(option("all", "전체 지역"));
+      regionOrder
+        .filter(region=>branches.some(branch=>branch.region === region))
+        .forEach(region=>refs.region.append(option(region, region)));
+    }
+
+    if(refs.tier){
+      refs.tier.append(option("all", "전체 등급"));
+      tierOrder.forEach(tier=>refs.tier.append(option(tier, tier)));
+    }
+
+    function createMarkerHtml(branch){
+      const tierClass =
+        `pass-marker-${branch.tier.toLowerCase().replace(/\s+/g, "-")}`;
+
+      return `<button type="button" class="pass-locator-marker ${tierClass}" aria-label="${branch.name}"><strong>${branch.shortName}</strong><span>${branch.tier}</span></button>`;
+    }
+
+    function getFilteredBranches(){
+      if(nearbyBranches.length){
+        return nearbyBranches;
+      }
+
+      const region =
+        refs.region ? refs.region.value : "all";
+
+      const tier =
+        refs.tier ? refs.tier.value : "all";
+
+      const keyword =
+        normalize(refs.search ? refs.search.value : "");
+
+      return branches.filter(branch=>{
+        const regionMatch =
+          region === "all" || branch.region === region;
+
+        const tierMatch =
+          tier === "all" || branch.tier === tier;
+
+        const searchTarget =
+          normalize(`${branch.name} ${branch.shortName} ${branch.address}`);
+
+        const keywordMatch =
+          !keyword || searchTarget.includes(keyword);
+
+        return regionMatch && tierMatch && keywordMatch;
+      });
+    }
+
+    function setFallbackPosition(button, branch){
+      const lngMin = 125.6;
+      const lngMax = 129.75;
+      const latMin = 34.95;
+      const latMax = 38.05;
+      const xRatio =
+        (branch.lng - lngMin) / (lngMax - lngMin);
+      const yRatio =
+        (latMax - branch.lat) / (latMax - latMin);
+      const x =
+        32 + xRatio * 35;
+      const y =
+        8 + yRatio * 78;
+
+      button.style.left =
+        `${Math.max(4, Math.min(96, x))}%`;
+
+      button.style.top =
+        `${Math.max(4, Math.min(96, y))}%`;
+    }
+
+    function buildFallbackMarkers(){
+      if(!refs.fallbackMarkers) return;
+
+      refs.fallbackMarkers.innerHTML =
+        "";
+
+      branches.forEach(branch=>{
+        const button =
+          document.createElement("button");
+
+        button.type =
+          "button";
+
+        button.className =
+          `pass-locator-fallback-marker pass-marker-${branch.tier.toLowerCase().replace(/\s+/g, "-")}`;
+
+        button.innerHTML =
+          `<strong>${branch.shortName}</strong><span>${branch.tier}</span>`;
+
+        button.setAttribute("aria-label", branch.name);
+        setFallbackPosition(button, branch);
+        button.addEventListener("click", ()=>focusBranch(branch));
+
+        refs.fallbackMarkers.appendChild(button);
+        fallbackMarkers.set(branch.id, button);
+      });
+    }
+
+    function loadNaverMapScript(){
+      if(window.naver && window.naver.maps){
+        return Promise.resolve();
+      }
+
+      const existing =
+        document.querySelector("script[data-pass-naver-script]");
+
+      if(existing){
+        return new Promise((resolve, reject)=>{
+          existing.addEventListener("load", resolve, {once:true});
+          existing.addEventListener("error", reject, {once:true});
+        });
+      }
+
+      return new Promise((resolve, reject)=>{
+        const script =
+          document.createElement("script");
+
+        script.src =
+          "https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=b2prbr0rbm";
+
+        script.async =
+          true;
+
+        script.dataset.passNaverScript =
+          "true";
+
+        script.onload =
+          resolve;
+
+        script.onerror =
+          reject;
+
+        document.head.appendChild(script);
+      });
+    }
+
+    function initNaverMap(){
+      if(!refs.naverMap) return;
+
+      loadNaverMapScript()
+        .then(()=>{
+          if(!window.naver || !window.naver.maps || naverMap) return;
+
+          naverMap =
+            new window.naver.maps.Map(refs.naverMap, {
+              center:new window.naver.maps.LatLng(36.35, 127.8),
+              zoom:7,
+              minZoom:6,
+              scaleControl:false,
+              mapDataControl:false,
+              logoControl:true
+            });
+
+          branches.forEach(branch=>{
+            const marker =
+              new window.naver.maps.Marker({
+                position:new window.naver.maps.LatLng(branch.lat, branch.lng),
+                map:naverMap,
+                icon:{
+                  content:createMarkerHtml(branch),
+                  anchor:new window.naver.maps.Point(42, 42)
+                },
+                title:branch.name
+              });
+
+            window.naver.maps.Event.addListener(marker, "click", ()=>{
+              focusBranch(branch);
+            });
+
+            naverMarkers.set(branch.id, marker);
+          });
+
+          section.classList.add("is-map-ready");
+          applyFilters();
+        })
+        .catch(()=>{
+          section.classList.add("is-fallback-ready");
+        });
+    }
+
+    function setMarkerVisibility(list){
+      const visibleIds =
+        new Set(list.map(branch=>branch.id));
+
+      naverMarkers.forEach((marker, id)=>{
+        marker.setVisible(visibleIds.has(id));
+      });
+
+      fallbackMarkers.forEach((marker, id)=>{
+        marker.classList.toggle("is-hidden", !visibleIds.has(id));
+      });
+    }
+
+    function setActiveMarker(branch){
+      fallbackMarkers.forEach((marker, id)=>{
+        marker.classList.toggle("is-active", branch && id === branch.id);
+      });
+
+      if(naverMarkers.size){
+        naverMarkers.forEach((marker, id)=>{
+          const markerBranch =
+            branchById.get(id);
+
+          marker.setIcon({
+            content:createMarkerHtml(markerBranch),
+            anchor:new window.naver.maps.Point(42, 42)
+          });
+        });
+      }
+    }
+
+    function focusBranch(branch){
+      activeBranch =
+        branch;
+
+      showDetail(branch);
+      setActiveMarker(branch);
+
+      if(naverMap && window.naver && window.naver.maps){
+        naverMap.morph(
+          new window.naver.maps.LatLng(branch.lat, branch.lng),
+          13,
+          {duration:600}
+        );
+      }
+    }
+
+    function showDetail(branch){
+      if(!refs.detail || !branch) return;
+
+      refs.detail.hidden =
+        false;
+
+      if(refs.detailName) refs.detailName.textContent = branch.name;
+      if(refs.detailTier) refs.detailTier.textContent = branch.tier;
+      if(refs.detailBadge) refs.detailBadge.textContent = branch.tier;
+      if(refs.detailAddress) refs.detailAddress.textContent = branch.address;
+      if(refs.detailHours){
+        refs.detailHours.textContent =
+          branch.open24 && branch.open24 !== "X" ? "24시간 운영" : "운영시간 확인";
+      }
+      if(refs.detailParking){
+        refs.detailParking.textContent =
+          branch.parking && branch.parking !== "X" ? `무료주차 ${branch.parking}` : "주차 정보 확인";
+      }
+      if(refs.detailLink){
+        refs.detailLink.href =
+          naverUrl(branch);
+      }
+      if(refs.selectCurrent){
+        refs.selectCurrent.textContent =
+          selectedIds.has(branch.id) ? "선택 해제" : "이 지점 선택";
+      }
+    }
+
+    function hideDetail(){
+      if(refs.detail){
+        refs.detail.hidden =
+          true;
+      }
+
+      activeBranch =
+        null;
+
+      setActiveMarker(null);
+    }
+
+    function toggleBranch(branch){
+      if(selectedIds.has(branch.id)){
+        selectedIds.delete(branch.id);
+      } else {
+        selectedIds.add(branch.id);
+      }
+
+      if(activeBranch && activeBranch.id === branch.id && refs.selectCurrent){
+        refs.selectCurrent.textContent =
+          selectedIds.has(branch.id) ? "선택 해제" : "이 지점 선택";
+      }
+
+      renderSelected();
+      renderList(getFilteredBranches());
+    }
+
+    function renderSelected(){
+      const selectedBranches =
+        Array.from(selectedIds).map(id=>branchById.get(id)).filter(Boolean);
+
+      if(refs.selectedCount){
+        refs.selectedCount.textContent =
+          selectedBranches.length;
+      }
+
+      if(!refs.selectedList) return;
+
+      refs.selectedList.innerHTML =
+        "";
+
+      if(!selectedBranches.length){
+        const empty =
+          document.createElement("p");
+
+        empty.innerHTML =
+          '<i data-feather="info"></i>지도에서 이용할 지점을 선택하거나, 위에서 지점을 검색하여 목록에 추가해주세요.';
+
+        refs.selectedList.appendChild(empty);
+        renderRecommendation([]);
+
+        if(window.feather){
+          window.feather.replace();
+        }
+
+        return;
+      }
+
+      selectedBranches.forEach(branch=>{
+        const chip =
+          document.createElement("button");
+
+        chip.type =
+          "button";
+
+        chip.className =
+          "pass-selected-chip";
+
+        chip.innerHTML =
+          `<strong>${branch.shortName}</strong><span>${branch.tier}</span><i data-feather="x"></i>`;
+
+        chip.addEventListener("click", ()=>toggleBranch(branch));
+        refs.selectedList.appendChild(chip);
+      });
+
+      renderRecommendation(selectedBranches);
+
+      if(window.feather){
+        window.feather.replace();
+      }
+    }
+
+    function renderRecommendation(selectedBranches){
+      if(!refs.recommend || !refs.planCards) return;
+
+      refs.planCards.innerHTML =
+        "";
+
+      if(!selectedBranches.length){
+        refs.recommend.hidden =
+          true;
+        return;
+      }
+
+      const recommendedTier =
+        getRecommendedTier();
+
+      refs.recommend.hidden =
+        false;
+
+      planInfo.forEach(plan=>{
+        const card =
+          document.createElement("a");
+
+        const available =
+          selectedBranches.every(branch=>canUsePlan(plan.tier, branch));
+
+        card.href =
+          plan.link;
+
+        card.target =
+          "_blank";
+
+        card.rel =
+          "noopener";
+
+        card.className =
+          `pass-plan-card${plan.tier === recommendedTier ? " is-recommended" : ""}${available ? "" : " is-disabled"}`;
+
+        card.innerHTML =
+          `<div><strong>${plan.name}</strong><span>${plan.tier}</span></div><em>월 ${plan.price.toLocaleString()}원</em><small>${plan.tier === recommendedTier ? "AI 추천" : available ? "이용 가능" : "선택 지점 일부 제한"}</small>`;
+
+        refs.planCards.appendChild(card);
+      });
+    }
+
+    function renderList(list){
+      if(refs.resultTitle){
+        const hasFilter =
+          nearbyBranches.length || (refs.region && refs.region.value !== "all") || (refs.tier && refs.tier.value !== "all") || (refs.search && refs.search.value.trim());
+
+        refs.resultTitle.textContent =
+          `${nearbyBranches.length ? "내 주변 지점" : hasFilter ? "검색 결과" : "전체 지점"} (${list.length})`;
+      }
+
+      if(!refs.resultList) return;
+
+      refs.resultList.innerHTML =
+        "";
+
+      if(!list.length){
+        const empty =
+          document.createElement("p");
+
+        empty.className =
+          "pass-result-empty";
+
+        empty.textContent =
+          "검색 결과가 없습니다.";
+
+        refs.resultList.appendChild(empty);
+        return;
+      }
+
+      list.forEach(branch=>{
+        const item =
+          document.createElement("article");
+
+        item.className =
+          "pass-result-item";
+
+        item.tabIndex =
+          0;
+
+        const info =
+          document.createElement("div");
+
+        info.className =
+          "pass-result-info";
+
+        info.innerHTML =
+          `<strong>${branch.name} <em>${branch.tier}</em></strong><span>${branch.address}</span>${typeof branch.distance === "number" ? `<small>약 ${branch.distance.toFixed(1)}km</small>` : ""}`;
+
+        const select =
+          document.createElement("button");
+
+        select.type =
+          "button";
+
+        select.textContent =
+          selectedIds.has(branch.id) ? "선택 해제" : "선택";
+
+        select.className =
+          selectedIds.has(branch.id) ? "is-selected" : "";
+
+        select.addEventListener("click", event=>{
+          event.stopPropagation();
+          toggleBranch(branch);
+        });
+
+        item.append(info, select);
+        item.addEventListener("click", ()=>focusBranch(branch));
+        item.addEventListener("keydown", event=>{
+          if(event.key === "Enter" || event.key === " "){
+            event.preventDefault();
+            focusBranch(branch);
+          }
+        });
+
+        refs.resultList.appendChild(item);
+      });
+    }
+
+    function applyFilters(){
+      const list =
+        getFilteredBranches();
+
+      setMarkerVisibility(list);
+      renderList(list);
+
+      if(!activeBranch || !list.some(branch=>branch.id === activeBranch.id)){
+        hideDetail();
+      }
+    }
+
+    function clearNearby(){
+      nearbyBranches =
+        [];
+    }
+
+    function distanceKm(lat1, lng1, lat2, lng2){
+      const toRad =
+        value=>value * Math.PI / 180;
+
+      const dLat =
+        toRad(lat2 - lat1);
+
+      const dLng =
+        toRad(lng2 - lng1);
+
+      const a =
+        Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+
+      return 6371 * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    if(refs.region){
+      refs.region.addEventListener("change", ()=>{
+        clearNearby();
+        applyFilters();
+      });
+    }
+
+    if(refs.tier){
+      refs.tier.addEventListener("change", ()=>{
+        clearNearby();
+        applyFilters();
+      });
+    }
+
+    if(refs.search){
+      refs.search.addEventListener("input", ()=>{
+        clearNearby();
+        applyFilters();
+      });
+    }
+
+    if(refs.nearby){
+      refs.nearby.addEventListener("click", ()=>{
+        if(!navigator.geolocation){
+          refs.nearby.classList.add("is-error");
+          return;
+        }
+
+        refs.nearby.classList.add("is-loading");
+        refs.nearby.querySelector("span").textContent =
+          "위치 확인 중";
+
+        navigator.geolocation.getCurrentPosition(position=>{
+          const {latitude, longitude} =
+            position.coords;
+
+          nearbyBranches =
+            branches
+              .map(branch=>({
+                ...branch,
+                distance:distanceKm(latitude, longitude, branch.lat, branch.lng)
+              }))
+              .filter(branch=>branch.distance <= 5)
+              .sort((a, b)=>a.distance - b.distance);
+
+          if(!nearbyBranches.length){
+            nearbyBranches =
+              branches
+                .map(branch=>({
+                  ...branch,
+                  distance:distanceKm(latitude, longitude, branch.lat, branch.lng)
+                }))
+                .sort((a, b)=>a.distance - b.distance)
+                .slice(0, 8);
+          }
+
+          if(refs.region) refs.region.value = "all";
+          if(refs.tier) refs.tier.value = "all";
+          if(refs.search) refs.search.value = "";
+
+          refs.nearby.classList.remove("is-loading");
+          refs.nearby.querySelector("span").textContent =
+            "현재 위치로 찾기";
+
+          applyFilters();
+
+          if(nearbyBranches[0]){
+            focusBranch(nearbyBranches[0]);
+          }
+        }, ()=>{
+          refs.nearby.classList.remove("is-loading");
+          refs.nearby.classList.add("is-error");
+          refs.nearby.querySelector("span").textContent =
+            "위치 사용 불가";
+          setTimeout(()=>{
+            refs.nearby.classList.remove("is-error");
+            refs.nearby.querySelector("span").textContent =
+              "현재 위치로 찾기";
+          }, 1800);
+        }, {
+          enableHighAccuracy:true,
+          timeout:10000,
+          maximumAge:0
+        });
+      });
+    }
+
+    if(refs.selectCurrent){
+      refs.selectCurrent.addEventListener("click", ()=>{
+        if(activeBranch){
+          toggleBranch(activeBranch);
+        }
+      });
+    }
+
+    if(refs.detailClose){
+      refs.detailClose.addEventListener("click", hideDetail);
+    }
+
+    if(refs.resultToggle){
+      refs.resultToggle.addEventListener("click", ()=>{
+        const isCollapsed =
+          section.classList.toggle("is-result-collapsed");
+
+        refs.resultToggle.setAttribute("aria-expanded", String(!isCollapsed));
+      });
+    }
+
+    buildFallbackMarkers();
+    section.classList.add("is-fallback-ready");
+    applyFilters();
+    renderSelected();
 
   }
 

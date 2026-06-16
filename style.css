@@ -6974,3 +6974,532 @@ body.menu-open .mobile-login-area{
     height:330px;
   }
 }
+
+/* all pass locator - full split screen refinement */
+html.pass-reveal-playing header,
+html.pass-reveal-complete header{
+  z-index:100010;
+}
+
+.pass-transition-panel{
+  z-index:99990;
+}
+
+.pass-locator-section{
+  inset:0;
+  z-index:99991;
+  height:100svh;
+  min-height:100vh;
+  padding:80px 0 0;
+  overflow:hidden;
+  background:#0b0d10;
+}
+
+.pass-locator-section.is-revealed{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.pass-locator-container{
+  width:100%;
+  height:calc(100svh - 80px);
+  min-height:620px;
+  margin:0;
+  padding:clamp(32px, 4.8vw, 72px);
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows:auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "intro map"
+    "controls map"
+    "results map";
+  gap:clamp(20px, 2vw, 30px) clamp(38px, 5vw, 86px);
+  align-items:stretch;
+  background:#0b0d10;
+}
+
+.pass-locator-intro{
+  grid-area:intro;
+  align-self:end;
+  max-width:620px;
+  padding:0;
+}
+
+.pass-locator-intro span{
+  display:none !important;
+}
+
+.pass-locator-intro h2{
+  color:#fff;
+  font-size:clamp(34px, 3.2vw, 52px);
+  font-weight:850;
+  line-height:1.12;
+  letter-spacing:0;
+}
+
+.pass-locator-intro p{
+  width:min(560px, 100%);
+  margin-top:18px;
+  color:rgba(255,255,255,.78);
+  font-size:clamp(17px, 1.28vw, 22px);
+  font-weight:800;
+  line-height:1.55;
+  letter-spacing:0;
+  word-break:keep-all;
+}
+
+.pass-locator-controls{
+  grid-area:controls;
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:16px;
+  align-self:stretch;
+  margin:0;
+  padding:0;
+  background:transparent;
+}
+
+.pass-locator-controls label{
+  display:flex;
+  min-width:0;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+
+.pass-locator-controls label > span{
+  margin-bottom:8px;
+  color:rgba(255,255,255,.82);
+  font-size:13px;
+  font-weight:850;
+  letter-spacing:0;
+}
+
+.pass-locator-controls select,
+.pass-locator-controls input,
+.pass-location-button{
+  height:54px;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:8px;
+  background:#11151b;
+  color:#fff;
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:0;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+.pass-locator-controls select{
+  padding:0 15px;
+}
+
+.pass-locator-controls input{
+  padding:0 16px 0 44px;
+}
+
+.pass-search-field svg{
+  left:15px;
+  bottom:16px;
+  width:20px;
+  height:20px;
+  color:rgba(255,255,255,.5);
+}
+
+.pass-location-button{
+  align-self:end;
+  justify-content:center;
+  gap:9px;
+  border-color:rgba(255,255,255,.18);
+  background:linear-gradient(135deg, #19212a, #10141a);
+  color:#f5f7fa;
+}
+
+.pass-location-button:hover{
+  border-color:rgba(255,255,255,.36);
+  background:#202935;
+  color:#fff;
+}
+
+.pass-result-card{
+  grid-area:results;
+  display:flex;
+  min-height:0;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+  flex-direction:column;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:10px;
+  background:#0f1217;
+}
+
+.pass-result-toggle{
+  flex:0 0 auto;
+  min-height:58px;
+  padding:0 18px;
+  background:#0f1217;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+.pass-result-list{
+  flex:1 1 auto;
+  max-height:none;
+  min-height:0;
+  padding:8px;
+  overflow:auto;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+
+.pass-result-item{
+  gap:14px;
+  padding:13px 12px;
+  border-radius:8px;
+}
+
+.pass-result-info strong{
+  color:#fff;
+  font-size:13px;
+  line-height:1.2;
+}
+
+.pass-result-info span,
+.pass-result-info small{
+  font-size:11px;
+  line-height:1.35;
+}
+
+.pass-result-item > button{
+  min-height:32px;
+  padding:0 11px;
+  border-radius:7px;
+  font-size:11px;
+}
+
+.pass-locator-map-shell{
+  grid-area:map;
+  width:100%;
+  height:100%;
+  min-height:0;
+  align-self:stretch;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:0;
+  background:#9fc7df;
+  box-shadow:0 28px 80px rgba(0,0,0,.34);
+}
+
+.pass-fallback-map{
+  background:
+    radial-gradient(circle at 70% 20%, rgba(255,255,255,.44), transparent 22%),
+    linear-gradient(135deg, #c0e0f2 0%, #9cc9e5 52%, #80b8d8 100%);
+}
+
+.pass-fallback-korea{
+  left:50%;
+  top:50%;
+  width:min(36vw, 560px);
+  height:min(76vh, 680px);
+  min-width:390px;
+  opacity:.9;
+}
+
+.pass-locator-fallback-marker,
+.pass-locator-marker{
+  width:25px;
+  min-width:25px;
+  height:25px;
+  min-height:25px;
+  padding:0;
+  border:2px solid rgba(255,255,255,.96);
+  border-radius:999px 999px 999px 5px;
+  background:#101820;
+  box-shadow:0 10px 24px rgba(0,0,0,.28);
+  transform:translate(-50%, -50%) rotate(-45deg);
+}
+
+.pass-locator-fallback-marker::before,
+.pass-locator-marker::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+  transform:translate(-50%, -50%);
+}
+
+.pass-locator-fallback-marker strong,
+.pass-locator-fallback-marker span,
+.pass-locator-marker strong,
+.pass-locator-marker span{
+  display:none;
+}
+
+.pass-locator-fallback-marker:hover,
+.pass-locator-fallback-marker.is-active,
+.pass-locator-marker:hover{
+  transform:translate(-50%, -50%) rotate(-45deg) scale(1.18);
+}
+
+.pass-locator-fallback-marker::after,
+.pass-locator-marker::after{
+  content:attr(aria-label);
+  position:absolute;
+  left:22px;
+  top:-8px;
+  min-width:max-content;
+  max-width:150px;
+  padding:7px 9px;
+  border-radius:8px;
+  background:rgba(12,15,20,.92);
+  color:#fff;
+  font-size:11px;
+  font-weight:850;
+  line-height:1.1;
+  opacity:0;
+  pointer-events:none;
+  transform:rotate(45deg) translateY(4px);
+  transition:opacity .18s ease, transform .18s ease;
+  box-shadow:0 12px 24px rgba(0,0,0,.22);
+}
+
+.pass-locator-fallback-marker:hover::after,
+.pass-locator-fallback-marker.is-active::after,
+.pass-locator-marker:hover::after{
+  opacity:1;
+  transform:rotate(45deg) translateY(0);
+}
+
+.pass-marker-s-premium,
+.pass-marker-premium,
+.pass-marker-gold,
+.pass-marker-silver,
+.pass-marker-black{
+  background:#111820;
+  color:#fff;
+}
+
+.pass-marker-premium{background:#203244}
+.pass-marker-gold{background:#2c3540}
+.pass-marker-silver{background:#53606d}
+.pass-marker-s-premium{background:#173241}
+
+.pass-selected-block{
+  display:none !important;
+}
+
+@media (max-width:1180px){
+  .pass-locator-container{
+    padding:28px;
+    gap:20px 32px;
+  }
+
+  .pass-locator-intro h2{
+    font-size:clamp(30px, 3.5vw, 42px);
+  }
+
+  .pass-locator-controls{
+    gap:12px;
+  }
+}
+
+@media (max-width:900px){
+  .pass-locator-section{
+    padding:64px 0 0;
+    overflow:hidden;
+  }
+
+  .pass-locator-container{
+    display:block;
+    width:100%;
+    height:calc(100svh - 64px);
+    min-height:0;
+    padding:0;
+    background:#0b0d10;
+  }
+
+  .pass-locator-intro{
+    position:absolute;
+    left:22px;
+    top:88px;
+    z-index:6;
+    width:min(310px, calc(100% - 44px));
+    pointer-events:none;
+  }
+
+  .pass-locator-intro h2{
+    color:#111820;
+    font-size:30px;
+    text-shadow:0 1px 18px rgba(255,255,255,.45);
+  }
+
+  .pass-locator-intro p{
+    display:none;
+  }
+
+  .pass-locator-map-shell{
+    width:100%;
+    height:58vh;
+    min-height:380px;
+    border:0;
+    box-shadow:none;
+  }
+
+  .pass-fallback-korea{
+    top:44%;
+    width:390px;
+    height:440px;
+    min-width:320px;
+  }
+
+  .pass-locator-controls,
+  .pass-result-card{
+    position:relative;
+    z-index:12;
+    width:calc(100% - 24px);
+    margin:0 auto;
+  }
+
+  .pass-locator-controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:-26px;
+    padding:18px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:24px 24px 0 0;
+    background:rgba(247,249,251,.96);
+    box-shadow:0 -24px 58px rgba(0,0,0,.24);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+  }
+
+  .pass-locator-controls label > span{
+    color:#111820;
+    font-size:12px;
+  }
+
+  .pass-locator-controls select,
+  .pass-locator-controls input,
+  .pass-location-button{
+    height:46px;
+    border-color:rgba(17,24,39,.14);
+    background:#fff;
+    color:#111820;
+    font-size:13px;
+  }
+
+  .pass-search-field{
+    grid-column:1 / -1;
+  }
+
+  .pass-location-button{
+    grid-column:1 / -1;
+    background:#111820;
+    color:#fff;
+  }
+
+  .pass-result-card{
+    height:min(28vh, 250px);
+    border:0;
+    border-radius:0 0 22px 22px;
+    background:rgba(247,249,251,.96);
+    box-shadow:0 22px 48px rgba(0,0,0,.18);
+  }
+
+  .pass-result-toggle{
+    min-height:50px;
+    background:transparent;
+    color:#111820;
+    font-size:16px;
+  }
+
+  .pass-result-list{
+    border-top-color:rgba(17,24,39,.08);
+  }
+
+  .pass-result-info strong{
+    color:#111820;
+  }
+
+  .pass-result-info span,
+  .pass-result-info small{
+    color:#586273;
+  }
+}
+
+@media (max-width:560px){
+  .pass-locator-intro{
+    top:80px;
+  }
+
+  .pass-locator-intro h2{
+    font-size:27px;
+  }
+
+  .pass-locator-map-shell{
+    height:55vh;
+    min-height:340px;
+  }
+
+  .pass-fallback-korea{
+    top:42%;
+    width:335px;
+    min-width:292px;
+  }
+
+  .pass-locator-controls,
+  .pass-result-card{
+    width:calc(100% - 18px);
+  }
+
+  .pass-locator-controls{
+    padding:15px;
+    gap:10px;
+  }
+
+  .pass-result-card{
+    height:30vh;
+  }
+}
+
+@media (min-width:901px){
+  .pass-locator-container{
+    padding:0;
+    grid-template-columns:50% 50%;
+    gap:clamp(18px, 2.1vh, 28px) 0;
+  }
+
+  .pass-locator-intro,
+  .pass-locator-controls,
+  .pass-result-card{
+    margin-left:clamp(42px, 5vw, 92px);
+    margin-right:clamp(34px, 4vw, 72px);
+  }
+
+  .pass-locator-intro{
+    margin-top:clamp(46px, 6vh, 82px);
+  }
+
+  .pass-result-card{
+    margin-bottom:clamp(38px, 5vh, 70px);
+  }
+
+  .pass-locator-map-shell{
+    border-top:0;
+    border-right:0;
+    border-bottom:0;
+    border-radius:0;
+    box-shadow:-28px 0 80px rgba(0,0,0,.26);
+  }
+}
+
+/* keep the inserted facility tour and review flow visible inside the brand area */
+.brand-co-section,
+#brand #inc01{
+  overflow:visible;
+}

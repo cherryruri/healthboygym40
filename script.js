@@ -779,24 +779,24 @@ document.addEventListener("DOMContentLoaded", function(){
         window.innerWidth <= 768;
 
       const headerOffset =
-        isMobile ? 76 : 88;
+        isMobile ? 76 : 80;
 
       const availableHeight =
         Math.max(360, window.innerHeight - headerOffset);
 
       const startWidth =
         Math.min(
-          window.innerWidth * (isMobile ? 0.84 : 0.7),
-          isMobile ? 360 : 1360
+          window.innerWidth * (isMobile ? 0.86 : 0.72),
+          isMobile ? 370 : 1420
         );
 
       const startHeight =
         isMobile
-          ? clamp(availableHeight * 0.36, 220, 260)
-          : clamp(availableHeight * 0.48, 340, 450);
+          ? clamp(availableHeight * 0.36, 230, 270)
+          : clamp(availableHeight * 0.5, 360, 480);
 
       const startBottom =
-        isMobile ? -24 : -45;
+        isMobile ? -8 : 0;
 
       const expandEnd =
         isMobile ? 0.5 : 0.34;

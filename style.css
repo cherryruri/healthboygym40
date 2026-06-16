@@ -25,34 +25,40 @@ header {
 
 .navbar {
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  max-width:1380px;
-  margin:auto;
-  padding:24px 20px;
+  width:100%;
+  min-height:80px;
+  padding:0 clamp(28px, 3vw, 60px);
+  gap:clamp(34px, 4.4vw, 92px);
 }
 
 .logo a {
   color:#000;
   font-weight:900;
-  font-size:28px;
+  font-size:27px;
   text-decoration:none;
+  white-space:nowrap;
 }
 
 .menu {
   display:flex;
+  flex:1 1 auto;
+  justify-content:center;
+  align-items:center;
+  gap:clamp(22px, 2vw, 44px);
   list-style:none;
 }
 
-.menu li {margin:0 13px;}
+.menu li {margin:0;}
 
 .menu a {
   color:#111;
-  font-size:14px;
+  font-size:13px;
   font-weight:900;
   text-decoration:none;
   position:relative;
   padding-bottom:5px;
+  white-space:nowrap;
 }
 
 .menu a::after {
@@ -69,17 +75,43 @@ header {
 .menu a:hover::after {width:100%;}
 
 .download-btn {
+  flex:0 0 auto;
   border:1px solid #000;
-  padding:10px 20px;
+  padding:11px 22px;
   color:#000;
   text-decoration:none;
   font-size:13px;
   font-weight:900;
+  white-space:nowrap;
 }
 
 .download-btn:hover {
   background:#000;
   color:#fff;
+}
+
+@media(max-width:1280px){
+  .navbar{
+    padding:0 28px;
+    gap:28px;
+  }
+
+  .logo a{
+    font-size:24px;
+  }
+
+  .menu{
+    gap:18px;
+  }
+
+  .menu a{
+    font-size:12px;
+  }
+
+  .download-btn{
+    padding:10px 16px;
+    font-size:12px;
+  }
 }
 
 /* 로고 인트로 */
@@ -226,16 +258,16 @@ header {
 
 .main-content {
   display:none;
-  padding-top:88px;
+  padding-top:80px;
   background:#fff;
 }
 
 /* 인트로 */
 .intro {
   --hero-progress:0;
-  --hero-frame-width:min(70vw, 1360px);
-  --hero-frame-height:clamp(340px, 48vh, 450px);
-  --hero-frame-bottom:-45px;
+  --hero-frame-width:min(72vw, 1420px);
+  --hero-frame-height:clamp(360px, 50vh, 480px);
+  --hero-frame-bottom:0px;
   --hero-frame-radius:28px;
   --hero-title-opacity:1;
   --hero-title-shift:0px;
@@ -259,8 +291,8 @@ header {
 
 .hero-expand-sticky{
   position:sticky;
-  top:88px;
-  height:calc(100vh - 88px);
+  top:80px;
+  height:calc(100vh - 80px);
   overflow:hidden;
   background:#fff;
 }
@@ -1517,9 +1549,9 @@ footer {
   .intro {
     height:235vh;
     padding:0;
-    --hero-frame-width:min(84vw, 360px);
-    --hero-frame-height:clamp(220px, 36vh, 260px);
-    --hero-frame-bottom:-24px;
+    --hero-frame-width:min(86vw, 370px);
+    --hero-frame-height:clamp(230px, 36vh, 270px);
+    --hero-frame-bottom:-8px;
   }
 
   .hero-expand-sticky{

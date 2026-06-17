@@ -1024,6 +1024,17 @@ document.addEventListener("DOMContentLoaded", function(){
             target.getBoundingClientRect().top + window.pageYOffset - offset;
 
           window.scrollTo({top, behavior:"smooth"});
+
+          const refreshAfterExit =
+            ()=>{
+              if(window.ScrollTrigger){
+                window.ScrollTrigger.refresh();
+              }
+            };
+
+          window.requestAnimationFrame(refreshAfterExit);
+          window.setTimeout(refreshAfterExit, 160);
+          window.setTimeout(refreshAfterExit, 720);
         }
       };
 

@@ -884,3 +884,130 @@ body {
     padding-right:88px;
   }
 }
+
+/* ===== unified board typography ===== */
+:root{
+  --board-title:42px;
+  --board-card-title:20px;
+  --board-body:15px;
+  --board-meta:13px;
+}
+
+.board-page,
+.board-page button,
+.board-page input,
+.board-page select{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.board-header h1,
+.board-page[data-board-mode="official"] .board-header h1,
+.board-page[data-board-mode="consult"] .board-header h1{
+  font-size:var(--board-title) !important;
+  font-weight:800 !important;
+  line-height:1.14 !important;
+  letter-spacing:0 !important;
+}
+
+.board-header p,
+.board-page[data-board-mode="consult"] .board-header p{
+  font-size:16px !important;
+  font-weight:600 !important;
+  line-height:1.64 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.board-category-bar button,
+.write-btn,
+.search-box input,
+.search-box button{
+  font-size:14px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+}
+
+.board-title,
+.official-post-body h2,
+.consult-post-main h2{
+  font-size:var(--board-card-title) !important;
+  font-weight:800 !important;
+  line-height:1.34 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.official-post-body p,
+.consult-post-excerpt,
+.empty-text,
+.board-row,
+.board-table{
+  font-size:var(--board-body) !important;
+  font-weight:600 !important;
+  line-height:1.62 !important;
+  letter-spacing:0 !important;
+}
+
+.board-meta,
+.post-meta,
+.consult-post-meta-top,
+.consult-post-meta-bottom,
+.consult-status,
+.official-post-meta,
+.official-post-tag{
+  font-size:var(--board-meta) !important;
+  font-weight:700 !important;
+  line-height:1.35 !important;
+  letter-spacing:0 !important;
+}
+
+@media(max-width:768px){
+  :root{
+    --board-title:30px;
+    --board-card-title:18px;
+    --board-body:14px;
+    --board-meta:12px;
+  }
+
+  .board-header{
+    margin-bottom:26px;
+  }
+
+  .board-header p,
+  .board-page[data-board-mode="consult"] .board-header p{
+    font-size:14px !important;
+    line-height:1.58 !important;
+  }
+
+  .board-category-bar{
+    margin-bottom:30px;
+  }
+}
+
+/* ===== yellow board category tabs ===== */
+.board-category-bar{
+  background:#fff7bd !important;
+}
+
+.board-category-bar button{
+  color:#6f6200 !important;
+}
+
+.board-category-bar button.active{
+  background:#080808 !important;
+  color:#fff !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.14), 0 0 0 1px rgba(255,242,0,.18) !important;
+}
+
+.official-post-kicker,
+.role-admin{
+  color:#8a7900 !important;
+}
+
+.official-post-thumb strong,
+.official-post-tag{
+  background:#fff200 !important;
+  color:#111 !important;
+}

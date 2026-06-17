@@ -707,3 +707,75 @@ cursor:pointer;
   }
 
 }
+
+/* ===== unified post typography ===== */
+.post-page,
+.post-page button,
+.post-page input,
+.post-page textarea{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.post-card h1,
+#postTitle{
+  font-size:38px !important;
+  font-weight:800 !important;
+  line-height:1.18 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.post-meta,
+.comment-meta,
+.comment-author{
+  font-size:13px !important;
+  font-weight:700 !important;
+  line-height:1.4 !important;
+  letter-spacing:0 !important;
+}
+
+.post-content,
+#postContent,
+.comment-body,
+.comment-content,
+.comment-input{
+  font-size:16px !important;
+  font-weight:500 !important;
+  line-height:1.75 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.comment-section h3{
+  font-size:22px !important;
+  font-weight:800 !important;
+  line-height:1.25 !important;
+  letter-spacing:0 !important;
+}
+
+.post-actions button,
+.post-actions a,
+.comment-submit,
+.save-comment-btn,
+.cancel-comment-btn{
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+}
+
+@media(max-width:768px){
+  .post-card h1,
+  #postTitle{
+    font-size:29px !important;
+  }
+
+  .post-content,
+  #postContent,
+  .comment-body,
+  .comment-content,
+  .comment-input{
+    font-size:14px !important;
+  }
+}

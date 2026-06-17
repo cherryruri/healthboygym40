@@ -318,3 +318,67 @@ body{
     min-width:760px;
   }
 }
+
+/* ===== unified admin typography ===== */
+.admin-page,
+.admin-page button,
+.admin-page input{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.admin-header h1{
+  font-size:42px !important;
+  font-weight:800 !important;
+  line-height:1.14 !important;
+  letter-spacing:0 !important;
+}
+
+.admin-header p,
+.admin-header a{
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.35 !important;
+  letter-spacing:0 !important;
+}
+
+.admin-card-top h2{
+  font-size:24px !important;
+  font-weight:800 !important;
+  line-height:1.24 !important;
+  letter-spacing:0 !important;
+}
+
+.admin-stats span,
+.admin-card-top input,
+.user-row{
+  font-size:14px !important;
+  font-weight:650 !important;
+  line-height:1.45 !important;
+  letter-spacing:0 !important;
+}
+
+.admin-stats strong{
+  font-size:30px !important;
+  font-weight:800 !important;
+  line-height:1 !important;
+  letter-spacing:0 !important;
+}
+
+.user-head,
+.role-admin,
+.role-user{
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.35 !important;
+}
+
+@media(max-width:768px){
+  .admin-header h1{
+    font-size:30px !important;
+  }
+
+  .admin-card-top h2{
+    font-size:22px !important;
+  }
+}

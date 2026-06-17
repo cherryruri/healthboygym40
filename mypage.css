@@ -887,3 +887,82 @@ body.welcoming .mobile-bottom-nav{
   }
 }
 
+/* ===== unified mypage typography ===== */
+.mypage,
+.mypage button,
+.mypage input,
+.mypage select{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.mypage-header h1{
+  font-size:38px !important;
+  font-weight:800 !important;
+  line-height:1.14 !important;
+  letter-spacing:0 !important;
+}
+
+.profile-area h2{
+  font-size:28px !important;
+  font-weight:800 !important;
+  line-height:1.22 !important;
+  letter-spacing:0 !important;
+}
+
+.info-section h3,
+.dash-card h3,
+.joined-card h3{
+  font-size:24px !important;
+  font-weight:800 !important;
+  line-height:1.24 !important;
+  letter-spacing:0 !important;
+}
+
+.profile-area p,
+.info-row span,
+.info-row strong,
+.mypage-list li,
+.mypage-list a,
+.joined-card p{
+  font-size:14px !important;
+  font-weight:650 !important;
+  line-height:1.56 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.info-actions button,
+.dash-title-row a,
+.profile-image-remove{
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+}
+
+@media(max-width:768px){
+  .mypage-header h1{
+    font-size:22px !important;
+  }
+
+  .profile-area h2{
+    font-size:28px !important;
+  }
+
+  .info-section h3,
+  .dash-card h3,
+  .joined-card h3{
+    font-size:22px !important;
+  }
+
+  .profile-area p,
+  .info-row span,
+  .info-row strong,
+  .mypage-list li,
+  .mypage-list a,
+  .joined-card p{
+    font-size:14px !important;
+  }
+}
+

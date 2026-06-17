@@ -413,3 +413,69 @@ border-radius:6px;
     width:100%;
   }
 }
+
+/* ===== unified editor typography ===== */
+.editor-page,
+.editor-page button,
+.editor-page input,
+.editor-page textarea,
+.editor-page select{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.editor-header h1{
+  font-size:38px !important;
+  font-weight:800 !important;
+  line-height:1.14 !important;
+  letter-spacing:0 !important;
+}
+
+.editor-header p{
+  font-size:15px !important;
+  font-weight:600 !important;
+  line-height:1.6 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.editor-title-input{
+  font-size:22px !important;
+  font-weight:800 !important;
+  line-height:1.28 !important;
+  letter-spacing:0 !important;
+}
+
+.editor-content-input,
+.editor-body textarea{
+  font-size:15px !important;
+  font-weight:500 !important;
+  line-height:1.72 !important;
+  letter-spacing:0 !important;
+}
+
+.editor-actions button,
+.editor-thumbnail-field strong,
+.editor-thumbnail-drop,
+.thumbnail-remove{
+  font-size:13px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+}
+
+.editor-thumbnail-field p{
+  font-size:12px !important;
+  font-weight:600 !important;
+  line-height:1.45 !important;
+}
+
+@media(max-width:768px){
+  .editor-header h1{
+    font-size:30px !important;
+  }
+
+  .editor-title-input{
+    font-size:20px !important;
+  }
+}

@@ -1397,3 +1397,81 @@ body{
   display:block;
   margin-top:14px;
 }
+
+/* ===== unified auth typography ===== */
+.login-page,
+.login-page button,
+.login-page input,
+.login-page select{
+  font-family:'Pretendard',Arial,sans-serif;
+  letter-spacing:0;
+}
+
+.auth-box h1,
+.login-visual h2,
+.terms-start h2,
+.interest-start h2,
+.info-start h2,
+.account-start h2{
+  font-size:34px !important;
+  font-weight:800 !important;
+  line-height:1.14 !important;
+  letter-spacing:0 !important;
+}
+
+.auth-box p,
+.interest-start p,
+.info-start p,
+.account-start p,
+.member-check p,
+.agree-card p{
+  font-size:15px !important;
+  font-weight:600 !important;
+  line-height:1.6 !important;
+  letter-spacing:0 !important;
+  word-break:keep-all;
+}
+
+.auth-box small,
+.login-visual small,
+.terms-title,
+.remember,
+.text-btn,
+.terms-box{
+  font-size:12px !important;
+  font-weight:700 !important;
+  line-height:1.45 !important;
+  letter-spacing:0 !important;
+}
+
+.auth-box input,
+.auth-box select,
+.main-btn,
+.sub-btn,
+.signup-real-btn,
+.signup-arrow{
+  font-size:14px !important;
+  font-weight:800 !important;
+  line-height:1.2 !important;
+  letter-spacing:0 !important;
+}
+
+@media(max-width:768px){
+  .auth-box h1,
+  .login-visual h2,
+  .terms-start h2,
+  .interest-start h2,
+  .info-start h2,
+  .account-start h2{
+    font-size:28px !important;
+  }
+
+  .auth-box p,
+  .interest-start p,
+  .info-start p,
+  .account-start p,
+  .member-check p,
+  .agree-card p{
+    font-size:14px !important;
+  }
+}

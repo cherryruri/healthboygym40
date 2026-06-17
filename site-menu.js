@@ -54,7 +54,8 @@
     const toggleMenu = event=>{
       event.preventDefault();
       event.stopImmediatePropagation();
-      document.body.classList.toggle("menu-open");
+      const isOpen = document.body.classList.toggle("menu-open");
+      button.setAttribute("aria-expanded", String(isOpen));
     };
 
     button.onclick = toggleMenu;
@@ -125,6 +126,9 @@
 
   function closeMenu(){
     document.body.classList.remove("menu-open");
+    document
+      .querySelectorAll(".mobile-menu-btn")
+      .forEach(button=>button.setAttribute("aria-expanded", "false"));
   }
 
   function initSiteMenu(){
@@ -138,7 +142,6 @@
 
     document.addEventListener("click", event=>{
       if(event.target.closest(".mobile-menu-btn")){
-        document.body.classList.toggle("menu-open");
         return;
       }
 

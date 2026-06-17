@@ -8493,6 +8493,192 @@ html.pass-reveal-complete header{
   }
 }
 
+@media(max-width:768px){
+  .mobile-menu-btn{
+    display:flex !important;
+    position:relative;
+    z-index:2301;
+    flex:0 0 42px !important;
+    width:42px !important;
+    min-width:42px !important;
+    max-width:42px !important;
+    height:42px !important;
+    min-height:42px !important;
+    max-height:42px !important;
+    padding:0 !important;
+    margin-left:auto;
+    align-items:center;
+    justify-content:center;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    font-size:0 !important;
+    color:transparent !important;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  body.menu-open .mobile-menu-btn{
+    position:fixed;
+    top:24px;
+    right:24px;
+    z-index:2302;
+  }
+
+  .mobile-menu-btn::before,
+  .mobile-menu-btn::after{
+    content:"";
+    position:absolute;
+    left:7px;
+    width:28px;
+    height:2px;
+    border-radius:0;
+    background:#111 !important;
+    transform-origin:center;
+    transition:
+      top .24s ease,
+      transform .24s ease,
+      background-color .2s ease;
+  }
+
+  .mobile-menu-btn::before{
+    top:14px;
+  }
+
+  .mobile-menu-btn::after{
+    top:26px;
+  }
+
+  body.menu-open .mobile-menu-btn::before,
+  body.menu-open .mobile-menu-btn::after{
+    top:20px;
+    background:#fff !important;
+  }
+
+  body.menu-open .mobile-menu-btn::before{
+    transform:rotate(45deg) !important;
+  }
+
+  body.menu-open .mobile-menu-btn::after{
+    transform:rotate(-45deg) !important;
+  }
+
+  .mobile-side-menu{
+    display:flex !important;
+    flex-direction:column;
+    position:fixed;
+    top:14px;
+    right:10px !important;
+    bottom:14px;
+    width:min(76vw, 336px) !important;
+    max-width:calc(100vw - 20px) !important;
+    height:auto !important;
+    min-height:0 !important;
+    padding:0 !important;
+    z-index:2300;
+    overflow:hidden;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:14px;
+    box-shadow:0 24px 60px rgba(0,0,0,.18) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    transform:translateX(calc(100% + 24px));
+    transition:transform .34s cubic-bezier(.19,1,.22,1);
+  }
+
+  body.menu-open .mobile-side-menu{
+    right:10px !important;
+    transform:translateX(0) !important;
+  }
+
+  .mobile-auth-panel{
+    flex:0 0 clamp(204px, 31dvh, 258px);
+    min-height:0;
+    padding:clamp(38px, 6dvh, 58px) 18px 20px;
+    border-radius:14px 14px 0 0;
+    background:#000;
+  }
+
+  .mobile-close{
+    display:none !important;
+  }
+
+  .mobile-profile-upload{
+    width:clamp(66px, 18vw, 86px);
+    height:clamp(66px, 18vw, 86px);
+    margin-bottom:clamp(10px, 1.8dvh, 16px);
+  }
+
+  .mobile-profile-avatar{
+    width:100%;
+    height:100%;
+  }
+
+  .mobile-auth-title{
+    font-size:clamp(15px, 4vw, 18px) !important;
+    line-height:1.2;
+  }
+
+  .mobile-auth-links{
+    margin-top:clamp(12px, 2dvh, 18px);
+    font-size:clamp(11px, 3.1vw, 13px);
+  }
+
+  .mobile-menu-list{
+    flex:1 1 auto;
+    min-height:0 !important;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    margin:0;
+    padding:clamp(20px, 3dvh, 30px) clamp(22px, 6vw, 30px) clamp(18px, 2.8dvh, 28px);
+    border-radius:0 0 14px 14px;
+    background:rgba(0,0,0,.66);
+    backdrop-filter:blur(9px);
+    -webkit-backdrop-filter:blur(9px);
+    overflow:hidden;
+  }
+
+  .mobile-menu-section-title{
+    padding-bottom:clamp(8px, 1.3dvh, 12px);
+    margin-bottom:clamp(8px, 1.2dvh, 12px);
+  }
+
+  .mobile-menu-section-title.member{
+    margin-top:auto;
+    padding-top:clamp(18px, 2.6dvh, 28px);
+  }
+
+  .mobile-side-menu .mobile-menu-list a{
+    padding:clamp(4px, .78dvh, 8px) 0 !important;
+    font-size:clamp(15px, 4.15vw, 18px) !important;
+    line-height:1.25;
+  }
+}
+
+@media(max-width:360px){
+  .mobile-side-menu{
+    right:8px !important;
+    width:min(78vw, 300px) !important;
+    max-width:calc(100vw - 16px) !important;
+  }
+
+  body.menu-open .mobile-side-menu{
+    right:8px !important;
+  }
+
+  body.menu-open .mobile-menu-btn{
+    right:20px;
+  }
+
+  .mobile-menu-list{
+    padding-left:20px;
+    padding-right:20px;
+  }
+}
+
 /* ================= Password change page ================= */
 
 .password-change-main{

@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>게시판</title>
 
-<link rel="stylesheet" href="style.css?v=20260618-mobile-menu-fit">
-<link rel="stylesheet" href="board.css?v=500">
+<link rel="stylesheet" href="style.css?v=20260618-profile-admin">
+<link rel="stylesheet" href="board.css?v=20260618-board-tabs">
 </head>
 <body class="loaded">
 
@@ -19,12 +19,13 @@
     <ul class="menu">
       <li><a href="index.html#about">센터 소개</a></li>
       <li><a href="index.html#brand">브랜드 소개</a></li>
-      <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#pass">올패스 안내</a></li>
+      <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#trainer">트레이너 소개</a></li>
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
       <li><a href="index.html#faq">자주 묻는 질문</a></li>
 
       <li id="userMenu">
@@ -39,26 +40,23 @@
   </nav>
 </header>
 
-<section class="board-page">
+<section class="board-page" data-board-mode="consult" data-board="free">
 <div class="board-layout">
-
-  <aside class="board-sidebar">
-    <button class="board-tab active" data-board="free">수내점 건의 사항</button>
-    <button class="board-tab" data-board="praise">칭찬합니다</button>
-    <button class="board-tab" data-board="noticeboard">수내점 공지사항</button>
-    <button class="board-tab" data-board="review">리얼 후기</button>
-    <button class="board-tab" data-board="teen">동기부여 모음</button>
-    <button class="board-tab" data-board="news">헬스보이짐 뉴스</button>
-  </aside>
 
   <div class="board-main">
     <div class="board-header">
-      <h1>수내점 건의 사항</h1>
+      <h1>자유게시판</h1>
       <p id="boardDesc">
-        헬스보이짐 수내점을 이용 중인 회원분들의 자유로운 건의 사항 게시판입니다.
-        <br>
-        기본적으로 비밀글로 표시 되어 있으며 빠른 시일 내에 답변드리도록 하겠습니다.
+        헬스보이짐 수내점 회원님들의 자유로운 이야기와 후기를 확인하는 공간입니다.
       </p>
+    </div>
+
+    <div id="boardCategoryBar" class="board-category-bar">
+      <button type="button" class="active" data-category="all">전체</button>
+      <button type="button" data-category="free">자유게시판</button>
+      <button type="button" data-category="praise">칭찬합니다</button>
+      <button type="button" data-category="pt">PT후기</button>
+      <button type="button" data-category="request">건의 사항</button>
     </div>
 
     <div class="board-table">
@@ -84,9 +82,9 @@
 </div>
 </section>
 
-<script src="site-menu.js?v=20260618-mobile-menu-fit"></script>
+<script src="site-menu.js?v=20260618-profile-admin"></script>
 <script type="module" src="firebase-index.js?v=20260618-mobile-board-menu"></script>
-<script type="module" src="board.js?v=500" defer></script>
+<script type="module" src="board.js?v=20260618-board-tabs" defer></script>
 
 <script>
   window.addEventListener('load', () => {

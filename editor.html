@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>글쓰기</title>
 
-<link rel="stylesheet" href="style.css?v=20260618-mobile-menu-fit">
-<link rel="stylesheet" href="editor.css">
+<link rel="stylesheet" href="style.css?v=20260618-profile-admin">
+<link rel="stylesheet" href="editor.css?v=20260618-community-board">
 
 </head>
 
@@ -22,12 +22,13 @@
     <ul class="menu">
       <li><a href="index.html#about">센터 소개</a></li>
       <li><a href="index.html#brand">브랜드 소개</a></li>
-      <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#pass">올패스 안내</a></li>
+      <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#trainer">트레이너 소개</a></li>
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
       <li><a href="index.html#faq">자주 묻는 질문</a></li>
 
       <li id="userMenu">
@@ -51,6 +52,19 @@
   </div>
 
   <section class="editor-card">
+
+    <div class="editor-thumbnail-field" id="editorThumbnailField" hidden>
+      <div>
+        <strong>썸네일 이미지</strong>
+        <p>공지/뉴스 목록에 노출될 대표 이미지를 등록하세요.</p>
+      </div>
+      <label class="editor-thumbnail-drop">
+        <input type="file" id="postThumbnail" accept="image/*">
+        <span id="thumbnailLabel">이미지 선택</span>
+      </label>
+      <button type="button" id="removeThumbnail" class="thumbnail-remove" hidden>삭제</button>
+      <div id="thumbnailPreview" class="thumbnail-preview" hidden></div>
+    </div>
 
     <input type="text" id="postTitle" class="editor-title-input" placeholder="제목을 입력하세요">
 <div class="editor-toolbar">
@@ -116,9 +130,9 @@
 
 </main>
 
-<script src="site-menu.js?v=20260618-mobile-menu-fit"></script>
+<script src="site-menu.js?v=20260618-profile-admin"></script>
 <script type="module" src="firebase-index.js?v=20260618-mobile-board-menu"></script>
-<script type="module" src="editor.js?v=1"></script>
+<script type="module" src="editor.js?v=20260618-board-tabs"></script>
 
 </body>
 </html>

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 페이지</title>
-<link rel="stylesheet" href="style.css?v=20260618-mobile-menu-fit">
-<link rel="stylesheet" href="admin.css">
+<link rel="stylesheet" href="style.css?v=20260618-profile-admin">
+<link rel="stylesheet" href="admin.css?v=20260618-member-list">
 </head>
 
 <body>
@@ -25,6 +25,7 @@
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
       <li><a href="index.html#faq">자주 묻는 질문</a></li>
     </ul>
 
@@ -89,7 +90,9 @@
 
 </main>
 
-<script type="module" src="admin.js"></script>
+<script src="site-menu.js?v=20260618-profile-admin"></script>
+<script type="module" src="firebase-index.js?v=20260618-mobile-board-menu"></script>
+<script type="module" src="admin.js?v=20260618-member-list"></script>
 
 </body>
 </html>

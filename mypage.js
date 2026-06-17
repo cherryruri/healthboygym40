@@ -14,6 +14,7 @@ import {
   getDoc,
   updateDoc,
   setDoc,
+  deleteField,
   deleteDoc,
   collection,
   getDocs,
@@ -47,6 +48,8 @@ const logoutBtn = document.getElementById("logoutBtn");
 const avatar = document.querySelector(".my-avatar");
 const avatarImage = document.getElementById("myAvatarImage");
 const profileImageInput = document.getElementById("profileImageInput");
+const removeProfileImageBtn = document.getElementById("removeProfileImageBtn");
+const adminUsersBtn = document.getElementById("adminUsersBtn");
 const mypageRoot = document.getElementById("mypageRoot");
 const myWelcome = document.getElementById("myWelcome");
 
@@ -66,7 +69,35 @@ function renderProfileImage(photoDataUrl, fallbackText){
 
   if(avatar){
     avatar.hidden = !!photoDataUrl;
-    avatar.textContent = (fallbackText || "H").charAt(0).toUpperCase();
+    avatar.textContent = "";
+  }
+
+  if(removeProfileImageBtn){
+    removeProfileImageBtn.hidden = !photoDataUrl;
+  }
+
+  renderMobileMenuImage(photoDataUrl);
+}
+
+function renderMobileMenuImage(photoDataUrl){
+  const menuImage = document.getElementById("mobileProfileImage");
+  const menuPlaceholder = document.getElementById("mobileProfilePlaceholder");
+  const menuDelete = document.getElementById("mobileProfileDelete");
+
+  if(menuImage && photoDataUrl){
+    menuImage.src = photoDataUrl;
+    menuImage.hidden = false;
+  }else if(menuImage){
+    menuImage.removeAttribute("src");
+    menuImage.hidden = true;
+  }
+
+  if(menuPlaceholder){
+    menuPlaceholder.hidden = !!photoDataUrl;
+  }
+
+  if(menuDelete){
+    menuDelete.hidden = !photoDataUrl;
   }
 }
 
@@ -197,11 +228,9 @@ console.log("문서존재", userSnap.exists());
       setText(infoMember, data.isGymMember === "yes" ? "헬스보이짐 회원" : "비회원");
       setText(infoRole, data.role === "admin" ? "관리자" : "일반 회원");
       
-      const adminMenu = document.getElementById("adminMenu");
-
-if(adminMenu && data.role === "admin"){
-  adminMenu.style.display = "flex";
-}
+      if(adminUsersBtn && data.role === "admin"){
+        adminUsersBtn.style.display = "inline-flex";
+      }
 
       if(data.name && myName){
         myName.textContent = `${data.name}님`;
@@ -464,5 +493,32 @@ if(profileImageInput){
     }finally{
       profileImageInput.value = "";
     }
+  });
+}
+
+if(removeProfileImageBtn){
+  removeProfileImageBtn.addEventListener("click", async ()=>{
+    const user = auth.currentUser;
+
+    if(!user) return;
+    if(!confirm("프로필 사진을 삭제할까요?")) return;
+
+    try{
+      await updateDoc(doc(db, "users", user.uid), {
+        photoDataUrl: deleteField()
+      });
+
+      renderProfileImage("", infoName ? infoName.textContent : "H");
+      alert("프로필 사진이 삭제되었습니다.");
+    }catch(error){
+      console.log(error);
+      alert("프로필 사진 삭제 중 오류가 발생했습니다.");
+    }
+  });
+}
+
+if(adminUsersBtn){
+  adminUsersBtn.addEventListener("click", ()=>{
+    location.href = "admin.html";
   });
 }

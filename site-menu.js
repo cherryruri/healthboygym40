@@ -10,6 +10,7 @@
         </span>
         <span class="mobile-profile-camera" aria-hidden="true"></span>
       </label>
+      <button type="button" class="mobile-profile-delete" id="mobileProfileDelete" hidden>사진 삭제</button>
       <a href="login.html" class="mobile-auth-title" id="mobileProfileName">로그인 하기</a>
       <p id="mobileProfileText" class="mobile-auth-sub">회원 전용 메뉴를 이용해보세요.</p>
       <div class="mobile-auth-links" id="mobileGuestActions">
@@ -36,7 +37,7 @@
       <a href="index.html#faq">자주 묻는 질문</a>
       <span class="mobile-menu-section-title member">수내점 회원 전용</span>
       <a href="board.html?board=free">자유게시판</a>
-      <a href="board.html?board=noticeboard">수내점 공지문 / 뉴스</a>
+      <a href="board.html?board=noticeboard">공지문 / 뉴스</a>
     </nav>
   `;
 
@@ -107,19 +108,25 @@
         }
       });
 
-    const hasBoard =
-      Array
-        .from(menu.querySelectorAll("a"))
-        .some(link=>link.getAttribute("href") === "board.html");
+    const links = Array.from(menu.querySelectorAll("a"));
+    const hasBoard = links.some(link=>link.getAttribute("href") === "board.html");
+    const hasNotice = links.some(link=>link.getAttribute("href") === "board.html?board=noticeboard");
+
+    const loginItem =
+      menu.querySelector(".login-menu, #userMenu");
+
+    if(!hasNotice){
+      const noticeItem = document.createElement("li");
+      noticeItem.className = "notice-menu-link";
+      noticeItem.innerHTML = `<a href="board.html?board=noticeboard">공지문/뉴스</a>`;
+      menu.insertBefore(noticeItem, loginItem || null);
+    }
 
     if(hasBoard) return;
 
     const item = document.createElement("li");
     item.className = "board-menu-link";
     item.innerHTML = `<a href="board.html">게시판</a>`;
-
-    const loginItem =
-      menu.querySelector(".login-menu, #userMenu");
 
     menu.insertBefore(item, loginItem || null);
   }

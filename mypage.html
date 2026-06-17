@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="ko">
 <head>
@@ -7,8 +7,8 @@
 <title>프로필 설정</title>
 
 
-<link rel="stylesheet" href="style.css?v=20260618-mobile-menu-fit">
-<link rel="stylesheet" href="mypage.css?v=20260618-mobile-board-menu">
+<link rel="stylesheet" href="style.css?v=20260618-profile-admin">
+<link rel="stylesheet" href="mypage.css?v=20260618-profile-admin">
 
 </head>
 
@@ -42,6 +42,7 @@
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
       <li><a href="index.html#faq">자주 묻는 질문</a></li>
 
       <li class="login-menu" id="userMenu">
@@ -122,12 +123,13 @@
   <div class="top-profile-wrap">
 
   <section class="profile-area">
-    <label class="profile-image profile-image-edit" for="profileImageInput">
+    <label class="profile-image profile-image-edit" for="profileImageInput" aria-label="프로필 사진 변경">
       <img id="myAvatarImage" class="my-avatar-image" alt="" hidden>
-      <span class="my-avatar">N</span>
-      <span class="profile-image-action">사진 변경</span>
+      <span class="my-avatar" aria-hidden="true"></span>
+      <span class="profile-camera" aria-hidden="true"></span>
     </label>
     <input type="file" id="profileImageInput" class="profile-image-input" accept="image/*">
+    <button type="button" id="removeProfileImageBtn" class="profile-image-remove" hidden>사진 삭제</button>
 
     <h2 id="myName">회원님</h2>
     <p id="myId">HEALTHBOYGYM SUNAE</p>
@@ -165,6 +167,7 @@
   <button type="button" id="editProfileBtn">수정하기</button>
   <button type="button" id="saveProfileBtn" style="display:none;">저장하기</button>
   <button type="button" id="changePasswordBtn">비밀번호 수정</button>
+  <button type="button" id="adminUsersBtn" style="display:none;">가입 회원 목록</button>
   <button type="button" id="deleteAccountBtn" class="danger">탈퇴하기</button>
 </div>
   </section>
@@ -226,8 +229,8 @@
 
 </main>
 
-<script src="site-menu.js?v=20260618-mobile-menu-fit"></script>
-<script type="module" src="mypage.js?v=20260618-mobile-board-menu"></script>
+<script src="site-menu.js?v=20260618-profile-admin"></script>
+<script type="module" src="mypage.js?v=20260618-profile-admin"></script>
 <script src="script.js?v=2"></script>
 <script type="module" src="./firebase-index.js?v=20260618-mobile-board-menu"></script>
 

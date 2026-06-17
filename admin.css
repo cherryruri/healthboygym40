@@ -166,3 +166,155 @@ body{
 .admin-page{
   padding-top:140px;
 }
+
+/* ===== board-like member list redesign ===== */
+body{
+  background:#fafafa;
+  color:#111;
+}
+
+.admin-page{
+  max-width:1180px;
+  padding:150px 24px 120px;
+}
+
+.admin-header{
+  justify-content:center;
+  text-align:center;
+  margin-bottom:42px;
+}
+
+.admin-header p{
+  color:#007f6b;
+}
+
+.admin-header h1{
+  color:#111;
+  font-size:clamp(40px, 5vw, 58px);
+  letter-spacing:-.05em;
+}
+
+.admin-header a{
+  position:absolute;
+  right:24px;
+  color:#111;
+  border-color:#ddd;
+  background:#fff;
+  font-weight:900;
+}
+
+.admin-stats{
+  max-width:520px;
+  margin:0 auto 36px;
+}
+
+.admin-stats div{
+  background:#fff;
+  border:1px solid #eee;
+  border-radius:18px;
+  box-shadow:0 14px 34px rgba(0,0,0,.04);
+}
+
+.admin-stats span{
+  color:#777;
+  font-weight:900;
+}
+
+.admin-stats strong{
+  color:#111;
+}
+
+.admin-card{
+  background:#fff;
+  border:0;
+  border-radius:0;
+  box-shadow:none;
+  padding:0;
+}
+
+.admin-card-top{
+  margin-bottom:24px;
+  padding-bottom:24px;
+  border-bottom:2px solid #111;
+}
+
+.admin-card-top h2{
+  color:#111;
+  font-size:28px;
+  font-weight:950;
+}
+
+.admin-card-top input{
+  width:min(100%, 360px);
+  height:54px;
+  background:#f5f5f7;
+  color:#111;
+  border:0;
+  border-radius:16px;
+  font-weight:800;
+  text-align:center;
+}
+
+.user-table{
+  background:#fff;
+}
+
+.user-row{
+  grid-template-columns:1fr 1fr 1.2fr 1.2fr 1.2fr .7fr;
+  min-height:64px;
+  align-items:center;
+  gap:12px;
+  padding:16px 18px;
+  border-bottom:1px solid #ececec;
+  color:#333;
+  font-size:14px;
+  font-weight:700;
+}
+
+.user-head{
+  color:#888;
+  background:#fafafa;
+  font-size:13px;
+}
+
+.user-item:hover{
+  background:#fafafa;
+}
+
+.role-admin{
+  color:#007f6b;
+}
+
+.role-user{
+  color:#777;
+}
+
+@media(max-width:768px){
+  .admin-page{
+    padding:108px 18px 90px;
+  }
+
+  .admin-header{
+    align-items:center;
+  }
+
+  .admin-header a{
+    position:static;
+  }
+
+  .admin-stats{
+    max-width:none;
+  }
+
+  .admin-card-top{
+    align-items:stretch;
+  }
+
+  .user-table{
+    overflow-x:auto;
+  }
+
+  .user-row{
+    min-width:760px;
+  }
+}

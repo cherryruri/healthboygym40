@@ -1,4 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import {
+  initializeApp,
+  getApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
   getAuth,
@@ -33,13 +37,15 @@ const firebaseConfig = {
   measurementId: "G-4CJK3XF633"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 /* ================= STATE ================= */
 
 let currentUser = null;
+let currentUserData = null;
+let currentPost = null;
 
 const postId = new URLSearchParams(location.search).get("id");
 
@@ -57,9 +63,32 @@ const commentBtn = document.getElementById("commentBtn");
 
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
+  currentUserData = await loadUserData(user);
   loadPost();
   loadComments();
 });
+
+async function loadUserData(user){
+  if(!user) return null;
+
+  try{
+    const snap = await getDoc(doc(db, "users", user.uid));
+    return snap.exists() ? snap.data() : null;
+  }catch(error){
+    console.log(error);
+    return null;
+  }
+}
+
+function isAdmin(){
+  return currentUserData && currentUserData.role === "admin";
+}
+
+function isRequestPost(post){
+  if(!post) return false;
+  if(post.category === "request") return true;
+  return post.board === "free" && (post.isSecret || post.isPublic === false);
+}
 
 async function loadPost() {
 
@@ -72,6 +101,7 @@ async function loadPost() {
   }
 
   const data = snap.data();
+  currentPost = data;
 
   titleEl.textContent = data.title;
   writerEl.textContent = data.writerId || "회원";
@@ -176,9 +206,19 @@ commentBtn.addEventListener("click", async ()=>{
     {
       text: commentText.value,
       writer: currentUser.email.split("@")[0],
+      writerUid: currentUser.uid,
+      writerRole: isAdmin() ? "admin" : "user",
       createdAt: serverTimestamp()
     }
   );
+
+  if(isAdmin() && isRequestPost(currentPost)){
+    await updateDoc(doc(db, "boards", postId), {
+      isAnswered: true,
+      answeredAt: serverTimestamp(),
+      answeredBy: currentUser.uid
+    });
+  }
 
   commentText.value = "";
   loadComments();

@@ -1,4 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import {
+  initializeApp,
+  getApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
   getAuth,
@@ -8,6 +12,8 @@ import {
 import {
   getFirestore,
   collection,
+  doc,
+  getDoc,
   getDocs,
   query,
   where,
@@ -24,264 +30,587 @@ const firebaseConfig = {
   measurementId: "G-4CJK3XF633"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const officialBoards = new Set(["noticeboard", "news"]);
+const communityBoards = ["free", "praise", "review"];
+
 let currentUser = null;
-let currentBoard = new URLSearchParams(location.search).get("board") || "free";
+let currentUserData = null;
+const initialBoard = new URLSearchParams(location.search).get("board") || "free";
+let currentBoard = officialBoards.has(initialBoard) ? "noticeboard" : "free";
+let currentPage = 1;
+let currentCategory =
+  initialBoard === "praise"
+    ? "praise"
+    : initialBoard === "review"
+      ? "pt"
+      : initialBoard === "news"
+        ? "news"
+        : officialBoards.has(initialBoard)
+          ? "notice"
+          : "all";
+let allPosts = [];
 
-// 각 메뉴별 설명문 상시 변경용 데이터베이스
-const boardDescriptions = {
-  "free": "헬스보이짐 수내점을 이용 중인 회원분들의 자유로운 건의 사항 게시판입니다. 기본적으로 비밀글로 표시 되어 있으며 빠른 시일 내에 답변드리도록 하겠습니다.",
-  "praise": "트레이너와 직원들을 칭찬하고 따뜻한 격려를 나누는 공간입니다. 회원님의 한마디가 저희 팀에게 가장 큰 보람과 에너지가 됩니다.",
-  "noticeboard": "헬스보이짐 수내점의 새로운 소식과 정기 휴무, 센터 운영에 관한 공식 공지사항을 안내해 드리는 공간입니다.",
-  "review": "회원님들이 직접 경험하고 작성해주신 100% 리얼 운동 후기입니다. 변화된 모습과 생생한 스토리를 만나보세요!",
-  "teen": "지치고 나태해질 때마다 꺼내보는 운동 자극 공간입니다. 매일 업데이트되는 동기부여 영상과 글로 득근 본능을 깨워보세요.",
-  "news": "헬스보이짐 전체 지점의 핫한 소식과 프로모션, 헬스 트렌드 및 유용한 건강 정보를 가장 빠르게 전해드립니다."
-};
-
-// 페이징 셋업 관련 변수
-let allPosts = [];       
-let currentPage = 1;     
-const postsPerPage = 20; 
-
+const postsPerPage = 20;
 const postList = document.getElementById("postList");
+const noticeList = document.getElementById("noticeList");
 const paginationContainer = document.getElementById("pagination");
 const writeBtn = document.getElementById("writeBtn");
-const boardDesc = document.getElementById("boardDesc"); 
+const boardDesc = document.getElementById("boardDesc");
+const boardSearch = document.getElementById("boardSearch");
+const boardPage = document.querySelector(".board-page");
+const boardHeader = document.querySelector(".board-header");
+const boardTitle = document.querySelector(".board-header h1");
 
-onAuthStateChanged(auth, (user)=>{
+let boardCategoryBar = document.getElementById("boardCategoryBar");
+
+const boardMeta = {
+  free: {
+    title: "자유게시판",
+    desc: "수내점 회원님들의 자유로운 이야기와 칭찬, PT 후기, 건의 사항을 확인하는 공간입니다.",
+    mode: "consult",
+    categories: [
+      ["all", "전체"],
+      ["free", "자유게시판"],
+      ["praise", "칭찬합니다"],
+      ["pt", "PT후기"],
+      ["request", "건의 사항"]
+    ]
+  },
+  praise: {
+    title: "칭찬합니다",
+    desc: "트레이너와 직원들을 칭찬하고 따뜻한 격려를 나누는 공간입니다.",
+    mode: "table"
+  },
+  noticeboard: {
+    title: "공지문 / 뉴스",
+    desc: "헬스보이짐 수내점의 중요한 소식과 업데이트된 정보를 빠르고 정확하게 확인하실 수 있습니다.",
+    mode: "official",
+    categories: [
+      ["notice", "공지문"],
+      ["news", "센터소식"],
+      ["trainer", "이달의 트레이너"]
+    ]
+  },
+  review: {
+    title: "리얼 후기",
+    desc: "회원님들이 직접 경험하고 작성해주신 100% 리얼 운동 후기입니다.",
+    mode: "table"
+  },
+  teen: {
+    title: "동기부여 모음",
+    desc: "지치고 나태해질 때마다 꺼내보는 운동 자극 공간입니다.",
+    mode: "table"
+  },
+  news: {
+    title: "헬스보이짐 뉴스",
+    desc: "헬스보이짐의 소식과 프로모션, 건강 정보를 가장 빠르게 전해드립니다.",
+    mode: "official",
+    categories: [
+      ["all", "전체"],
+      ["notice", "공지사항"],
+      ["news", "센터소식"]
+    ]
+  }
+};
+
+function getMeta(){
+  return boardMeta[currentBoard] || boardMeta.free;
+}
+
+function isAdmin(){
+  return currentUserData && currentUserData.role === "admin";
+}
+
+function escapeHTML(value){
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatDate(post){
+  if(post.createdAt && post.createdAt.toDate){
+    return post.createdAt.toDate().toISOString().slice(0, 10).replace(/-/g, ". ");
+  }
+
+  return "-";
+}
+
+function getPostCategory(post){
+  if(post.category) return post.category;
+
+  if(post.board === "praise") return "praise";
+  if(post.board === "review") return "pt";
+  if(post.board === "news") return "news";
+  if(post.isNotice || post.board === "noticeboard") return "notice";
+  if(post.board === "free" && (post.isSecret || post.isPublic === false)) return "request";
+
+  return "free";
+}
+
+function getPostCategoryLabel(post){
+  const category = getPostCategory(post);
+
+  if(category === "praise") return "칭찬합니다";
+  if(category === "pt") return "PT후기";
+  if(category === "trainer") return "이달의 트레이너";
+  if(category === "news") return "센터소식";
+  if(category === "request") return "건의사항";
+  if(category === "free") return "자유게시판";
+  return "공지문";
+}
+
+function canWriteCurrentBoard(){
+  if(officialBoards.has(currentBoard)) return isAdmin();
+  return true;
+}
+
+function updateWriteButton(){
+  if(!writeBtn) return;
+
+  const official = officialBoards.has(currentBoard);
+  const canWrite = canWriteCurrentBoard();
+
+  writeBtn.hidden = official && !canWrite;
+  writeBtn.textContent = official ? "공지 작성" : "글쓰기";
+}
+
+function ensureCategoryBar(){
+  if(!boardHeader) return null;
+
+  if(!boardCategoryBar){
+    boardCategoryBar = document.createElement("div");
+    boardCategoryBar.id = "boardCategoryBar";
+    boardCategoryBar.className = "board-category-bar";
+    boardHeader.insertAdjacentElement("afterend", boardCategoryBar);
+  }
+
+  return boardCategoryBar;
+}
+
+function updateCategoryBar(){
+  const meta = getMeta();
+  const bar = ensureCategoryBar();
+
+  if(!bar) return;
+
+  if(!Array.isArray(meta.categories)){
+    bar.hidden = true;
+    bar.innerHTML = "";
+    currentCategory = "all";
+    return;
+  }
+
+  if(!meta.categories.some(([value])=>value === currentCategory)){
+    currentCategory = meta.categories[0][0];
+  }
+
+  bar.hidden = false;
+  bar.innerHTML = meta.categories
+    .map(([value, label])=>`
+      <button type="button" class="${currentCategory === value ? "active" : ""}" data-category="${value}">
+        ${escapeHTML(label)}
+      </button>
+    `)
+    .join("");
+}
+
+function updateBoardInfo(){
+  const meta = getMeta();
+
+  if(boardTitle){
+    boardTitle.textContent = meta.title;
+  }
+
+  if(boardDesc){
+    boardDesc.innerHTML = escapeHTML(meta.desc);
+  }
+
+  if(boardPage){
+    boardPage.dataset.boardMode = meta.mode;
+    boardPage.dataset.board = currentBoard;
+  }
+
+  document.body.dataset.boardMode = meta.mode;
+  document.body.dataset.board = currentBoard;
+
+  updateCategoryBar();
+  updateWriteButton();
+}
+
+async function loadUserData(user){
+  if(!user) return null;
+
+  try{
+    const snap = await getDoc(doc(db, "users", user.uid));
+    return snap.exists() ? snap.data() : null;
+  }catch(error){
+    console.log(error);
+    return null;
+  }
+}
+
+onAuthStateChanged(auth, async user=>{
   currentUser = user;
+  currentUserData = await loadUserData(user);
+  updateBoardInfo();
   loadPosts();
-  updateBoardInfo(); 
 });
 
-// 메뉴 탭 스위칭 컨트롤러
 document.querySelectorAll(".board-tab").forEach(tab=>{
   if(tab.dataset.board === currentBoard){
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
-
-    const boardTitle = document.querySelector(".board-header h1");
-
-    if(boardTitle){
-      boardTitle.textContent = tab.textContent.trim();
-    }
   }
 
-  tab.addEventListener("click", function(){
+  tab.addEventListener("click", ()=>{
     currentBoard = tab.dataset.board;
+    currentPage = 1;
+    currentCategory = "all";
     history.replaceState(null, "", `board.html?board=${currentBoard}`);
 
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
 
-    const boardTitle = document.querySelector(".board-header h1");
-    if (boardTitle) {
-      boardTitle.classList.remove("fade-in-text");
-      void boardTitle.offsetWidth;
-      boardTitle.textContent = tab.textContent.trim();
-      boardTitle.classList.add("fade-in-text");
-    }
-
     updateBoardInfo();
-    currentPage = 1; 
     loadPosts();
   });
 });
 
-function updateBoardInfo() {
-  if (boardDesc) {
-    boardDesc.innerHTML = boardDescriptions[currentBoard] || "헬스보이짐 수내점 커뮤니티입니다.";
-  }
+document.addEventListener("click", event=>{
+  const categoryButton = event.target.closest("#boardCategoryBar button");
+
+  if(!categoryButton) return;
+
+  currentCategory = categoryButton.dataset.category || "all";
+  currentPage = 1;
+  updateCategoryBar();
+  renderPage(currentPage);
+});
+
+if(boardSearch){
+  boardSearch.addEventListener("input", ()=>{
+    currentPage = 1;
+    renderPage(currentPage);
+  });
 }
 
 if(writeBtn){
   writeBtn.addEventListener("click", ()=>{
+    if(officialBoards.has(currentBoard) && !isAdmin()){
+      alert("관리자만 공지와 뉴스를 작성할 수 있습니다.");
+      return;
+    }
+
     if(!currentUser){
       alert("로그인한 회원만 글을 쓸 수 있습니다.");
       location.href = "login.html";
       return;
     }
-    location.href = `editor.html?board=${currentBoard}`;
+
+    location.href = `editor.html?${getWriteQueryString()}`;
   });
+}
+
+updateBoardInfo();
+
+function getWriteQueryString(){
+  if(currentBoard === "noticeboard"){
+    if(currentCategory === "news"){
+      return "board=news&category=news";
+    }
+
+    if(currentCategory === "trainer"){
+      return "board=noticeboard&category=trainer";
+    }
+
+    return "board=noticeboard&category=notice";
+  }
+
+  if(currentCategory === "praise"){
+    return "board=praise&category=praise";
+  }
+
+  if(currentCategory === "pt"){
+    return "board=review&category=pt";
+  }
+
+  if(currentCategory === "request"){
+    return "board=free&category=request";
+  }
+
+  return "board=free&category=free";
+}
+
+function getQueryBoards(){
+  if(currentBoard === "free") return communityBoards;
+  if(currentBoard === "noticeboard") return ["noticeboard", "news"];
+  return [currentBoard];
 }
 
 async function loadPosts(){
   if(!postList) return;
 
   postList.innerHTML = "";
+  if(noticeList) noticeList.innerHTML = "";
   if(paginationContainer) paginationContainer.innerHTML = "";
 
-  const q = query(
-    collection(db, "boards"),
-    where("board", "==", currentBoard),
-    orderBy("createdAt", "desc")
-  );
+  try{
+    const boards = getQueryBoards();
+    const q =
+      boards.length > 1
+        ? query(
+            collection(db, "boards"),
+            where("board", "in", boards),
+            orderBy("createdAt", "desc")
+          )
+        : query(
+            collection(db, "boards"),
+            where("board", "==", boards[0]),
+            orderBy("createdAt", "desc")
+          );
 
-  const snap = await getDocs(q);
-
-  if(snap.empty){
-    postList.innerHTML = `
-      <div class="board-row">
-        <div>-</div>
-        <div class="board-title">등록된 글이 없습니다.</div>
-        <div>-</div>
-        <div>-</div>
-        <div>-</div>
-      </div>
-    `;
+    const snap = await getDocs(q);
     allPosts = [];
-    setupPagination();
+
+    snap.forEach(docSnap=>{
+      allPosts.push({
+        id: docSnap.id,
+        data: docSnap.data()
+      });
+    });
+
+    renderPage(currentPage);
+  }catch(error){
+    console.log(error);
+    postList.innerHTML = `<div class="board-empty">게시글을 불러오지 못했습니다.</div>`;
+  }
+}
+
+function getVisiblePosts(){
+  const search = boardSearch ? boardSearch.value.trim().toLowerCase() : "";
+  const meta = getMeta();
+
+  return allPosts.filter(({ data })=>{
+    const category = getPostCategory(data);
+    const categoryMatches =
+      currentCategory === "all" ||
+      category === currentCategory ||
+      (meta.mode === "official" && currentCategory === "notice" && data.isNotice);
+
+    const searchMatches =
+      !search ||
+      String(data.title || "").toLowerCase().includes(search) ||
+      String(data.content || "").toLowerCase().includes(search) ||
+      String(data.writerId || "").toLowerCase().includes(search);
+
+    return categoryMatches && searchMatches;
+  });
+}
+
+function canOpenPost(post){
+  if(!post.isSecret) return true;
+  if(isAdmin()) return true;
+  return currentUser && currentUser.uid === post.writerUid;
+}
+
+function openPost(docId, post){
+  if(!canOpenPost(post)){
+    alert("비밀글입니다. 작성자만 볼 수 있어요.");
     return;
   }
 
-  allPosts = [];
-  snap.forEach(docSnap => {
-    allPosts.push({
-      id: docSnap.id,
-      data: docSnap.data()
-    });
-  });
-
-  renderPage(currentPage);
+  location.href = `post.html?id=${docId}`;
 }
 
-function renderPage(page) {
-  if (!postList) return;
+function renderPage(page){
+  if(!postList) return;
+
   postList.innerHTML = "";
-  
-  if (allPosts.length === 0) {
-    setupPagination();
+
+  const meta = getMeta();
+  const posts = getVisiblePosts();
+
+  if(posts.length === 0){
+    postList.innerHTML = `<div class="board-empty">등록된 글이 없습니다.</div>`;
+    setupPagination(posts.length);
     return;
   }
 
   const startIndex = (page - 1) * postsPerPage;
-  const endIndex = Math.min(startIndex + postsPerPage, allPosts.length);
-  
-  let no = allPosts.length - startIndex;
+  const endIndex = Math.min(startIndex + postsPerPage, posts.length);
+  const pagePosts = posts.slice(startIndex, endIndex);
 
-  for (let i = startIndex; i < endIndex; i++) {
-    const docId = allPosts[i].id;
-    const post = allPosts[i].data;
+  if(meta.mode === "official"){
+    renderOfficialPosts(pagePosts);
+  }else if(meta.mode === "consult"){
+    renderConsultPosts(pagePosts, startIndex);
+  }else{
+    renderTablePosts(pagePosts, startIndex, posts.length);
+  }
 
-    const date = post.createdAt && post.createdAt.toDate
-      ? post.createdAt.toDate().toISOString().slice(0,10)
-      : "-";
+  setupPagination(posts.length);
+}
 
+function renderOfficialPosts(posts){
+  const list = document.createElement("div");
+  list.className = "official-post-grid";
+
+  posts.forEach(({ id, data })=>{
+    const card = document.createElement("article");
+    card.className = "official-post-card board-post";
+
+    const label = getPostCategoryLabel(data);
+    const title = escapeHTML(data.title);
+    const date = formatDate(data);
+    const thumb = data.thumbnailDataUrl;
+
+    card.innerHTML = `
+      <div class="official-post-thumb ${thumb ? "" : "no-thumb"}">
+        ${thumb ? `<img src="${thumb}" alt="">` : `<span>${escapeHTML(label)}</span>`}
+        <strong>${escapeHTML(label)}</strong>
+      </div>
+      <div class="official-post-body">
+        <span class="official-post-kicker">${escapeHTML(label)}</span>
+        <h2>${title}</h2>
+        <time>${date}</time>
+      </div>
+    `;
+
+    card.addEventListener("click", ()=>openPost(id, data));
+    list.appendChild(card);
+  });
+
+  postList.appendChild(list);
+}
+
+function renderConsultPosts(posts){
+  const list = document.createElement("div");
+  list.className = "consult-post-list";
+
+  posts.forEach(({ id, data })=>{
+    const card = document.createElement("article");
+    card.className = "consult-post-card board-post";
+
+    const label = getPostCategoryLabel(data);
+    const isRequest = getPostCategory(data) === "request" && currentCategory === "request";
+    const status = data.answer || data.isAnswered ? "상담완료" : "상담대기";
+    const locked = data.isPublic ? "" : "비밀글";
+
+    if(isRequest){
+      card.classList.add("has-status");
+    }
+
+    card.innerHTML = `
+      <div class="consult-post-meta-top">${escapeHTML(label)}</div>
+      <div class="consult-post-main">
+        <h2>${escapeHTML(data.title)}</h2>
+        ${isRequest ? `<span class="consult-status ${status === "상담완료" ? "done" : ""}">${status}</span>` : ""}
+      </div>
+      <div class="consult-post-meta-bottom">
+        <span>${escapeHTML(data.writerId || "회원")}</span>
+        <time>${formatDate(data)}</time>
+        ${locked ? `<em>${locked}</em>` : ""}
+      </div>
+    `;
+
+    card.addEventListener("click", ()=>openPost(id, data));
+    list.appendChild(card);
+  });
+
+  postList.appendChild(list);
+}
+
+function renderTablePosts(posts, startIndex, totalCount){
+  let no = totalCount - startIndex;
+
+  posts.forEach(({ id, data })=>{
     const row = document.createElement("div");
     row.className = "board-row board-post";
 
     row.innerHTML = `
-      <div>${post.isNotice ? "공지" : no}</div>
-      <div class="board-title">${post.isPublic ? "" : "🔒"} ${post.title}</div>
-      <div>${post.writerId || "회원"}</div>
-      <div>${date}</div>
-      <div>${post.views || 0}</div>
+      <div>${data.isNotice ? "공지" : no}</div>
+      <div class="board-title">${data.isPublic ? "" : "비밀"} ${escapeHTML(data.title)}</div>
+      <div>${escapeHTML(data.writerId || "회원")}</div>
+      <div>${formatDate(data)}</div>
+      <div>${data.views || 0}</div>
     `;
 
-    row.addEventListener("click", () => {
-      const isWriter = currentUser && currentUser.uid === post.writerUid;
-      if (post.isSecret && !isWriter) {
-        alert("🔒 비밀글입니다. 작성자만 볼 수 있어요.");
-        return;
-      }
-      location.href = `post.html?id=${docId}`;
-    });
-
+    row.addEventListener("click", ()=>openPost(id, data));
     postList.appendChild(row);
 
-    if(!post.isNotice){
+    if(!data.isNotice){
       no--;
     }
-  }
-
-  setupPagination();
+  });
 }
 
-function setupPagination() {
-  if (!paginationContainer) return;
+function setupPagination(totalCount){
+  if(!paginationContainer) return;
+
   paginationContainer.innerHTML = "";
 
-  const actualTotalPages = Math.ceil(allPosts.length / postsPerPage) || 1; 
-  const displayTotalPages = Math.max(actualTotalPages, 5); 
+  const actualTotalPages = Math.ceil(totalCount / postsPerPage) || 1;
+  const displayTotalPages = Math.max(actualTotalPages, 5);
 
-  // 1. [<<]
-  const firstBtn = document.createElement("button");
-  firstBtn.innerHTML = "&lt;&lt;";
-  firstBtn.className = "page-arrow";
-  firstBtn.disabled = currentPage === 1;
-  firstBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage = 1;
-      renderPage(currentPage);
-      window.scrollTo(0, 0);
-    }
+  const makeButton = (label, className, disabled, onClick)=>{
+    const button = document.createElement("button");
+    button.innerHTML = label;
+    if(className) button.className = className;
+    button.disabled = disabled;
+    button.addEventListener("click", onClick);
+    paginationContainer.appendChild(button);
+  };
+
+  makeButton("&lt;&lt;", "page-arrow", currentPage === 1, ()=>{
+    currentPage = 1;
+    renderPage(currentPage);
+    window.scrollTo(0, 0);
   });
-  paginationContainer.appendChild(firstBtn);
 
-  // 2. [<]
-  const prevBtn = document.createElement("button");
-  prevBtn.innerHTML = "&lt;";
-  prevBtn.className = "page-arrow";
-  prevBtn.disabled = currentPage === 1; 
-  prevBtn.addEventListener("click", () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderPage(currentPage);
-      window.scrollTo(0, 0); 
-    }
+  makeButton("&lt;", "page-arrow", currentPage === 1, ()=>{
+    currentPage = Math.max(1, currentPage - 1);
+    renderPage(currentPage);
+    window.scrollTo(0, 0);
   });
-  paginationContainer.appendChild(prevBtn);
 
-  // 3. [숫자 번호판]
-  for (let i = 1; i <= displayTotalPages; i++) {
+  for(let i = 1; i <= displayTotalPages; i++){
     const pageBtn = document.createElement("button");
     pageBtn.innerText = i;
-    
-    if (i > actualTotalPages) {
+
+    if(i > actualTotalPages){
       pageBtn.classList.add("dummy-page");
-      pageBtn.disabled = true; 
-    } else if (i === currentPage) {
-      pageBtn.className = "active"; 
+      pageBtn.disabled = true;
+    }else if(i === currentPage){
+      pageBtn.className = "active";
     }
 
-    pageBtn.addEventListener("click", () => {
-      if (i <= actualTotalPages) {
+    pageBtn.addEventListener("click", ()=>{
+      if(i <= actualTotalPages){
         currentPage = i;
         renderPage(currentPage);
         window.scrollTo(0, 0);
       }
     });
+
     paginationContainer.appendChild(pageBtn);
   }
 
-  // 4. [>]
-  const nextBtn = document.createElement("button");
-  nextBtn.innerHTML = "&gt;";
-  nextBtn.className = "page-arrow";
-  nextBtn.disabled = currentPage === actualTotalPages; 
-  nextBtn.addEventListener("click", () => {
-    if (currentPage < actualTotalPages) {
-      currentPage++;
-      renderPage(currentPage);
-      window.scrollTo(0, 0);
-    }
+  makeButton("&gt;", "page-arrow", currentPage === actualTotalPages, ()=>{
+    currentPage = Math.min(actualTotalPages, currentPage + 1);
+    renderPage(currentPage);
+    window.scrollTo(0, 0);
   });
-  paginationContainer.appendChild(nextBtn);
 
-  // 5. [>>]
-  const lastBtn = document.createElement("button");
-  lastBtn.innerHTML = "&gt;&gt;";
-  lastBtn.className = "page-arrow";
-  lastBtn.disabled = currentPage === actualTotalPages;
-  lastBtn.addEventListener("click", () => {
-    if (currentPage < actualTotalPages) {
-      currentPage = actualTotalPages;
-      renderPage(currentPage);
-      window.scrollTo(0, 0);
-    }
+  makeButton("&gt;&gt;", "page-arrow", currentPage === actualTotalPages, ()=>{
+    currentPage = actualTotalPages;
+    renderPage(currentPage);
+    window.scrollTo(0, 0);
   });
-  paginationContainer.appendChild(lastBtn);
 }

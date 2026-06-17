@@ -14,7 +14,9 @@ import {
   getFirestore,
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  updateDoc,
+  deleteField
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -42,6 +44,10 @@ function getUserName(user, data){
 function setAvatar(photoDataUrl){
   const image = document.getElementById("mobileProfileImage");
   const placeholder = document.getElementById("mobileProfilePlaceholder");
+  const deleteButton = document.getElementById("mobileProfileDelete");
+  const pageImage = document.getElementById("myAvatarImage");
+  const pagePlaceholder = document.querySelector(".my-avatar");
+  const pageDelete = document.getElementById("removeProfileImageBtn");
 
   if(image && photoDataUrl){
     image.src = photoDataUrl;
@@ -53,6 +59,26 @@ function setAvatar(photoDataUrl){
 
   if(placeholder){
     placeholder.hidden = !!photoDataUrl;
+  }
+
+  if(deleteButton){
+    deleteButton.hidden = !photoDataUrl;
+  }
+
+  if(pageImage && photoDataUrl){
+    pageImage.src = photoDataUrl;
+    pageImage.hidden = false;
+  }else if(pageImage){
+    pageImage.removeAttribute("src");
+    pageImage.hidden = true;
+  }
+
+  if(pagePlaceholder){
+    pagePlaceholder.hidden = !!photoDataUrl;
+  }
+
+  if(pageDelete){
+    pageDelete.hidden = !photoDataUrl;
   }
 }
 
@@ -115,6 +141,7 @@ function setMobileUserMenu(user, data){
   const mobileUserActions = document.getElementById("mobileUserActions");
   const mobileProfileInput = document.getElementById("mobileProfileInput");
   const mobileProfileUploadLabel = document.getElementById("mobileProfileUploadLabel");
+  const mobileProfileDelete = document.getElementById("mobileProfileDelete");
 
   if(user){
     const name = getUserName(user, data);
@@ -141,6 +168,7 @@ function setMobileUserMenu(user, data){
     if(mobileUserActions) mobileUserActions.hidden = false;
     if(mobileProfileInput) mobileProfileInput.disabled = false;
     if(mobileProfileUploadLabel) mobileProfileUploadLabel.classList.add("is-editable");
+    if(mobileProfileDelete) mobileProfileDelete.disabled = false;
 
     setAvatar(data && data.photoDataUrl);
   }else{
@@ -166,6 +194,7 @@ function setMobileUserMenu(user, data){
     if(mobileUserActions) mobileUserActions.hidden = true;
     if(mobileProfileInput) mobileProfileInput.disabled = true;
     if(mobileProfileUploadLabel) mobileProfileUploadLabel.classList.remove("is-editable");
+    if(mobileProfileDelete) mobileProfileDelete.disabled = true;
 
     setAvatar("");
   }
@@ -188,6 +217,35 @@ onAuthStateChanged(auth, async user=>{
 
   setUserMenu(user, data);
   setMobileUserMenu(user, data);
+});
+
+document.addEventListener("click", async event=>{
+  const deleteButton = event.target.closest("#mobileProfileDelete");
+
+  if(!deleteButton) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+
+  const user = auth.currentUser;
+
+  if(!user){
+    alert("로그인 후 프로필 사진을 삭제할 수 있습니다.");
+    return;
+  }
+
+  if(!confirm("프로필 사진을 삭제할까요?")) return;
+
+  try{
+    await updateDoc(doc(db, "users", user.uid), {
+      photoDataUrl: deleteField()
+    });
+
+    setAvatar("");
+  }catch(error){
+    console.log(error);
+    alert("프로필 사진 삭제 중 오류가 발생했습니다.");
+  }
 });
 
 document.addEventListener("click", async event=>{

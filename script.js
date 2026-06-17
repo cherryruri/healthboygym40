@@ -988,6 +988,9 @@ document.addEventListener("DOMContentLoaded", function(){
     const isLocatorAtBottom =
       ()=>locator.scrollTop + locator.clientHeight >= locator.scrollHeight - 4;
 
+    const shouldExitRevealToFacility =
+      ()=>window.innerWidth <= 900 || isLocatorAtBottom();
+
     const exitRevealTo =
       target=>{
         revealStarted =
@@ -998,11 +1001,17 @@ document.addEventListener("DOMContentLoaded", function(){
           0;
         closePull =
           0;
+        nextPull =
+          0;
 
         locator.classList.remove("is-revealed");
         transition.classList.remove("is-playing", "is-complete");
         document.documentElement.classList.remove("pass-reveal-playing", "pass-reveal-complete");
         applyRevealProgress(0);
+
+        if(window.ScrollTrigger){
+          window.ScrollTrigger.refresh();
+        }
 
         if(target){
           const header =
@@ -1112,13 +1121,13 @@ document.addEventListener("DOMContentLoaded", function(){
             if(closePull > 900){
               closeReveal();
             }
-          }else if(event.deltaY > 0 && isLocatorAtBottom()){
+          }else if(event.deltaY > 0 && shouldExitRevealToFacility()){
             event.preventDefault();
             nextPull += event.deltaY;
             closePull =
               0;
 
-            if(nextPull > 1200){
+            if(nextPull > (window.innerWidth <= 900 ? 1200 : 1200)){
               exitRevealTo(document.querySelector("#facility"));
             }
           }else{
@@ -1169,7 +1178,7 @@ document.addEventListener("DOMContentLoaded", function(){
             if(closePull > 260){
               closeReveal();
             }
-          }else if(touchStartY - currentY > 10 && isLocatorAtBottom()){
+          }else if(touchStartY - currentY > 10 && shouldExitRevealToFacility()){
             event.preventDefault();
             nextPull += touchStartY - currentY;
             closePull =
@@ -1177,7 +1186,7 @@ document.addEventListener("DOMContentLoaded", function(){
             touchStartY =
               currentY;
 
-            if(nextPull > 420){
+            if(nextPull > (window.innerWidth <= 900 ? 720 : 420)){
               exitRevealTo(document.querySelector("#facility"));
             }
           }else{
@@ -2314,7 +2323,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const revealWords =
       Array.from(hero.querySelectorAll(".intro-reveal-copy .reveal-word"));
 
-    const introStats =
+    let introStats =
       Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
 
     let heroCounterStarted =
@@ -2334,10 +2343,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function startHeroCounter(){
 
+      if(!introStats.length){
+        introStats =
+          Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
+      }
+
       if(heroCounterStarted || !introStats.length) return;
 
       heroCounterStarted =
         true;
+
+      const stats =
+        introStats;
 
       const duration =
         1500;
@@ -2350,7 +2367,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const progress =
           easeOut(clamp((now - startedAt) / duration, 0, 1));
 
-        introStats.forEach(stat=>{
+        stats.forEach(stat=>{
 
           const target =
             Number(stat.dataset.target);
@@ -2459,28 +2476,58 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.9 : 0.88;
+        isMobile ? 0.76 : 0.75;
 
       const statsIntroEnd =
-        isMobile ? 0.945 : 0.93;
+        isMobile ? 0.81 : 0.80;
 
       const messageExitStart =
-        isMobile ? 0.84 : 0.82;
+        isMobile ? 0.70 : 0.69;
 
       const messageExitEnd =
-        isMobile ? 0.88 : 0.86;
+        isMobile ? 0.74 : 0.73;
 
-      const groupLiftStart =
-        isMobile ? 0.97 : 0.965;
+      const statsFadeStart =
+        isMobile ? 0.87 : 0.86;
 
-      const groupLiftEnd =
-        isMobile ? 0.99 : 0.985;
+      const statsFadeEnd =
+        isMobile ? 0.91 : 0.90;
+
+      const reviewDarkStart =
+        isMobile ? 0.875 : 0.865;
+
+      const reviewDarkEnd =
+        isMobile ? 0.965 : 0.955;
+
+      const frameReturnStart =
+        isMobile ? 0.94 : 0.93;
+
+      const frameReturnEnd =
+        isMobile ? 0.992 : 0.988;
 
       const cardsStart =
-        isMobile ? 0.98 : 0.975;
+        isMobile ? 0.994 : 0.99;
 
       const cardsEnd =
-        isMobile ? 0.995 : 0.992;
+        isMobile ? 0.999 : 0.998;
+
+      const proofStart =
+        isMobile ? 0.92 : 0.91;
+
+      const proofEnd =
+        isMobile ? 0.945 : 0.935;
+
+      const lineFadeStart =
+        isMobile ? 0.955 : 0.945;
+
+      const lineFadeEnd =
+        isMobile ? 0.975 : 0.965;
+
+      const proofLiftStart =
+        isMobile ? 0.982 : 0.975;
+
+      const proofLiftEnd =
+        isMobile ? 0.996 : 0.992;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -2488,15 +2535,43 @@ document.addEventListener("DOMContentLoaded", function(){
       const messageExitProgress =
         easeInOut(clamp((progress - messageExitStart) / (messageExitEnd - messageExitStart), 0, 1));
 
-      const groupLiftProgress =
+      const statsFadeProgress =
         heroCounterComplete
-          ? easeInOut(clamp((progress - groupLiftStart) / (groupLiftEnd - groupLiftStart), 0, 1))
+          ? easeInOut(clamp((progress - statsFadeStart) / (statsFadeEnd - statsFadeStart), 0, 1))
           : 0;
 
       const cardsProgress =
         heroCounterComplete
           ? easeInOut(clamp((progress - cardsStart) / (cardsEnd - cardsStart), 0, 1))
           : 0;
+
+      const proofProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - proofStart) / (proofEnd - proofStart), 0, 1))
+          : 0;
+
+      const proofLiftProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - proofLiftStart) / (proofLiftEnd - proofLiftStart), 0, 1))
+          : 0;
+
+      const reviewDarkProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - reviewDarkStart) / (reviewDarkEnd - reviewDarkStart), 0, 1))
+          : 0;
+
+      const frameReturnProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - frameReturnStart) / (frameReturnEnd - frameReturnStart), 0, 1))
+          : 0;
+
+      const lineFadeProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
+          : 0;
+
+      const proofDividerAlive =
+        clamp(1 - lineFadeProgress, 0, 1);
 
       if(statsIntroProgress > 0.12){
         startHeroCounter();
@@ -2508,17 +2583,47 @@ document.addEventListener("DOMContentLoaded", function(){
       const scrollProgress =
         clamp(progress / 0.18, 0, 1);
 
-      const radius =
-        (isMobile ? 20 : 28) * (1 - expand);
+      const baseRadius =
+        ((isMobile ? 20 : 28) * (1 - expand)) + (isMobile ? 20 : 28) * copyProgress;
+
+      const fullWidth =
+        window.innerWidth;
+
+      const framedWidth =
+        Math.max(
+          isMobile ? 312 : 720,
+          window.innerWidth - (isMobile ? 28 : 72)
+        );
+
+      const baseFrameWidth =
+        startWidth + (fullWidth - startWidth) * expand - (fullWidth - framedWidth) * copyProgress;
+
+      const fullHeight =
+        availableHeight;
+
+      const framedHeight =
+        Math.max(
+          isMobile ? 430 : 520,
+          availableHeight - (isMobile ? 28 : 62)
+        );
+
+      const baseFrameHeight =
+        startHeight + (fullHeight - startHeight) * expand - (fullHeight - framedHeight) * copyProgress;
+
+      const baseFrameBottom =
+        startBottom * (1 - expand) + (isMobile ? 14 : 31) * copyProgress;
 
       const frameWidth =
-        startWidth + (window.innerWidth - startWidth) * expand;
+        baseFrameWidth + (fullWidth - baseFrameWidth) * frameReturnProgress;
 
       const frameHeight =
-        startHeight + (availableHeight - startHeight) * expand;
+        baseFrameHeight + (fullHeight - baseFrameHeight) * frameReturnProgress;
 
       const frameBottom =
-        startBottom * (1 - expand);
+        baseFrameBottom * (1 - frameReturnProgress);
+
+      const radius =
+        baseRadius * (1 - frameReturnProgress);
 
       const lineReveal =
         index=>`${(easeInOut(clamp((progress - (lineStart + index * lineStep)) / lineRange, 0, 1)) * 100).toFixed(1)}%`;
@@ -2578,12 +2683,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-content-y",
-        `${(isMobile ? 132 : 92) - statsIntroProgress * (isMobile ? 132 : 92) - groupLiftProgress * (isMobile ? 118 : 120)}px`
+        `${(isMobile ? 132 : 92) - statsIntroProgress * (isMobile ? 132 : 92)}px`
       );
 
       hero.style.setProperty(
         "--review-stats-opacity",
-        (clamp(statsIntroProgress / 0.8, 0, 1) * (1 - groupLiftProgress)).toFixed(4)
+        (clamp(statsIntroProgress / 0.8, 0, 1) * (1 - statsFadeProgress)).toFixed(4)
       );
 
       hero.style.setProperty(
@@ -2593,13 +2698,72 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-cards-y",
-        `${(isMobile ? 560 : 500) - cardsProgress * (isMobile ? 560 : 500)}px`
+        `${(isMobile ? 560 : 520) - cardsProgress * (isMobile ? 560 : 520)}px`
+      );
+
+      hero.style.setProperty(
+        "--review-cards-x",
+        `${(1 - cardsProgress) * (isMobile ? 220 : 340)}px`
       );
 
       hero.style.setProperty(
         "--review-bg-opacity",
-        (Math.max(groupLiftProgress * 0.98, cardsProgress * 0.98)).toFixed(4)
+        "0"
       );
+
+      hero.style.setProperty(
+        "--review-proof-opacity",
+        (proofProgress * (1 - Math.max(0, cardsProgress - 0.55) / 0.45)).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--review-proof-y",
+        `${(isMobile ? 88 : 112) - proofProgress * (isMobile ? 88 : 112) - proofLiftProgress * (isMobile ? 118 : 150)}px`
+      );
+
+      hero.style.setProperty(
+        "--review-proof-scale",
+        "1"
+      );
+
+      hero.style.setProperty(
+        "--review-proof-gap",
+        `${(isMobile ? 3 : 4) + proofDividerAlive * (isMobile ? 2 : 3)}px`
+      );
+
+      hero.style.setProperty(
+        "--review-proof-divider-opacity",
+        (proofProgress * proofDividerAlive).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--review-proof-divider-width",
+        `${(isMobile ? 16 : 56) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
+      );
+
+      const liveReviewSlides =
+        Array.from(hero.querySelectorAll(".review-cover-panel .review-slide"));
+
+      liveReviewSlides.forEach((slide, index)=>{
+        const orderMatch =
+          slide.className.match(/\breview(\d+)\b/);
+
+        const orderIndex =
+          orderMatch ? Math.max(0, Number(orderMatch[1]) - 1) : index;
+
+        const slideProgress =
+          easeInOut(clamp((cardsProgress - orderIndex * 0.11) / 0.26, 0, 1));
+
+        slide.style.setProperty(
+          "--slide-opacity",
+          slideProgress.toFixed(4)
+        );
+
+        slide.style.setProperty(
+          "--slide-x",
+          `${(1 - slideProgress) * (isMobile ? 90 : 130)}px`
+        );
+      });
 
       for(let i = 0; i < 4; i++){
         hero.style.setProperty(
@@ -2638,7 +2802,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--hero-overlay",
-        (0.06 + 0.34 * copyProgress).toFixed(4)
+        Math.max(0.06 + 0.34 * copyProgress, reviewDarkProgress * 0.98).toFixed(4)
       );
 
     }

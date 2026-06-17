@@ -2028,10 +2028,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .76 : .74;
+        window.innerWidth <= 768 ? .68 : .66;
 
       const end =
-        window.innerWidth <= 768 ? .97 : .95;
+        window.innerWidth <= 768 ? .96 : .93;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);
@@ -2040,15 +2040,15 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(progress);
 
       panel.style.setProperty(
-        "--review-cover-x",
-        `${((1 - eased) * 100).toFixed(2)}vw`
+        "--review-cover-y",
+        `${((1 - eased) * (window.innerWidth <= 768 ? 28 : 30)).toFixed(2)}vh`
       );
 
       panel.style.opacity =
-        (0.42 + eased * 0.58).toFixed(4);
+        eased.toFixed(4);
 
       panel.classList.toggle("is-visible", progress > 0.02);
-      panel.classList.toggle("is-covered", progress > .96);
+      panel.classList.toggle("is-covered", progress > .94);
 
     }
 
@@ -2261,16 +2261,16 @@ document.addEventListener("DOMContentLoaded", function(){
       const startHeight =
         isMobile
           ? clamp(availableHeight * 0.36, 230, 270)
-          : clamp(availableHeight * 0.5, 360, 480);
+          : clamp(availableHeight * 0.46, 340, 450);
 
       const startBottom =
-        isMobile ? -8 : 0;
+        isMobile ? -14 : -54;
 
       const expandEnd =
         isMobile ? 0.5 : 0.34;
 
       const copyStart =
-        isMobile ? 0.52 : 0.32;
+        isMobile ? 0.5 : 0.32;
 
       const copyRange =
         isMobile ? 0.28 : 0.3;
@@ -2285,7 +2285,7 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.32 : 0.36;
 
       const wordStart =
-        isMobile ? 0.55 : 0.36;
+        isMobile ? 0.54 : 0.36;
 
       const wordStep =
         isMobile ? 0.047 : 0.043;
@@ -2304,6 +2304,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const copyProgress =
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
+
+      const copyLiftProgress =
+        easeInOut(clamp((progress - (isMobile ? 0.68 : 0.62)) / (isMobile ? 0.17 : 0.2), 0, 1));
+
+      const reviewLiftProgress =
+        easeInOut(clamp((progress - (isMobile ? 0.72 : 0.68)) / (isMobile ? 0.24 : 0.25), 0, 1));
 
       const introProgress =
         easeOut(clamp(progress / 0.24, 0, 1));
@@ -2371,7 +2377,32 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--hero-copy-y",
-        `${64 - 64 * copyProgress}px`
+        `${64 - 64 * copyProgress - copyLiftProgress * (isMobile ? 150 : 300)}px`
+      );
+
+      hero.style.setProperty(
+        "--hero-copy-scale",
+        (1 - copyLiftProgress * (isMobile ? 0.08 : 0.1)).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--review-content-y",
+        `${(isMobile ? 210 : 122) - reviewLiftProgress * (isMobile ? 100 : 110)}px`
+      );
+
+      hero.style.setProperty(
+        "--review-stats-opacity",
+        clamp((reviewLiftProgress - 0.04) / 0.34, 0, 1).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--review-cards-opacity",
+        clamp((reviewLiftProgress - 0.34) / 0.42, 0, 1).toFixed(4)
+      );
+
+      hero.style.setProperty(
+        "--review-cards-y",
+        `${(1 - clamp((reviewLiftProgress - 0.34) / 0.42, 0, 1)) * (isMobile ? 28 : 42)}px`
       );
 
       for(let i = 0; i < 4; i++){
@@ -2411,7 +2442,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--hero-overlay",
-        (0.12 + 0.5 * copyProgress).toFixed(4)
+        (0.06 + 0.34 * copyProgress).toFixed(4)
       );
 
     }

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내가 쓴 게시물</title>
 
-<link rel="stylesheet" href="style.css?v=2">
+<link rel="stylesheet" href="style.css?v=20260618-mobile-board-menu4">
 <link rel="stylesheet" href="board.css?v=2">
 </head>
 
@@ -26,7 +26,8 @@
       <li><a href="index.html#trainer">트레이너 소개</a></li>
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
-      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="board.html">게시판</a></li>
+      <li><a href="index.html#faq">자주 묻는 질문</a></li>
 
       <li class="login-menu" id="userMenu">
         <a href="login.html" id="loginLink">LOGIN</a>
@@ -66,7 +67,7 @@
       <a href="index.html#trainer">트레이너 소개</a>
       <a href="index.html#hours">운영 시간</a>
       <a href="index.html#location">오시는 길</a>
-      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#faq">자주 묻는 질문</a>
 
       <a href="./login.html" id="mobileLoginLink">LOGIN</a>
       <button id="mobileLogoutBtn" style="display:none;">LOGOUT</button>
@@ -100,29 +101,9 @@
 
 </section>
 
-<nav class="pc-floating-widget">
-
-  <a href="index.html" class="pc-widget-item" data-label="HOME" aria-label="홈">
-    <svg viewBox="0 0 24 24"><path d="M3 10.8L12 3.8l9 7v9.4a1 1 0 0 1-1 1h-5.2v-6.3H9.2v6.3H4a1 1 0 0 1-1-1v-9.4z"/></svg>
-  </a>
-
-  <a href="board.html" class="pc-widget-item" data-label="BOARD" aria-label="게시판">
-    <svg viewBox="0 0 24 24"><path d="M4 5.5h16v10.8H8.6L4 20.5v-15z"/><path d="M8 9.2h8"/><path d="M8 12.3h5.5"/></svg>
-  </a>
-
-  <a href="#" class="pc-widget-item" data-label="EVENT" aria-label="이벤트">
-    <svg viewBox="0 0 24 24"><path d="M4 10h16v11H4z"/><path d="M3 7h18v3H3z"/><path d="M12 7v14"/><path d="M12 7H8.7A2.2 2.2 0 1 1 12 4.8V7z"/><path d="M12 7h3.3A2.2 2.2 0 1 0 12 4.8V7z"/></svg>
-  </a>
-
-  <a href="mypage.html" class="pc-widget-item" data-label="MY" aria-label="마이페이지">
-    <svg viewBox="0 0 24 24"><path d="M12 12.2a4.1 4.1 0 1 0 0-8.2 4.1 4.1 0 0 0 0 8.2z"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg>
-  </a>
-
-</nav>
-
-</nav>
+<script src="site-menu.js?v=20260618-mobile-board-menu3"></script>
 <script type="module" src="my-posts.js?v=2"></script>
-<script type="module" src="./firebase-index.js?v=1"></script>
+<script type="module" src="./firebase-index.js?v=20260618-mobile-board-menu"></script>
 <script src="script.js?v=2"></script>
 </body>
 </html>

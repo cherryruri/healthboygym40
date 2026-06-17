@@ -13,6 +13,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  setDoc,
   deleteDoc,
   collection,
   getDocs,
@@ -44,12 +45,60 @@ const infoMember = document.getElementById("infoMember");
 const infoRole = document.getElementById("infoRole");
 const logoutBtn = document.getElementById("logoutBtn");
 const avatar = document.querySelector(".my-avatar");
+const avatarImage = document.getElementById("myAvatarImage");
+const profileImageInput = document.getElementById("profileImageInput");
 const mypageRoot = document.getElementById("mypageRoot");
 const myWelcome = document.getElementById("myWelcome");
 
 
 function setText(el, value){
   if(el) el.textContent = value || "-";
+}
+
+function renderProfileImage(photoDataUrl, fallbackText){
+  if(avatarImage && photoDataUrl){
+    avatarImage.src = photoDataUrl;
+    avatarImage.hidden = false;
+  }else if(avatarImage){
+    avatarImage.removeAttribute("src");
+    avatarImage.hidden = true;
+  }
+
+  if(avatar){
+    avatar.hidden = !!photoDataUrl;
+    avatar.textContent = (fallbackText || "H").charAt(0).toUpperCase();
+  }
+}
+
+function readImageAsDataUrl(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+
+    reader.onload = ()=>{
+      const image = new Image();
+
+      image.onload = ()=>{
+        const maxSize = 520;
+        const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(image, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.84));
+      };
+
+      image.onerror = reject;
+      image.src = reader.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 onAuthStateChanged(auth, async (user)=>{
@@ -126,9 +175,7 @@ document.body.classList.remove("welcoming");
   setText(myId, user.email);
   setText(infoId, userId);
 
-  if(avatar){
-    avatar.textContent = userId.charAt(0).toUpperCase();
-  }
+  renderProfileImage("", userId);
 
   try{
     console.log("현재UID", user.uid);
@@ -160,9 +207,7 @@ if(adminMenu && data.role === "admin"){
         myName.textContent = `${data.name}님`;
       }
 
-      if(data.name && avatar){
-        avatar.textContent = data.name.charAt(0);
-      }
+      renderProfileImage(data.photoDataUrl, data.name || userId);
 
 
     }else{
@@ -384,5 +429,40 @@ if(saveProfileBtn){
 
     alert("수정되었습니다.");
     location.reload();
+  });
+}
+
+const changePasswordBtn = document.getElementById("changePasswordBtn");
+
+if(changePasswordBtn){
+  changePasswordBtn.addEventListener("click", ()=>{
+    location.href = "change-password.html";
+  });
+}
+
+if(profileImageInput){
+  profileImageInput.addEventListener("change", async ()=>{
+    const user = auth.currentUser;
+    const file = profileImageInput.files && profileImageInput.files[0];
+
+    if(!user || !file) return;
+
+    try{
+      const photoDataUrl = await readImageAsDataUrl(file);
+
+      await setDoc(
+        doc(db, "users", user.uid),
+        { photoDataUrl },
+        { merge:true }
+      );
+
+      renderProfileImage(photoDataUrl, infoName ? infoName.textContent : "H");
+      alert("프로필 사진이 변경되었습니다.");
+    }catch(error){
+      console.log(error);
+      alert("프로필 사진 변경 중 오류가 발생했습니다.");
+    }finally{
+      profileImageInput.value = "";
+    }
   });
 }

@@ -152,7 +152,12 @@ body.welcoming .mobile-bottom-nav{
   }
 
   .profile-image{
+    position:relative;
+    width:96px;
+    height:96px;
+    display:block;
     margin:0;
+    cursor:pointer;
   }
 
   .my-avatar{
@@ -166,6 +171,42 @@ body.welcoming .mobile-bottom-nav{
     display:flex;
     align-items:center;
     justify-content:center;
+  }
+
+  .my-avatar-image{
+    width:96px;
+    height:96px;
+    display:block;
+    object-fit:cover;
+    border-radius:0;
+  }
+
+  .profile-image-input{
+    display:none;
+  }
+
+  .profile-image-action{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:-27px;
+    height:22px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:999px;
+    background:#111;
+    color:#fff;
+    font-size:11px;
+    font-weight:900;
+    opacity:0;
+    transform:translateY(4px);
+    transition:.2s ease;
+  }
+
+  .profile-image-edit:hover .profile-image-action{
+    opacity:1;
+    transform:translateY(0);
   }
 
   .profile-area h2{
@@ -384,7 +425,12 @@ body.welcoming .mobile-bottom-nav{
   }
 
   .profile-image{
+    width:126px;
+    height:126px;
+    display:block;
     margin-bottom:22px;
+    margin-left:auto;
+    margin-right:auto;
   }
 
   .my-avatar{
@@ -399,6 +445,17 @@ body.welcoming .mobile-bottom-nav{
     display:flex;
     align-items:center;
     justify-content:center;
+  }
+
+  .my-avatar-image{
+    width:126px;
+    height:126px;
+    border-radius:50%;
+  }
+
+  .profile-image-action{
+    opacity:1;
+    bottom:-30px;
   }
 
   .profile-area h2{

@@ -4958,108 +4958,9 @@ body.menu-open .mobile-login-area{
   }
 }
 
-/* ================= PC FLOATING WIDGET - APPLE NIKE ================= */
-
+/* Legacy floating widgets are no longer used. */
 .pc-floating-widget{
-  position:fixed;
-  right:32px;
-  bottom:34px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  z-index:999998;
-}
-
-.pc-widget-item{
-  position:relative;
-
-  width:54px;
-  height:54px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-  text-decoration:none;
-
-  background:rgba(18,18,18,.38);
-  backdrop-filter:blur(18px) saturate(150%);
-  -webkit-backdrop-filter:blur(18px) saturate(150%);
-
-  border:1px solid rgba(255,255,255,.16);
-
-  color:rgba(255,255,255,.86);
-
-  box-shadow:
-    0 14px 34px rgba(0,0,0,.28),
-    inset 0 1px 0 rgba(255,255,255,.08);
-
-  transition:
-    width .28s cubic-bezier(.22,.61,.36,1),
-    border-radius .28s cubic-bezier(.22,.61,.36,1),
-    transform .22s ease,
-    background .22s ease,
-    color .22s ease,
-    border-color .22s ease;
-}
-
-.pc-widget-item svg{
-  width:21px;
-  height:21px;
-
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.85;
-  stroke-linecap:round;
-  stroke-linejoin:round;
-
-  flex:0 0 auto;
-}
-
-.pc-widget-item::after{
-  content:attr(data-label);
-
-  position:absolute;
-  right:50px;
-
-  opacity:0;
-  transform:translateX(8px);
-
-  padding:9px 13px;
-  border-radius:999px;
-
-  background:rgba(18,18,18,.72);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-
-  border:1px solid rgba(255,255,255,.12);
-
-  color:#fff;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.08em;
-  white-space:nowrap;
-
-  pointer-events:none;
-
-  transition:.24s ease;
-}
-
-.pc-widget-item:hover{
-  transform:translateY(-2px) scale(1.03);
-  background:rgba(255,255,255,.12);
-  border-color:rgba(255,242,0,.45);
-  color:#fff200;
-}
-
-.pc-widget-item:hover::after{
-  opacity:1;
-  transform:translateX(0);
-}
-
-.pc-widget-item:active{
-  transform:scale(.95);
+  display:none !important;
 }
 
 
@@ -8181,4 +8082,508 @@ html.pass-reveal-complete header{
 .brand-co-section,
 #brand #inc01{
   overflow:visible;
+}
+
+/* ================= Shared header and mobile menu final ================= */
+
+.pc-floating-widget{
+  display:none !important;
+}
+
+.menu{
+  gap:clamp(14px, 1.35vw, 30px);
+}
+
+.menu a{
+  font-size:11px;
+}
+
+.board-menu-link a{
+  color:#000;
+}
+
+@media(max-width:768px){
+  .navbar{
+    min-height:70px;
+    padding:14px 22px;
+  }
+
+  .logo a{
+    font-size:22px;
+  }
+
+  .mobile-menu-btn{
+    display:flex !important;
+    position:relative;
+    z-index:2101;
+    flex:0 0 58px !important;
+    width:58px !important;
+    min-width:58px !important;
+    max-width:58px !important;
+    inline-size:58px !important;
+    height:42px !important;
+    min-height:42px !important;
+    max-height:42px !important;
+    block-size:42px !important;
+    align-items:center;
+    justify-content:center;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    font-size:0 !important;
+    color:transparent !important;
+    cursor:pointer;
+  }
+
+  .mobile-menu-btn::before,
+  .mobile-menu-btn::after{
+    content:"";
+    position:absolute;
+    left:12px;
+    width:34px;
+    height:3px;
+    border-radius:0;
+    background:#111 !important;
+    transition:
+      top .24s ease,
+      transform .24s ease;
+  }
+
+  .mobile-menu-btn::before{
+    top:13px;
+  }
+
+  .mobile-menu-btn::after{
+    top:27px;
+  }
+
+  body.menu-open .mobile-menu-btn::before{
+    top:20px;
+    transform:rotate(45deg) !important;
+  }
+
+  body.menu-open .mobile-menu-btn::after{
+    top:20px;
+    transform:rotate(-45deg) !important;
+  }
+
+  .mobile-menu-overlay{
+    display:block;
+    position:fixed;
+    inset:0;
+    z-index:1998;
+    background:transparent !important;
+    opacity:0;
+    visibility:hidden;
+    transition:.24s ease;
+  }
+
+  body.menu-open .mobile-menu-overlay{
+    opacity:1;
+    visibility:visible;
+  }
+
+  .mobile-side-menu{
+    display:block !important;
+    position:fixed;
+    top:14px;
+    right:8px !important;
+    width:172px;
+    max-width:calc(100vw - 18px);
+    height:auto;
+    min-height:0;
+    padding:0 !important;
+    z-index:2100;
+    overflow:visible;
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    transform:translateX(calc(100% + 20px));
+    transition:transform .32s cubic-bezier(.19,1,.22,1);
+  }
+
+  body.menu-open .mobile-side-menu{
+    right:8px !important;
+    transform:translateX(0) !important;
+  }
+
+  .mobile-auth-panel{
+    position:relative;
+    min-height:188px;
+    padding:38px 12px 18px;
+    border-radius:12px;
+    background:#000;
+    color:#fff;
+    text-align:center;
+  }
+
+  .mobile-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:26px;
+    height:26px;
+    display:block;
+    padding:0;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    font-size:0;
+  }
+
+  .mobile-close::before,
+  .mobile-close::after{
+    content:"";
+    position:absolute;
+    left:4px;
+    top:12px;
+    width:20px;
+    height:3px;
+    background:#fff;
+    border-radius:0;
+  }
+
+  .mobile-close::before{
+    transform:rotate(45deg);
+  }
+
+  .mobile-close::after{
+    transform:rotate(-45deg);
+  }
+
+  .mobile-profile-upload{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:66px;
+    height:66px;
+    margin:0 auto 10px;
+    cursor:default;
+  }
+
+  .mobile-profile-upload.is-editable{
+    cursor:pointer;
+  }
+
+  .mobile-profile-upload input{
+    display:none;
+  }
+
+  .mobile-profile-avatar{
+    position:relative;
+    width:66px;
+    height:66px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    border-radius:9px;
+    background:#585858;
+  }
+
+  .mobile-profile-avatar img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+  }
+
+  .mobile-profile-placeholder{
+    position:relative;
+    width:32px;
+    height:32px;
+    display:block;
+  }
+
+  .mobile-profile-placeholder::before{
+    content:"";
+    position:absolute;
+    left:10px;
+    top:1px;
+    width:13px;
+    height:13px;
+    border-radius:50%;
+    background:#fff;
+  }
+
+  .mobile-profile-placeholder::after{
+    content:"";
+    position:absolute;
+    left:3px;
+    bottom:0;
+    width:27px;
+    height:14px;
+    border-radius:16px 16px 3px 3px;
+    background:#fff;
+  }
+
+  .mobile-profile-camera{
+    position:absolute;
+    right:-2px;
+    bottom:-2px;
+    width:18px;
+    height:18px;
+    border:2px solid #000;
+    border-radius:50%;
+    background:#fff;
+  }
+
+  .mobile-profile-camera::before{
+    content:"";
+    position:absolute;
+    left:4px;
+    top:5px;
+    width:7px;
+    height:5px;
+    border:1px solid #111;
+    border-radius:2px;
+  }
+
+  .mobile-profile-camera::after{
+    content:"";
+    position:absolute;
+    left:7px;
+    top:7px;
+    width:2px;
+    height:2px;
+    border-radius:50%;
+    background:#111;
+  }
+
+  .mobile-auth-title{
+    display:block !important;
+    padding:0 !important;
+    border:0 !important;
+    color:#fff !important;
+    font-size:15px !important;
+    font-weight:900 !important;
+    line-height:1.2;
+    text-decoration:none;
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .mobile-auth-sub{
+    margin:6px 0 0;
+    color:rgba(255,255,255,.72);
+    font-size:11px;
+    font-weight:700;
+    line-height:1.35;
+  }
+
+  .mobile-auth-links{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    margin-top:14px;
+    color:#fff;
+    font-size:11px;
+    font-weight:800;
+  }
+
+  .mobile-auth-links[hidden]{
+    display:none !important;
+  }
+
+  .mobile-auth-links a,
+  .mobile-auth-links button{
+    width:auto !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    color:#fff !important;
+    font:inherit;
+    line-height:1;
+    text-decoration:none;
+    opacity:1 !important;
+    transform:none !important;
+    cursor:pointer;
+  }
+
+  .mobile-menu-list{
+    display:flex;
+    flex-direction:column;
+    min-height:386px;
+    margin-top:0;
+    padding:23px 18px 18px;
+    border-radius:12px;
+    background:rgba(0,0,0,.62);
+    backdrop-filter:blur(8px);
+    -webkit-backdrop-filter:blur(8px);
+    color:#fff;
+  }
+
+  .mobile-menu-section-title{
+    display:block;
+    padding:0 0 9px;
+    margin:0 0 8px;
+    border-bottom:1px solid rgba(255,255,255,.78);
+    color:rgba(255,255,255,.82);
+    font-size:10px;
+    font-weight:800;
+    line-height:1;
+  }
+
+  .mobile-menu-section-title.member{
+    margin-top:22px;
+  }
+
+  .mobile-side-menu .mobile-menu-list a{
+    display:block;
+    padding:4px 0 !important;
+    border:0 !important;
+    color:#fff !important;
+    font-size:16px !important;
+    font-weight:900 !important;
+    line-height:1.28;
+    letter-spacing:0;
+    text-decoration:none;
+    opacity:0;
+    transform:translateY(16px);
+    transition:
+      opacity .42s ease,
+      transform .42s ease;
+  }
+
+  body.menu-open .mobile-side-menu .mobile-menu-list a{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(1){ transition-delay:.04s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(2){ transition-delay:.07s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(3){ transition-delay:.1s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(4){ transition-delay:.13s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(5){ transition-delay:.16s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(6){ transition-delay:.19s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(7){ transition-delay:.22s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(8){ transition-delay:.25s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(9){ transition-delay:.28s; }
+  body.menu-open .mobile-side-menu .mobile-menu-list a:nth-of-type(10){ transition-delay:.31s; }
+
+  .mobile-side-reserve,
+  .mobile-profile-card,
+  .mobile-side-top{
+    display:none !important;
+  }
+}
+
+@media(max-width:360px){
+  body.menu-open .mobile-side-menu{
+    right:6px !important;
+  }
+
+  .mobile-side-menu{
+    width:168px;
+  }
+
+  .mobile-menu-list{
+    padding-left:17px;
+    padding-right:17px;
+  }
+
+  .mobile-side-menu .mobile-menu-list a{
+    font-size:15px !important;
+  }
+}
+
+/* ================= Password change page ================= */
+
+.password-change-main{
+  min-height:calc(100vh - 80px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:120px 22px 70px;
+  background:#f6f6f6;
+}
+
+.password-change-card{
+  width:min(460px, 100%);
+  padding:40px 34px;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 22px 60px rgba(0,0,0,.12);
+}
+
+.password-change-card small{
+  display:block;
+  color:#777;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.password-change-card h1{
+  margin:8px 0 10px;
+  color:#000;
+  font-size:32px;
+  font-weight:950;
+  line-height:1.12;
+}
+
+.password-change-card p{
+  margin:0 0 24px;
+  color:#555;
+  font-size:14px;
+  font-weight:700;
+  line-height:1.55;
+}
+
+.password-change-card input{
+  width:100%;
+  height:50px;
+  margin-bottom:12px;
+  padding:0 15px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#fafafa;
+  color:#111;
+  font-size:14px;
+  font-weight:700;
+  outline:none;
+}
+
+.password-change-card input:focus{
+  border-color:#111;
+  background:#fff;
+}
+
+.password-change-card button,
+.password-change-card .sub-link{
+  width:100%;
+  height:50px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:900;
+  text-decoration:none;
+}
+
+.password-change-card button{
+  border:0;
+  background:#000;
+  color:#fff;
+  cursor:pointer;
+}
+
+.password-change-card .sub-link{
+  margin-top:10px;
+  border:1px solid #ddd;
+  background:#fff;
+  color:#111;
+}
+
+.password-change-msg{
+  min-height:20px;
+  margin-top:14px !important;
+  font-size:13px !important;
 }

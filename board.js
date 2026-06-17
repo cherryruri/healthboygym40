@@ -62,10 +62,17 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
   if(tab.dataset.board === currentBoard){
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
+
+    const boardTitle = document.querySelector(".board-header h1");
+
+    if(boardTitle){
+      boardTitle.textContent = tab.textContent.trim();
+    }
   }
 
   tab.addEventListener("click", function(){
     currentBoard = tab.dataset.board;
+    history.replaceState(null, "", `board.html?board=${currentBoard}`);
 
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");

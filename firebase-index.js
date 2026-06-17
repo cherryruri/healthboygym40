@@ -1,10 +1,21 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import {
+  initializeApp,
+  getApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
   getAuth,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -16,127 +27,224 @@ const firebaseConfig = {
   measurementId: "G-4CJK3XF633"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-function setUserMenu(user){
+function getUserId(user){
+  return user && user.email ? user.email.split("@")[0] : "회원";
+}
+
+function getUserName(user, data){
+  return (data && (data.name || data.signupName || data.id)) || getUserId(user);
+}
+
+function setAvatar(photoDataUrl){
+  const image = document.getElementById("mobileProfileImage");
+  const placeholder = document.getElementById("mobileProfilePlaceholder");
+
+  if(image && photoDataUrl){
+    image.src = photoDataUrl;
+    image.hidden = false;
+  }else if(image){
+    image.removeAttribute("src");
+    image.hidden = true;
+  }
+
+  if(placeholder){
+    placeholder.hidden = !!photoDataUrl;
+  }
+}
+
+function readImageAsDataUrl(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+
+    reader.onload = ()=>{
+      const image = new Image();
+
+      image.onload = ()=>{
+        const maxSize = 420;
+        const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(image, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.82));
+      };
+
+      image.onerror = reject;
+      image.src = reader.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function setUserMenu(user, data){
   const loginLink = document.getElementById("loginLink");
   const logoutBtn = document.getElementById("logoutBtn");
 
   if(!loginLink || !logoutBtn) return;
 
   if(user){
-    const name = user.email.split("@")[0];
+    const name = getUserName(user, data);
 
-    loginLink.textContent = `${name}님 환영합니다`;
-    loginLink.href = "#";
-
+    loginLink.textContent = `${name}님`;
+    loginLink.href = "mypage.html";
     logoutBtn.style.display = "";
   }else{
     loginLink.textContent = "LOGIN";
     loginLink.href = "login.html";
-
     logoutBtn.style.display = "none";
   }
 }
 
-function setMobileUserMenu(user){
+function setMobileUserMenu(user, data){
   const mobileLoginLink = document.getElementById("mobileLoginLink");
   const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
-  const mobileProfileCard = document.getElementById("mobileProfileCard");
-const mobileProfileName = document.getElementById("mobileProfileName");
-const mobileProfileText = document.getElementById("mobileProfileText");
-
-  if(!mobileLoginLink || !mobileLogoutBtn) return;
+  const mobileProfileName = document.getElementById("mobileProfileName");
+  const mobileProfileText = document.getElementById("mobileProfileText");
+  const mobileGuestActions = document.getElementById("mobileGuestActions");
+  const mobileUserActions = document.getElementById("mobileUserActions");
+  const mobileProfileInput = document.getElementById("mobileProfileInput");
+  const mobileProfileUploadLabel = document.getElementById("mobileProfileUploadLabel");
 
   if(user){
-    const name = user.email.split("@")[0];
+    const name = getUserName(user, data);
 
-    mobileLoginLink.textContent = `${name}님 환영합니다`;
-    mobileLoginLink.href = "#";
+    if(mobileLoginLink){
+      mobileLoginLink.textContent = `${name}님`;
+      mobileLoginLink.href = "mypage.html";
+    }
 
-    mobileLogoutBtn.style.display = "";
-if(mobileProfileCard){
-  mobileProfileCard.href = "mypage.html";
-}
+    if(mobileLogoutBtn){
+      mobileLogoutBtn.style.display = "";
+    }
 
-if(mobileProfileName){
-  mobileProfileName.textContent = `${name}님`;
-}
+    if(mobileProfileName){
+      mobileProfileName.textContent = `[${name}]님 환영합니다`;
+      mobileProfileName.href = "mypage.html";
+    }
 
-if(mobileProfileText){
-  mobileProfileText.textContent = "헬스보이짐 수내점 이용 회원님입니다.";
-}
+    if(mobileProfileText){
+      mobileProfileText.textContent = "";
+    }
 
+    if(mobileGuestActions) mobileGuestActions.hidden = true;
+    if(mobileUserActions) mobileUserActions.hidden = false;
+    if(mobileProfileInput) mobileProfileInput.disabled = false;
+    if(mobileProfileUploadLabel) mobileProfileUploadLabel.classList.add("is-editable");
 
-
-
+    setAvatar(data && data.photoDataUrl);
   }else{
-    mobileLoginLink.textContent = "LOGIN";
-    mobileLoginLink.href = "login.html";
+    if(mobileLoginLink){
+      mobileLoginLink.textContent = "LOGIN";
+      mobileLoginLink.href = "login.html";
+    }
 
-    mobileLogoutBtn.style.display = "none";
-    if(mobileProfileCard){
-  mobileProfileCard.href = "login.html";
-}
+    if(mobileLogoutBtn){
+      mobileLogoutBtn.style.display = "none";
+    }
 
-if(mobileProfileName){
-  mobileProfileName.textContent = "LOGIN";
-}
+    if(mobileProfileName){
+      mobileProfileName.textContent = "로그인 하기";
+      mobileProfileName.href = "login.html";
+    }
 
-if(mobileProfileText){
-  mobileProfileText.textContent = "로그인 후 마이페이지를 이용해보세요.";
-}
+    if(mobileProfileText){
+      mobileProfileText.textContent = "회원 전용 메뉴를 이용해보세요.";
+    }
+
+    if(mobileGuestActions) mobileGuestActions.hidden = false;
+    if(mobileUserActions) mobileUserActions.hidden = true;
+    if(mobileProfileInput) mobileProfileInput.disabled = true;
+    if(mobileProfileUploadLabel) mobileProfileUploadLabel.classList.remove("is-editable");
+
+    setAvatar("");
   }
 }
 
-onAuthStateChanged(auth, (user)=>{
-  setUserMenu(user);
-  setMobileUserMenu(user);
+onAuthStateChanged(auth, async user=>{
+  let data = null;
+
+  if(user){
+    try{
+      const snap = await getDoc(doc(db, "users", user.uid));
+
+      if(snap.exists()){
+        data = snap.data();
+      }
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+  setUserMenu(user, data);
+  setMobileUserMenu(user, data);
 });
 
-const logoutBtn = document.getElementById("logoutBtn");
+document.addEventListener("click", async event=>{
+  const logoutButton = event.target.closest("#logoutBtn, #mobileLogoutBtn");
 
-if(logoutBtn){
-  logoutBtn.addEventListener("click", async ()=>{
-    await signOut(auth);
-    alert("로그아웃 완료");
-    location.reload();
-  });
-}
+  if(!logoutButton) return;
 
-const mobileLogoutBtn = document.getElementById("mobileLogoutBtn");
+  await signOut(auth);
+  alert("로그아웃 완료");
+  location.reload();
+});
 
-if(mobileLogoutBtn){
-  mobileLogoutBtn.addEventListener("click", async ()=>{
-    await signOut(auth);
-    alert("로그아웃 완료");
-    location.reload();
-  });
-}
+document.addEventListener("change", async event=>{
+  const input = event.target.closest("#mobileProfileInput");
+
+  if(!input) return;
+
+  const user = auth.currentUser;
+
+  if(!user){
+    alert("로그인 후 프로필 사진을 변경할 수 있습니다.");
+    input.value = "";
+    return;
+  }
+
+  const file = input.files && input.files[0];
+
+  if(!file) return;
+
+  try{
+    const photoDataUrl = await readImageAsDataUrl(file);
+
+    await setDoc(
+      doc(db, "users", user.uid),
+      { photoDataUrl },
+      { merge:true }
+    );
+
+    setAvatar(photoDataUrl);
+  }catch(error){
+    console.log(error);
+    alert("프로필 사진 변경 중 오류가 발생했습니다.");
+  }finally{
+    input.value = "";
+  }
+});
 
 const mypageBtn = document.getElementById("mypageBtn");
 
 if(mypageBtn){
+  mypageBtn.addEventListener("click", event=>{
+    event.preventDefault();
 
-  mypageBtn.addEventListener("click",(e)=>{
-
-    e.preventDefault();
-
-    const user = auth.currentUser;
-
-    if(user){
-
+    if(auth.currentUser){
       location.href = "mypage.html";
-
     }else{
-
-  location.href = "login.html";
-
-}
-
+      location.href = "login.html";
+    }
   });
-
 }
-
-

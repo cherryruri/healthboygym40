@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", function(){
 
   /* 로더 */
+  if("scrollRestoration" in window.history){
+    window.history.scrollRestoration =
+      "manual";
+  }
+
+  if(!window.location.hash){
+    window.scrollTo(0, 0);
+  }
+
   let siteStarted =
     false;
 
@@ -2028,10 +2037,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .68 : .66;
+        window.innerWidth <= 768 ? .78 : .76;
 
       const end =
-        window.innerWidth <= 768 ? .96 : .93;
+        window.innerWidth <= 768 ? .86 : .84;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);
@@ -2041,7 +2050,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       panel.style.setProperty(
         "--review-cover-y",
-        `${((1 - eased) * (window.innerWidth <= 768 ? 28 : 30)).toFixed(2)}vh`
+        "0vh"
       );
 
       panel.style.opacity =
@@ -2118,10 +2127,19 @@ document.addEventListener("DOMContentLoaded", function(){
         hash.slice(1);
     }
 
-    const target =
-      document.getElementById(targetId);
+    const top =
+      getHashScrollTop(targetId);
 
-    if(!target) return;
+    if(top === null) return;
+
+    window.scrollTo({
+      top,
+      behavior:"auto"
+    });
+
+  }
+
+  function getHashScrollTop(targetId){
 
     const header =
       document.querySelector("header");
@@ -2129,13 +2147,89 @@ document.addEventListener("DOMContentLoaded", function(){
     const headerHeight =
       header ? header.offsetHeight : 0;
 
-    const top =
-      target.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+    if(targetId === "about"){
+      const hero =
+        document.querySelector(".hero-expand-section");
 
-    window.scrollTo({
-      top:Math.max(0, top),
-      behavior:"auto"
-    });
+      if(hero){
+        const heroTop =
+          hero.getBoundingClientRect().top + window.pageYOffset;
+
+        const scrollable =
+          Math.max(1, hero.offsetHeight - window.innerHeight);
+
+        const centerIntroProgress =
+          window.innerWidth <= 768 ? 0.62 : 0.6;
+
+        return Math.max(0, heroTop + scrollable * centerIntroProgress - headerHeight);
+      }
+    }
+
+    const target =
+      document.getElementById(targetId);
+
+    if(!target) return null;
+
+    return Math.max(
+      0,
+      target.getBoundingClientRect().top + window.pageYOffset - headerHeight
+    );
+
+  }
+
+  function initHashNavigation(){
+
+    document
+      .querySelectorAll('a[href^="#"]')
+      .forEach(link=>{
+
+        if(link.dataset.hashNavReady === "true") return;
+
+        link.dataset.hashNavReady =
+          "true";
+
+        link.addEventListener("click", event=>{
+
+          const href =
+            link.getAttribute("href");
+
+          if(!href || href === "#") return;
+
+          let targetId =
+            href.slice(1);
+
+          try{
+            targetId =
+              decodeURIComponent(targetId);
+          }catch(error){
+            targetId =
+              href.slice(1);
+          }
+
+          const top =
+            getHashScrollTop(targetId);
+
+          if(top === null) return;
+
+          event.preventDefault();
+
+          if(window.history && window.history.pushState){
+            window.history.pushState(null, "", `#${encodeURIComponent(targetId)}`);
+          }else{
+            window.location.hash =
+              targetId;
+          }
+
+          document.body.classList.remove("menu-open");
+
+          window.scrollTo({
+            top,
+            behavior:"smooth"
+          });
+
+        });
+
+      });
 
   }
 
@@ -2162,6 +2256,7 @@ document.addEventListener("DOMContentLoaded", function(){
     if(!loader){
       document.body.classList.add("loaded");
       startSite();
+      initHashNavigation();
       queueHashScroll();
       return;
     }
@@ -2181,6 +2276,7 @@ document.addEventListener("DOMContentLoaded", function(){
       document.body.classList.add("loaded");
       loader.classList.add("release");
       startSite();
+      initHashNavigation();
       queueHashScroll();
 
     },1250);
@@ -2218,6 +2314,15 @@ document.addEventListener("DOMContentLoaded", function(){
     const revealWords =
       Array.from(hero.querySelectorAll(".intro-reveal-copy .reveal-word"));
 
+    const introStats =
+      Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
+
+    let heroCounterStarted =
+      false;
+
+    let heroCounterComplete =
+      false;
+
     const clamp =
       (value, min, max)=>Math.max(min, Math.min(max, value));
 
@@ -2226,6 +2331,54 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const easeInOut =
         value=>value * value * (3 - 2 * value);
+
+    function startHeroCounter(){
+
+      if(heroCounterStarted || !introStats.length) return;
+
+      heroCounterStarted =
+        true;
+
+      const duration =
+        1500;
+
+      const startedAt =
+        performance.now();
+
+      function updateCounter(now){
+
+        const progress =
+          easeOut(clamp((now - startedAt) / duration, 0, 1));
+
+        introStats.forEach(stat=>{
+
+          const target =
+            Number(stat.dataset.target);
+
+          if(!Number.isFinite(target)) return;
+
+          const value =
+            progress >= 1
+              ? target
+              : Math.floor(target * progress);
+
+          stat.textContent =
+            value.toLocaleString();
+
+        });
+
+        if(progress < 1){
+          requestAnimationFrame(updateCounter);
+        }else{
+          heroCounterComplete =
+            true;
+        }
+
+      }
+
+      requestAnimationFrame(updateCounter);
+
+    }
 
     function update(){
 
@@ -2270,28 +2423,28 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.5 : 0.34;
 
       const copyStart =
-        isMobile ? 0.5 : 0.32;
+        isMobile ? 0.42 : 0.34;
 
       const copyRange =
-        isMobile ? 0.28 : 0.3;
+        isMobile ? 0.18 : 0.16;
 
       const lineStart =
-        isMobile ? 0.56 : 0.38;
+        isMobile ? 0.46 : 0.39;
 
       const lineStep =
-        isMobile ? 0.05 : 0.065;
+        isMobile ? 0.035 : 0.035;
 
       const lineRange =
-        isMobile ? 0.32 : 0.36;
+        isMobile ? 0.18 : 0.18;
 
       const wordStart =
-        isMobile ? 0.54 : 0.36;
+        isMobile ? 0.44 : 0.42;
 
       const wordStep =
-        isMobile ? 0.047 : 0.043;
+        isMobile ? 0.026 : 0.024;
 
       const wordRange =
-        isMobile ? 0.088 : 0.075;
+        isMobile ? 0.095 : 0.085;
 
       const underlineStart =
         lineStart + lineStep + lineRange * 0.78;
@@ -2305,14 +2458,52 @@ document.addEventListener("DOMContentLoaded", function(){
       const copyProgress =
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
-      const copyLiftProgress =
-        easeInOut(clamp((progress - (isMobile ? 0.68 : 0.62)) / (isMobile ? 0.17 : 0.2), 0, 1));
+      const statsIntroStart =
+        isMobile ? 0.9 : 0.88;
 
-      const reviewLiftProgress =
-        easeInOut(clamp((progress - (isMobile ? 0.72 : 0.68)) / (isMobile ? 0.24 : 0.25), 0, 1));
+      const statsIntroEnd =
+        isMobile ? 0.945 : 0.93;
+
+      const messageExitStart =
+        isMobile ? 0.84 : 0.82;
+
+      const messageExitEnd =
+        isMobile ? 0.88 : 0.86;
+
+      const groupLiftStart =
+        isMobile ? 0.97 : 0.965;
+
+      const groupLiftEnd =
+        isMobile ? 0.99 : 0.985;
+
+      const cardsStart =
+        isMobile ? 0.98 : 0.975;
+
+      const cardsEnd =
+        isMobile ? 0.995 : 0.992;
+
+      const statsIntroProgress =
+        easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
+
+      const messageExitProgress =
+        easeInOut(clamp((progress - messageExitStart) / (messageExitEnd - messageExitStart), 0, 1));
+
+      const groupLiftProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - groupLiftStart) / (groupLiftEnd - groupLiftStart), 0, 1))
+          : 0;
+
+      const cardsProgress =
+        heroCounterComplete
+          ? easeInOut(clamp((progress - cardsStart) / (cardsEnd - cardsStart), 0, 1))
+          : 0;
+
+      if(statsIntroProgress > 0.12){
+        startHeroCounter();
+      }
 
       const introProgress =
-        easeOut(clamp(progress / 0.24, 0, 1));
+        easeOut(clamp((progress - 0.06) / 0.2, 0, 1));
 
       const scrollProgress =
         clamp(progress / 0.18, 0, 1);
@@ -2362,47 +2553,52 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--hero-title-shift",
-        `${-42 * introProgress}px`
+        `${-28 * introProgress}px`
       );
 
       hero.style.setProperty(
         "--hero-title-height",
-        `${62 - 14 * introProgress}vh`
+        "62vh"
       );
 
       hero.style.setProperty(
         "--hero-copy-opacity",
-        copyProgress.toFixed(4)
+        (copyProgress * (1 - messageExitProgress)).toFixed(4)
       );
 
       hero.style.setProperty(
         "--hero-copy-y",
-        `${64 - 64 * copyProgress - copyLiftProgress * (isMobile ? 150 : 300)}px`
+        `${64 - 64 * copyProgress - messageExitProgress * (isMobile ? 18 : 24)}px`
       );
 
       hero.style.setProperty(
         "--hero-copy-scale",
-        (1 - copyLiftProgress * (isMobile ? 0.08 : 0.1)).toFixed(4)
+        (1 - messageExitProgress * (isMobile ? 0.035 : 0.04)).toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-content-y",
-        `${(isMobile ? 210 : 122) - reviewLiftProgress * (isMobile ? 100 : 110)}px`
+        `${(isMobile ? 132 : 92) - statsIntroProgress * (isMobile ? 132 : 92) - groupLiftProgress * (isMobile ? 118 : 120)}px`
       );
 
       hero.style.setProperty(
         "--review-stats-opacity",
-        clamp((reviewLiftProgress - 0.04) / 0.34, 0, 1).toFixed(4)
+        (clamp(statsIntroProgress / 0.8, 0, 1) * (1 - groupLiftProgress)).toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-cards-opacity",
-        clamp((reviewLiftProgress - 0.34) / 0.42, 0, 1).toFixed(4)
+        cardsProgress.toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-cards-y",
-        `${(1 - clamp((reviewLiftProgress - 0.34) / 0.42, 0, 1)) * (isMobile ? 28 : 42)}px`
+        `${(isMobile ? 560 : 500) - cardsProgress * (isMobile ? 560 : 500)}px`
+      );
+
+      hero.style.setProperty(
+        "--review-bg-opacity",
+        (Math.max(groupLiftProgress * 0.98, cardsProgress * 0.98)).toFixed(4)
       );
 
       for(let i = 0; i < 4; i++){
@@ -2549,6 +2745,8 @@ document.addEventListener("DOMContentLoaded", function(){
       document.querySelector(".stats-section");
 
     if(!statsSection) return;
+
+    if(statsSection.closest(".hero-expand-sticky")) return;
 
     const observer =
       new IntersectionObserver((entries)=>{

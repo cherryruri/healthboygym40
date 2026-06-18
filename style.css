@@ -13,7 +13,15 @@ body {
 
 html.allpass-scroll-locked,
 html.allpass-scroll-locked body {
+  overflow:hidden;
   overscroll-behavior:contain;
+}
+
+html.allpass-scroll-locked .pass-transition-panel,
+html.allpass-scroll-locked .pass-locator-section {
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
 }
 
 html.pass-reveal-playing,

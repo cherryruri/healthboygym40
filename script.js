@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
       placePassUnderAllPass,
       placeReviewsAfterIntro,
       prepareIntroStatementWords,
+      initHeroCaptionScrollGate,
       initHeroExpand,
       initReviewCoverPanel,
       fadeIn,
@@ -2064,6 +2065,122 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+  function initHeroCaptionScrollGate(){
+
+    const hero =
+      document.querySelector(".hero-expand-section");
+
+    const caption =
+      document.querySelector(".intro-desc[data-caption-reveal]");
+
+    if(!hero || !caption || caption.dataset.scrollGateReady === "true" || window.location.hash) return;
+
+    caption.dataset.scrollGateReady =
+      "true";
+
+    const characters =
+      Array.from(caption.querySelectorAll(".desc-char"));
+
+    if(!characters.length) return;
+
+    const maxCaptionIndex =
+      characters.reduce((max, character)=>{
+        const value =
+          Number.parseFloat(character.style.getPropertyValue("--caption-index"));
+
+        return Number.isFinite(value)
+          ? Math.max(max, value)
+          : max;
+      }, 0);
+
+    const holdMs =
+      Math.min(3200, Math.max(1900, 580 + maxCaptionIndex * 24 + 920));
+
+    const lockTop =
+      Math.max(0, Math.round(hero.getBoundingClientRect().top + window.pageYOffset));
+
+    const scrollLockKeys =
+      new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End"]);
+
+    let touchStartY =
+      0;
+
+    let released =
+      false;
+
+    const clampToHero =
+      ()=>{
+        if(window.pageYOffset > lockTop + 1){
+          window.scrollTo(0, lockTop);
+        }
+      };
+
+    const release =
+      ()=>{
+        if(released) return;
+
+        released =
+          true;
+
+        window.removeEventListener("wheel", onWheel);
+        window.removeEventListener("touchstart", onTouchStart);
+        window.removeEventListener("touchmove", onTouchMove);
+        window.removeEventListener("keydown", onKeyDown);
+        window.removeEventListener("scroll", onScroll);
+        document.documentElement.classList.remove("hero-caption-scroll-locked");
+      };
+
+    const onWheel =
+      event=>{
+        if(event.deltaY > 0){
+          event.preventDefault();
+          clampToHero();
+        }
+      };
+
+    const onTouchStart =
+      event=>{
+        touchStartY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : 0;
+      };
+
+    const onTouchMove =
+      event=>{
+        const currentY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : touchStartY;
+
+        if(touchStartY - currentY > 0){
+          event.preventDefault();
+          clampToHero();
+        }
+      };
+
+    const onKeyDown =
+      event=>{
+        if(scrollLockKeys.has(event.key)){
+          event.preventDefault();
+          clampToHero();
+        }
+      };
+
+    const onScroll =
+      ()=>clampToHero();
+
+    document.documentElement.classList.add("hero-caption-scroll-locked");
+    window.addEventListener("wheel", onWheel, {passive:false});
+    window.addEventListener("touchstart", onTouchStart, {passive:true});
+    window.addEventListener("touchmove", onTouchMove, {passive:false});
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("scroll", onScroll, {passive:true});
+
+    window.setTimeout(release, holdMs);
+
+  }
+
   function initReviewCoverPanel(){
 
     const panel =
@@ -2602,13 +2719,13 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.5 : 0.34;
 
       const copyStart =
-        isMobile ? 0.42 : 0.34;
+        isMobile ? 0.34 : 0.27;
 
       const copyRange =
         isMobile ? 0.18 : 0.16;
 
       const lineStart =
-        isMobile ? 0.46 : 0.39;
+        isMobile ? 0.38 : 0.31;
 
       const lineStep =
         isMobile ? 0.035 : 0.035;
@@ -2617,7 +2734,7 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.18 : 0.18;
 
       const wordStart =
-        isMobile ? 0.44 : 0.42;
+        isMobile ? 0.37 : 0.32;
 
       const wordStep =
         isMobile ? 0.026 : 0.024;

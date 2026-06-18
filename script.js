@@ -20,22 +20,32 @@ document.addEventListener("DOMContentLoaded", function(){
     siteStarted =
       true;
 
-    placePassUnderAllPass();
-    placeReviewsAfterIntro();
-    prepareIntroStatementWords();
-    initHeroExpand();
-    initReviewCoverPanel();
-    fadeIn();
-    observeCounter();
-    startTyping();
-    startBrandTyping();
-    initAllPassTyping();
-    initPassBranchLocator();
-    initAllPassLocatorReveal();
-    initPassMap();
-    initBrandAbout();
-    initCoBrandExperience();
-    initFacilityTour();
+    const startupSteps = [
+      placePassUnderAllPass,
+      placeReviewsAfterIntro,
+      prepareIntroStatementWords,
+      initHeroExpand,
+      initReviewCoverPanel,
+      fadeIn,
+      observeCounter,
+      startTyping,
+      startBrandTyping,
+      initAllPassTyping,
+      initFacilityTour,
+      initPassBranchLocator,
+      initAllPassLocatorReveal,
+      initPassMap,
+      initBrandAbout,
+      initCoBrandExperience
+    ];
+
+    startupSteps.forEach(step=>{
+      try{
+        step();
+      }catch(error){
+        console.error(error);
+      }
+    });
 
   }
 
@@ -991,8 +1001,19 @@ document.addEventListener("DOMContentLoaded", function(){
     const shouldExitRevealToFacility =
       ()=>window.innerWidth <= 900 || isLocatorAtBottom();
 
+    let suppressRevealUntil =
+      0;
+
+    const revealSuppressed =
+      ()=>Date.now() < suppressRevealUntil || Date.now() < (window.__skipAllPassRevealUntil || 0);
+
     const exitRevealTo =
-      target=>{
+      (target, behavior = "smooth")=>{
+        suppressRevealUntil =
+          Date.now() + 1600;
+
+        document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
+
         revealStarted =
           false;
         revealComplete =
@@ -1023,7 +1044,7 @@ document.addEventListener("DOMContentLoaded", function(){
           const top =
             target.getBoundingClientRect().top + window.pageYOffset - offset;
 
-          window.scrollTo({top, behavior:"smooth"});
+          window.scrollTo({top, behavior});
 
           const refreshAfterExit =
             ()=>{
@@ -1037,6 +1058,9 @@ document.addEventListener("DOMContentLoaded", function(){
           window.setTimeout(refreshAfterExit, 720);
         }
       };
+
+    window.exitAllPassRevealTo =
+      exitRevealTo;
 
     let revealStarted =
       false;
@@ -1077,7 +1101,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const beginReveal =
       ()=>{
 
-        if(revealComplete || revealStarted || !isTypingComplete() || !isIntroScene()) return false;
+        if(revealSuppressed() || revealComplete || revealStarted || !isTypingComplete() || !isIntroScene()) return false;
 
         revealStarted =
           true;
@@ -1122,6 +1146,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const onWheel =
       event=>{
+        if(revealSuppressed()) return;
+
         if(revealComplete){
           if(event.deltaY < 0 && isLocatorAtTop()){
             event.preventDefault();
@@ -1138,7 +1164,7 @@ document.addEventListener("DOMContentLoaded", function(){
             closePull =
               0;
 
-            if(nextPull > (window.innerWidth <= 900 ? 1200 : 1200)){
+            if(nextPull > 180){
               exitRevealTo(document.querySelector("#facility"));
             }
           }else{
@@ -1172,6 +1198,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const onTouchMove =
       event=>{
+        if(revealSuppressed()) return;
+
         const currentY =
           event.touches && event.touches.length
             ? event.touches[0].clientY
@@ -1197,7 +1225,7 @@ document.addEventListener("DOMContentLoaded", function(){
             touchStartY =
               currentY;
 
-            if(nextPull > (window.innerWidth <= 900 ? 720 : 420)){
+            if(nextPull > 100){
               exitRevealTo(document.querySelector("#facility"));
             }
           }else{
@@ -1227,10 +1255,16 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const onKeyDown =
       event=>{
+        if(revealSuppressed()) return;
+
         if(revealComplete){
           if(closeKeys.has(event.key) && isLocatorAtTop()){
             event.preventDefault();
             closeReveal();
+          }
+          if(revealKeys.has(event.key) && isLocatorAtBottom()){
+            event.preventDefault();
+            exitRevealTo(document.querySelector("#facility"));
           }
           return;
         }
@@ -1255,6 +1289,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const onScroll =
       ()=>{
+        if(revealSuppressed()) return;
+
         if(revealStarted || revealComplete){
           keepIntroLocked();
           return;
@@ -1443,6 +1479,8 @@ document.addEventListener("DOMContentLoaded", function(){
           releaseAllPassScrollLock();
         }
       };
+
+    document.addEventListener("allpassReleaseScrollLock", stopAllPassScrollLock);
 
     const wait =
       delay=>new Promise(resolve=>setTimeout(resolve, delay));
@@ -2147,15 +2185,95 @@ document.addEventListener("DOMContentLoaded", function(){
         hash.slice(1);
     }
 
+    const target =
+      document.getElementById(targetId);
+
+    if(!target) return;
+
+    jumpToHashTarget(targetId, "auto");
+
+  }
+
+  function clearAllPassOverlayForSectionJump(){
+
+    window.__skipAllPassRevealUntil =
+      Date.now() + 1800;
+
+    document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
+
+    document.documentElement.classList.remove(
+      "allpass-scroll-locked",
+      "pass-reveal-playing",
+      "pass-reveal-complete"
+    );
+
+    const locator =
+      document.querySelector("[data-pass-locator]");
+
+    if(locator){
+      locator.classList.remove("is-revealed");
+    }
+
+    const transition =
+      document.querySelector("[data-pass-transition]");
+
+    if(transition){
+      transition.classList.remove("is-playing", "is-complete");
+      transition.style.setProperty("--pass-transition-opacity", "0");
+      transition.style.setProperty("--pass-transition-scale", ".2");
+    }
+
+    document.documentElement.style.overflow =
+      "";
+    document.body.style.overflow =
+      "";
+
+  }
+
+  function jumpToHashTarget(targetId, behavior = "smooth"){
+
+    const target =
+      document.getElementById(targetId);
+
+    if(!target) return false;
+
+    if(targetId === "facility"){
+      clearAllPassOverlayForSectionJump();
+    }
+
     const top =
       getHashScrollTop(targetId);
 
-    if(top === null) return;
+    if(top === null) return false;
 
     window.scrollTo({
       top,
-      behavior:"auto"
+      behavior
     });
+
+    if(targetId === "facility"){
+      [80, 280, 760].forEach(delay=>{
+        window.setTimeout(()=>{
+          clearAllPassOverlayForSectionJump();
+
+          const nextTop =
+            getHashScrollTop(targetId);
+
+          if(nextTop !== null){
+            window.scrollTo({
+              top:nextTop,
+              behavior:"auto"
+            });
+          }
+
+          if(window.ScrollTrigger){
+            window.ScrollTrigger.refresh();
+          }
+        }, delay);
+      });
+    }
+
+    return true;
 
   }
 
@@ -2231,6 +2349,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
           if(top === null) return;
 
+          const target =
+            document.getElementById(targetId);
+
           event.preventDefault();
 
           if(window.history && window.history.pushState){
@@ -2242,10 +2363,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
           document.body.classList.remove("menu-open");
 
-          window.scrollTo({
-            top,
-            behavior:"smooth"
-          });
+          jumpToHashTarget(targetId, "smooth");
 
         });
 
@@ -2260,6 +2378,8 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
   }
+
+  window.addEventListener("hashchange", scrollToHashTarget);
 
   function openMain(){
 
@@ -3175,30 +3295,90 @@ document.addEventListener("DOMContentLoaded", function(){
     const section =
       document.querySelector("#facilityTour");
 
-    if(!section || !window.gsap || !window.ScrollTrigger) return;
+    if(!section) return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    const canUseScrollTrigger =
+      Boolean(window.gsap && window.ScrollTrigger);
+
+    if(canUseScrollTrigger){
+      gsap.registerPlugin(ScrollTrigger);
+    }
 
     const imgs =
-      document.querySelectorAll("#facilityTour .img_box li");
+      Array.from(document.querySelectorAll("#facilityTour .img_box li"));
 
     const texts =
-      document.querySelectorAll("#facilityTour .txt_box li");
+      Array.from(document.querySelectorAll("#facilityTour .txt_box li"));
 
     if(!imgs.length || !texts.length) return;
 
-    imgs.forEach(img=>{
+    const facilityPhotos =
+      imgs.map(img=>Array.from(img.querySelectorAll("span")));
+
+    const photoIndexes =
+      facilityPhotos.map(()=>0);
+
+    let activeFacilityIndex =
+      0;
+
+    function getPhotoSrc(photo){
+
+      const inlineBg =
+        photo && photo.style ? photo.style.backgroundImage : "";
+
+      const bg =
+        inlineBg || (photo ? window.getComputedStyle(photo).backgroundImage : "");
+
+      return bg.replace(/^url\(["']?/, "").replace(/["']?\)$/, "");
+
+    }
+
+    function setFacilityPhoto(index, photoIndex = 0){
 
       const photos =
-        img.querySelectorAll("span");
+        facilityPhotos[index] || [];
 
       if(!photos.length) return;
 
-      photos[0].classList.add("photo-on");
+      const safeIndex =
+        ((photoIndex % photos.length) + photos.length) % photos.length;
 
+      photoIndexes[index] =
+        safeIndex;
+
+      photos.forEach((photo, i)=>{
+        photo.classList.toggle("photo-on", i === safeIndex);
+      });
+
+      if(texts[index]){
+        const src =
+          getPhotoSrc(photos[safeIndex]);
+
+        if(src){
+          texts[index].style.setProperty("--facility-bg", `url("${src}")`);
+        }
+      }
+
+    }
+
+    facilityPhotos.forEach((photos, index)=>{
+      if(photos.length){
+        setFacilityPhoto(index, 0);
+      }
     });
 
+    section.classList.add("facility-ready");
+
     function setActive(index){
+
+      const maxIndex =
+        Math.min(imgs.length, texts.length) - 1;
+
+      index =
+        Math.max(0, Math.min(index, maxIndex));
+
+      activeFacilityIndex =
+        index;
 
       imgs.forEach(img=>img.classList.remove("on"));
       texts.forEach(text=>text.classList.remove("on"));
@@ -3211,35 +3391,109 @@ document.addEventListener("DOMContentLoaded", function(){
         texts[index].classList.add("on");
       }
 
+      setFacilityPhoto(index, photoIndexes[index] || 0);
+
     }
 
     setActive(0);
 
-    if(window.innerWidth <= 768){
+    let facilityScrollTicking =
+      false;
 
-      ScrollTrigger.create({
-        trigger:"#facilityTour .cont",
-        start:"top top",
-        end:"bottom bottom",
-        pin:"#facilityTour .img_inner",
-        pinSpacing:false,
-        anticipatePin:1,
-        invalidateOnRefresh:true,
+    function getVisibleTextIndex(){
+
+      const anchorY =
+        window.innerHeight * 0.5;
+
+      let bestIndex =
+        activeFacilityIndex;
+
+      let bestDistance =
+        Number.POSITIVE_INFINITY;
+
+      texts.forEach((text, index)=>{
+        const rect =
+          text.getBoundingClientRect();
+
+        const visibleHeight =
+          Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+
+        if(!visibleHeight) return;
+
+        const textCenter =
+          rect.top + rect.height / 2;
+
+        const distance =
+          Math.abs(textCenter - anchorY);
+
+        if(distance < bestDistance){
+          bestDistance =
+            distance;
+          bestIndex =
+            index;
+        }
       });
+
+      return bestIndex;
 
     }
 
-    texts.forEach((text, i)=>{
+    function syncActiveToVisibleText(){
 
+      facilityScrollTicking =
+        false;
+
+      setActive(getVisibleTextIndex());
+
+    }
+
+    function requestFacilitySync(){
+
+      if(facilityScrollTicking) return;
+
+      facilityScrollTicking =
+        true;
+
+      window.requestAnimationFrame(syncActiveToVisibleText);
+
+    }
+
+    window.addEventListener("scroll", requestFacilitySync, {passive:true});
+
+    window.addEventListener("resize", ()=>{
+      requestFacilitySync();
+
+      if(window.ScrollTrigger){
+        window.ScrollTrigger.refresh();
+      }
+    }, {passive:true});
+
+    if(canUseScrollTrigger){
       ScrollTrigger.create({
-        trigger:text,
-        start:"top 62%",
-        end:"bottom 38%",
-        onEnter:()=>setActive(i),
-        onEnterBack:()=>setActive(i),
+        trigger:"#facilityTour .cont",
+        start:"top bottom",
+        end:"bottom top",
+        onEnter:requestFacilitySync,
+        onEnterBack:requestFacilitySync,
+        onUpdate:requestFacilitySync,
       });
+    }
 
+    [80, 320, 900].forEach(delay=>{
+      window.setTimeout(requestFacilitySync, delay);
     });
+
+    window.setInterval(()=>{
+      const photos =
+        facilityPhotos[activeFacilityIndex] || [];
+
+      if(photos.length <= 1) return;
+
+      setFacilityPhoto(
+        activeFacilityIndex,
+        (photoIndexes[activeFacilityIndex] || 0) + 1
+      );
+    }, 2600);
 
     const modal =
       document.querySelector(".facility-photo-modal");
@@ -3261,15 +3515,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let modalPhotos = [];
     let modalPhotoIndex = 0;
-
-    function getPhotoSrc(photo){
-
-      const bg =
-        window.getComputedStyle(photo).backgroundImage;
-
-      return bg.replace(/^url\(["']?/, "").replace(/["']?\)$/, "");
-
-    }
 
     function renderModalPhoto(){
 

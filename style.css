@@ -6374,7 +6374,7 @@ body.menu-open .mobile-login-area{
   width:100%;
   height:100vh;
   transform:translate(-50%, -50%) scale(1.1);
-  transition:all 2s cubic-bezier(0.165, 0.840, 0.440, 1);
+  transition:opacity .45s ease, transform .7s cubic-bezier(0.165, 0.840, 0.440, 1);
 }
 
 #facilityTour .img_box li.on{
@@ -6403,6 +6403,10 @@ body.menu-open .mobile-login-area{
   filter:brightness(1.08) contrast(.96) saturate(1.04);
   transform:scale(1);
   transition:opacity .7s ease;
+}
+
+#facilityTour:not(.facility-ready) .img_box li.on span:first-child{
+  opacity:1;
 }
 
 #facilityTour .img_box span.photo-on{
@@ -8866,7 +8870,7 @@ html.pass-reveal-complete header{
 
 @media(max-width:768px){
   #facilityTour .cont{
-    min-height:520svh;
+    min-height:600svh;
   }
 
   #facilityTour .img_inner,
@@ -8877,7 +8881,11 @@ html.pass-reveal-complete header{
   }
 
   #facilityTour .img_box li{
-    transform:translate(-50%, -50%) scale(1.02);
+    transform:translate(-50%, -50%) scale(1.08);
+  }
+
+  #facilityTour .img_box li.on{
+    transform:translate(-50%, -50%) scale(1);
   }
 
   #facilityTour .img_box span{
@@ -8887,7 +8895,7 @@ html.pass-reveal-complete header{
   }
 
   #facilityTour .img_box li:after{
-    background:linear-gradient(180deg, rgba(0,0,0,.04) 0%, rgba(0,0,0,.14) 42%, rgba(0,0,0,.72) 100%);
+    background:linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.26) 42%, rgba(0,0,0,.74) 100%);
   }
 
   #facilityTour .txt_box{
@@ -8895,25 +8903,41 @@ html.pass-reveal-complete header{
   }
 
   #facilityTour .txt_box li{
-    justify-content:flex-end;
+    align-items:center;
+    justify-content:center;
+    width:100%;
     height:100svh;
-    padding:0 22px 12svh;
+    min-height:100svh;
+    margin:0;
+    padding:0 22px calc(72px + env(safe-area-inset-bottom));
+    text-align:center;
+    border-bottom:0;
   }
 
   #facilityTour .txt_box li > *{
-    max-width:340px;
+    max-width:min(390px, 100%);
   }
 
   #facilityTour .txt_box h2{
-    font-size:clamp(23px, 7vw, 32px);
-    text-shadow:0 3px 18px rgba(0,0,0,.5);
+    font-size:clamp(24px, 7vw, 34px);
+    line-height:1.16;
+    text-shadow:0 3px 18px rgba(0,0,0,.55);
   }
 
   #facilityTour .txt_box li div{
-    margin:10px auto 16px;
+    margin:12px auto 18px;
     font-size:clamp(14px, 4vw, 17px);
     line-height:1.58;
-    text-shadow:0 2px 12px rgba(0,0,0,.5);
+    white-space:pre-line;
+    text-shadow:0 2px 12px rgba(0,0,0,.55);
+  }
+
+  #facilityTour .facility-view-btn{
+    width:142px;
+    height:42px;
+    border-color:rgba(255,255,255,.86);
+    background:rgba(0,0,0,.34);
+    font-size:14px;
   }
 }
 
@@ -9440,5 +9464,131 @@ li{
   .intro-reveal-copy .intro-comfort-line{
     width:min(330px, 88vw);
     font-size:15px !important;
+  }
+}
+
+@media(max-width:768px){
+  #facilityTour .cont{
+    min-height:600vh !important;
+    min-height:600svh !important;
+    background:#000 !important;
+  }
+
+  #facilityTour .img_inner{
+    display:block !important;
+    position:sticky !important;
+    top:0 !important;
+    z-index:1 !important;
+    overflow:hidden !important;
+    height:100vh !important;
+    height:100svh !important;
+    min-height:100vh !important;
+    min-height:100svh !important;
+    background:#000 !important;
+  }
+
+  #facilityTour .img_box{
+    position:absolute !important;
+    inset:0 !important;
+    overflow:hidden !important;
+    width:100% !important;
+    height:100vh !important;
+    height:100svh !important;
+  }
+
+  #facilityTour .img_box li{
+    position:absolute !important;
+    top:50% !important;
+    left:50% !important;
+    width:100% !important;
+    height:100vh !important;
+    height:100svh !important;
+    min-height:100vh !important;
+    min-height:100svh !important;
+    transform:translate(-50%, -50%) scale(1.08) !important;
+  }
+
+  #facilityTour .img_box li.on{
+    transform:translate(-50%, -50%) scale(1) !important;
+  }
+
+  #facilityTour .img_box li:after{
+    background:linear-gradient(180deg, rgba(0,0,0,.08) 0%, rgba(0,0,0,.26) 42%, rgba(0,0,0,.74) 100%) !important;
+  }
+
+  #facilityTour .txt_box{
+    position:relative !important;
+    z-index:2 !important;
+    margin-top:-100vh !important;
+    margin-top:-100svh !important;
+    color:#fff !important;
+  }
+
+  #facilityTour .txt_box li{
+    position:relative !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:100% !important;
+    height:100vh !important;
+    height:100svh !important;
+    min-height:100vh !important;
+    min-height:100svh !important;
+    margin:0 !important;
+    padding:0 22px calc(72px + env(safe-area-inset-bottom)) !important;
+    overflow:visible !important;
+    border-bottom:0 !important;
+    text-align:center !important;
+    pointer-events:auto !important;
+  }
+
+  #facilityTour .txt_box li::before,
+  #facilityTour .txt_box li::after{
+    content:none !important;
+    display:none !important;
+  }
+
+  #facilityTour .txt_box li > *{
+    position:relative !important;
+    z-index:3 !important;
+    max-width:min(390px, 100%) !important;
+    pointer-events:auto !important;
+  }
+
+  #facilityTour .txt_box h2{
+    font-size:clamp(24px, 7vw, 34px) !important;
+    line-height:1.16 !important;
+    text-shadow:0 3px 18px rgba(0,0,0,.55) !important;
+  }
+
+  #facilityTour .txt_box li div{
+    margin:12px auto 18px !important;
+    font-size:clamp(14px, 4vw, 17px) !important;
+    line-height:1.58 !important;
+    white-space:pre-line !important;
+    text-shadow:0 2px 12px rgba(0,0,0,.55) !important;
+  }
+
+  #facilityTour .facility-view-btn{
+    position:relative !important;
+    z-index:4 !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:142px !important;
+    height:42px !important;
+    border:1px solid rgba(255,255,255,.86) !important;
+    border-radius:999px !important;
+    background:rgba(0,0,0,.34) !important;
+    color:#fff !important;
+    font-size:14px !important;
+    font-weight:800 !important;
+    pointer-events:auto !important;
+    touch-action:manipulation;
+  }
+
+  .facility-photo-modal.is-open{
+    display:flex !important;
   }
 }

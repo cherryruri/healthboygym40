@@ -2095,10 +2095,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .78 : .76;
+        window.innerWidth <= 768 ? .86 : .84;
 
       const end =
-        window.innerWidth <= 768 ? .86 : .84;
+        window.innerWidth <= 768 ? .92 : .90;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);
@@ -2495,6 +2495,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
       function updateCounter(now){
 
+        if(heroCounterComplete) return;
+
         const progress =
           easeOut(clamp((now - startedAt) / duration, 0, 1));
 
@@ -2525,6 +2527,35 @@ document.addEventListener("DOMContentLoaded", function(){
       }
 
       requestAnimationFrame(updateCounter);
+
+    }
+
+    function finishHeroCounter(){
+
+      if(!introStats.length){
+        introStats =
+          Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
+      }
+
+      if(!introStats.length) return;
+
+      introStats.forEach(stat=>{
+
+        const target =
+          Number(stat.dataset.target);
+
+        if(!Number.isFinite(target)) return;
+
+        stat.textContent =
+          target.toLocaleString();
+
+      });
+
+      heroCounterStarted =
+        true;
+
+      heroCounterComplete =
+        true;
 
     }
 
@@ -2607,64 +2638,68 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.76 : 0.75;
+        isMobile ? 0.84 : 0.82;
 
       const statsIntroEnd =
-        isMobile ? 0.81 : 0.80;
+        isMobile ? 0.89 : 0.87;
 
       const messageExitStart =
-        isMobile ? 0.70 : 0.69;
+        isMobile ? 0.80 : 0.78;
 
       const messageExitEnd =
-        isMobile ? 0.74 : 0.73;
+        isMobile ? 0.84 : 0.82;
 
       const statsFadeStart =
-        isMobile ? 0.87 : 0.86;
+        isMobile ? 0.942 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.91 : 0.90;
+        isMobile ? 0.956 : 0.952;
 
       const reviewDarkStart =
-        isMobile ? 0.875 : 0.865;
+        isMobile ? 0.954 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.965 : 0.955;
+        isMobile ? 0.992 : 0.99;
 
       const frameReturnStart =
-        isMobile ? 0.94 : 0.93;
+        isMobile ? 0.995 : 0.994;
 
       const frameReturnEnd =
-        isMobile ? 0.992 : 0.988;
+        isMobile ? 0.9996 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.994 : 0.99;
+        isMobile ? 0.9996 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.999 : 0.998;
+        isMobile ? 0.99995 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.92 : 0.91;
+        isMobile ? 0.956 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.945 : 0.935;
+        isMobile ? 0.966 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.955 : 0.945;
+        isMobile ? 0.966 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.975 : 0.965;
+        isMobile ? 0.9992 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.982 : 0.975;
+        isMobile ? 0.9986 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.996 : 0.992;
+        isMobile ? 0.9998 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
 
       const messageExitProgress =
         easeInOut(clamp((progress - messageExitStart) / (messageExitEnd - messageExitStart), 0, 1));
+
+      if(progress >= proofStart && !heroCounterComplete){
+        finishHeroCounter();
+      }
 
       const statsFadeProgress =
         heroCounterComplete
@@ -2703,6 +2738,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const proofDividerAlive =
         clamp(1 - lineFadeProgress, 0, 1);
+
+      const proofDividerOpacity =
+        proofProgress * clamp(proofDividerAlive / 0.22, 0, 1);
 
       if(statsIntroProgress > 0.12){
         startHeroCounter();
@@ -2859,17 +2897,17 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-gap",
-        `${(isMobile ? 3 : 4) + proofDividerAlive * (isMobile ? 2 : 3)}px`
+        `${(isMobile ? 8 : 10) + proofDividerAlive * (isMobile ? 6 : 8)}px`
       );
 
       hero.style.setProperty(
         "--review-proof-divider-opacity",
-        (proofProgress * proofDividerAlive).toFixed(4)
+        proofDividerOpacity.toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-proof-divider-width",
-        `${(isMobile ? 16 : 56) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
+        `${(isMobile ? 46 : 110) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
       );
 
       const liveReviewSlides =

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
-<link rel="stylesheet" href="style.css?v=20260618-facility-sync-pairs">
+<link rel="stylesheet" href="style.css?v=20260619-news-hub5">
 <link rel="stylesheet" href="css/swiper.min.css">
 </head>
 <body>
@@ -40,7 +40,7 @@
     <li><a href="#location">오시는 길</a></li>
     <li><a href="board.html">게시판</a></li>
     <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
-    <li><a href="#faq">자주 묻는 질문</a></li>
+    <li><a href="#newsHub">새 소식</a></li>
 
 
 <li class="login-menu" id="userMenu">
@@ -113,7 +113,7 @@
   <a href="#trainer">트레이너 소개</a>
   <a href="#hours">운영 시간</a>
   <a href="#location">오시는 길</a>
-  <a href="#faq">자주 묻는 질문</a>
+  <a href="#newsHub">새 소식</a>
 
  
 
@@ -166,7 +166,8 @@
     <div class="intro-statement intro-reveal-copy" aria-hidden="true">
       <p>
         <span class="reveal-line intro-greeting-line">안녕하세요</span>
-        <span class="reveal-line intro-comfort-line">수내동에서 제일 쾌적한 헬스장, 헬스보이짐 필라걸 수내점입니다.</span>
+        <span class="reveal-line intro-comfort-line">수내동에서 제일 쾌적한 헬스장</span>
+        <span class="reveal-line intro-branch-line">헬스보이짐 필라걸 수내점입니다</span>
       </p>
     </div>
 
@@ -401,7 +402,7 @@
         <div class="stat-box">
           <div class="stat-number rank" data-target="1">0</div>
           <p>고객만족도</p>
-          <span>분당 헬스장 부문 부동의 1위</span>
+          <span>분당 헬스장 부문<br><span class="stat-no-break">부동의&nbsp;1위</span></span>
         </div>
       </section>
 
@@ -1011,102 +1012,52 @@
 
 
 
-<section id="faq" class="faq-new-section fade">
+<section id="newsHub" class="news-hub-section fade" aria-label="헬스보이짐 수내점 새 소식">
+  <div class="news-hub-inner">
+    <div class="news-hub-top">
+      <div class="news-hub-title">
+        <h2>수내점의<br>새로운 소식을<br>만나보세요</h2>
+      </div>
 
-  <div class="faq-new-hero">
-
-    <div class="faq-new-title">
-
-      <small>자주 묻는 질문</small>
-
-      <h2>자주 묻는 질문</h2>
-
-      <p>
-        헬스보이짐 수내점 이용 전<br>
-        궁금한 내용을 빠르게 확인해보세요.
-      </p>
-
+      <article class="news-board-card">
+        <div class="news-hub-head">
+          <h3>NOTICE</h3>
+          <a href="board.html?board=noticeboard" aria-label="공지사항 더보기">+</a>
+        </div>
+        <div class="news-board-list" data-home-board-list>
+          <a class="news-board-item" href="board.html?board=noticeboard">
+            <span>공지사항을 불러오는 중입니다</span>
+            <time>-</time>
+          </a>
+        </div>
+      </article>
     </div>
 
-    <div class="faq-new-search">
-      <input type="text" id="faqSearch" placeholder="궁금한 내용을 검색해보세요">
-      <span>⌕</span>
+    <div class="news-hub-head news-notice-head">
+      <h3>NEWS</h3>
+      <a href="board.html?board=news" aria-label="뉴스 더보기">+</a>
     </div>
 
-  </div>
+    <div class="news-media-grid">
+      <a class="news-thumb-card" data-home-news-thumb href="board.html?board=news" aria-label="최신 뉴스 보기">
+        <img src="헬스보이짐 사진.jpg" alt="뉴스 썸네일" loading="lazy">
+        <span data-home-news-title>NEWS</span>
+      </a>
 
-
-
-
-
-  <div class="faq-new-wrap">
-
-    <div class="faq-new-category">
-      <button data-category="all">전체</button>
-      <button data-category="membership">회원권</button>
-      <button data-category="gym">헬스</button>
-      <button data-category="pt">PT</button>
-      <button data-category="pilates">필라테스</button>
-      <button data-category="parking">주차</button>
-      <button data-category="hours">운영시간</button>
-      <button data-category="refund">회원권 양도</button>
+      <article class="news-video-card" data-home-video-card>
+        <video data-home-video preload="metadata" playsinline muted>
+          <source src="센터 드론 영상.mp4" type="video/mp4">
+        </video>
+        <button class="news-video-play" type="button" data-home-video-play aria-label="영상 재생">
+          <span></span>
+        </button>
+        <div class="news-video-empty" data-home-video-empty hidden>영상 없음</div>
+        <div class="news-video-admin" data-home-video-admin hidden>
+          <button type="button" data-home-video-edit>수정</button>
+          <button type="button" data-home-video-delete>삭제</button>
+        </div>
+      </article>
     </div>
-
-    <div class="faq-new-list">
-
-
-      <div class="faq-new-item" data-category="membership">
-  <div class="faq-new-q">회원권은 어떤 종류가 있나요?<span>+</span></div>
-  <div class="faq-new-a">
-    헬스 이용권, PT 이용권, 필라테스 이용권 등 운동 목적에 맞춰 선택하실 수 있습니다.
-    방문 상담 시 현재 진행 중인 이벤트와 이용 기간에 맞춰 자세히 안내드립니다.
-  </div>
-</div>
-
-<div class="faq-new-item" data-category="membership">
-  <div class="faq-new-q">처음 등록할 때 상담도 가능한가요?<span>+</span></div>
-  <div class="faq-new-a">
-    네 가능합니다. 운동 목적, 이용 시간대, 현재 몸 상태를 확인한 뒤
-    헬스 · PT · 필라테스 중 가장 잘 맞는 방향으로 안내드립니다.
-  </div>
-</div>
-      <div class="faq-new-item" data-category="pilates">
-        <div class="faq-new-q">헬스랑 필라테스를 같이 이용할 수 있나요?<span>+</span></div>
-        <div class="faq-new-a">네 가능합니다. 헬스 · PT · 그룹필라테스를 함께 이용하실 수 있습니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="pilates">
-        <div class="faq-new-q">필라테스 수업은 몇 명인가요?<span>+</span></div>
-        <div class="faq-new-a">최대 6:1 소규모 그룹으로 진행됩니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="gym">
-        <div class="faq-new-q">헬스만 이용도 가능한가요?<span>+</span></div>
-        <div class="faq-new-a">네 가능합니다. 원하는 방식으로 이용 가능합니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="pt">
-        <div class="faq-new-q">PT는 필수인가요?<span>+</span></div>
-        <div class="faq-new-a">아닙니다. 필요하신 경우에만 진행하시면 됩니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="parking">
-        <div class="faq-new-q">주차 가능한가요?<span>+</span></div>
-        <div class="faq-new-a">지하 2층, 3층 주차장 이용 가능합니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="hours">
-        <div class="faq-new-q">운영 시간은 어떻게 되나요?<span>+</span></div>
-        <div class="faq-new-a">평일 06:00 - 24:00 / 주말 08:00 - 21:00 입니다.</div>
-      </div>
-
-      <div class="faq-new-item" data-category="refund">
-        <div class="faq-new-q">양도가 가능한가요?<span>+</span></div>
-        <div class="faq-new-a">양도비 3만원 결제 시 회원권 양도 가능합니다.</div>
-      </div>
-
-    </div>
-
   </div>
 </section>
 
@@ -1129,7 +1080,8 @@
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260618-profile-admin"></script>
-<script src="script.js?v=20260618-facility-sync-pairs"></script>
+<script src="script.js?v=20260619-stat-nowrap"></script>
+<script type="module" src="home-news.js?v=20260619-news-hub3"></script>
 <script type="module" src="firebase-index.js?v=20260618-mobile-board-menu"></script>
 
 </body>

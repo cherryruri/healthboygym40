@@ -2144,13 +2144,13 @@ document.addEventListener("DOMContentLoaded", function(){
           hero.querySelectorAll(".intro-reveal-copy .reveal-word").length;
 
         const cinematicWordStart =
-          isMobile ? 0.37 : 0.32;
+          isMobile ? 0.34 : 0.32;
 
         const cinematicWordStep =
-          isMobile ? 0.026 : 0.024;
+          isMobile ? 0.032 : 0.024;
 
         const cinematicWordRange =
-          isMobile ? 0.095 : 0.085;
+          isMobile ? 0.15 : 0.085;
 
         return cinematicWordStart +
           Math.max(0, wordCount - 1) * cinematicWordStep +
@@ -2163,8 +2163,8 @@ document.addEventListener("DOMContentLoaded", function(){
           window.innerWidth <= 768;
 
         return Math.min(
-          isMobile ? 0.68 : 0.60,
-          Math.max(isMobile ? 0.58 : 0.53, getStatementCompleteProgress())
+          isMobile ? 0.72 : 0.60,
+          Math.max(isMobile ? 0.62 : 0.53, getStatementCompleteProgress())
         );
       };
 
@@ -2173,7 +2173,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const isMobile =
           window.innerWidth <= 768;
 
-        return isMobile ? 0.885 : 0.865;
+        return isMobile ? 0.82 : 0.865;
       };
 
     const restartCaptionReveal =
@@ -2263,7 +2263,7 @@ document.addEventListener("DOMContentLoaded", function(){
           Math.max(startY, lockTop + scrollable * targetProgress);
 
         const duration =
-          isMobile ? 2600 : 2500;
+          isMobile ? 3000 : 2500;
 
         const ease =
           value=>value < 0.5
@@ -2328,8 +2328,13 @@ document.addEventListener("DOMContentLoaded", function(){
         const distanceProgress =
           clamp((targetY - startY) / scrollable, 0, 1);
 
+        const isMobile =
+          window.innerWidth <= 768;
+
         const duration =
-          Math.round(2100 + distanceProgress * 5200);
+          isMobile
+            ? Math.round(1050 + distanceProgress * 2600)
+            : Math.round(2100 + distanceProgress * 5200);
 
         const ease =
           value=>value < 0.5
@@ -3187,31 +3192,31 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? -14 : -54;
 
       const expandEnd =
-        isMobile ? 0.5 : 0.34;
+        isMobile ? 0.42 : 0.34;
 
       const copyStart =
-        isMobile ? 0.34 : 0.27;
+        isMobile ? 0.31 : 0.27;
 
       const copyRange =
-        isMobile ? 0.18 : 0.16;
+        isMobile ? 0.24 : 0.16;
 
       const lineStart =
-        isMobile ? 0.38 : 0.31;
+        isMobile ? 0.34 : 0.31;
 
       const lineStep =
-        isMobile ? 0.035 : 0.035;
+        isMobile ? 0.05 : 0.035;
 
       const lineRange =
-        isMobile ? 0.18 : 0.18;
+        isMobile ? 0.22 : 0.18;
 
       const wordStart =
-        isMobile ? 0.37 : 0.32;
+        isMobile ? 0.34 : 0.32;
 
       const wordStep =
-        isMobile ? 0.026 : 0.024;
+        isMobile ? 0.032 : 0.024;
 
       const wordRange =
-        isMobile ? 0.095 : 0.085;
+        isMobile ? 0.15 : 0.085;
 
       const underlineStart =
         lineStart + lineStep + lineRange * 0.78;
@@ -3226,16 +3231,16 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.805 : 0.795;
+        isMobile ? 0.745 : 0.795;
 
       const statsIntroEnd =
-        isMobile ? 0.875 : 0.855;
+        isMobile ? 0.82 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.79 : 0.765;
+        isMobile ? 0.72 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.855 : 0.835;
+        isMobile ? 0.805 : 0.835;
 
       const statsFadeStart =
         isMobile ? 0.942 : 0.94;

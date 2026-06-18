@@ -3254,7 +3254,7 @@ footer {
   }
 
   .intro {
-    height:3200vh;
+    height:1800vh;
     padding:0;
     --hero-frame-width:min(86vw, 370px);
     --hero-frame-height:clamp(230px, 36vh, 270px);

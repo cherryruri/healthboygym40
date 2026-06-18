@@ -2134,6 +2134,9 @@ document.addEventListener("DOMContentLoaded", function(){
     const scrollLockKeys =
       new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End"]);
 
+    const scrollUpKeys =
+      new Set(["ArrowUp", "PageUp", "Home"]);
+
     let touchStartY =
       0;
 
@@ -2167,6 +2170,14 @@ document.addEventListener("DOMContentLoaded", function(){
     const getHeroProgress =
       ()=>clamp((window.pageYOffset - lockTop) / getScrollable(), 0, 1);
 
+    const isWithinHeroSnapRange =
+      ()=>{
+        const y =
+          window.pageYOffset;
+
+        return y >= lockTop - 2 && y <= lockTop + getScrollable() + 8;
+      };
+
     const getStatementCompleteProgress =
       ()=>{
         const isMobile =
@@ -2186,7 +2197,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         return cinematicWordStart +
           Math.max(0, wordCount - 1) * cinematicWordStep +
-          cinematicWordRange * 0.92;
+          cinematicWordRange;
       };
 
     const getStatementTargetProgress =
@@ -2205,8 +2216,14 @@ document.addEventListener("DOMContentLoaded", function(){
         const isMobile =
           window.innerWidth <= 768;
 
-        return isMobile ? 0.745 : 0.865;
+        return isMobile ? 0.745 : 0.855;
       };
+
+    const getBridgeLead =
+      ()=>window.innerWidth <= 768 ? 0.09 : 0.065;
+
+    const getBridgeExit =
+      ()=>window.innerWidth <= 768 ? 0.04 : 0.04;
 
     const restartCaptionReveal =
       ()=>{
@@ -2338,20 +2355,9 @@ document.addEventListener("DOMContentLoaded", function(){
         requestAnimationFrame(step);
       };
 
-    const playStatsBridge =
-      ()=>{
+    const playHeroSnap =
+      targetProgress=>{
         if(statsBridgePlaying || !released || cinematicPlaying) return;
-
-        const startProgress =
-          getHeroProgress();
-
-        const statementProgress =
-          getStatementTargetProgress();
-
-        const targetProgress =
-          getStatsTargetProgress();
-
-        if(startProgress < statementProgress - 0.035 || startProgress >= targetProgress - 0.025) return;
 
         statsBridgePlaying =
           true;
@@ -2362,19 +2368,22 @@ document.addEventListener("DOMContentLoaded", function(){
         const startY =
           window.pageYOffset;
 
+        const targetProgressClamped =
+          clamp(targetProgress, 0, 1);
+
         const targetY =
-          Math.max(startY, lockTop + scrollable * targetProgress);
+          lockTop + scrollable * targetProgressClamped;
 
         const distanceProgress =
-          clamp((targetY - startY) / scrollable, 0, 1);
+          clamp(Math.abs(targetY - startY) / scrollable, 0, 1);
 
         const isMobile =
           window.innerWidth <= 768;
 
         const duration =
           isMobile
-            ? Math.round(620 + distanceProgress * 1450)
-            : Math.round(2100 + distanceProgress * 5200);
+            ? Math.round(420 + distanceProgress * 980)
+            : Math.round(520 + distanceProgress * 1450);
 
         const ease =
           value=>value < 0.5
@@ -2386,9 +2395,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
         document.documentElement.classList.add("hero-caption-scroll-locked");
         document.documentElement.classList.add("hero-stats-bridge-playing");
-        if(isMobile){
-          document.documentElement.classList.add("hero-mobile-snap-playing");
-        }
+        document.documentElement.classList.add("hero-mobile-snap-playing");
 
         const step =
           now=>{
@@ -2407,15 +2414,58 @@ document.addEventListener("DOMContentLoaded", function(){
 
             window.scrollTo(0, targetY);
 
-            statsBridgePlaying =
-              false;
+            requestAnimationFrame(()=>{
+              requestAnimationFrame(()=>{
+                statsBridgePlaying =
+                  false;
 
-            document.documentElement.classList.remove("hero-caption-scroll-locked");
-            document.documentElement.classList.remove("hero-stats-bridge-playing");
-            document.documentElement.classList.remove("hero-mobile-snap-playing");
+                document.documentElement.classList.remove("hero-caption-scroll-locked");
+                document.documentElement.classList.remove("hero-stats-bridge-playing");
+                document.documentElement.classList.remove("hero-mobile-snap-playing");
+              });
+            });
           };
 
         requestAnimationFrame(step);
+      };
+
+    const playStatsBridge =
+      ()=>{
+        const startProgress =
+          getHeroProgress();
+
+        const statementProgress =
+          getStatementTargetProgress();
+
+        const targetProgress =
+          getStatsTargetProgress();
+
+        if(startProgress < statementProgress - getBridgeLead() || startProgress > targetProgress + getBridgeExit()) return;
+
+        playHeroSnap(targetProgress);
+      };
+
+    const playStatementBridge =
+      ()=>{
+        const startProgress =
+          getHeroProgress();
+
+        const statementProgress =
+          getStatementTargetProgress();
+
+        if(startProgress <= statementProgress + 0.015) return;
+
+        playHeroSnap(statementProgress);
+      };
+
+    const playHeroTopBridge =
+      ()=>{
+        const startProgress =
+          getHeroProgress();
+
+        if(startProgress <= 0.025 || startProgress > getStatementTargetProgress() + 0.08) return;
+
+        playHeroSnap(0);
       };
 
     const onWheel =
@@ -2512,22 +2562,34 @@ document.addEventListener("DOMContentLoaded", function(){
           return;
         }
 
-        if(event.deltaY <= 0) return;
-        if(!released || cinematicPlaying) return;
+        if(!released || cinematicPlaying || !isWithinHeroSnapRange()) return;
 
-        const startProgress =
-          getHeroProgress();
+        if(event.deltaY > 0){
+          const startProgress =
+            getHeroProgress();
 
-        const bridgeLead =
-          window.innerWidth <= 768 ? 0.09 : 0.035;
+          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
 
-        const bridgeExit =
-          window.innerWidth <= 768 ? 0.035 : 0.025;
+          event.preventDefault();
+          playStatsBridge();
+          return;
+        }
 
-        if(startProgress < getStatementTargetProgress() - bridgeLead || startProgress >= getStatsTargetProgress() + bridgeExit) return;
+        if(event.deltaY < 0){
+          const startProgress =
+            getHeroProgress();
 
-        event.preventDefault();
-        playStatsBridge();
+          if(startProgress > getStatementTargetProgress() + 0.015){
+            event.preventDefault();
+            playStatementBridge();
+            return;
+          }
+
+          if(startProgress > 0.025){
+            event.preventDefault();
+            playHeroTopBridge();
+          }
+        }
       };
 
     const onBridgeTouchStart =
@@ -2550,22 +2612,34 @@ document.addEventListener("DOMContentLoaded", function(){
             ? event.touches[0].clientY
             : bridgeTouchStartY;
 
-        if(bridgeTouchStartY - currentY <= 0) return;
-        if(!released || cinematicPlaying) return;
+        if(!released || cinematicPlaying || !isWithinHeroSnapRange()) return;
+
+        const travel =
+          bridgeTouchStartY - currentY;
+
+        if(Math.abs(travel) < 4) return;
 
         const startProgress =
           getHeroProgress();
 
-        const bridgeLead =
-          window.innerWidth <= 768 ? 0.09 : 0.035;
+        if(travel > 0){
+          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
 
-        const bridgeExit =
-          window.innerWidth <= 768 ? 0.035 : 0.025;
+          event.preventDefault();
+          playStatsBridge();
+          return;
+        }
 
-        if(startProgress < getStatementTargetProgress() - bridgeLead || startProgress >= getStatsTargetProgress() + bridgeExit) return;
+        if(startProgress > getStatementTargetProgress() + 0.015){
+          event.preventDefault();
+          playStatementBridge();
+          return;
+        }
 
-        event.preventDefault();
-        playStatsBridge();
+        if(startProgress > 0.025){
+          event.preventDefault();
+          playHeroTopBridge();
+        }
       };
 
     const onBridgeKeyDown =
@@ -2575,22 +2649,31 @@ document.addEventListener("DOMContentLoaded", function(){
           return;
         }
 
-        if(!scrollLockKeys.has(event.key)) return;
-        if(!released || cinematicPlaying) return;
+        if(!released || cinematicPlaying || !isWithinHeroSnapRange()) return;
 
         const startProgress =
           getHeroProgress();
 
-        const bridgeLead =
-          window.innerWidth <= 768 ? 0.09 : 0.035;
+        if(scrollLockKeys.has(event.key)){
+          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
 
-        const bridgeExit =
-          window.innerWidth <= 768 ? 0.035 : 0.025;
+          event.preventDefault();
+          playStatsBridge();
+          return;
+        }
 
-        if(startProgress < getStatementTargetProgress() - bridgeLead || startProgress >= getStatsTargetProgress() + bridgeExit) return;
+        if(!scrollUpKeys.has(event.key)) return;
 
-        event.preventDefault();
-        playStatsBridge();
+        if(startProgress > getStatementTargetProgress() + 0.015){
+          event.preventDefault();
+          playStatementBridge();
+          return;
+        }
+
+        if(startProgress > 0.025){
+          event.preventDefault();
+          playHeroTopBridge();
+        }
       };
 
     window.addEventListener("wheel", onReplayWheel, {passive:false});
@@ -3311,16 +3394,16 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.705 : 0.795;
+        isMobile ? 0.724 : 0.795;
 
       const statsIntroEnd =
         isMobile ? 0.745 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.69 : 0.765;
+        isMobile ? 0.718 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.735 : 0.835;
+        isMobile ? 0.743 : 0.835;
 
       const statsFadeStart =
         isMobile ? 0.942 : 0.94;

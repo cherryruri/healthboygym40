@@ -2897,12 +2897,23 @@ document.addEventListener("DOMContentLoaded", function(){
 
     setLoaderTarget();
 
+    const isMobileLoader =
+      window.innerWidth <= 768;
+
+    const mobileBlackLogoHold =
+      isMobileLoader ? 640 : 0;
+
     requestAnimationFrame(()=>{
 
       setLoaderTarget();
-      loader.classList.add("is-wiping", "logo-visible");
-      document.body.classList.add("loader-docking");
-      loader.classList.add("dock-to-logo");
+      loader.classList.add("is-wiping", "logo-visible", "logo-on-white");
+
+      setTimeout(()=>{
+
+        document.body.classList.add("loader-docking");
+        loader.classList.add("dock-to-logo");
+
+      }, mobileBlackLogoHold);
 
     });
 
@@ -2914,13 +2925,13 @@ document.addEventListener("DOMContentLoaded", function(){
       initHashNavigation();
       queueHashScroll();
 
-    },1240);
+    },1240 + mobileBlackLogoHold);
 
     setTimeout(()=>{
 
       loader.style.display = "none";
 
-    },1880);
+    },1880 + mobileBlackLogoHold);
 
   }
 

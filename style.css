@@ -242,6 +242,13 @@ header {
   width:100%;
 }
 
+.logo-screen.logo-on-white .loader-logo{
+  color:#000;
+  mix-blend-mode:normal;
+  opacity:1;
+  transform:translate(-50%, -50%) skewX(var(--loader-logo-skew));
+}
+
 .logo-screen.dock-to-logo .loader-logo{
   left:var(--loader-target-x);
   top:var(--loader-target-y);

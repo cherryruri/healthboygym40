@@ -2108,17 +2108,73 @@ document.addEventListener("DOMContentLoaded", function(){
     let replayTouchStartY =
       0;
 
+    let bridgeTouchStartY =
+      0;
+
     let released =
       true;
 
     let cinematicPlaying =
       false;
 
+    let statsBridgePlaying =
+      false;
+
     let playTimer =
       0;
 
+    const clamp =
+      (value, min, max)=>Math.max(min, Math.min(max, value));
+
     const isNearHeroTop =
       ()=>window.pageYOffset <= lockTop + 10;
+
+    const getScrollable =
+      ()=>Math.max(1, hero.offsetHeight - window.innerHeight);
+
+    const getHeroProgress =
+      ()=>clamp((window.pageYOffset - lockTop) / getScrollable(), 0, 1);
+
+    const getStatementCompleteProgress =
+      ()=>{
+        const isMobile =
+          window.innerWidth <= 768;
+
+        const wordCount =
+          hero.querySelectorAll(".intro-reveal-copy .reveal-word").length;
+
+        const cinematicWordStart =
+          isMobile ? 0.37 : 0.32;
+
+        const cinematicWordStep =
+          isMobile ? 0.026 : 0.024;
+
+        const cinematicWordRange =
+          isMobile ? 0.095 : 0.085;
+
+        return cinematicWordStart +
+          Math.max(0, wordCount - 1) * cinematicWordStep +
+          cinematicWordRange * 0.92;
+      };
+
+    const getStatementTargetProgress =
+      ()=>{
+        const isMobile =
+          window.innerWidth <= 768;
+
+        return Math.min(
+          isMobile ? 0.68 : 0.60,
+          Math.max(isMobile ? 0.58 : 0.53, getStatementCompleteProgress())
+        );
+      };
+
+    const getStatsTargetProgress =
+      ()=>{
+        const isMobile =
+          window.innerWidth <= 768;
+
+        return isMobile ? 0.885 : 0.865;
+      };
 
     const restartCaptionReveal =
       ()=>{
@@ -2195,33 +2251,13 @@ document.addEventListener("DOMContentLoaded", function(){
           window.innerWidth <= 768;
 
         const scrollable =
-          Math.max(1, hero.offsetHeight - window.innerHeight);
+          getScrollable();
 
         const startY =
           window.pageYOffset;
 
-        const wordCount =
-          hero.querySelectorAll(".intro-reveal-copy .reveal-word").length;
-
-        const cinematicWordStart =
-          isMobile ? 0.37 : 0.32;
-
-        const cinematicWordStep =
-          isMobile ? 0.026 : 0.024;
-
-        const cinematicWordRange =
-          isMobile ? 0.095 : 0.085;
-
-        const statementCompleteProgress =
-          cinematicWordStart +
-          Math.max(0, wordCount - 1) * cinematicWordStep +
-          cinematicWordRange * 0.92;
-
         const targetProgress =
-          Math.min(
-            isMobile ? 0.68 : 0.60,
-            Math.max(isMobile ? 0.58 : 0.53, statementCompleteProgress)
-          );
+          getStatementTargetProgress();
 
         const targetY =
           Math.max(startY, lockTop + scrollable * targetProgress);
@@ -2257,6 +2293,75 @@ document.addEventListener("DOMContentLoaded", function(){
             cinematicPlaying =
               false;
             release();
+          };
+
+        requestAnimationFrame(step);
+      };
+
+    const playStatsBridge =
+      ()=>{
+        if(statsBridgePlaying || !released || cinematicPlaying) return;
+
+        const startProgress =
+          getHeroProgress();
+
+        const statementProgress =
+          getStatementTargetProgress();
+
+        const targetProgress =
+          getStatsTargetProgress();
+
+        if(startProgress < statementProgress - 0.035 || startProgress >= targetProgress - 0.025) return;
+
+        statsBridgePlaying =
+          true;
+
+        const scrollable =
+          getScrollable();
+
+        const startY =
+          window.pageYOffset;
+
+        const targetY =
+          Math.max(startY, lockTop + scrollable * targetProgress);
+
+        const distanceProgress =
+          clamp((targetY - startY) / scrollable, 0, 1);
+
+        const duration =
+          Math.round(2100 + distanceProgress * 5200);
+
+        const ease =
+          value=>value < 0.5
+            ? 4 * value * value * value
+            : 1 - Math.pow(-2 * value + 2, 3) / 2;
+
+        const startedAt =
+          performance.now();
+
+        document.documentElement.classList.add("hero-caption-scroll-locked");
+        document.documentElement.classList.add("hero-stats-bridge-playing");
+
+        const step =
+          now=>{
+            const progress =
+              Math.min(1, (now - startedAt) / duration);
+
+            const y =
+              startY + (targetY - startY) * ease(progress);
+
+            window.scrollTo(0, y);
+
+            if(progress < 1){
+              requestAnimationFrame(step);
+              return;
+            }
+
+            statsBridgePlaying =
+              false;
+
+            document.documentElement.classList.remove("hero-caption-scroll-locked");
+            document.documentElement.classList.remove("hero-stats-bridge-playing");
           };
 
         requestAnimationFrame(step);
@@ -2349,10 +2454,84 @@ document.addEventListener("DOMContentLoaded", function(){
         triggerReplay();
       };
 
+    const onBridgeWheel =
+      event=>{
+        if(statsBridgePlaying){
+          event.preventDefault();
+          return;
+        }
+
+        if(event.deltaY <= 0) return;
+        if(!released || cinematicPlaying) return;
+
+        const startProgress =
+          getHeroProgress();
+
+        if(startProgress < getStatementTargetProgress() - 0.035 || startProgress >= getStatsTargetProgress() - 0.025) return;
+
+        event.preventDefault();
+        playStatsBridge();
+      };
+
+    const onBridgeTouchStart =
+      event=>{
+        bridgeTouchStartY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : 0;
+      };
+
+    const onBridgeTouchMove =
+      event=>{
+        if(statsBridgePlaying){
+          event.preventDefault();
+          return;
+        }
+
+        const currentY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : bridgeTouchStartY;
+
+        if(bridgeTouchStartY - currentY <= 0) return;
+        if(!released || cinematicPlaying) return;
+
+        const startProgress =
+          getHeroProgress();
+
+        if(startProgress < getStatementTargetProgress() - 0.035 || startProgress >= getStatsTargetProgress() - 0.025) return;
+
+        event.preventDefault();
+        playStatsBridge();
+      };
+
+    const onBridgeKeyDown =
+      event=>{
+        if(statsBridgePlaying && scrollLockKeys.has(event.key)){
+          event.preventDefault();
+          return;
+        }
+
+        if(!scrollLockKeys.has(event.key)) return;
+        if(!released || cinematicPlaying) return;
+
+        const startProgress =
+          getHeroProgress();
+
+        if(startProgress < getStatementTargetProgress() - 0.035 || startProgress >= getStatsTargetProgress() - 0.025) return;
+
+        event.preventDefault();
+        playStatsBridge();
+      };
+
     window.addEventListener("wheel", onReplayWheel, {passive:false});
     window.addEventListener("touchstart", onReplayTouchStart, {passive:true});
     window.addEventListener("touchmove", onReplayTouchMove, {passive:false});
     window.addEventListener("keydown", onReplayKeyDown);
+    window.addEventListener("wheel", onBridgeWheel, {passive:false});
+    window.addEventListener("touchstart", onBridgeTouchStart, {passive:true});
+    window.addEventListener("touchmove", onBridgeTouchMove, {passive:false});
+    window.addEventListener("keydown", onBridgeKeyDown);
 
     armGate(holdMs);
 
@@ -2441,7 +2620,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const targetScale =
       loaderRect.width > 0
-        ? Math.min(.75, Math.max(.2, logoRect.width / loaderRect.width))
+        ? Math.min(.75, Math.max(.12, logoRect.width / loaderRect.width))
         : .28;
 
     loader.style.setProperty(
@@ -2458,6 +2637,27 @@ document.addEventListener("DOMContentLoaded", function(){
       "--loader-target-scale",
       targetScale.toFixed(4)
     );
+
+  }
+
+  function stageLoaderIntro(){
+
+    const loader =
+      document.querySelector(".logo-screen");
+
+    if(!loader) return;
+
+    requestAnimationFrame(()=>{
+
+      setTimeout(()=>{
+        loader.classList.add("logo-visible");
+      }, 240);
+
+      setTimeout(()=>{
+        loader.classList.add("is-wiping");
+      }, 1480);
+
+    });
 
   }
 
@@ -2700,6 +2900,7 @@ document.addEventListener("DOMContentLoaded", function(){
     requestAnimationFrame(()=>{
 
       setLoaderTarget();
+      loader.classList.add("is-wiping", "logo-visible");
       document.body.classList.add("loader-docking");
       loader.classList.add("dock-to-logo");
 
@@ -2713,13 +2914,13 @@ document.addEventListener("DOMContentLoaded", function(){
       initHashNavigation();
       queueHashScroll();
 
-    },1250);
+    },1240);
 
     setTimeout(()=>{
 
       loader.style.display = "none";
 
-    },2000);
+    },1880);
 
   }
 
@@ -2733,7 +2934,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
   prepareIntroCaption();
 
-  setTimeout(openMain, 1350);
+  stageLoaderIntro();
+
+  setTimeout(openMain, 2860);
 
 
 
@@ -2785,6 +2988,16 @@ document.addEventListener("DOMContentLoaded", function(){
           now;
 
         return 0;
+      }
+
+      if(document.documentElement.classList.contains("hero-stats-bridge-playing")){
+        displayedHeroProgress =
+          rawProgress;
+
+        lastHeroSmoothAt =
+          now;
+
+        return rawProgress;
       }
 
       if(displayedHeroProgress === null){
@@ -3002,16 +3215,16 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.84 : 0.82;
+        isMobile ? 0.805 : 0.795;
 
       const statsIntroEnd =
-        isMobile ? 0.89 : 0.87;
+        isMobile ? 0.875 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.80 : 0.78;
+        isMobile ? 0.79 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.84 : 0.82;
+        isMobile ? 0.855 : 0.835;
 
       const statsFadeStart =
         isMobile ? 0.942 : 0.94;

@@ -2105,11 +2105,38 @@ document.addEventListener("DOMContentLoaded", function(){
     let touchStartY =
       0;
 
+    let replayTouchStartY =
+      0;
+
     let released =
+      true;
+
+    let cinematicPlaying =
       false;
+
+    let playTimer =
+      0;
+
+    const isNearHeroTop =
+      ()=>window.pageYOffset <= lockTop + 10;
+
+    const restartCaptionReveal =
+      ()=>{
+        caption.classList.remove("is-replaying", "is-replay-reset");
+        caption.classList.add("is-replay-reset");
+
+        void caption.offsetWidth;
+
+        window.requestAnimationFrame(()=>{
+          caption.classList.remove("is-replay-reset");
+          caption.classList.add("is-replaying");
+        });
+      };
 
     const clampToHero =
       ()=>{
+        if(cinematicPlaying) return;
+
         if(window.pageYOffset > lockTop + 1){
           window.scrollTo(0, lockTop);
         }
@@ -2122,12 +2149,117 @@ document.addEventListener("DOMContentLoaded", function(){
         released =
           true;
 
+        window.clearTimeout(playTimer);
         window.removeEventListener("wheel", onWheel);
         window.removeEventListener("touchstart", onTouchStart);
         window.removeEventListener("touchmove", onTouchMove);
         window.removeEventListener("keydown", onKeyDown);
         window.removeEventListener("scroll", onScroll);
         document.documentElement.classList.remove("hero-caption-scroll-locked");
+      };
+
+    const armGate =
+      (delay, shouldReplayCaption = false)=>{
+        if(!released || cinematicPlaying || !isNearHeroTop()) return;
+
+        released =
+          false;
+
+        if(shouldReplayCaption){
+          restartCaptionReveal();
+        }
+
+        document.documentElement.classList.add("hero-caption-scroll-locked");
+        window.addEventListener("wheel", onWheel, {passive:false});
+        window.addEventListener("touchstart", onTouchStart, {passive:true});
+        window.addEventListener("touchmove", onTouchMove, {passive:false});
+        window.addEventListener("keydown", onKeyDown);
+        window.addEventListener("scroll", onScroll, {passive:true});
+
+        window.clearTimeout(playTimer);
+
+        if(Number.isFinite(delay)){
+          playTimer =
+            window.setTimeout(playCinematicIntro, delay);
+        }
+      };
+
+    const playCinematicIntro =
+      ()=>{
+        if(released) return;
+
+        cinematicPlaying =
+          true;
+
+        const isMobile =
+          window.innerWidth <= 768;
+
+        const scrollable =
+          Math.max(1, hero.offsetHeight - window.innerHeight);
+
+        const startY =
+          window.pageYOffset;
+
+        const wordCount =
+          hero.querySelectorAll(".intro-reveal-copy .reveal-word").length;
+
+        const cinematicWordStart =
+          isMobile ? 0.37 : 0.32;
+
+        const cinematicWordStep =
+          isMobile ? 0.026 : 0.024;
+
+        const cinematicWordRange =
+          isMobile ? 0.095 : 0.085;
+
+        const statementCompleteProgress =
+          cinematicWordStart +
+          Math.max(0, wordCount - 1) * cinematicWordStep +
+          cinematicWordRange * 0.92;
+
+        const targetProgress =
+          Math.min(
+            isMobile ? 0.68 : 0.60,
+            Math.max(isMobile ? 0.58 : 0.53, statementCompleteProgress)
+          );
+
+        const targetY =
+          Math.max(startY, lockTop + scrollable * targetProgress);
+
+        const duration =
+          isMobile ? 2600 : 2500;
+
+        const ease =
+          value=>value < 0.5
+            ? 4 * value * value * value
+            : 1 - Math.pow(-2 * value + 2, 3) / 2;
+
+        const startedAt =
+          performance.now();
+
+        const step =
+          now=>{
+            if(released) return;
+
+            const progress =
+              Math.min(1, (now - startedAt) / duration);
+
+            const y =
+              startY + (targetY - startY) * ease(progress);
+
+            window.scrollTo(0, y);
+
+            if(progress < 1){
+              requestAnimationFrame(step);
+              return;
+            }
+
+            cinematicPlaying =
+              false;
+            release();
+          };
+
+        requestAnimationFrame(step);
       };
 
     const onWheel =
@@ -2170,14 +2302,59 @@ document.addEventListener("DOMContentLoaded", function(){
     const onScroll =
       ()=>clampToHero();
 
-    document.documentElement.classList.add("hero-caption-scroll-locked");
-    window.addEventListener("wheel", onWheel, {passive:false});
-    window.addEventListener("touchstart", onTouchStart, {passive:true});
-    window.addEventListener("touchmove", onTouchMove, {passive:false});
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("scroll", onScroll, {passive:true});
+    const triggerReplay =
+      ()=>{
+        if(!released || cinematicPlaying || !isNearHeroTop()) return;
 
-    window.setTimeout(release, holdMs);
+        armGate(holdMs, true);
+      };
+
+    const onReplayWheel =
+      event=>{
+        if(event.deltaY <= 0) return;
+        if(!released || cinematicPlaying || !isNearHeroTop()) return;
+
+        event.preventDefault();
+        triggerReplay();
+      };
+
+    const onReplayTouchStart =
+      event=>{
+        replayTouchStartY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : 0;
+      };
+
+    const onReplayTouchMove =
+      event=>{
+        const currentY =
+          event.touches && event.touches.length
+            ? event.touches[0].clientY
+            : replayTouchStartY;
+
+        if(replayTouchStartY - currentY <= 0) return;
+        if(!released || cinematicPlaying || !isNearHeroTop()) return;
+
+        event.preventDefault();
+        triggerReplay();
+      };
+
+    const onReplayKeyDown =
+      event=>{
+        if(!scrollLockKeys.has(event.key)) return;
+        if(!released || cinematicPlaying || !isNearHeroTop()) return;
+
+        event.preventDefault();
+        triggerReplay();
+      };
+
+    window.addEventListener("wheel", onReplayWheel, {passive:false});
+    window.addEventListener("touchstart", onReplayTouchStart, {passive:true});
+    window.addEventListener("touchmove", onReplayTouchMove, {passive:false});
+    window.addEventListener("keydown", onReplayKeyDown);
+
+    armGate(holdMs);
 
   }
 
@@ -2589,6 +2766,73 @@ document.addEventListener("DOMContentLoaded", function(){
       const easeInOut =
         value=>value * value * (3 - 2 * value);
 
+    let displayedHeroProgress =
+      null;
+
+    let lastHeroSmoothAt =
+      0;
+
+    function smoothHeroProgress(rawProgress){
+
+      const now =
+        performance.now();
+
+      if(rawProgress <= 0.001){
+        displayedHeroProgress =
+          0;
+
+        lastHeroSmoothAt =
+          now;
+
+        return 0;
+      }
+
+      if(displayedHeroProgress === null){
+        displayedHeroProgress =
+          rawProgress;
+
+        lastHeroSmoothAt =
+          now;
+
+        return rawProgress;
+      }
+
+      const delta =
+        rawProgress - displayedHeroProgress;
+
+      if(Math.abs(delta) < 0.00035){
+        displayedHeroProgress =
+          rawProgress;
+
+        return rawProgress;
+      }
+
+      const absDelta =
+        Math.abs(delta);
+
+      const smoothing =
+        delta < 0
+          ? (absDelta > 0.08 ? 0.045 : 0.07)
+          : (absDelta > 0.08 ? 0.19 : 0.12);
+
+      const elapsedFrames =
+        lastHeroSmoothAt
+          ? clamp((now - lastHeroSmoothAt) / 16.67, 0, 4)
+          : 1;
+
+      lastHeroSmoothAt =
+        now;
+
+      const frameSmoothing =
+        1 - Math.pow(1 - smoothing, elapsedFrames);
+
+      displayedHeroProgress +=
+        delta * frameSmoothing;
+
+      return displayedHeroProgress;
+
+    }
+
     function startHeroCounter(){
 
       if(!introStats.length){
@@ -2684,8 +2928,11 @@ document.addEventListener("DOMContentLoaded", function(){
       const scrollable =
         Math.max(1, hero.offsetHeight - window.innerHeight);
 
-      const progress =
+      const rawProgress =
         Math.max(0, Math.min(1, -rect.top / scrollable));
+
+      const progress =
+        smoothHeroProgress(rawProgress);
 
       hero.style.setProperty(
         "--hero-progress",

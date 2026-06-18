@@ -17,6 +17,11 @@ html.allpass-scroll-locked body {
   overscroll-behavior:contain;
 }
 
+html.hero-caption-scroll-locked,
+html.hero-caption-scroll-locked body {
+  overscroll-behavior:contain;
+}
+
 html.allpass-scroll-locked .pass-transition-panel,
 html.allpass-scroll-locked .pass-locator-section {
   opacity:0 !important;
@@ -494,6 +499,17 @@ body.loaded .intro-desc .desc-char{
   animation-delay:calc(.58s + (var(--caption-index, 0) * .024s));
 }
 
+.intro-desc.is-replay-reset .desc-char{
+  animation:none !important;
+  color:#b8b8b8 !important;
+  opacity:.55 !important;
+}
+
+body.loaded .intro-desc.is-replaying .desc-char{
+  animation:heroCaptionInk .72s cubic-bezier(.19,1,.22,1) forwards !important;
+  animation-delay:calc(.12s + (var(--caption-index, 0) * .024s)) !important;
+}
+
 body.loaded .intro-desc:not(.is-split) .intro-desc-line{
   animation:heroCaptionInkLine .9s cubic-bezier(.19,1,.22,1) forwards;
 }
@@ -555,6 +571,9 @@ body.loaded .intro-desc:not(.is-split) .intro-desc-line:nth-child(2){
   transform-origin:center;
   pointer-events:none;
   text-align:center;
+  transition:
+    opacity .34s cubic-bezier(.22,.61,.36,1),
+    transform .34s cubic-bezier(.22,.61,.36,1);
 }
 
 .review-proof-title{

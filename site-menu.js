@@ -185,6 +185,38 @@
     return mobileQuery.matches;
   }
 
+  function isAllPassTypingActive(){
+    if(!isMobile()) return false;
+
+    const line = document.querySelector("[data-allpass-typing]");
+    return Boolean(line && line.dataset.typed === "true" && line.dataset.typingComplete !== "true");
+  }
+
+  function revealPassLocatorAfterTyping(){
+    if(!isMobile()) return;
+
+    const line = document.querySelector("[data-allpass-typing]");
+    const locator = document.querySelector("[data-pass-locator]");
+
+    if(!line || !locator || line.dataset.typingComplete !== "true") return;
+
+    locator.classList.add("is-revealed");
+    root.classList.remove("pass-reveal-playing");
+    root.classList.add("pass-reveal-complete");
+
+    const transition = document.querySelector("[data-pass-transition]");
+    if(transition){
+      transition.classList.remove("is-playing");
+      transition.classList.add("is-complete");
+      transition.style.setProperty("--pass-transition-opacity", "1");
+      transition.style.setProperty("--pass-transition-scale", "1");
+    }
+
+    if(window.ScrollTrigger){
+      requestAnimationFrame(()=>window.ScrollTrigger.refresh());
+    }
+  }
+
   function injectMobileScrollStyle(){
     if(document.getElementById("mobile-scroll-fix-style")) return;
 
@@ -220,8 +252,20 @@
           position:relative !important;
           inset:auto !important;
           z-index:auto !important;
-          height:auto !important;
+          height:0 !important;
           min-height:0 !important;
+          margin:0 !important;
+          padding:0 !important;
+          overflow:hidden !important;
+          opacity:0 !important;
+          visibility:hidden !important;
+          pointer-events:none !important;
+          transform:translateY(22px) !important;
+          transition:opacity .55s ease, transform .55s ease, visibility .55s ease !important;
+        }
+        .pass-locator-section.is-revealed{
+          height:auto !important;
+          min-height:100svh !important;
           padding:72px 0 84px !important;
           overflow:visible !important;
           opacity:1 !important;
@@ -235,6 +279,18 @@
         .pass-locator-section .pass-selected-block,
         .pass-locator-section .pass-recommend-panel,
         .pass-locator-section .pass-result-card{
+          opacity:0 !important;
+          visibility:hidden !important;
+          pointer-events:none !important;
+          transform:translateY(20px) !important;
+          transition:opacity .55s ease, transform .55s ease, visibility .55s ease !important;
+        }
+        .pass-locator-section.is-revealed .pass-locator-container,
+        .pass-locator-section.is-revealed .pass-locator-controls,
+        .pass-locator-section.is-revealed .pass-locator-map-shell,
+        .pass-locator-section.is-revealed .pass-selected-block,
+        .pass-locator-section.is-revealed .pass-recommend-panel,
+        .pass-locator-section.is-revealed .pass-result-card{
           opacity:1 !important;
           visibility:visible !important;
           pointer-events:auto !important;
@@ -260,16 +316,23 @@
   function clearMobileScrollLocks(){
     if(!isMobile()) return;
 
-    const hadLock = lockClasses.some(className=>root.classList.contains(className));
+    const keepAllPassTypingLock = isAllPassTypingActive();
+    const removableClasses = keepAllPassTypingLock
+      ? lockClasses.filter(className=>className !== "allpass-scroll-locked")
+      : lockClasses;
+    const hadLock = removableClasses.some(className=>root.classList.contains(className));
     const body = document.body;
 
-    lockClasses.forEach(className=>root.classList.remove(className));
+    removableClasses.forEach(className=>root.classList.remove(className));
     if(body){
       body.classList.remove("hero-mobile-snap-playing");
       body.style.overflow = "";
     }
     root.style.overflow = "";
-    window.__skipAllPassRevealUntil = Date.now() + 1800;
+
+    if(!keepAllPassTypingLock){
+      window.__skipAllPassRevealUntil = Date.now() + 1800;
+    }
 
     const transition = document.querySelector("[data-pass-transition]");
     if(transition){
@@ -278,7 +341,7 @@
       transition.style.setProperty("--pass-transition-scale", ".2");
     }
 
-    if(hadLock){
+    if(hadLock && !keepAllPassTypingLock){
       document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
     }
   }
@@ -316,6 +379,7 @@
 
   function shouldBypassScrollHijack(event){
     if(!isMobile() || isMobileException(event.target)) return false;
+    if(isAllPassTypingActive() && root.classList.contains("allpass-scroll-locked")) return false;
     return lockClasses.some(className=>root.classList.contains(className)) || isInHeroOrAllPassScene();
   }
 
@@ -332,7 +396,11 @@
 
   function hasMobileScrollLock(){
     const body = document.body;
-    return lockClasses.some(className=>root.classList.contains(className)) ||
+    const watchedClasses = isAllPassTypingActive()
+      ? lockClasses.filter(className=>className !== "allpass-scroll-locked")
+      : lockClasses;
+
+    return watchedClasses.some(className=>root.classList.contains(className)) ||
       Boolean(body && body.classList.contains("hero-mobile-snap-playing"));
   }
 
@@ -533,6 +601,9 @@
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
   window.addEventListener("pageshow", queueIntroVideoGuard, {passive:true});
   document.addEventListener("visibilitychange", queueIntroVideoGuard);
+  document.addEventListener("allpassTypingComplete", ()=>{
+    setTimeout(revealPassLocatorAfterTyping, 80);
+  });
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
   document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
   document.addEventListener("DOMContentLoaded", queueIntroVideoGuard);
@@ -547,4 +618,5 @@
   setTimeout(queueIntroVideoGuard, 900);
   setTimeout(queueIntroVideoGuard, 1800);
   setTimeout(queueIntroVideoGuard, 3200);
+  setTimeout(revealPassLocatorAfterTyping, 3200);
 })();

@@ -199,6 +199,7 @@
         html.allpass-scroll-locked body,
         html.pass-reveal-playing,
         html.pass-reveal-playing body,
+        html.pass-reveal-complete,
         html.pass-reveal-complete body{
           overflow-y:auto !important;
           overflow-x:hidden !important;
@@ -213,11 +214,14 @@
     if(!isMobile()) return;
 
     const hadLock = lockClasses.some(className=>root.classList.contains(className));
+    const body = document.body;
 
     lockClasses.forEach(className=>root.classList.remove(className));
-    document.body.classList.remove("hero-mobile-snap-playing");
+    if(body){
+      body.classList.remove("hero-mobile-snap-playing");
+      body.style.overflow = "";
+    }
     root.style.overflow = "";
-    document.body.style.overflow = "";
     window.__skipAllPassRevealUntil = Date.now() + 1800;
 
     const locator = document.querySelector("[data-pass-locator]");
@@ -284,12 +288,38 @@
     bypassScrollHijack(event);
   }
 
+  function hasMobileScrollLock(){
+    const body = document.body;
+    return lockClasses.some(className=>root.classList.contains(className)) ||
+      Boolean(body && body.classList.contains("hero-mobile-snap-playing"));
+  }
+
+  function watchMobileScrollLocks(){
+    if(!("MutationObserver" in window)) return;
+
+    const releaseIfLocked = ()=>{
+      if(!isMobile() || !hasMobileScrollLock()) return;
+      requestAnimationFrame(clearMobileScrollLocks);
+    };
+
+    const observer = new MutationObserver(releaseIfLocked);
+    observer.observe(root, {attributes:true, attributeFilter:["class", "style"]});
+    if(document.body){
+      observer.observe(document.body, {attributes:true, attributeFilter:["class", "style"]});
+    }
+  }
+
   injectMobileScrollStyle();
   clearMobileScrollLocks();
+  watchMobileScrollLocks();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
+  window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
+  setTimeout(clearMobileScrollLocks, 600);
+  setTimeout(clearMobileScrollLocks, 1800);
+  setTimeout(clearMobileScrollLocks, 3200);
 })();

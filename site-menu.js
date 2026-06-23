@@ -513,7 +513,7 @@
     const mobile = isMobile();
     const holdStart = mobile ? 0.958 : 0.954;
     const resetBefore = holdStart - 0.055;
-    const minHoldMs = mobile ? 2800 : 2300;
+    const minHoldMs = mobile ? 4200 : 3400;
 
     if(progress < resetBefore){
       reviewProofHoldStartedAt = 0;

@@ -309,17 +309,127 @@
     }
   }
 
+  let reviewStatsHoldStartedAt = 0;
+  let reviewStatsHoldDone = false;
+  let reviewStatsHoldTicking = false;
+  let reviewStatsHoldReleaseQueued = false;
+
+  function numberFromCss(value){
+    const number = Number.parseFloat(value);
+    return Number.isFinite(number) ? number : 0;
+  }
+
+  function getHeroProgress(hero){
+    return numberFromCss(
+      hero.style.getPropertyValue("--hero-progress") ||
+      getComputedStyle(hero).getPropertyValue("--hero-progress")
+    );
+  }
+
+  function reviewStatsReachedTargets(stats){
+    if(!stats.length) return false;
+
+    return stats.every(stat=>{
+      const target = Number(stat.dataset.target);
+      const current = Number((stat.textContent || "").replace(/[^\d.-]/g, ""));
+
+      return Number.isFinite(target) &&
+        Number.isFinite(current) &&
+        current >= target;
+    });
+  }
+
+  function forceReviewStatsVisible(hero){
+    const mobile = isMobile();
+
+    hero.style.setProperty("--review-content-y", "0px");
+    hero.style.setProperty("--review-stats-opacity", "1");
+    hero.style.setProperty("--review-proof-opacity", "0");
+    hero.style.setProperty("--review-proof-divider-opacity", "0");
+    hero.style.setProperty("--review-proof-divider-width", "0px");
+    hero.style.setProperty("--review-cards-opacity", "0");
+    hero.style.setProperty("--review-cards-y", `${mobile ? 560 : 520}px`);
+    hero.style.setProperty("--review-cards-x", `${mobile ? 220 : 340}px`);
+  }
+
+  function releaseReviewStatsHold(){
+    if(reviewStatsHoldReleaseQueued) return;
+
+    reviewStatsHoldReleaseQueued = true;
+    setTimeout(()=>{
+      reviewStatsHoldReleaseQueued = false;
+      window.dispatchEvent(new Event("scroll"));
+    }, 0);
+  }
+
+  function applyReviewStatsHold(){
+    reviewStatsHoldTicking = false;
+
+    const hero = document.querySelector(".hero-expand-section");
+    if(!hero) return;
+
+    const stats =
+      Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
+
+    if(!stats.length) return;
+
+    const progress = getHeroProgress(hero);
+    const mobile = isMobile();
+    const holdStart = mobile ? 0.705 : 0.79;
+    const resetBefore = holdStart - 0.05;
+    const minHoldMs = mobile ? 2400 : 1900;
+    const maxHoldMs = mobile ? 3400 : 2800;
+
+    if(progress < resetBefore){
+      reviewStatsHoldStartedAt = 0;
+      reviewStatsHoldDone = false;
+      return;
+    }
+
+    if(progress < holdStart || reviewStatsHoldDone) return;
+
+    if(!reviewStatsHoldStartedAt){
+      reviewStatsHoldStartedAt = performance.now();
+    }
+
+    const elapsed = performance.now() - reviewStatsHoldStartedAt;
+    const reachedTargets = reviewStatsReachedTargets(stats);
+    const shouldHold = elapsed < minHoldMs || (!reachedTargets && elapsed < maxHoldMs);
+
+    if(shouldHold){
+      forceReviewStatsVisible(hero);
+      setTimeout(queueReviewStatsHold, 120);
+      return;
+    }
+
+    reviewStatsHoldDone = true;
+    releaseReviewStatsHold();
+  }
+
+  function queueReviewStatsHold(){
+    if(reviewStatsHoldTicking) return;
+
+    reviewStatsHoldTicking = true;
+    requestAnimationFrame(applyReviewStatsHold);
+  }
+
   injectMobileScrollStyle();
   clearMobileScrollLocks();
   watchMobileScrollLocks();
+  queueReviewStatsHold();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
+  window.addEventListener("scroll", queueReviewStatsHold, {passive:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
+  window.addEventListener("resize", queueReviewStatsHold, {passive:true});
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
+  document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
   setTimeout(clearMobileScrollLocks, 600);
   setTimeout(clearMobileScrollLocks, 1800);
   setTimeout(clearMobileScrollLocks, 3200);
+  setTimeout(queueReviewStatsHold, 800);
+  setTimeout(queueReviewStatsHold, 2000);
 })();

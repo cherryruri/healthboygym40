@@ -193,12 +193,13 @@
     style.textContent = `
       @media (max-width: 768px){
         .intro{
-          height:760vh !important;
+          height:620vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky,
         .hero-expand-sticky::before{
           background:var(--hero-stage-bg, #fff) !important;
+          transition:background .22s linear;
         }
         .hero-video-frame{
           background:#050505 !important;
@@ -212,6 +213,64 @@
           backface-visibility:hidden;
           transform:translateZ(0);
           will-change:transform;
+        }
+        .review-proof-title{
+          display:none !important;
+        }
+        .hero-expand-sticky > .review-cover-panel{
+          display:none !important;
+        }
+        #brand #inc01 .list.review-cover-panel{
+          position:relative !important;
+          inset:auto !important;
+          display:block !important;
+          min-height:auto !important;
+          height:auto !important;
+          padding:82px 0 98px !important;
+          overflow:hidden !important;
+          background:#000 !important;
+          opacity:1 !important;
+          transform:none !important;
+          box-shadow:none !important;
+          pointer-events:auto !important;
+        }
+        #brand #inc01 .list.review-cover-panel h2{
+          display:block !important;
+          margin:0 0 30px !important;
+          padding:0 20px !important;
+          color:#fff !important;
+          font-size:clamp(27px, 7vw, 34px) !important;
+          line-height:1.18 !important;
+          text-align:center !important;
+        }
+        #brand #inc01 .list.review-cover-panel .review-stats-section{
+          position:static !important;
+          left:auto !important;
+          top:auto !important;
+          display:grid !important;
+          grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+          width:calc(100% - 28px) !important;
+          margin:0 auto 34px !important;
+          gap:22px 0 !important;
+          background:transparent !important;
+          opacity:1 !important;
+          transform:none !important;
+        }
+        #brand #inc01 .list.review-cover-panel .review-stats-section .stat-box{
+          padding:0 10px 14px !important;
+        }
+        #brand #inc01 .list.review-cover-panel .all_slider{
+          position:relative !important;
+          left:auto !important;
+          top:auto !important;
+          width:100% !important;
+          overflow:visible !important;
+          opacity:1 !important;
+          transform:none !important;
+        }
+        #brand #inc01 .list.review-cover-panel .review-slide{
+          opacity:1 !important;
+          transform:none !important;
         }
         .pass-transition-panel{
           display:none !important;
@@ -356,6 +415,8 @@
   let reviewStatsHoldTicking = false;
   let reviewStatsHoldReleaseQueued = false;
   let introVideoGuardTicking = false;
+  let mobileReviewFlowTicking = false;
+  let mobileReviewCounterStarted = false;
 
   function numberFromCss(value){
     const number = Number.parseFloat(value);
@@ -410,6 +471,10 @@
 
     const hero = document.querySelector(".hero-expand-section");
     if(!hero) return;
+
+    if(isMobile() && document.querySelector(".review-cover-panel.mobile-review-flow")){
+      return;
+    }
 
     const stats =
       Array.from(hero.querySelectorAll(".review-stats-section .stat-number"));
@@ -501,8 +566,124 @@
     const progress = getHeroProgress(hero);
     hero.style.setProperty(
       "--hero-stage-bg",
-      progress >= 0.255 ? "#050505" : "#fff"
+      progress >= 0.2 ? "#050505" : "#fff"
     );
+  }
+
+  function animateMobileReviewCounters(panel){
+    if(mobileReviewCounterStarted || !panel) return;
+
+    const stats =
+      Array.from(panel.querySelectorAll(".review-stats-section .stat-number"));
+
+    if(!stats.length) return;
+
+    mobileReviewCounterStarted = true;
+
+    const duration = 1450;
+    const startedAt = performance.now();
+    const easeOut = value=>1 - Math.pow(1 - value, 3);
+
+    stats.forEach(stat=>{
+      stat.textContent = "0";
+    });
+
+    function tick(now){
+      const progress = Math.max(0, Math.min(1, (now - startedAt) / duration));
+      const eased = easeOut(progress);
+
+      stats.forEach(stat=>{
+        const target = Number(stat.dataset.target);
+        if(!Number.isFinite(target)) return;
+
+        const value = progress >= 1
+          ? target
+          : Math.floor(target * eased);
+
+        stat.textContent = value.toLocaleString();
+      });
+
+      if(progress < 1){
+        requestAnimationFrame(tick);
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  function watchMobileReviewCounters(panel){
+    if(!panel || panel.dataset.mobileCounterWatch === "true") return;
+
+    panel.dataset.mobileCounterWatch = "true";
+
+    if(!("IntersectionObserver" in window)){
+      animateMobileReviewCounters(panel);
+      return;
+    }
+
+    const observer = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+
+        animateMobileReviewCounters(panel);
+        observer.disconnect();
+      });
+    }, {threshold:0.28, rootMargin:"0px 0px -12% 0px"});
+
+    observer.observe(panel);
+  }
+
+  function stabilizeMobileReviewFlow(){
+    mobileReviewFlowTicking = false;
+
+    if(!isMobile()) return;
+
+    const panel =
+      document.querySelector(".review-cover-panel");
+
+    const brandArticle =
+      document.querySelector("#brand #inc01");
+
+    if(!panel || !brandArticle) return;
+
+    const brandCross =
+      brandArticle.querySelector(".brand-cross");
+
+    if(panel.parentElement && panel.parentElement.classList.contains("hero-expand-sticky")){
+      brandArticle.insertBefore(panel, brandCross || brandArticle.firstChild);
+    }
+
+    panel.classList.add("mobile-review-flow");
+
+    const title =
+      panel.querySelector(":scope > h2");
+
+    if(title){
+      title.textContent = "리뷰가 증명하는 헬스장";
+    }
+
+    panel
+      .querySelectorAll(".review-slide")
+      .forEach(slide=>{
+        slide.style.setProperty("--slide-opacity", "1");
+        slide.style.setProperty("--slide-x", "0px");
+      });
+
+    const statsSection =
+      panel.querySelector(".review-stats-section");
+
+    if(statsSection){
+      statsSection.classList.add("show");
+    }
+
+    watchMobileReviewCounters(panel);
+  }
+
+  function queueMobileReviewFlow(){
+    if(mobileReviewFlowTicking) return;
+
+    mobileReviewFlowTicking = true;
+    requestAnimationFrame(stabilizeMobileReviewFlow);
   }
 
   function queueIntroVideoGuard(){
@@ -521,21 +702,26 @@
   watchMobileScrollLocks();
   queueReviewStatsHold();
   queueIntroVideoGuard();
+  queueMobileReviewFlow();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
   window.addEventListener("scroll", queueReviewStatsHold, {passive:true});
   window.addEventListener("scroll", queueIntroVideoGuard, {passive:true});
+  window.addEventListener("scroll", queueMobileReviewFlow, {passive:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
   window.addEventListener("resize", queueReviewStatsHold, {passive:true});
   window.addEventListener("resize", queueIntroVideoGuard, {passive:true});
+  window.addEventListener("resize", queueMobileReviewFlow, {passive:true});
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
   window.addEventListener("pageshow", queueIntroVideoGuard, {passive:true});
+  window.addEventListener("pageshow", queueMobileReviewFlow, {passive:true});
   document.addEventListener("visibilitychange", queueIntroVideoGuard);
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
   document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
   document.addEventListener("DOMContentLoaded", queueIntroVideoGuard);
+  document.addEventListener("DOMContentLoaded", queueMobileReviewFlow);
   setTimeout(clearMobileScrollLocks, 600);
   setTimeout(clearMobileScrollLocks, 1800);
   setTimeout(clearMobileScrollLocks, 3200);
@@ -547,4 +733,9 @@
   setTimeout(queueIntroVideoGuard, 900);
   setTimeout(queueIntroVideoGuard, 1800);
   setTimeout(queueIntroVideoGuard, 3200);
+  setTimeout(queueMobileReviewFlow, 0);
+  setTimeout(queueMobileReviewFlow, 120);
+  setTimeout(queueMobileReviewFlow, 500);
+  setTimeout(queueMobileReviewFlow, 1200);
+  setTimeout(queueMobileReviewFlow, 2400);
 })();

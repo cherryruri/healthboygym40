@@ -1,0 +1,49 @@
+name: Codex cache bust review overlay
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-index-cache:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Update homepage asset cache keys
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          index_path = Path('index.html')
+          text = index_path.read_text(encoding='utf-8-sig')
+          replacements = {
+              'style.css?v=20260619-intro-snap-anchors4': 'style.css?v=20260624-review-overlay-restore',
+              'site-menu.js?v=20260618-profile-admin': 'site-menu.js?v=20260624-review-overlay-restore',
+              'script.js?v=20260619-intro-snap-anchors4': 'script.js?v=20260624-review-overlay-restore',
+          }
+          for old, new in replacements.items():
+              text = text.replace(old, new)
+          index_path.write_text(text, encoding='utf-8')
+
+          workflow_path = Path('.github/workflows/codex-cache-bust-review-overlay.yml')
+          if workflow_path.exists():
+              workflow_path.unlink()
+          PY
+      - name: Commit cache bust
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/codex-cache-bust-review-overlay.yml
+          git commit -m "Bust review overlay asset cache"
+          git push

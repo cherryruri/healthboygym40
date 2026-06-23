@@ -423,6 +423,10 @@
   let reviewStatsHoldDone = false;
   let reviewStatsHoldTicking = false;
   let reviewStatsHoldReleaseQueued = false;
+  let reviewProofHoldStartedAt = 0;
+  let reviewProofHoldDone = false;
+  let reviewProofHoldTicking = false;
+  let reviewProofHoldReleaseQueued = false;
   let introVideoGuardTicking = false;
 
   function numberFromCss(value){
@@ -473,6 +477,73 @@
     }, 0);
   }
 
+  function forceReviewProofVisible(hero){
+    const mobile = isMobile();
+
+    hero.style.setProperty("--review-content-y", "0px");
+    hero.style.setProperty("--review-stats-opacity", "0");
+    hero.style.setProperty("--review-proof-opacity", "1");
+    hero.style.setProperty("--review-proof-y", "0px");
+    hero.style.setProperty("--review-proof-scale", "1");
+    hero.style.setProperty("--review-proof-gap", `${mobile ? 14 : 18}px`);
+    hero.style.setProperty("--review-proof-divider-opacity", "1");
+    hero.style.setProperty("--review-proof-divider-width", `${mobile ? 46 : 110}px`);
+    hero.style.setProperty("--review-cards-opacity", "0");
+    hero.style.setProperty("--review-cards-y", `${mobile ? 560 : 520}px`);
+    hero.style.setProperty("--review-cards-x", `${mobile ? 220 : 340}px`);
+  }
+
+  function releaseReviewProofHold(){
+    if(reviewProofHoldReleaseQueued) return;
+
+    reviewProofHoldReleaseQueued = true;
+    setTimeout(()=>{
+      reviewProofHoldReleaseQueued = false;
+      window.dispatchEvent(new Event("scroll"));
+    }, 0);
+  }
+
+  function applyReviewProofHold(){
+    reviewProofHoldTicking = false;
+
+    const hero = document.querySelector(".hero-expand-section");
+    if(!hero) return;
+
+    const progress = getHeroProgress(hero);
+    const mobile = isMobile();
+    const holdStart = mobile ? 0.958 : 0.954;
+    const resetBefore = holdStart - 0.055;
+    const minHoldMs = mobile ? 2800 : 2300;
+
+    if(progress < resetBefore){
+      reviewProofHoldStartedAt = 0;
+      reviewProofHoldDone = false;
+      return;
+    }
+
+    if(progress < holdStart || reviewProofHoldDone || !reviewStatsHoldDone) return;
+
+    if(!reviewProofHoldStartedAt){
+      reviewProofHoldStartedAt = performance.now();
+    }
+
+    if(performance.now() - reviewProofHoldStartedAt < minHoldMs){
+      forceReviewProofVisible(hero);
+      setTimeout(queueReviewProofHold, 120);
+      return;
+    }
+
+    reviewProofHoldDone = true;
+    releaseReviewProofHold();
+  }
+
+  function queueReviewProofHold(){
+    if(reviewProofHoldTicking) return;
+
+    reviewProofHoldTicking = true;
+    requestAnimationFrame(applyReviewProofHold);
+  }
+
   function applyReviewStatsHold(){
     reviewStatsHoldTicking = false;
 
@@ -494,6 +565,8 @@
     if(progress < resetBefore){
       reviewStatsHoldStartedAt = 0;
       reviewStatsHoldDone = false;
+      reviewProofHoldStartedAt = 0;
+      reviewProofHoldDone = false;
       return;
     }
 
@@ -588,15 +661,18 @@
   clearMobileScrollLocks();
   watchMobileScrollLocks();
   queueReviewStatsHold();
+  queueReviewProofHold();
   queueIntroVideoGuard();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
   window.addEventListener("scroll", queueReviewStatsHold, {passive:true});
+  window.addEventListener("scroll", queueReviewProofHold, {passive:true});
   window.addEventListener("scroll", queueIntroVideoGuard, {passive:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
   window.addEventListener("resize", queueReviewStatsHold, {passive:true});
+  window.addEventListener("resize", queueReviewProofHold, {passive:true});
   window.addEventListener("resize", queueIntroVideoGuard, {passive:true});
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
   window.addEventListener("pageshow", queueIntroVideoGuard, {passive:true});
@@ -606,12 +682,15 @@
   });
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
   document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
+  document.addEventListener("DOMContentLoaded", queueReviewProofHold);
   document.addEventListener("DOMContentLoaded", queueIntroVideoGuard);
   setTimeout(clearMobileScrollLocks, 600);
   setTimeout(clearMobileScrollLocks, 1800);
   setTimeout(clearMobileScrollLocks, 3200);
   setTimeout(queueReviewStatsHold, 800);
   setTimeout(queueReviewStatsHold, 2000);
+  setTimeout(queueReviewProofHold, 1200);
+  setTimeout(queueReviewProofHold, 2400);
   setTimeout(queueIntroVideoGuard, 0);
   setTimeout(queueIntroVideoGuard, 120);
   setTimeout(queueIntroVideoGuard, 430);

@@ -213,6 +213,33 @@
           transform:translateZ(0);
           will-change:transform;
         }
+        .pass-transition-panel{
+          display:none !important;
+        }
+        .pass-locator-section{
+          position:relative !important;
+          inset:auto !important;
+          z-index:auto !important;
+          height:auto !important;
+          min-height:0 !important;
+          padding:72px 0 84px !important;
+          overflow:visible !important;
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
+        .pass-locator-section .pass-locator-container,
+        .pass-locator-section .pass-locator-controls,
+        .pass-locator-section .pass-locator-map-shell,
+        .pass-locator-section .pass-selected-block,
+        .pass-locator-section .pass-recommend-panel,
+        .pass-locator-section .pass-result-card{
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
         html.hero-caption-scroll-locked,
         html.hero-caption-scroll-locked body,
         html.allpass-scroll-locked,
@@ -243,11 +270,6 @@
     }
     root.style.overflow = "";
     window.__skipAllPassRevealUntil = Date.now() + 1800;
-
-    const locator = document.querySelector("[data-pass-locator]");
-    if(locator){
-      locator.classList.remove("is-revealed");
-    }
 
     const transition = document.querySelector("[data-pass-transition]");
     if(transition){

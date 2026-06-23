@@ -192,7 +192,27 @@
     style.id = "mobile-scroll-fix-style";
     style.textContent = `
       @media (max-width: 768px){
-        .intro{height:760vh !important;}
+        .intro{
+          height:760vh !important;
+          --hero-stage-bg:#fff;
+        }
+        .hero-expand-sticky,
+        .hero-expand-sticky::before{
+          background:var(--hero-stage-bg, #fff) !important;
+        }
+        .hero-video-frame{
+          background:#050505 !important;
+          backface-visibility:hidden;
+          transform:translate3d(-50%, 0, 0);
+        }
+        .intro-video{
+          display:block !important;
+          opacity:1 !important;
+          background:#050505;
+          backface-visibility:hidden;
+          transform:translateZ(0);
+          will-change:transform;
+        }
         html.hero-caption-scroll-locked,
         html.hero-caption-scroll-locked body,
         html.allpass-scroll-locked,
@@ -313,6 +333,7 @@
   let reviewStatsHoldDone = false;
   let reviewStatsHoldTicking = false;
   let reviewStatsHoldReleaseQueued = false;
+  let introVideoGuardTicking = false;
 
   function numberFromCss(value){
     const number = Number.parseFloat(value);
@@ -413,23 +434,95 @@
     requestAnimationFrame(applyReviewStatsHold);
   }
 
+  function keepIntroVideoWarm(){
+    if(!isMobile() || document.hidden) return;
+
+    const video = document.querySelector(".intro-video");
+    if(!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("playsinline", "");
+
+    if(video.readyState === 0){
+      video.load();
+    }
+
+    const play = ()=>{
+      const promise = video.play();
+      if(promise && typeof promise.catch === "function"){
+        promise.catch(()=>{});
+      }
+    };
+
+    if(video.paused || video.readyState < 2){
+      play();
+      video.addEventListener("loadeddata", play, {once:true});
+      video.addEventListener("canplay", play, {once:true});
+    }
+  }
+
+  function updateHeroStageBackground(){
+    const hero = document.querySelector(".hero-expand-section");
+    if(!hero) return;
+
+    if(!isMobile()){
+      hero.style.removeProperty("--hero-stage-bg");
+      return;
+    }
+
+    const progress = getHeroProgress(hero);
+    hero.style.setProperty(
+      "--hero-stage-bg",
+      progress >= 0.255 ? "#050505" : "#fff"
+    );
+  }
+
+  function queueIntroVideoGuard(){
+    if(introVideoGuardTicking) return;
+
+    introVideoGuardTicking = true;
+    requestAnimationFrame(()=>{
+      introVideoGuardTicking = false;
+      keepIntroVideoWarm();
+      updateHeroStageBackground();
+    });
+  }
+
   injectMobileScrollStyle();
   clearMobileScrollLocks();
   watchMobileScrollLocks();
   queueReviewStatsHold();
+  queueIntroVideoGuard();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
   window.addEventListener("scroll", queueReviewStatsHold, {passive:true});
+  window.addEventListener("scroll", queueIntroVideoGuard, {passive:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
   window.addEventListener("resize", queueReviewStatsHold, {passive:true});
+  window.addEventListener("resize", queueIntroVideoGuard, {passive:true});
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
+  window.addEventListener("pageshow", queueIntroVideoGuard, {passive:true});
+  document.addEventListener("visibilitychange", queueIntroVideoGuard);
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
   document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
+  document.addEventListener("DOMContentLoaded", queueIntroVideoGuard);
   setTimeout(clearMobileScrollLocks, 600);
   setTimeout(clearMobileScrollLocks, 1800);
   setTimeout(clearMobileScrollLocks, 3200);
   setTimeout(queueReviewStatsHold, 800);
   setTimeout(queueReviewStatsHold, 2000);
+  setTimeout(queueIntroVideoGuard, 0);
+  setTimeout(queueIntroVideoGuard, 120);
+  setTimeout(queueIntroVideoGuard, 430);
+  setTimeout(queueIntroVideoGuard, 900);
+  setTimeout(queueIntroVideoGuard, 1800);
+  setTimeout(queueIntroVideoGuard, 3200);
 })();

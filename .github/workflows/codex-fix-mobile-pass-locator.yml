@@ -1,0 +1,315 @@
+name: Codex fix mobile pass locator reveal
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-mobile-pass-locator:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch mobile pass locator reveal timing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(text, old, new, label):
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected 1 match, found {count}')
+              return text.replace(old, new, 1)
+
+          site_path = Path('site-menu.js')
+          site = site_path.read_text(encoding='utf-8')
+
+          site = replace_once(site, '''  function isMobile(){
+    return mobileQuery.matches;
+  }
+''', '''  function isMobile(){
+    return mobileQuery.matches;
+  }
+
+  function isAllPassTypingActive(){
+    if(!isMobile()) return false;
+
+    const line = document.querySelector("[data-allpass-typing]");
+    return Boolean(line && line.dataset.typed === "true" && line.dataset.typingComplete !== "true");
+  }
+''', 'site isMobile helper')
+
+          site = replace_once(site, '''        .pass-locator-section{
+          position:relative !important;
+          inset:auto !important;
+          z-index:auto !important;
+          height:auto !important;
+          min-height:0 !important;
+          padding:72px 0 84px !important;
+          overflow:visible !important;
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
+''', '''        .pass-locator-section{
+          position:relative !important;
+          inset:auto !important;
+          z-index:auto !important;
+          height:0 !important;
+          min-height:0 !important;
+          margin:0 !important;
+          padding:0 !important;
+          overflow:hidden !important;
+          opacity:0 !important;
+          visibility:hidden !important;
+          pointer-events:none !important;
+          transform:translateY(22px) !important;
+          transition:opacity .55s ease, transform .55s ease, visibility .55s ease !important;
+        }
+        .pass-locator-section.is-revealed{
+          height:auto !important;
+          min-height:100svh !important;
+          padding:72px 0 84px !important;
+          overflow:visible !important;
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
+''', 'site mobile locator hidden state')
+
+          site = replace_once(site, '''        .pass-locator-section .pass-locator-container,
+        .pass-locator-section .pass-locator-controls,
+        .pass-locator-section .pass-locator-map-shell,
+        .pass-locator-section .pass-selected-block,
+        .pass-locator-section .pass-recommend-panel,
+        .pass-locator-section .pass-result-card{
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
+''', '''        .pass-locator-section .pass-locator-container,
+        .pass-locator-section .pass-locator-controls,
+        .pass-locator-section .pass-locator-map-shell,
+        .pass-locator-section .pass-selected-block,
+        .pass-locator-section .pass-recommend-panel,
+        .pass-locator-section .pass-result-card{
+          opacity:0 !important;
+          visibility:hidden !important;
+          pointer-events:none !important;
+          transform:translateY(20px) !important;
+          transition:opacity .55s ease, transform .55s ease, visibility .55s ease !important;
+        }
+        .pass-locator-section.is-revealed .pass-locator-container,
+        .pass-locator-section.is-revealed .pass-locator-controls,
+        .pass-locator-section.is-revealed .pass-locator-map-shell,
+        .pass-locator-section.is-revealed .pass-selected-block,
+        .pass-locator-section.is-revealed .pass-recommend-panel,
+        .pass-locator-section.is-revealed .pass-result-card{
+          opacity:1 !important;
+          visibility:visible !important;
+          pointer-events:auto !important;
+          transform:none !important;
+        }
+''', 'site mobile locator children state')
+
+          site = replace_once(site, '''  function clearMobileScrollLocks(){
+    if(!isMobile()) return;
+
+    const hadLock = lockClasses.some(className=>root.classList.contains(className));
+    const body = document.body;
+
+    lockClasses.forEach(className=>root.classList.remove(className));
+    if(body){
+      body.classList.remove("hero-mobile-snap-playing");
+      body.style.overflow = "";
+    }
+    root.style.overflow = "";
+    window.__skipAllPassRevealUntil = Date.now() + 1800;
+
+    const transition = document.querySelector("[data-pass-transition]");
+    if(transition){
+      transition.classList.remove("is-playing", "is-complete");
+      transition.style.setProperty("--pass-transition-opacity", "0");
+      transition.style.setProperty("--pass-transition-scale", ".2");
+    }
+
+    if(hadLock){
+      document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
+    }
+  }
+''', '''  function clearMobileScrollLocks(){
+    if(!isMobile()) return;
+
+    const keepAllPassTypingLock = isAllPassTypingActive();
+    const removableClasses = keepAllPassTypingLock
+      ? lockClasses.filter(className=>className !== "allpass-scroll-locked")
+      : lockClasses;
+    const hadLock = removableClasses.some(className=>root.classList.contains(className));
+    const body = document.body;
+
+    removableClasses.forEach(className=>root.classList.remove(className));
+    if(body){
+      body.classList.remove("hero-mobile-snap-playing");
+      body.style.overflow = "";
+    }
+    root.style.overflow = "";
+
+    if(!keepAllPassTypingLock){
+      window.__skipAllPassRevealUntil = Date.now() + 1800;
+    }
+
+    const transition = document.querySelector("[data-pass-transition]");
+    if(transition){
+      transition.classList.remove("is-playing", "is-complete");
+      transition.style.setProperty("--pass-transition-opacity", "0");
+      transition.style.setProperty("--pass-transition-scale", ".2");
+    }
+
+    if(hadLock && !keepAllPassTypingLock){
+      document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
+    }
+  }
+''', 'site clear locks')
+
+          site = replace_once(site, '''  function shouldBypassScrollHijack(event){
+    if(!isMobile() || isMobileException(event.target)) return false;
+    return lockClasses.some(className=>root.classList.contains(className)) || isInHeroOrAllPassScene();
+  }
+''', '''  function shouldBypassScrollHijack(event){
+    if(!isMobile() || isMobileException(event.target)) return false;
+    if(isAllPassTypingActive() && root.classList.contains("allpass-scroll-locked")) return false;
+    return lockClasses.some(className=>root.classList.contains(className)) || isInHeroOrAllPassScene();
+  }
+''', 'site bypass allpass active')
+
+          site = replace_once(site, '''  function hasMobileScrollLock(){
+    const body = document.body;
+    return lockClasses.some(className=>root.classList.contains(className)) ||
+      Boolean(body && body.classList.contains("hero-mobile-snap-playing"));
+  }
+''', '''  function hasMobileScrollLock(){
+    const body = document.body;
+    const watchedClasses = isAllPassTypingActive()
+      ? lockClasses.filter(className=>className !== "allpass-scroll-locked")
+      : lockClasses;
+
+    return watchedClasses.some(className=>root.classList.contains(className)) ||
+      Boolean(body && body.classList.contains("hero-mobile-snap-playing"));
+  }
+''', 'site lock watcher')
+
+          site_path.write_text(site, encoding='utf-8')
+
+          script_path = Path('script.js')
+          script = script_path.read_text(encoding='utf-8')
+
+          script = replace_once(script, '''    const clamp =
+      (value, min, max)=>Math.min(Math.max(value, min), max);
+
+    const typingLine =
+''', '''    const clamp =
+      (value, min, max)=>Math.min(Math.max(value, min), max);
+
+    const mobilePassQuery =
+      window.matchMedia("(max-width: 768px)");
+
+    const typingLine =
+''', 'script mobile pass query')
+
+          script = replace_once(script, '''        keepIntroLocked();
+
+      };
+
+    const beginReveal =
+''', '''        keepIntroLocked();
+
+      };
+
+    const isMobilePassFlow =
+      ()=>mobilePassQuery.matches;
+
+    const revealMobileLocatorWhenReady =
+      ()=>{
+        if(!isMobilePassFlow() || !isTypingComplete()) return;
+
+        revealStarted =
+          false;
+        revealComplete =
+          true;
+        revealProgress =
+          1;
+        closePull =
+          0;
+        nextPull =
+          0;
+
+        setOrbOrigin();
+        applyRevealProgress(1);
+        transition.classList.remove("is-playing");
+        transition.classList.add("is-complete");
+        locator.classList.add("is-revealed");
+        document.documentElement.classList.remove("pass-reveal-playing");
+        document.documentElement.classList.add("pass-reveal-complete");
+
+        if(window.ScrollTrigger){
+          window.ScrollTrigger.refresh();
+        }
+      };
+
+    const beginReveal =
+''', 'script mobile direct reveal')
+
+          script = replace_once(script, '''    document.addEventListener("allpassTypingComplete", setOrbOrigin);
+''', '''    document.addEventListener("allpassTypingComplete", ()=>{
+      setOrbOrigin();
+      window.setTimeout(revealMobileLocatorWhenReady, 80);
+    });
+''', 'script typing complete listener')
+
+          script = replace_once(script, '''    setOrbOrigin();
+    applyRevealProgress(0);
+
+  }
+''', '''    setOrbOrigin();
+
+    if(isMobilePassFlow() && isTypingComplete()){
+      revealMobileLocatorWhenReady();
+    }else{
+      applyRevealProgress(0);
+    }
+
+  }
+''', 'script initial reveal state')
+
+          script_path.write_text(script, encoding='utf-8')
+
+          index_path = Path('index.html')
+          index = index_path.read_text(encoding='utf-8-sig')
+          index = index.replace('site-menu.js?v=20260624-review-overlay-restore', 'site-menu.js?v=20260624-mobile-pass-locator')
+          index = index.replace('script.js?v=20260624-review-overlay-restore', 'script.js?v=20260624-mobile-pass-locator')
+          index_path.write_text(index, encoding='utf-8')
+
+          workflow_path = Path('.github/workflows/codex-fix-mobile-pass-locator.yml')
+          if workflow_path.exists():
+              workflow_path.unlink()
+          PY
+      - name: Commit mobile pass locator fix
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html script.js site-menu.js .github/workflows/codex-fix-mobile-pass-locator.yml
+          git commit -m "Fix mobile allpass locator reveal timing"
+          git push

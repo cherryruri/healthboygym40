@@ -3271,7 +3271,7 @@ footer {
   }
 
   .intro {
-    height:680vh;
+    height:900vh;
     padding:0;
     --hero-frame-width:min(86vw, 370px);
     --hero-frame-height:clamp(230px, 36vh, 270px);
@@ -3512,6 +3512,142 @@ footer {
   footer {
     padding:36px 20px;
     font-size:12px;
+  }
+}
+
+/* ================= Mobile flow and all-pass reveal refinements ================= */
+.allpass-reveal-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:168px;
+  min-height:52px;
+  margin-top:28px;
+  padding:0 26px;
+  border:1px solid #111;
+  border-radius:8px;
+  background:#111;
+  color:#fff;
+  font-family:'Pretendard', Arial, sans-serif;
+  font-size:15px;
+  font-weight:850;
+  letter-spacing:0;
+  cursor:pointer;
+  transition:transform .22s ease, background .22s ease, color .22s ease, border-color .22s ease;
+}
+
+.allpass-reveal-button:hover{
+  transform:translateY(-2px);
+  background:#fff200;
+  border-color:#fff200;
+  color:#111;
+}
+
+.pass-locator-section > .pass-locator-back{
+  position:fixed;
+  left:clamp(22px, 3vw, 52px);
+  top:clamp(92px, 10vh, 118px);
+  z-index:20;
+  background:rgba(15,18,24,.82);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+}
+
+.hero-expand-sticky > .review-cover-panel .review-card-text{
+  opacity:var(--card-text-opacity, 1);
+  transform:translateY(var(--card-text-y, 0px));
+  transition:none;
+  will-change:opacity, transform;
+}
+
+@media(max-width:768px){
+  .intro{
+    height:900vh !important;
+  }
+
+  .intro-reveal-copy .intro-greeting-line{
+    font-size:clamp(32px, 9.2vw, 44px) !important;
+    line-height:1.08 !important;
+  }
+
+  .intro-reveal-copy .intro-comfort-line,
+  .intro-reveal-copy .intro-branch-line{
+    width:min(520px, 91vw);
+    font-size:clamp(20px, 5.2vw, 29px) !important;
+    line-height:1.32 !important;
+  }
+
+  .intro-reveal-copy .intro-branch-line{
+    margin-top:8px !important;
+    font-size:clamp(18px, 4.6vw, 25px) !important;
+  }
+
+  .review-proof-title{
+    width:min(560px, 92vw);
+    gap:var(--review-proof-gap);
+    font-size:clamp(29px, 8.6vw, 42px) !important;
+    line-height:1.1 !important;
+  }
+
+  .review-proof-divider{
+    width:var(--review-proof-divider-width);
+    height:2px;
+  }
+
+  .hero-expand-sticky > .review-cover-panel .all_slider{
+    top:55%;
+  }
+
+  .review-cover-panel .review-slide{
+    width:calc(100vw - 40px) !important;
+    max-width:372px;
+  }
+
+  .review-cover-panel .review-card-text{
+    left:18px;
+    right:18px;
+    bottom:24px;
+    min-height:238px;
+  }
+
+  .review-cover-panel .review-copy{
+    min-height:88px;
+    max-height:88px;
+    font-size:14px;
+    line-height:1.5;
+  }
+
+  #brand #inc01 .brand-cross{
+    padding:96px 18px 88px;
+  }
+
+  .allpass-reveal-button{
+    min-width:154px;
+    min-height:48px;
+    margin-top:24px;
+    padding:0 22px;
+    font-size:14px;
+  }
+
+  .pass-locator-section > .pass-locator-back{
+    position:sticky;
+    top:66px;
+    left:auto;
+    z-index:30;
+    margin:0 0 14px 14px;
+    background:#111820;
+  }
+}
+
+@media(max-width:390px){
+  .intro-reveal-copy .intro-comfort-line,
+  .intro-reveal-copy .intro-branch-line{
+    width:min(330px, 91vw);
+    font-size:18px !important;
+  }
+
+  .intro-reveal-copy .intro-branch-line{
+    font-size:16px !important;
   }
 }
 

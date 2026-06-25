@@ -196,20 +196,12 @@
     if(!isMobile()) return;
 
     const line = document.querySelector("[data-allpass-typing]");
-    const locator = document.querySelector("[data-pass-locator]");
+    const trigger = document.querySelector("[data-pass-reveal-trigger]");
 
-    if(!line || !locator || line.dataset.typingComplete !== "true") return;
+    if(!line || line.dataset.typingComplete !== "true") return;
 
-    locator.classList.add("is-revealed");
-    root.classList.remove("pass-reveal-playing");
-    root.classList.add("pass-reveal-complete");
-
-    const transition = document.querySelector("[data-pass-transition]");
-    if(transition){
-      transition.classList.remove("is-playing");
-      transition.classList.add("is-complete");
-      transition.style.setProperty("--pass-transition-opacity", "1");
-      transition.style.setProperty("--pass-transition-scale", "1");
+    if(trigger){
+      trigger.classList.add("is-ready");
     }
 
     if(window.ScrollTrigger){
@@ -235,7 +227,7 @@
           touch-action:pan-y !important;
         }
         .intro{
-          height:680vh !important;
+          height:900vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky,
@@ -525,9 +517,9 @@
 
     const progress = getHeroProgress(hero);
     const mobile = isMobile();
-    const holdStart = mobile ? 0.958 : 0.954;
+    const holdStart = mobile ? 0.86 : 0.954;
     const resetBefore = holdStart - 0.055;
-    const minHoldMs = mobile ? 4200 : 3400;
+    const minHoldMs = mobile ? 1800 : 3400;
 
     if(progress < resetBefore){
       reviewProofHoldStartedAt = 0;
@@ -541,7 +533,7 @@
       reviewProofHoldStartedAt = performance.now();
     }
 
-    if(performance.now() - reviewProofHoldStartedAt < (mobile ? 700 : minHoldMs)){
+    if(performance.now() - reviewProofHoldStartedAt < minHoldMs){
       forceReviewProofVisible(hero);
       setTimeout(queueReviewProofHold, 120);
       return;
@@ -573,8 +565,8 @@
     const mobile = isMobile();
     const holdStart = mobile ? 0.705 : 0.79;
     const resetBefore = holdStart - 0.05;
-    const minHoldMs = mobile ? 500 : 1900;
-    const maxHoldMs = mobile ? 900 : 2800;
+    const minHoldMs = mobile ? 900 : 1900;
+    const maxHoldMs = mobile ? 1400 : 2800;
 
     if(progress < resetBefore){
       reviewStatsHoldStartedAt = 0;

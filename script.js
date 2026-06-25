@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function(){
       startTyping,
       startBrandTyping,
       initAllPassTyping,
+      initAllPassRevealButton,
       initFacilityTour,
       initPassBranchLocator,
       initAllPassLocatorReveal,
@@ -824,6 +825,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function initAllPassLocatorReveal(){
 
+    if(document.querySelector("[data-pass-reveal-trigger]")) return;
+
     if(window.innerWidth <= 768) return;
 
     const transition =
@@ -1590,6 +1593,117 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     run();
+
+  }
+
+  function initAllPassRevealButton(){
+
+    const trigger =
+      document.querySelector("[data-pass-reveal-trigger]");
+
+    const locator =
+      document.querySelector("[data-pass-locator]");
+
+    if(!trigger || !locator || trigger.dataset.revealReady === "true") return;
+
+    trigger.dataset.revealReady =
+      "true";
+
+    if(!locator.id){
+      locator.id =
+        "allpass-locator";
+    }
+
+    trigger.setAttribute("aria-controls", locator.id);
+    trigger.setAttribute("aria-expanded", "false");
+
+    const transition =
+      document.querySelector("[data-pass-transition]");
+
+    const brandCross =
+      document.querySelector("#brand #inc01 .brand-cross");
+
+    const refreshLayout =
+      ()=>{
+        if(window.ScrollTrigger){
+          window.ScrollTrigger.refresh();
+        }
+
+        window.dispatchEvent(new Event("resize"));
+      };
+
+    const openLocator =
+      ()=>{
+        document.dispatchEvent(new CustomEvent("allpassReleaseScrollLock"));
+        document.documentElement.classList.remove("allpass-scroll-locked", "pass-reveal-playing");
+        document.documentElement.classList.add("pass-reveal-complete");
+
+        if(transition){
+          transition.classList.remove("is-playing");
+          transition.classList.add("is-complete");
+          transition.style.setProperty("--pass-transition-opacity", "0");
+          transition.style.setProperty("--pass-transition-scale", "1");
+        }
+
+        locator.classList.add("is-revealed");
+        trigger.setAttribute("aria-expanded", "true");
+
+        if(window.feather){
+          feather.replace();
+        }
+
+        if(window.innerWidth <= 768){
+          requestAnimationFrame(()=>{
+            locator.scrollIntoView({block:"start", behavior:"smooth"});
+          });
+        }else{
+          locator.scrollTop =
+            0;
+        }
+
+        requestAnimationFrame(refreshLayout);
+        setTimeout(refreshLayout, 240);
+      };
+
+    const closeLocator =
+      ()=>{
+        locator.classList.remove("is-revealed");
+        trigger.setAttribute("aria-expanded", "false");
+        document.documentElement.classList.remove("pass-reveal-playing", "pass-reveal-complete");
+
+        if(transition){
+          transition.classList.remove("is-playing", "is-complete");
+          transition.style.setProperty("--pass-transition-opacity", "0");
+          transition.style.setProperty("--pass-transition-scale", ".2");
+        }
+
+        if(window.innerWidth <= 768 && brandCross){
+          const header =
+            document.querySelector("header");
+
+          const offset =
+            header ? header.offsetHeight : 0;
+
+          const top =
+            brandCross.getBoundingClientRect().top + window.pageYOffset - offset;
+
+          window.scrollTo({top, behavior:"smooth"});
+        }
+
+        requestAnimationFrame(refreshLayout);
+      };
+
+    trigger.addEventListener("click", openLocator);
+
+    locator
+      .querySelectorAll("[data-pass-locator-close]")
+      .forEach(button=>button.addEventListener("click", closeLocator));
+
+    window.addEventListener("keydown", event=>{
+      if(event.key === "Escape" && locator.classList.contains("is-revealed")){
+        closeLocator();
+      }
+    });
 
   }
 
@@ -3423,13 +3537,13 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.30 : 0.34;
 
       const copyStart =
-        isMobile ? 0.22 : 0.27;
+        isMobile ? 0.20 : 0.27;
 
       const copyRange =
-        isMobile ? 0.2 : 0.16;
+        isMobile ? 0.16 : 0.16;
 
       const lineStart =
-        isMobile ? 0.27 : 0.31;
+        isMobile ? 0.235 : 0.31;
 
       const lineStep =
         isMobile ? 0.05 : 0.035;
@@ -3438,7 +3552,7 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.22 : 0.18;
 
       const wordStart =
-        isMobile ? 0.29 : 0.32;
+        isMobile ? 0.25 : 0.32;
 
       const wordStep =
         isMobile ? 0.032 : 0.024;
@@ -3459,58 +3573,58 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.76 : 0.795;
+        isMobile ? 0.66 : 0.795;
 
       const statsIntroEnd =
-        isMobile ? 0.79 : 0.855;
+        isMobile ? 0.72 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.74 : 0.765;
+        isMobile ? 0.64 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.79 : 0.835;
+        isMobile ? 0.74 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.865 : 0.94;
+        isMobile ? 0.78 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.905 : 0.952;
+        isMobile ? 0.835 : 0.952;
 
       const reviewDarkStart =
-        isMobile ? 0.865 : 0.95;
+        isMobile ? 0.78 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.95 : 0.99;
+        isMobile ? 0.93 : 0.99;
 
       const frameReturnStart =
-        isMobile ? 0.925 : 0.994;
+        isMobile ? 0.88 : 0.994;
 
       const frameReturnEnd =
-        isMobile ? 0.982 : 0.9995;
+        isMobile ? 0.99 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.956 : 0.9995;
+        isMobile ? 0.94 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.984 : 0.9999;
+        isMobile ? 0.995 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.912 : 0.952;
+        isMobile ? 0.82 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.935 : 0.962;
+        isMobile ? 0.86 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.942 : 0.962;
+        isMobile ? 0.91 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.958 : 0.999;
+        isMobile ? 0.955 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.928 : 0.9983;
+        isMobile ? 0.90 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.956 : 0.9997;
+        isMobile ? 0.965 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3746,8 +3860,17 @@ document.addEventListener("DOMContentLoaded", function(){
         const orderIndex =
           orderMatch ? Math.max(0, Number(orderMatch[1]) - 1) : index;
 
+        const orderStep =
+          isMobile ? 0.055 : 0.11;
+
+        const slideRange =
+          isMobile ? 0.32 : 0.26;
+
         const slideProgress =
-          easeInOut(clamp((cardsProgress - orderIndex * 0.11) / 0.26, 0, 1));
+          easeInOut(clamp((cardsProgress - orderIndex * orderStep) / slideRange, 0, 1));
+
+        const textProgress =
+          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.12 : 0.08)) / (isMobile ? 0.34 : 0.28), 0, 1));
 
         slide.style.setProperty(
           "--slide-opacity",
@@ -3757,6 +3880,16 @@ document.addEventListener("DOMContentLoaded", function(){
         slide.style.setProperty(
           "--slide-x",
           `${(1 - slideProgress) * (isMobile ? 90 : 130)}px`
+        );
+
+        slide.style.setProperty(
+          "--card-text-opacity",
+          textProgress.toFixed(4)
+        );
+
+        slide.style.setProperty(
+          "--card-text-y",
+          `${(1 - textProgress) * (isMobile ? 26 : 32)}px`
         );
       });
 

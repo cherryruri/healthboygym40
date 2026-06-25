@@ -224,6 +224,16 @@
     style.id = "mobile-scroll-fix-style";
     style.textContent = `
       @media (max-width: 768px){
+        html{
+          overflow-x:clip !important;
+          overflow-y:auto !important;
+          touch-action:pan-y !important;
+        }
+        body{
+          overflow-x:clip !important;
+          overflow-y:visible !important;
+          touch-action:pan-y !important;
+        }
         .intro{
           height:680vh !important;
           --hero-stage-bg:#fff;
@@ -297,15 +307,19 @@
           transform:none !important;
         }
         html.hero-caption-scroll-locked,
-        html.hero-caption-scroll-locked body,
         html.allpass-scroll-locked,
-        html.allpass-scroll-locked body,
         html.pass-reveal-playing,
-        html.pass-reveal-playing body,
-        html.pass-reveal-complete,
-        html.pass-reveal-complete body{
+        html.pass-reveal-complete{
           overflow-y:auto !important;
-          overflow-x:hidden !important;
+          overflow-x:clip !important;
+          overscroll-behavior:auto !important;
+        }
+        html.hero-caption-scroll-locked body,
+        html.allpass-scroll-locked body,
+        html.pass-reveal-playing body,
+        html.pass-reveal-complete body{
+          overflow-y:visible !important;
+          overflow-x:clip !important;
           overscroll-behavior:auto !important;
         }
       }

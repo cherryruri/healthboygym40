@@ -3489,28 +3489,28 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.982 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.918 : 0.9995;
+        isMobile ? 0.956 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.976 : 0.9999;
+        isMobile ? 0.984 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.868 : 0.952;
+        isMobile ? 0.912 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.902 : 0.962;
+        isMobile ? 0.935 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.902 : 0.962;
+        isMobile ? 0.942 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.952 : 0.999;
+        isMobile ? 0.958 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.912 : 0.9983;
+        isMobile ? 0.928 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.968 : 0.9997;
+        isMobile ? 0.956 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3562,6 +3562,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const proofDividerOpacity =
         proofProgress * clamp(proofDividerAlive / 0.22, 0, 1);
+
+      const proofCardFade =
+        isMobile
+          ? clamp(cardsProgress / 0.35, 0, 1)
+          : Math.max(0, cardsProgress - 0.55) / 0.45;
 
       if(statsIntroProgress > 0.12){
         startHeroCounter();
@@ -3703,7 +3708,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-opacity",
-        (proofProgress * (1 - Math.max(0, cardsProgress - 0.55) / 0.45)).toFixed(4)
+        (proofProgress * (1 - proofCardFade)).toFixed(4)
       );
 
       hero.style.setProperty(

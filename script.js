@@ -2127,6 +2127,20 @@ document.addEventListener("DOMContentLoaded", function(){
     caption.dataset.scrollGateReady =
       "true";
 
+    if(window.innerWidth <= 768){
+      document.documentElement.classList.remove(
+        "hero-caption-scroll-locked",
+        "hero-mobile-snap-playing",
+        "hero-stats-bridge-playing"
+      );
+
+      try{
+        window.localStorage.setItem("healthboygymIntroCaptionGateSeen", "1");
+      }catch(error){}
+
+      return;
+    }
+
     const introGateSeenKey =
       "healthboygymIntroCaptionGateSeen";
 

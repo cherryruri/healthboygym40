@@ -227,8 +227,12 @@
           touch-action:pan-y !important;
         }
         .intro{
-          height:420vh !important;
+          height:760vh !important;
           --hero-stage-bg:#fff;
+        }
+        .hero-expand-sticky{
+          height:calc(100svh - 79px) !important;
+          min-height:calc(100svh - 79px) !important;
         }
         .hero-expand-sticky,
         .hero-expand-sticky::before{

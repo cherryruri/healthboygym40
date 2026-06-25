@@ -2398,6 +2398,10 @@ document.addEventListener("DOMContentLoaded", function(){
     const getBridgeExit =
       ()=>window.innerWidth <= 768 ? 0.04 : 0.04;
 
+    const shouldLetReviewAreaScrollBack =
+      progress=>window.innerWidth <= 768 &&
+        progress > getStatsTargetProgress() + getBridgeExit();
+
     const restartCaptionReveal =
       ()=>{
         caption.classList.remove("is-replaying", "is-replay-reset");
@@ -2754,6 +2758,8 @@ document.addEventListener("DOMContentLoaded", function(){
           const startProgress =
             getHeroProgress();
 
+          if(shouldLetReviewAreaScrollBack(startProgress)) return;
+
           if(startProgress > getStatementTargetProgress() + 0.015){
             event.preventDefault();
             playStatementBridge();
@@ -2805,6 +2811,8 @@ document.addEventListener("DOMContentLoaded", function(){
           return;
         }
 
+        if(shouldLetReviewAreaScrollBack(startProgress)) return;
+
         if(startProgress > getStatementTargetProgress() + 0.015){
           event.preventDefault();
           playStatementBridge();
@@ -2838,6 +2846,8 @@ document.addEventListener("DOMContentLoaded", function(){
         }
 
         if(!scrollUpKeys.has(event.key)) return;
+
+        if(shouldLetReviewAreaScrollBack(startProgress)) return;
 
         if(startProgress > getStatementTargetProgress() + 0.015){
           event.preventDefault();
@@ -3319,8 +3329,26 @@ document.addEventListener("DOMContentLoaded", function(){
     let lastHeroSmoothAt =
       0;
 
-    let reviewProofAutoStartedAt =
+    let reviewProofDividerTimer =
       0;
+
+    let reviewProofDividerTimedOut =
+      false;
+
+    function armReviewProofDividerTimer(isMobile){
+      if(reviewProofDividerTimer || reviewProofDividerTimedOut) return;
+
+      reviewProofDividerTimer =
+        window.setTimeout(()=>{
+          reviewProofDividerTimer =
+            0;
+
+          reviewProofDividerTimedOut =
+            true;
+
+          update();
+        }, isMobile ? 1700 : 1400);
+    }
 
     function smoothHeroProgress(rawProgress){
 
@@ -3592,10 +3620,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.68 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.835 : 0.94;
+        isMobile ? 0.72 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.875 : 0.952;
+        isMobile ? 0.755 : 0.952;
 
       const reviewDarkStart =
         isMobile ? 0.61 : 0.95;
@@ -3604,34 +3632,34 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.82 : 0.99;
 
       const frameReturnStart =
-        isMobile ? 0.90 : 0.994;
+        isMobile ? 0.94 : 0.994;
 
       const frameReturnEnd =
         isMobile ? 0.99 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.945 : 0.9995;
+        isMobile ? 0.965 : 0.9995;
 
       const cardsEnd =
         isMobile ? 0.998 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.875 : 0.952;
+        isMobile ? 0.755 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.91 : 0.962;
+        isMobile ? 0.79 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.91 : 0.962;
+        isMobile ? 1.1 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.945 : 0.999;
+        isMobile ? 1.1 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.925 : 0.9983;
+        isMobile ? 0.93 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.955 : 0.9997;
+        isMobile ? 0.965 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3681,20 +3709,12 @@ document.addEventListener("DOMContentLoaded", function(){
       const reviewStatsHoldComplete =
         document.documentElement.classList.contains("review-stats-counted");
 
-      if(proofProgress > 0.52 && reviewStatsHoldComplete && !reviewProofAutoStartedAt){
-        reviewProofAutoStartedAt =
-          performance.now();
-      }
-
-      if(proofProgress < 0.15 || !heroCounterComplete || !reviewStatsHoldComplete){
-        reviewProofAutoStartedAt =
-          0;
+      if(proofProgress > 0.95 && reviewStatsHoldComplete){
+        armReviewProofDividerTimer(isMobile);
       }
 
       const proofAutoLineFade =
-        reviewProofAutoStartedAt
-          ? easeInOut(clamp((performance.now() - reviewProofAutoStartedAt - (isMobile ? 1700 : 720)) / (isMobile ? 650 : 720), 0, 1))
-          : 0;
+        reviewProofDividerTimedOut ? 1 : 0;
 
       const proofExitProgress =
         isMobile && heroCounterComplete

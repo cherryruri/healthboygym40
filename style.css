@@ -10153,6 +10153,7 @@ li{
   border-radius:999px !important;
   background:rgba(255,255,255,.92) !important;
   opacity:var(--review-proof-divider-opacity) !important;
+  transition:width .65s cubic-bezier(.22,.61,.36,1), opacity .65s cubic-bezier(.22,.61,.36,1) !important;
   box-shadow:0 0 24px rgba(255,255,255,.28) !important;
 }
 
@@ -10168,7 +10169,12 @@ li{
 
 @media(max-width:768px){
   .intro{
-    height:500vh !important;
+    height:760vh !important;
+  }
+
+  .hero-expand-sticky{
+    height:calc(100svh - 79px) !important;
+    min-height:calc(100svh - 79px) !important;
   }
 
   .review-proof-title{

@@ -3585,46 +3585,46 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.68 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.80 : 0.94;
+        isMobile ? 0.78 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.85 : 0.952;
+        isMobile ? 0.83 : 0.952;
 
       const reviewDarkStart =
         isMobile ? 0.61 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.79 : 0.99;
+        isMobile ? 0.82 : 0.99;
 
       const frameReturnStart =
-        isMobile ? 0.88 : 0.994;
+        isMobile ? 0.90 : 0.994;
 
       const frameReturnEnd =
         isMobile ? 0.99 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.955 : 0.9995;
+        isMobile ? 0.945 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.995 : 0.9999;
+        isMobile ? 0.998 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.84 : 0.952;
+        isMobile ? 0.805 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.90 : 0.962;
+        isMobile ? 0.86 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.93 : 0.962;
+        isMobile ? 0.875 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.965 : 0.999;
+        isMobile ? 0.93 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.92 : 0.9983;
+        isMobile ? 0.875 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.975 : 0.9997;
+        isMobile ? 0.935 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3671,6 +3671,11 @@ document.addEventListener("DOMContentLoaded", function(){
           ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
           : 0;
 
+      const proofExitProgress =
+        isMobile && heroCounterComplete
+          ? easeInOut(clamp((progress - 0.905) / 0.035, 0, 1))
+          : 0;
+
       const proofDividerAlive =
         clamp(1 - lineFadeProgress, 0, 1);
 
@@ -3679,8 +3684,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const proofCardFade =
         isMobile
-          ? clamp(cardsProgress / 0.35, 0, 1)
+          ? clamp(cardsProgress / 0.58, 0, 1)
           : Math.max(0, cardsProgress - 0.55) / 0.45;
+
+      const proofFadeProgress =
+        Math.max(proofExitProgress, proofCardFade);
 
       if(statsIntroProgress > 0.12){
         startHeroCounter();
@@ -3827,12 +3835,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-opacity",
-        (proofProgress * (1 - proofCardFade)).toFixed(4)
+        (proofProgress * (1 - proofFadeProgress)).toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-proof-y",
-        `${(isMobile ? 72 : 112) - proofProgress * (isMobile ? 72 : 112) - proofLiftProgress * (isMobile ? 104 : 150)}px`
+        `${(isMobile ? 82 : 112) - proofProgress * (isMobile ? 82 : 112) - proofLiftProgress * (isMobile ? 92 : 150)}px`
       );
 
       hero.style.setProperty(
@@ -3842,7 +3850,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-gap",
-        `${(isMobile ? 8 : 10) + proofDividerAlive * (isMobile ? 6 : 8)}px`
+        `${(isMobile ? 12 : 16) + proofDividerAlive * (isMobile ? 10 : 14)}px`
       );
 
       hero.style.setProperty(
@@ -3852,7 +3860,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-divider-width",
-        `${(isMobile ? 46 : 110) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
+        `${(isMobile ? 62 : 150) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
       );
 
       const liveReviewSlides =
@@ -3866,16 +3874,16 @@ document.addEventListener("DOMContentLoaded", function(){
           orderMatch ? Math.max(0, Number(orderMatch[1]) - 1) : index;
 
         const orderStep =
-          isMobile ? 0.055 : 0.11;
+          isMobile ? 0.072 : 0.11;
 
         const slideRange =
-          isMobile ? 0.32 : 0.26;
+          isMobile ? 0.44 : 0.26;
 
         const slideProgress =
           easeInOut(clamp((cardsProgress - orderIndex * orderStep) / slideRange, 0, 1));
 
         const textProgress =
-          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.12 : 0.08)) / (isMobile ? 0.34 : 0.28), 0, 1));
+          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.18 : 0.08)) / (isMobile ? 0.42 : 0.28), 0, 1));
 
         slide.style.setProperty(
           "--slide-opacity",

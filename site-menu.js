@@ -491,7 +491,7 @@
     hero.style.setProperty("--review-proof-opacity", "1");
     hero.style.setProperty("--review-proof-y", "0px");
     hero.style.setProperty("--review-proof-scale", "1");
-    hero.style.setProperty("--review-proof-gap", `${mobile ? 14 : 18}px`);
+    hero.style.setProperty("--review-proof-gap", `${mobile ? 8 : 18}px`);
     hero.style.setProperty("--review-proof-divider-opacity", "1");
     hero.style.setProperty("--review-proof-divider-width", `${mobile ? 46 : 110}px`);
     hero.style.setProperty("--review-cards-opacity", "0");
@@ -517,9 +517,9 @@
 
     const progress = getHeroProgress(hero);
     const mobile = isMobile();
-    const holdStart = mobile ? 0.86 : 0.954;
+    const holdStart = mobile ? 0.885 : 0.954;
     const resetBefore = holdStart - 0.055;
-    const minHoldMs = mobile ? 1800 : 3400;
+    const minHoldMs = mobile ? 1500 : 3400;
 
     if(progress < resetBefore){
       reviewProofHoldStartedAt = 0;
@@ -563,10 +563,10 @@
 
     const progress = getHeroProgress(hero);
     const mobile = isMobile();
-    const holdStart = mobile ? 0.705 : 0.79;
+    const holdStart = mobile ? 0.665 : 0.79;
     const resetBefore = holdStart - 0.05;
-    const minHoldMs = mobile ? 900 : 1900;
-    const maxHoldMs = mobile ? 1400 : 2800;
+    const minHoldMs = mobile ? 1300 : 1900;
+    const maxHoldMs = mobile ? 2100 : 2800;
 
     if(progress < resetBefore){
       reviewStatsHoldStartedAt = 0;

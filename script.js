@@ -2899,10 +2899,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .82 : .84;
+        window.innerWidth <= 768 ? .61 : .84;
 
       const end =
-        window.innerWidth <= 768 ? .90 : .90;
+        window.innerWidth <= 768 ? .69 : .90;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);
@@ -3420,7 +3420,7 @@ document.addEventListener("DOMContentLoaded", function(){
         introStats;
 
       const duration =
-        1500;
+        window.innerWidth <= 768 ? 1050 : 1500;
 
       const startedAt =
         performance.now();
@@ -3573,28 +3573,28 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.66 : 0.795;
+        isMobile ? 0.61 : 0.795;
 
       const statsIntroEnd =
-        isMobile ? 0.72 : 0.855;
+        isMobile ? 0.69 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.64 : 0.765;
+        isMobile ? 0.57 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.74 : 0.835;
+        isMobile ? 0.68 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.78 : 0.94;
+        isMobile ? 0.80 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.835 : 0.952;
+        isMobile ? 0.85 : 0.952;
 
       const reviewDarkStart =
-        isMobile ? 0.78 : 0.95;
+        isMobile ? 0.61 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.93 : 0.99;
+        isMobile ? 0.79 : 0.99;
 
       const frameReturnStart =
         isMobile ? 0.88 : 0.994;
@@ -3603,28 +3603,28 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.99 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.94 : 0.9995;
+        isMobile ? 0.955 : 0.9995;
 
       const cardsEnd =
         isMobile ? 0.995 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.82 : 0.952;
+        isMobile ? 0.84 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.86 : 0.962;
+        isMobile ? 0.90 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.91 : 0.962;
+        isMobile ? 0.93 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.955 : 0.999;
+        isMobile ? 0.965 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.90 : 0.9983;
+        isMobile ? 0.92 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.965 : 0.9997;
+        isMobile ? 0.975 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3832,7 +3832,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-y",
-        `${(isMobile ? 88 : 112) - proofProgress * (isMobile ? 88 : 112) - proofLiftProgress * (isMobile ? 118 : 150)}px`
+        `${(isMobile ? 72 : 112) - proofProgress * (isMobile ? 72 : 112) - proofLiftProgress * (isMobile ? 104 : 150)}px`
       );
 
       hero.style.setProperty(

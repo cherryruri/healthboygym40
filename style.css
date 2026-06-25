@@ -6461,8 +6461,8 @@ body.menu-open .mobile-login-area{
   }
 
   .review-cover-panel .review-slide{
-    width:calc(100vw - 28px) !important;
-    max-width:340px;
+    width:min(96vw, 370px) !important;
+    max-width:none;
   }
 
   .review-cover-panel .review-slide a{
@@ -6596,8 +6596,8 @@ body.menu-open .mobile-login-area{
 
 @media (max-width:390px){
   .review-cover-panel .review-slide{
-    width:calc(100vw - 26px) !important;
-    max-width:318px;
+    width:min(96vw, 356px) !important;
+    max-width:none;
   }
 
   .review-cover-panel .review-card-text{

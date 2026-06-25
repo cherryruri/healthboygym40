@@ -4107,7 +4107,7 @@ document.addEventListener("DOMContentLoaded", function(){
         loop:true,
         speed:1000,
         slidesPerView:"auto",
-        spaceBetween:18,
+        spaceBetween:10,
         slideActiveClass:"on",
         centeredSlides:true,
         autoplay:{
@@ -4116,7 +4116,7 @@ document.addEventListener("DOMContentLoaded", function(){
         },
         breakpoints:{
           481:{
-            spaceBetween:22,
+            spaceBetween:18,
           },
           769:{
             spaceBetween:28,

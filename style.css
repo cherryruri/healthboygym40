@@ -6388,6 +6388,7 @@ body.menu-open .mobile-login-area{
     left:50%;
     width:100vw;
     max-width:100%;
+    overflow:hidden;
     transform:translate(calc(-50% + var(--review-cards-x)), calc(-50% + var(--review-cards-y)));
   }
 
@@ -6460,8 +6461,8 @@ body.menu-open .mobile-login-area{
   }
 
   .review-cover-panel .review-slide{
-    width:min(84vw, 330px) !important;
-    max-width:330px;
+    width:calc(100vw - 28px) !important;
+    max-width:340px;
   }
 
   .review-cover-panel .review-slide a{
@@ -6595,7 +6596,8 @@ body.menu-open .mobile-login-area{
 
 @media (max-width:390px){
   .review-cover-panel .review-slide{
-    width:min(86vw, 318px) !important;
+    width:calc(100vw - 26px) !important;
+    max-width:318px;
   }
 
   .review-cover-panel .review-card-text{

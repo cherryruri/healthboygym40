@@ -3271,7 +3271,7 @@ footer {
   }
 
   .intro {
-    height:900vh;
+    height:420vh;
     padding:0;
     --hero-frame-width:min(86vw, 370px);
     --hero-frame-height:clamp(230px, 36vh, 270px);
@@ -3562,7 +3562,7 @@ footer {
 
 @media(max-width:768px){
   .intro{
-    height:900vh !important;
+    height:420vh !important;
   }
 
   .intro-reveal-copy .intro-greeting-line{
@@ -3580,6 +3580,18 @@ footer {
   .intro-reveal-copy .intro-branch-line{
     margin-top:8px !important;
     font-size:clamp(18px, 4.6vw, 25px) !important;
+  }
+
+  .intro-reveal-copy .reveal-line.has-word-reveal{
+    background:none !important;
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+  }
+
+  .intro-reveal-copy .reveal-word{
+    background:none !important;
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
   }
 
   .review-proof-title{
@@ -9883,35 +9895,48 @@ li{
 }
 
 @media(max-width:768px){
+  .intro-reveal-copy .intro-greeting-line{
+    font-size:clamp(34px, 9vw, 46px) !important;
+    line-height:1.08 !important;
+  }
+
   #brand #inc01 .brand-cross .brand-type-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line{
-    width:min(520px, 86vw);
-    font-size:clamp(17px, 3.8vw, 24px) !important;
-    line-height:1.5 !important;
+    width:min(520px, 90vw);
+    font-size:clamp(19px, 5vw, 27px) !important;
+    line-height:1.42 !important;
   }
 
   .intro-reveal-copy .intro-branch-line{
-    margin-top:4px !important;
+    margin-top:6px !important;
   }
 }
 
 @media(max-width:480px){
+  .intro-reveal-copy .intro-greeting-line{
+    font-size:38px !important;
+  }
+
   #brand #inc01 .brand-cross .brand-type-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line{
-    width:min(340px, 88vw);
-    font-size:16px !important;
-    line-height:1.55 !important;
+    width:min(350px, 90vw);
+    font-size:20px !important;
+    line-height:1.42 !important;
   }
 }
 
 @media(max-width:390px){
+  .intro-reveal-copy .intro-greeting-line{
+    font-size:36px !important;
+  }
+
   #brand #inc01 .brand-cross .brand-type-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line{
-    width:min(330px, 88vw);
-    font-size:15px !important;
+    width:min(350px, 90vw);
+    font-size:19px !important;
   }
 }
 

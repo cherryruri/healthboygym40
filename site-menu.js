@@ -227,7 +227,7 @@
           touch-action:pan-y !important;
         }
         .intro{
-          height:900vh !important;
+          height:420vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky,

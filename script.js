@@ -3534,31 +3534,31 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? -14 : -54;
 
       const expandEnd =
-        isMobile ? 0.30 : 0.34;
+        isMobile ? 0.23 : 0.34;
 
       const copyStart =
-        isMobile ? 0.20 : 0.27;
+        isMobile ? 0.16 : 0.27;
 
       const copyRange =
-        isMobile ? 0.16 : 0.16;
+        isMobile ? 0.10 : 0.16;
 
       const lineStart =
-        isMobile ? 0.235 : 0.31;
+        isMobile ? 0.18 : 0.31;
 
       const lineStep =
-        isMobile ? 0.05 : 0.035;
+        isMobile ? 0.018 : 0.035;
 
       const lineRange =
-        isMobile ? 0.22 : 0.18;
+        isMobile ? 0.08 : 0.18;
 
       const wordStart =
-        isMobile ? 0.25 : 0.32;
+        isMobile ? 0.18 : 0.32;
 
       const wordStep =
-        isMobile ? 0.032 : 0.024;
+        isMobile ? 0 : 0.024;
 
       const wordRange =
-        isMobile ? 0.15 : 0.085;
+        isMobile ? 0.08 : 0.085;
 
       const underlineStart =
         lineStart + lineStep + lineRange * 0.78;
@@ -3735,7 +3735,12 @@ document.addEventListener("DOMContentLoaded", function(){
         baseRadius * (1 - frameReturnProgress);
 
       const lineReveal =
-        index=>`${(easeInOut(clamp((progress - (lineStart + index * lineStep)) / lineRange, 0, 1)) * 100).toFixed(1)}%`;
+        index=>{
+          const start =
+            isMobile ? lineStart : lineStart + index * lineStep;
+
+          return `${(easeInOut(clamp((progress - start) / lineRange, 0, 1)) * 100).toFixed(1)}%`;
+        };
 
       const underlineProgress =
         easeInOut(clamp((progress - underlineStart) / underlineRange, 0, 1));

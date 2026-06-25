@@ -22,7 +22,7 @@
     style.id = "mobile-scroll-fix-style";
     style.textContent = `
       @media (max-width: 768px){
-        .intro{height:760vh !important;}
+        .intro{height:420vh !important;}
         html.hero-caption-scroll-locked,
         html.hero-caption-scroll-locked body,
         html.allpass-scroll-locked,

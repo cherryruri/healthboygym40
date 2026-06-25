@@ -225,7 +225,7 @@
     style.textContent = `
       @media (max-width: 768px){
         .intro{
-          height:430vh !important;
+          height:680vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky,

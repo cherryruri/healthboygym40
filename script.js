@@ -3423,13 +3423,13 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.30 : 0.34;
 
       const copyStart =
-        isMobile ? 0.27 : 0.27;
+        isMobile ? 0.22 : 0.27;
 
       const copyRange =
         isMobile ? 0.2 : 0.16;
 
       const lineStart =
-        isMobile ? 0.32 : 0.31;
+        isMobile ? 0.27 : 0.31;
 
       const lineStep =
         isMobile ? 0.05 : 0.035;
@@ -3438,7 +3438,7 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.22 : 0.18;
 
       const wordStart =
-        isMobile ? 0.34 : 0.32;
+        isMobile ? 0.29 : 0.32;
 
       const wordStep =
         isMobile ? 0.032 : 0.024;
@@ -3459,16 +3459,16 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.724 : 0.795;
+        isMobile ? 0.76 : 0.795;
 
       const statsIntroEnd =
-        isMobile ? 0.745 : 0.855;
+        isMobile ? 0.79 : 0.855;
 
       const messageExitStart =
-        isMobile ? 0.718 : 0.765;
+        isMobile ? 0.74 : 0.765;
 
       const messageExitEnd =
-        isMobile ? 0.743 : 0.835;
+        isMobile ? 0.79 : 0.835;
 
       const statsFadeStart =
         isMobile ? 0.865 : 0.94;

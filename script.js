@@ -2076,15 +2076,17 @@ document.addEventListener("DOMContentLoaded", function(){
     video.dataset.mobileVideoReady =
       "true";
 
-    if(window.innerWidth > 768) return;
+    video.muted =
+      true;
+
+    video.playsInline =
+      true;
 
     video.preload =
-      "metadata";
+      "auto";
 
-    video.pause();
-    video.removeAttribute("autoplay");
-
-    window.setTimeout(()=>{
+    const playVideo =
+      ()=>{
 
       const playPromise =
         video.play();
@@ -2093,7 +2095,22 @@ document.addEventListener("DOMContentLoaded", function(){
         playPromise.catch(()=>{});
       }
 
-    }, 420);
+      };
+
+    if(window.innerWidth > 768){
+      playVideo();
+      return;
+    }
+
+    video.load();
+
+    if(video.readyState >= 2){
+      playVideo();
+    }else{
+      video.addEventListener("loadeddata", playVideo, {once:true});
+      video.addEventListener("canplay", playVideo, {once:true});
+      window.setTimeout(playVideo, 80);
+    }
 
   }
 
@@ -2109,6 +2126,30 @@ document.addEventListener("DOMContentLoaded", function(){
 
     caption.dataset.scrollGateReady =
       "true";
+
+    const introGateSeenKey =
+      "healthboygymIntroCaptionGateSeen";
+
+    const isMobileViewport =
+      ()=>window.innerWidth <= 768;
+
+    const hasSeenIntroGate =
+      ()=>{
+        try{
+          return window.localStorage.getItem(introGateSeenKey) === "1";
+        }catch(error){
+          return false;
+        }
+      };
+
+    const markIntroGateSeen =
+      ()=>{
+        if(!isMobileViewport()) return;
+
+        try{
+          window.localStorage.setItem(introGateSeenKey, "1");
+        }catch(error){}
+      };
 
     const characters =
       Array.from(caption.querySelectorAll(".desc-char"));
@@ -2262,6 +2303,7 @@ document.addEventListener("DOMContentLoaded", function(){
         window.removeEventListener("scroll", onScroll);
         document.documentElement.classList.remove("hero-caption-scroll-locked");
         document.documentElement.classList.remove("hero-mobile-snap-playing");
+        markIntroGateSeen();
       };
 
     const armGate =
@@ -2510,6 +2552,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const triggerReplay =
       ()=>{
+        if(isMobileViewport() && hasSeenIntroGate()) return;
         if(!released || cinematicPlaying || !isNearHeroTop()) return;
 
         armGate(holdMs, true);
@@ -2685,7 +2728,11 @@ document.addEventListener("DOMContentLoaded", function(){
     window.addEventListener("touchmove", onBridgeTouchMove, {passive:false});
     window.addEventListener("keydown", onBridgeKeyDown);
 
-    armGate(holdMs);
+    if(isMobileViewport() && hasSeenIntroGate()){
+      document.documentElement.classList.remove("hero-caption-scroll-locked");
+    }else{
+      armGate(holdMs);
+    }
 
   }
 
@@ -2720,10 +2767,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .86 : .84;
+        window.innerWidth <= 768 ? .82 : .84;
 
       const end =
-        window.innerWidth <= 768 ? .92 : .90;
+        window.innerWidth <= 768 ? .90 : .90;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);
@@ -3199,7 +3246,7 @@ document.addEventListener("DOMContentLoaded", function(){
           ? (
               delta < 0
                 ? (absDelta > 0.08 ? 0.18 : 0.24)
-                : (absDelta > 0.08 ? 0.42 : 0.28)
+                : (absDelta > 0.18 ? 0.82 : (absDelta > 0.08 ? 0.62 : 0.34))
             )
           : (
               delta < 0
@@ -3406,46 +3453,46 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.743 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.942 : 0.94;
+        isMobile ? 0.865 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.956 : 0.952;
+        isMobile ? 0.905 : 0.952;
 
       const reviewDarkStart =
-        isMobile ? 0.954 : 0.95;
+        isMobile ? 0.865 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.992 : 0.99;
+        isMobile ? 0.95 : 0.99;
 
       const frameReturnStart =
-        isMobile ? 0.995 : 0.994;
+        isMobile ? 0.925 : 0.994;
 
       const frameReturnEnd =
-        isMobile ? 0.9996 : 0.9995;
+        isMobile ? 0.982 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.9996 : 0.9995;
+        isMobile ? 0.918 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.99995 : 0.9999;
+        isMobile ? 0.976 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.956 : 0.952;
+        isMobile ? 0.868 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.966 : 0.962;
+        isMobile ? 0.902 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.966 : 0.962;
+        isMobile ? 0.902 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.9992 : 0.999;
+        isMobile ? 0.952 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.9986 : 0.9983;
+        isMobile ? 0.912 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.9998 : 0.9997;
+        isMobile ? 0.968 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3633,7 +3680,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-bg-opacity",
-        "0"
+        (reviewDarkProgress * 0.86).toFixed(4)
       );
 
       hero.style.setProperty(

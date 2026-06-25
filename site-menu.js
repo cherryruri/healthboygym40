@@ -225,7 +225,7 @@
     style.textContent = `
       @media (max-width: 768px){
         .intro{
-          height:760vh !important;
+          height:430vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky,
@@ -527,7 +527,7 @@
       reviewProofHoldStartedAt = performance.now();
     }
 
-    if(performance.now() - reviewProofHoldStartedAt < minHoldMs){
+    if(performance.now() - reviewProofHoldStartedAt < (mobile ? 700 : minHoldMs)){
       forceReviewProofVisible(hero);
       setTimeout(queueReviewProofHold, 120);
       return;
@@ -559,8 +559,8 @@
     const mobile = isMobile();
     const holdStart = mobile ? 0.705 : 0.79;
     const resetBefore = holdStart - 0.05;
-    const minHoldMs = mobile ? 2400 : 1900;
-    const maxHoldMs = mobile ? 3400 : 2800;
+    const minHoldMs = mobile ? 500 : 1900;
+    const maxHoldMs = mobile ? 900 : 2800;
 
     if(progress < resetBefore){
       reviewStatsHoldStartedAt = 0;

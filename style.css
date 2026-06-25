@@ -11,6 +11,14 @@ body {
   overflow-x:hidden;
 }
 
+@media (max-width:768px){
+  html,
+  body{
+    overflow-y:auto !important;
+    touch-action:pan-y !important;
+  }
+}
+
 html.allpass-scroll-locked,
 html.allpass-scroll-locked body {
   overflow:hidden;
@@ -3257,7 +3265,7 @@ footer {
   }
 
   .intro {
-    height:1300vh;
+    height:430vh;
     padding:0;
     --hero-frame-width:min(86vw, 370px);
     --hero-frame-height:clamp(230px, 36vh, 270px);

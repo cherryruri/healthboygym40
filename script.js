@@ -824,6 +824,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
   function initAllPassLocatorReveal(){
 
+    if(window.innerWidth <= 768) return;
+
     const transition =
       document.querySelector("[data-pass-transition]");
 
@@ -1393,6 +1395,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const startAllPassScrollLock =
       ()=>{
+
+        if(window.innerWidth <= 768) return;
 
         if(!brandCross || releaseAllPassScrollLock) return;
 

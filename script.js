@@ -3319,6 +3319,9 @@ document.addEventListener("DOMContentLoaded", function(){
     let lastHeroSmoothAt =
       0;
 
+    let reviewProofAutoStartedAt =
+      0;
+
     function smoothHeroProgress(rawProgress){
 
       const now =
@@ -3420,7 +3423,7 @@ document.addEventListener("DOMContentLoaded", function(){
         introStats;
 
       const duration =
-        window.innerWidth <= 768 ? 1050 : 1500;
+        window.innerWidth <= 768 ? 1300 : 1500;
 
       const startedAt =
         performance.now();
@@ -3454,6 +3457,8 @@ document.addEventListener("DOMContentLoaded", function(){
         }else{
           heroCounterComplete =
             true;
+
+          document.documentElement.classList.add("review-stats-counted");
         }
 
       }
@@ -3488,6 +3493,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
       heroCounterComplete =
         true;
+
+      document.documentElement.classList.add("review-stats-counted");
 
     }
 
@@ -3585,10 +3592,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.68 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.78 : 0.94;
+        isMobile ? 0.835 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.83 : 0.952;
+        isMobile ? 0.875 : 0.952;
 
       const reviewDarkStart =
         isMobile ? 0.61 : 0.95;
@@ -3609,22 +3616,22 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.998 : 0.9999;
 
       const proofStart =
-        isMobile ? 0.805 : 0.952;
+        isMobile ? 0.875 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.86 : 0.962;
+        isMobile ? 0.91 : 0.962;
 
       const lineFadeStart =
-        isMobile ? 0.875 : 0.962;
+        isMobile ? 0.91 : 0.962;
 
       const lineFadeEnd =
-        isMobile ? 0.93 : 0.999;
+        isMobile ? 0.945 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.875 : 0.9983;
+        isMobile ? 0.925 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.935 : 0.9997;
+        isMobile ? 0.955 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3632,7 +3639,7 @@ document.addEventListener("DOMContentLoaded", function(){
       const messageExitProgress =
         easeInOut(clamp((progress - messageExitStart) / (messageExitEnd - messageExitStart), 0, 1));
 
-      if(progress >= proofStart && !heroCounterComplete){
+      if(progress >= proofStart && !heroCounterComplete && !isMobile){
         finishHeroCounter();
       }
 
@@ -3671,13 +3678,31 @@ document.addEventListener("DOMContentLoaded", function(){
           ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
           : 0;
 
+      const reviewStatsHoldComplete =
+        document.documentElement.classList.contains("review-stats-counted");
+
+      if(proofProgress > 0.52 && reviewStatsHoldComplete && !reviewProofAutoStartedAt){
+        reviewProofAutoStartedAt =
+          performance.now();
+      }
+
+      if(proofProgress < 0.15 || !heroCounterComplete || !reviewStatsHoldComplete){
+        reviewProofAutoStartedAt =
+          0;
+      }
+
+      const proofAutoLineFade =
+        reviewProofAutoStartedAt
+          ? easeInOut(clamp((performance.now() - reviewProofAutoStartedAt - (isMobile ? 1700 : 720)) / (isMobile ? 650 : 720), 0, 1))
+          : 0;
+
       const proofExitProgress =
         isMobile && heroCounterComplete
-          ? easeInOut(clamp((progress - 0.905) / 0.035, 0, 1))
+          ? easeInOut(clamp((progress - 0.94) / 0.035, 0, 1))
           : 0;
 
       const proofDividerAlive =
-        clamp(1 - lineFadeProgress, 0, 1);
+        clamp(1 - Math.max(lineFadeProgress, proofAutoLineFade), 0, 1);
 
       const proofDividerOpacity =
         proofProgress * clamp(proofDividerAlive / 0.22, 0, 1);
@@ -3850,7 +3875,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-gap",
-        `${(isMobile ? 12 : 16) + proofDividerAlive * (isMobile ? 10 : 14)}px`
+        `${(isMobile ? 8 : 16) + proofDividerAlive * (isMobile ? 5 : 14)}px`
       );
 
       hero.style.setProperty(
@@ -3860,7 +3885,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-divider-width",
-        `${(isMobile ? 62 : 150) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
+        `${(isMobile ? 38 : 150) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
       );
 
       const liveReviewSlides =

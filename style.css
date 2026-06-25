@@ -10126,23 +10126,24 @@ li{
 
 /* ================= Requested review proof partner-style flow ================= */
 .review-proof-title{
-  flex-direction:column !important;
+  flex-direction:row !important;
   align-items:center !important;
   justify-content:center !important;
   gap:var(--review-proof-gap) !important;
-  width:min(1160px, 94vw) !important;
-  font-size:clamp(44px, 6.1vw, 104px) !important;
+  width:min(1180px, 96vw) !important;
+  font-size:clamp(40px, 4.9vw, 86px) !important;
   font-weight:900 !important;
-  line-height:1.03 !important;
+  line-height:1 !important;
   letter-spacing:0 !important;
-  white-space:normal !important;
-  text-wrap:balance;
+  white-space:nowrap !important;
+  flex-wrap:nowrap !important;
 }
 
 .review-proof-line{
-  display:block !important;
-  width:100% !important;
+  display:inline-block !important;
+  width:auto !important;
   text-align:center !important;
+  white-space:nowrap !important;
 }
 
 .review-proof-divider{
@@ -10171,10 +10172,10 @@ li{
   }
 
   .review-proof-title{
-    width:min(520px, 92vw) !important;
+    width:min(620px, 96vw) !important;
     gap:var(--review-proof-gap) !important;
-    font-size:clamp(38px, 10.2vw, 52px) !important;
-    line-height:1.04 !important;
+    font-size:clamp(28px, 7.1vw, 34px) !important;
+    line-height:1 !important;
   }
 
   .review-proof-divider{
@@ -10189,6 +10190,6 @@ li{
 
 @media(max-width:390px){
   .review-proof-title{
-    font-size:38px !important;
+    font-size:27px !important;
   }
 }

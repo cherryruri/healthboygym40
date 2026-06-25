@@ -465,12 +465,29 @@
 
     hero.style.setProperty("--review-content-y", "0px");
     hero.style.setProperty("--review-stats-opacity", "1");
+    hero.style.setProperty("--review-bg-opacity", "0.86");
+    hero.style.setProperty("--hero-overlay", "0.84");
     hero.style.setProperty("--review-proof-opacity", "0");
     hero.style.setProperty("--review-proof-divider-opacity", "0");
     hero.style.setProperty("--review-proof-divider-width", "0px");
     hero.style.setProperty("--review-cards-opacity", "0");
     hero.style.setProperty("--review-cards-y", `${mobile ? 560 : 520}px`);
     hero.style.setProperty("--review-cards-x", `${mobile ? 220 : 340}px`);
+  }
+
+  function holdReviewStatsScrollPosition(hero, targetProgress){
+    if(!hero || !isMobile()) return;
+
+    const top = pageTop(hero);
+    if(top === null) return;
+
+    const scrollable =
+      Math.max(1, hero.offsetHeight - window.innerHeight);
+
+    window.scrollTo({
+      top:top + scrollable * targetProgress,
+      behavior:"auto"
+    });
   }
 
   function releaseReviewStatsHold(){
@@ -491,9 +508,9 @@
     hero.style.setProperty("--review-proof-opacity", "1");
     hero.style.setProperty("--review-proof-y", "0px");
     hero.style.setProperty("--review-proof-scale", "1");
-    hero.style.setProperty("--review-proof-gap", `${mobile ? 22 : 30}px`);
+    hero.style.setProperty("--review-proof-gap", `${mobile ? 13 : 30}px`);
     hero.style.setProperty("--review-proof-divider-opacity", "1");
-    hero.style.setProperty("--review-proof-divider-width", `${mobile ? 62 : 150}px`);
+    hero.style.setProperty("--review-proof-divider-width", `${mobile ? 38 : 150}px`);
     hero.style.setProperty("--review-cards-opacity", "0");
     hero.style.setProperty("--review-cards-y", `${mobile ? 560 : 520}px`);
     hero.style.setProperty("--review-cards-x", `${mobile ? 220 : 340}px`);
@@ -565,8 +582,14 @@
     const mobile = isMobile();
     const holdStart = mobile ? 0.665 : 0.79;
     const resetBefore = holdStart - 0.05;
-    const minHoldMs = mobile ? 1300 : 1900;
-    const maxHoldMs = mobile ? 2100 : 2800;
+    const minHoldMs = mobile ? 1800 : 1900;
+    const maxHoldMs = mobile ? 2600 : 2800;
+
+    if(root.classList.contains("review-stats-counted")){
+      reviewStatsHoldDone = true;
+      root.classList.add("review-stats-hold-complete");
+      return;
+    }
 
     if(progress < resetBefore){
       reviewStatsHoldStartedAt = 0;
@@ -584,16 +607,21 @@
 
     const elapsed = performance.now() - reviewStatsHoldStartedAt;
     const reachedTargets = reviewStatsReachedTargets(stats);
-    const shouldHold = elapsed < minHoldMs || (!reachedTargets && elapsed < maxHoldMs);
+    const countedByHero =
+      root.classList.contains("review-stats-counted");
 
-    if(shouldHold){
-      forceReviewStatsVisible(hero);
-      setTimeout(queueReviewStatsHold, 120);
+    if(((reachedTargets || countedByHero) && elapsed >= minHoldMs) || elapsed >= maxHoldMs){
+      reviewStatsHoldDone = true;
+      root.classList.add("review-stats-hold-complete");
+      releaseReviewStatsHold();
       return;
     }
 
-    reviewStatsHoldDone = true;
-    releaseReviewStatsHold();
+    forceReviewStatsVisible(hero);
+    if(mobile && progress > holdStart + 0.018){
+      holdReviewStatsScrollPosition(hero, holdStart + 0.012);
+    }
+    setTimeout(queueReviewStatsHold, 120);
   }
 
   function queueReviewStatsHold(){

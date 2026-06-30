@@ -307,71 +307,354 @@ if(mypageBtn){
   });
 }
 
-(function improveMobileHeroComfort(){
+(function applyKakaoInspiredHero(){
   const mobileMedia = window.matchMedia("(max-width: 768px)");
+  const root = document.documentElement;
   const originalScrollTo = window.scrollTo.bind(window);
   const scrollKeys = new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End", "ArrowUp", "PageUp", "Home"]);
+  const lockClasses = [
+    "hero-caption-scroll-locked",
+    "hero-mobile-snap-playing",
+    "hero-stats-bridge-playing"
+  ];
   let lastUserScrollAt = 0;
   let patchedScrollTo = false;
-  let comfortTicking = false;
+  let ticking = false;
+  let intervalCount = 0;
 
   function ensureStyle(){
-    if(document.getElementById("mobile-hero-comfort-style")) return;
+    if(document.getElementById("kakao-inspired-hero-style")) return;
 
     const style = document.createElement("style");
-    style.id = "mobile-hero-comfort-style";
+    style.id = "kakao-inspired-hero-style";
     style.textContent = `
+      html.kakao-inspired-hero,
+      html.kakao-inspired-hero body{
+        background:#fff !important;
+        scroll-behavior:auto !important;
+      }
+
+      html.kakao-inspired-hero .intro{
+        height:calc(100svh - 80px) !important;
+        min-height:760px !important;
+        overflow:visible !important;
+        background:#fff !important;
+        color:#050505 !important;
+        text-align:left !important;
+      }
+
+      html.kakao-inspired-hero .hero-expand-sticky{
+        position:relative !important;
+        top:auto !important;
+        height:100% !important;
+        min-height:inherit !important;
+        overflow:hidden !important;
+        background:#fff !important;
+        isolation:auto !important;
+      }
+
+      html.kakao-inspired-hero .hero-expand-sticky::before{
+        background:#fff !important;
+        opacity:1 !important;
+      }
+
+      html.kakao-inspired-hero .intro-inner{
+        position:absolute !important;
+        left:0 !important;
+        top:clamp(132px, 22svh, 210px) !important;
+        z-index:4 !important;
+        width:100% !important;
+        min-height:0 !important;
+        padding:0 clamp(58px, 14vw, 150px) !important;
+        align-items:flex-start !important;
+        justify-content:flex-start !important;
+        opacity:1 !important;
+        transform:none !important;
+        text-align:left !important;
+      }
+
+      html.kakao-inspired-hero .intro-main{
+        align-items:flex-start !important;
+        gap:4px !important;
+        max-width:720px !important;
+        color:#050505 !important;
+        font-size:clamp(42px, 8.5vw, 96px) !important;
+        line-height:1.18 !important;
+        font-weight:950 !important;
+        letter-spacing:0 !important;
+        text-align:left !important;
+      }
+
+      html.kakao-inspired-hero .intro-title-line{
+        opacity:1 !important;
+        transform:none !important;
+        clip-path:none !important;
+      }
+
+      html.kakao-inspired-hero .intro-desc,
+      html.kakao-inspired-hero .intro-statement,
+      html.kakao-inspired-hero .review-proof-title{
+        display:none !important;
+      }
+
+      html.kakao-inspired-hero .hero-video-frame{
+        position:absolute !important;
+        left:50% !important;
+        top:clamp(382px, 54svh, 520px) !important;
+        bottom:auto !important;
+        z-index:2 !important;
+        width:min(68vw, 255px) !important;
+        height:min(664px, 78svh) !important;
+        border-radius:14px !important;
+        overflow:hidden !important;
+        background:#dfe8e8 !important;
+        opacity:1 !important;
+        transform:translateX(-50%) !important;
+        box-shadow:none !important;
+        transition:none !important;
+      }
+
+      html.kakao-inspired-hero .hero-video-frame::after{
+        background:rgba(0,0,0,.06) !important;
+      }
+
+      html.kakao-inspired-hero .intro-video{
+        display:block !important;
+        width:100% !important;
+        height:100% !important;
+        object-fit:cover !important;
+        opacity:1 !important;
+        filter:none !important;
+        transform:translateZ(0);
+        backface-visibility:hidden;
+      }
+
+      html.kakao-inspired-hero .kb-story-section{
+        position:relative;
+        min-height:118svh;
+        overflow:hidden;
+        background:#fff;
+        color:#050505;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:120px 0;
+      }
+
+      html.kakao-inspired-hero .kb-story-inner{
+        position:relative;
+        width:min(100%, 1080px);
+        min-height:760px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+
+      html.kakao-inspired-hero .kb-story-copy{
+        position:relative;
+        z-index:3;
+        width:min(720px, calc(100% - 48px));
+        margin:0 auto;
+        text-align:center;
+        color:#050505;
+        font-size:clamp(34px, 4.3vw, 64px);
+        line-height:1.36;
+        font-weight:950;
+        letter-spacing:0;
+        word-break:keep-all;
+      }
+
+      html.kakao-inspired-hero .kb-story-copy span{
+        display:block;
+      }
+
+      html.kakao-inspired-hero .kb-float{
+        position:absolute;
+        z-index:1;
+        overflow:hidden;
+        border-radius:18px;
+        background:#f4f4f4;
+        box-shadow:none;
+      }
+
+      html.kakao-inspired-hero .kb-float img{
+        display:block;
+        width:100%;
+        height:100%;
+        object-fit:cover;
+      }
+
+      html.kakao-inspired-hero .kb-float-photo-a{
+        width:190px;
+        height:142px;
+        left:6%;
+        top:10%;
+      }
+
+      html.kakao-inspired-hero .kb-float-photo-b{
+        width:180px;
+        height:138px;
+        right:8%;
+        bottom:12%;
+      }
+
+      html.kakao-inspired-hero .kb-proof-chip{
+        position:absolute;
+        z-index:2;
+        min-width:132px;
+        min-height:118px;
+        border-radius:18px;
+        padding:22px 20px;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        background:#fff200;
+        color:#050505;
+        font-size:13px;
+        line-height:1.35;
+        font-weight:900;
+        letter-spacing:0;
+      }
+
+      html.kakao-inspired-hero .kb-proof-chip strong{
+        display:block;
+        margin-top:14px;
+        font-size:30px;
+        line-height:1;
+        font-weight:950;
+      }
+
+      html.kakao-inspired-hero .kb-proof-review{
+        right:14%;
+        top:18%;
+      }
+
+      html.kakao-inspired-hero .kb-proof-member{
+        left:10%;
+        bottom:16%;
+        background:#eaf1ff;
+      }
+
+      html.kakao-inspired-hero .review-cover-panel.kb-review-flow{
+        position:relative !important;
+        inset:auto !important;
+        left:auto !important;
+        top:auto !important;
+        display:block !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:0 !important;
+        overflow:visible !important;
+        opacity:1 !important;
+        visibility:visible !important;
+        pointer-events:auto !important;
+        transform:none !important;
+        background:#050505 !important;
+        color:#fff !important;
+        z-index:auto !important;
+      }
+
+      html.kakao-inspired-hero .review-cover-panel.kb-review-flow .review-cards,
+      html.kakao-inspired-hero .review-cover-panel.kb-review-flow .review-stats-section,
+      html.kakao-inspired-hero .review-cover-panel.kb-review-flow .review-proof-section{
+        opacity:1 !important;
+        visibility:visible !important;
+        transform:none !important;
+      }
+
       @media (max-width: 768px){
-        html,
-        body{
-          scroll-behavior:auto !important;
+        html.kakao-inspired-hero .main-content{
+          padding-top:79px !important;
+          background:#fff !important;
         }
-        .intro{
-          height:560vh !important;
+
+        html.kakao-inspired-hero .intro{
+          height:calc(100svh - 79px) !important;
+          min-height:760px !important;
         }
-        .hero-video-frame{
-          opacity:1 !important;
-          background:#050505 !important;
-          transition:none !important;
-          will-change:transform;
+
+        html.kakao-inspired-hero .hero-expand-sticky{
+          height:100% !important;
+          min-height:inherit !important;
         }
-        .intro-video{
-          display:block !important;
-          opacity:1 !important;
-          backface-visibility:hidden;
-          transform:translateZ(0);
-          will-change:transform;
+
+        html.kakao-inspired-hero .intro-inner{
+          top:clamp(130px, 22svh, 235px) !important;
+          padding:0 0 0 clamp(48px, 15vw, 64px) !important;
         }
-        .hero-expand-sticky > .review-cover-panel{
-          background:rgba(0,0,0,.24) !important;
-          backdrop-filter:none !important;
+
+        html.kakao-inspired-hero .intro-main{
+          font-size:clamp(38px, 10.2vw, 48px) !important;
+          line-height:1.22 !important;
+          max-width:295px !important;
         }
-        .review-stats-section,
-        .review-proof-section,
-        .review-cards{
-          will-change:opacity, transform;
+
+        html.kakao-inspired-hero .hero-video-frame{
+          top:clamp(352px, 50svh, 445px) !important;
+          width:min(68vw, 255px) !important;
+          height:min(664px, 78svh) !important;
+          border-radius:14px !important;
+        }
+
+        html.kakao-inspired-hero .kb-story-section{
+          min-height:116svh;
+          padding:72px 0 86px;
+        }
+
+        html.kakao-inspired-hero .kb-story-inner{
+          min-height:760px;
+        }
+
+        html.kakao-inspired-hero .kb-story-copy{
+          width:calc(100% - 52px);
+          font-size:clamp(28px, 7vw, 34px);
+          line-height:1.42;
+        }
+
+        html.kakao-inspired-hero .kb-float-photo-a{
+          width:118px;
+          height:92px;
+          left:-22px;
+          top:8%;
+          border-radius:14px;
+        }
+
+        html.kakao-inspired-hero .kb-float-photo-b{
+          width:122px;
+          height:94px;
+          right:-18px;
+          bottom:9%;
+          border-radius:14px;
+        }
+
+        html.kakao-inspired-hero .kb-proof-chip{
+          min-width:104px;
+          min-height:96px;
+          padding:16px 15px;
+          border-radius:16px;
+          font-size:11px;
+        }
+
+        html.kakao-inspired-hero .kb-proof-chip strong{
+          font-size:24px;
+        }
+
+        html.kakao-inspired-hero .kb-proof-review{
+          right:8%;
+          top:9%;
+        }
+
+        html.kakao-inspired-hero .kb-proof-member{
+          left:5%;
+          bottom:16%;
         }
       }
     `;
     document.head.appendChild(style);
   }
 
-  function numberFromCss(value){
-    const number = Number.parseFloat(value);
-    return Number.isFinite(number) ? number : 0;
-  }
-
   function getHero(){
     return document.querySelector(".hero-expand-section");
-  }
-
-  function getHeroProgress(hero){
-    if(!hero) return 0;
-
-    return numberFromCss(
-      hero.style.getPropertyValue("--hero-progress") ||
-      getComputedStyle(hero).getPropertyValue("--hero-progress")
-    );
   }
 
   function pageTop(element){
@@ -383,52 +666,103 @@ if(mypageBtn){
     return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
   }
 
-  function isReviewStatsAutoHoldTarget(top){
+  function ensureStorySection(){
     const hero = getHero();
-    const heroTop = pageTop(hero);
+    if(!hero) return null;
 
-    if(!hero || heroTop === null || !Number.isFinite(top)) return false;
+    let story = document.querySelector("[data-kb-story]");
+    if(story) return story;
 
-    const scrollable = Math.max(1, hero.offsetHeight - window.innerHeight);
-    const progress = (top - heroTop) / scrollable;
-
-    return progress >= 0.62 && progress <= 0.72;
+    story = document.createElement("section");
+    story.className = "kb-story-section";
+    story.dataset.kbStory = "true";
+    story.setAttribute("aria-label", "헬스보이짐 수내점 소개");
+    story.innerHTML = `
+      <div class="kb-story-inner">
+        <figure class="kb-float kb-float-photo-a" aria-hidden="true">
+          <img src="프리웨이트존사진1.jpg" alt="">
+        </figure>
+        <div class="kb-proof-chip kb-proof-review" aria-hidden="true">
+          <span>네이버 리뷰</span>
+          <strong>1,000+</strong>
+        </div>
+        <div class="kb-proof-chip kb-proof-member" aria-hidden="true">
+          <span>누적 회원 등록</span>
+          <strong>5,000+</strong>
+        </div>
+        <div class="kb-story-copy">
+          <span>헬스보이짐 수내점의 구성원은</span>
+          <span>회원님의 일상이 더 건강해지도록</span>
+          <span>쾌적한 공간과 운동의 기준을</span>
+          <span>먼저 만들어가는 사람들입니다.</span>
+        </div>
+        <figure class="kb-float kb-float-photo-b" aria-hidden="true">
+          <img src="리포머사진1.jpg" alt="">
+        </figure>
+      </div>
+    `;
+    hero.insertAdjacentElement("afterend", story);
+    return story;
   }
 
-  function isLargeBackwardHeroJump(top){
+  function moveReviewPanel(){
+    const story = ensureStorySection();
+    if(!story) return;
+
+    const sticky = document.querySelector(".hero-expand-sticky");
+    const review = sticky ? sticky.querySelector(".review-cover-panel") : document.querySelector(".review-cover-panel");
+    if(!review) return;
+
+    review.classList.add("kb-review-flow");
+    if(story.nextElementSibling !== review){
+      story.insertAdjacentElement("afterend", review);
+    }
+  }
+
+  function resetHeroState(){
     const hero = getHero();
+    if(!hero) return;
+
+    [
+      "--hero-video-opacity",
+      "--review-bg-opacity",
+      "--hero-overlay",
+      "--review-cover-y",
+      "--hero-stage-bg"
+    ].forEach(name=>hero.style.removeProperty(name));
+
+    lockClasses.forEach(className=>root.classList.remove(className));
+    document.body.classList.remove("hero-mobile-snap-playing");
+    document.body.style.overflow = "";
+    root.style.overflow = "";
+  }
+
+  function isLargeBackwardJump(top){
+    if(!Number.isFinite(top)) return false;
+
+    const hero = getHero();
+    const story = document.querySelector("[data-kb-story]");
     const heroTop = pageTop(hero);
-
-    if(!hero || heroTop === null || !Number.isFinite(top)) return false;
-
+    const storyTop = pageTop(story);
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
     const currentTop = getScrollTop();
-    const heroBottom = heroTop + hero.offsetHeight;
-    const progress = getHeroProgress(hero);
-    const inHeroFlow =
-      currentTop >= heroTop - viewportHeight * 0.2 &&
-      currentTop <= heroBottom + viewportHeight * 0.8;
-    const reviewFlowActive = progress >= 0.55 && progress <= 1.15;
-    const jumpsBackTooFar = top < currentTop - viewportHeight * 0.7;
+    const flowTop = heroTop === null ? 0 : heroTop;
+    const flowBottom = story && storyTop !== null
+      ? storyTop + story.offsetHeight
+      : (heroTop === null ? viewportHeight : heroTop + hero.offsetHeight + viewportHeight);
+    const inHeroStoryFlow = currentTop >= flowTop - viewportHeight * 0.2 && currentTop <= flowBottom + viewportHeight * 0.5;
 
-    return inHeroFlow && reviewFlowActive && jumpsBackTooFar;
-  }
-
-  function shouldKeepHeroVideoLive(){
-    if(!mobileMedia.matches || document.hidden) return false;
-
-    const hero = getHero();
-    const progress = getHeroProgress(hero);
-
-    return Boolean(hero && progress >= 0.45 && progress <= 1.08);
+    return inHeroStoryFlow && top < currentTop - viewportHeight * 0.65;
   }
 
   function patchScrollTo(){
     if(patchedScrollTo) return;
 
     patchedScrollTo = true;
-    window.scrollTo = function patchedMobileHeroScrollTo(arg, y){
-      if(mobileMedia.matches){
+    window.scrollTo = function patchedKakaoInspiredScrollTo(arg, y){
+      const userScrollIsActive = Date.now() - lastUserScrollAt < 3200;
+
+      if(userScrollIsActive){
         let top = null;
 
         if(arg && typeof arg === "object"){
@@ -437,8 +771,7 @@ if(mypageBtn){
           top = Number(y);
         }
 
-        const userScrollIsActive = Date.now() - lastUserScrollAt < 3200;
-        if(userScrollIsActive && (isReviewStatsAutoHoldTarget(top) || isLargeBackwardHeroJump(top))){
+        if(isLargeBackwardJump(top)){
           return;
         }
       }
@@ -454,13 +787,26 @@ if(mypageBtn){
     queueUpdate();
   }
 
+  function shouldKeepVideoLive(){
+    if(document.hidden) return false;
+
+    const hero = getHero();
+    const heroTop = pageTop(hero);
+    if(!hero || heroTop === null) return false;
+
+    const currentTop = getScrollTop();
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+
+    return currentTop >= heroTop - viewportHeight && currentTop <= heroTop + hero.offsetHeight + viewportHeight;
+  }
+
   function patchVideoPause(video){
-    if(!video || video.__mobileHeroComfortPausePatched) return;
+    if(!video || video.__kakaoInspiredPausePatched) return;
 
     const originalPause = video.pause.bind(video);
-    video.__mobileHeroComfortPausePatched = true;
-    video.pause = function comfortAwarePause(){
-      if(shouldKeepHeroVideoLive()) return;
+    video.__kakaoInspiredPausePatched = true;
+    video.pause = function kakaoInspiredPause(){
+      if(shouldKeepVideoLive()) return;
       return originalPause();
     };
   }
@@ -484,7 +830,7 @@ if(mypageBtn){
       video.load();
     }
 
-    if(shouldKeepHeroVideoLive() && video.paused){
+    if(shouldKeepVideoLive() && video.paused){
       const playPromise = video.play();
       if(playPromise && typeof playPromise.catch === "function"){
         playPromise.catch(()=>{});
@@ -492,38 +838,32 @@ if(mypageBtn){
     }
   }
 
-  function applyComfortVars(){
-    if(!mobileMedia.matches) return;
-
-    const hero = getHero();
-    if(!hero) return;
-
-    const progress = getHeroProgress(hero);
-
-    if(progress >= 0.45 && progress <= 1.08){
-      hero.style.setProperty("--hero-video-opacity", "1");
-      hero.style.setProperty("--review-bg-opacity", "0.24");
-      hero.style.setProperty("--hero-overlay", progress >= 0.52 ? "0.28" : "0.18");
-    }else if(progress < 0.42){
-      hero.style.removeProperty("--hero-video-opacity");
+  function refreshScrollTools(){
+    if(window.ScrollTrigger && typeof window.ScrollTrigger.refresh === "function"){
+      window.ScrollTrigger.refresh();
     }
   }
 
   function update(){
-    comfortTicking = false;
-
-    if(!mobileMedia.matches) return;
-
+    ticking = false;
+    root.classList.add("kakao-inspired-hero");
     ensureStyle();
+    ensureStorySection();
+    moveReviewPanel();
+    resetHeroState();
     patchScrollTo();
-    applyComfortVars();
     keepVideoPlaying();
+    intervalCount += 1;
+
+    if(intervalCount < 8){
+      refreshScrollTools();
+    }
   }
 
   function queueUpdate(){
-    if(comfortTicking) return;
+    if(ticking) return;
 
-    comfortTicking = true;
+    ticking = true;
     requestAnimationFrame(update);
   }
 
@@ -545,5 +885,6 @@ if(mypageBtn){
   setTimeout(queueUpdate, 80);
   setTimeout(queueUpdate, 350);
   setTimeout(queueUpdate, 900);
-  setInterval(update, 160);
+  setTimeout(queueUpdate, 1800);
+  setInterval(update, 500);
 })();

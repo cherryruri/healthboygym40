@@ -316,52 +316,60 @@ onAuthStateChanged(auth, async user=>{
 loadLatestPosts();
 loadVideoSettings();
 
-(function finalizeMobileHeroProofAndVideo(){
+(function finalHeroReviewOverride(){
   const mobileMedia = window.matchMedia("(max-width: 768px)");
   let ticking = false;
 
   function ensureStyle(){
-    let style = document.getElementById("final-mobile-hero-proof-style");
+    let style = document.getElementById("final-hero-review-override-style");
 
     if(!style){
       style = document.createElement("style");
-      style.id = "final-mobile-hero-proof-style";
+      style.id = "final-hero-review-override-style";
     }
 
     style.textContent = `
-      .review-proof-title{
-        opacity:var(--final-proof-title-opacity, var(--stable-review-proof-opacity, var(--review-proof-opacity, 0))) !important;
-        transform:translate(-50%, -50%) scale(1) !important;
-        transition:opacity .16s linear !important;
+      html body .hero-expand-sticky > .review-cover-panel{
+        background:rgba(0,0,0,var(--absolute-review-bg-opacity, 0)) !important;
+        backdrop-filter:none !important;
       }
-      .review-proof-title .review-proof-line{
+      html body .review-proof-title{
+        opacity:var(--absolute-proof-title-opacity, 0) !important;
+        transform:translate(-50%, -50%) scale(1) !important;
+      }
+      html body .review-proof-title .review-proof-line{
         opacity:1 !important;
         transform:none !important;
       }
-      .review-proof-title .review-proof-divider{
-        width:var(--final-proof-divider-width, var(--proof-divider-width, var(--review-proof-divider-width, 0px))) !important;
-        opacity:var(--final-proof-divider-opacity, var(--proof-divider-opacity, var(--review-proof-divider-opacity, 0))) !important;
-        transition:width .22s cubic-bezier(.22,.61,.36,1), opacity .18s linear !important;
+      html body .review-proof-title .review-proof-divider{
+        width:var(--absolute-proof-divider-width, 0px) !important;
+        opacity:var(--absolute-proof-divider-opacity, 0) !important;
+      }
+      html body .hero-expand-sticky > .review-cover-panel .review-stats-section{
+        opacity:var(--absolute-stats-opacity, var(--review-stats-opacity, 0)) !important;
+      }
+      html body .hero-expand-sticky > .review-cover-panel .all_slider{
+        opacity:var(--absolute-cards-opacity, 0) !important;
       }
       @media (max-width: 768px){
-        .hero-video-frame{
+        html body .hero-video-frame{
           opacity:1 !important;
           transform:translate3d(-50%, 0, 0) !important;
           transition:none !important;
           will-change:auto !important;
           backface-visibility:hidden;
-          contain:layout paint;
+          contain:paint;
         }
-        .intro-video{
-          opacity:var(--final-intro-video-opacity, 1) !important;
+        html body .intro-video{
+          opacity:var(--absolute-video-opacity, 1) !important;
           filter:none !important;
           transform:translate3d(0, 0, 0) !important;
           transition:opacity .18s linear !important;
           backface-visibility:hidden;
           will-change:auto !important;
         }
-        .intro-statement{
-          transform:translate3d(-50%, calc(-50% + var(--final-copy-y, var(--hero-copy-y))), 0) scale(1) !important;
+        html body .intro-statement{
+          transform:translate3d(-50%, calc(-50% + var(--absolute-copy-y, var(--hero-copy-y))), 0) scale(1) !important;
           transition:opacity .16s linear !important;
           backface-visibility:hidden;
           will-change:opacity !important;
@@ -397,188 +405,6 @@ loadVideoSettings();
     );
   }
 
-  function patchVideoPlay(hero){
-    const video = hero.querySelector(".intro-video");
-    if(!video || video.__finalMobileFreezePatched) return;
-
-    const originalPlay = video.play.bind(video);
-    video.__finalMobileFreezePatched = true;
-    video.play = function finalMobilePlayGuard(){
-      const currentHero = document.querySelector(".hero-expand-section");
-      const progress = currentHero ? getProgress(currentHero) : 0;
-
-      if(mobileMedia.matches && progress >= 0.16 && progress <= 0.63){
-        return Promise.resolve();
-      }
-
-      return originalPlay();
-    };
-  }
-
-  function stabilizeVideo(hero, progress){
-    if(!mobileMedia.matches) return;
-
-    const video = hero.querySelector(".intro-video");
-    if(!video) return;
-
-    patchVideoPlay(hero);
-
-    const statementActive = progress >= 0.16 && progress <= 0.63;
-    const reviewFade = ease((progress - 0.60) / 0.12);
-    const videoOpacity = Math.max(0.08, 1 - reviewFade * 0.92);
-
-    hero.style.setProperty("--final-intro-video-opacity", videoOpacity.toFixed(3));
-
-    if(statementActive){
-      if(!video.paused){
-        video.pause();
-      }
-      hero.style.setProperty("--final-copy-y", "0px");
-      hero.style.setProperty("--hero-copy-scale", "1");
-      return;
-    }
-
-    hero.style.removeProperty("--final-copy-y");
-
-    if(progress < 0.14 && video.paused && !document.hidden){
-      video.muted = true;
-      video.defaultMuted = true;
-      video.playsInline = true;
-      video.setAttribute("muted", "");
-      video.setAttribute("playsinline", "");
-
-      const promise = video.play();
-      if(promise && typeof promise.catch === "function"){
-        promise.catch(()=>{});
-      }
-    }
-  }
-
-  function stabilizeProof(hero, progress){
-    const isMobile = mobileMedia.matches;
-    const showStart = isMobile ? 0.735 : 0.944;
-    const showRange = isMobile ? 0.04 : 0.018;
-    const lineVisible = ease((progress - showStart) / showRange);
-    const dividerFadeStart = isMobile ? 0.805 : 0.972;
-    const dividerFadeRange = isMobile ? 0.10 : 0.022;
-    const dividerVisible = lineVisible * (1 - ease((progress - dividerFadeStart) / dividerFadeRange));
-    const maxWidth = isMobile ? 48 : 150;
-    const minGap = isMobile ? 8 : 16;
-    const extraGap = isMobile ? 8 : 18;
-
-    hero.style.setProperty("--final-proof-title-opacity", lineVisible.toFixed(4));
-    hero.style.setProperty("--final-proof-divider-opacity", clamp(dividerVisible, 0, 1).toFixed(4));
-    hero.style.setProperty("--final-proof-divider-width", `${(maxWidth * dividerVisible).toFixed(2)}px`);
-    hero.style.setProperty("--proof-divider-gap", `${(minGap + extraGap * dividerVisible).toFixed(2)}px`);
-    hero.style.setProperty("--review-proof-y", "0px");
-    hero.style.setProperty("--review-proof-scale", "1");
-  }
-
-  function update(){
-    ticking = false;
-    ensureStyle();
-
-    const hero = document.querySelector(".hero-expand-section");
-    if(!hero) return;
-
-    const progress = getProgress(hero);
-
-    stabilizeProof(hero, progress);
-    stabilizeVideo(hero, progress);
-  }
-
-  function queueUpdate(){
-    if(ticking) return;
-
-    ticking = true;
-    requestAnimationFrame(update);
-  }
-
-  ensureStyle();
-  queueUpdate();
-
-  window.addEventListener("scroll", queueUpdate, {passive:true});
-  window.addEventListener("resize", queueUpdate, {passive:true});
-  window.addEventListener("pageshow", queueUpdate, {passive:true});
-  document.addEventListener("DOMContentLoaded", queueUpdate);
-  document.addEventListener("visibilitychange", queueUpdate);
-  setTimeout(queueUpdate, 80);
-  setTimeout(queueUpdate, 420);
-  setTimeout(queueUpdate, 1100);
-  setInterval(queueUpdate, 80);
-})();
-
-(function correctStatsVideoAndProofTiming(){
-  const mobileMedia = window.matchMedia("(max-width: 768px)");
-  let ticking = false;
-
-  function ensureStyle(){
-    let style = document.getElementById("stats-video-proof-correction-style");
-
-    if(!style){
-      style = document.createElement("style");
-      style.id = "stats-video-proof-correction-style";
-    }
-
-    style.textContent = `
-      .hero-expand-sticky > .review-cover-panel{
-        background:rgba(0,0,0,var(--correct-review-bg-opacity, var(--review-bg-live-opacity, var(--review-bg-opacity, 0)))) !important;
-      }
-      .review-proof-title{
-        opacity:var(--correct-proof-title-opacity, var(--final-proof-title-opacity, var(--review-proof-opacity, 0))) !important;
-        transform:translate(-50%, -50%) scale(1) !important;
-      }
-      .review-proof-title .review-proof-divider{
-        width:var(--correct-proof-divider-width, var(--final-proof-divider-width, 0px)) !important;
-        opacity:var(--correct-proof-divider-opacity, var(--final-proof-divider-opacity, 0)) !important;
-      }
-      @media (max-width: 768px){
-        .hero-video-frame{
-          opacity:1 !important;
-          transform:translate3d(-50%, 0, 0) !important;
-          transition:none !important;
-          will-change:auto !important;
-          backface-visibility:hidden;
-          contain:paint;
-        }
-        .intro-video{
-          opacity:var(--correct-video-opacity, 1) !important;
-          filter:none !important;
-          transform:translate3d(0, 0, 0) !important;
-          transition:opacity .18s linear !important;
-          backface-visibility:hidden;
-        }
-      }
-    `;
-
-    if(document.head && style.parentNode !== document.head){
-      document.head.appendChild(style);
-    }else if(document.head && style.nextSibling){
-      document.head.appendChild(style);
-    }
-  }
-
-  function numberFromCss(value){
-    const number = Number.parseFloat(value);
-    return Number.isFinite(number) ? number : 0;
-  }
-
-  function clamp(value, min, max){
-    return Math.max(min, Math.min(max, value));
-  }
-
-  function ease(value){
-    const clamped = clamp(value, 0, 1);
-    return clamped * clamped * (3 - 2 * clamped);
-  }
-
-  function getProgress(hero){
-    return numberFromCss(
-      hero.style.getPropertyValue("--hero-progress") ||
-      getComputedStyle(hero).getPropertyValue("--hero-progress")
-    );
-  }
-
   function update(){
     ticking = false;
     ensureStyle();
@@ -588,39 +414,35 @@ loadVideoSettings();
 
     const progress = getProgress(hero);
     const isMobile = mobileMedia.matches;
-    const statsDone =
-      document.documentElement.classList.contains("review-stats-counted") ||
-      document.documentElement.classList.contains("review-stats-hold-complete") ||
-      progress >= (isMobile ? 0.86 : 0.955);
-
     const statsIn = ease((progress - (isMobile ? 0.61 : 0.79)) / (isMobile ? 0.05 : 0.04));
-    const statsOut = ease((progress - (isMobile ? 0.83 : 0.94)) / (isMobile ? 0.09 : 0.035));
+    const statsOut = ease((progress - (isMobile ? 0.84 : 0.944)) / (isMobile ? 0.08 : 0.032));
     const statsVisible = clamp(statsIn * (1 - statsOut), 0, 1);
-    const proofStart = isMobile ? 0.885 : 0.968;
-    const proofVisible = statsDone ? ease((progress - proofStart) / (isMobile ? 0.085 : 0.018)) : 0;
-    const dividerOut = ease((progress - (isMobile ? 0.955 : 0.988)) / (isMobile ? 0.075 : 0.012));
-    const dividerOpacity = clamp(proofVisible * (1 - dividerOut), 0, 1);
+    const proofStart = isMobile ? 0.93 : 0.972;
+    const proofVisible = ease((progress - proofStart) / (isMobile ? 0.055 : 0.016));
+    const dividerOut = ease((progress - (isMobile ? 0.985 : 0.99)) / (isMobile ? 0.045 : 0.008));
+    const dividerVisible = clamp(proofVisible * (1 - dividerOut), 0, 1);
     const maxWidth = isMobile ? 48 : 150;
-    const dividerWidth = proofVisible > 0.02 ? maxWidth * (1 - dividerOut) : maxWidth;
-    const blackIn = ease((progress - (isMobile ? 0.86 : 0.955)) / (isMobile ? 0.15 : 0.03));
-    const videoFade = ease((progress - (isMobile ? 0.875 : 0.965)) / (isMobile ? 0.14 : 0.03));
-    const cardsVisible = statsDone ? ease((progress - (isMobile ? 0.965 : 0.992)) / (isMobile ? 0.05 : 0.006)) : 0;
+    const blackIn = ease((progress - (isMobile ? 0.88 : 0.958)) / (isMobile ? 0.13 : 0.03));
+    const videoFade = ease((progress - (isMobile ? 0.895 : 0.966)) / (isMobile ? 0.14 : 0.028));
+    const cardsVisible = ease((progress - (isMobile ? 0.992 : 0.996)) / (isMobile ? 0.028 : 0.004));
 
-    hero.style.setProperty("--correct-review-bg-opacity", (0.16 * statsVisible + 0.92 * blackIn).toFixed(4));
-    hero.style.setProperty("--review-stats-live-opacity", statsVisible.toFixed(4));
-    hero.style.setProperty("--correct-proof-title-opacity", proofVisible.toFixed(4));
-    hero.style.setProperty("--correct-proof-divider-opacity", dividerOpacity.toFixed(4));
-    hero.style.setProperty("--correct-proof-divider-width", `${Math.max(0, dividerWidth).toFixed(2)}px`);
-    hero.style.setProperty("--proof-divider-gap", `${(isMobile ? 10 : 20).toFixed(2)}px`);
+    hero.style.setProperty("--absolute-review-bg-opacity", (0.12 * statsVisible + 0.92 * blackIn).toFixed(4));
+    hero.style.setProperty("--absolute-stats-opacity", statsVisible.toFixed(4));
+    hero.style.setProperty("--absolute-proof-title-opacity", proofVisible.toFixed(4));
+    hero.style.setProperty("--absolute-proof-divider-opacity", dividerVisible.toFixed(4));
+    hero.style.setProperty("--absolute-proof-divider-width", `${(maxWidth * (1 - dividerOut)).toFixed(2)}px`);
+    hero.style.setProperty("--proof-divider-gap", `${isMobile ? 10 : 20}px`);
+    hero.style.setProperty("--absolute-cards-opacity", cardsVisible.toFixed(4));
+    hero.style.setProperty("--review-cards-live-opacity", cardsVisible.toFixed(4));
     hero.style.setProperty("--review-proof-y", "0px");
     hero.style.setProperty("--review-proof-scale", "1");
-    hero.style.setProperty("--review-cards-live-opacity", cardsVisible.toFixed(4));
-    hero.style.setProperty("--review-cards-opacity", cardsVisible.toFixed(4));
-    hero.style.setProperty("--correct-video-opacity", Math.max(0.08, 1 - videoFade * 0.92).toFixed(3));
 
     if(isMobile){
+      hero.style.setProperty("--absolute-video-opacity", Math.max(0.08, 1 - videoFade * 0.92).toFixed(3));
+      hero.style.setProperty("--absolute-copy-y", progress >= 0.16 && progress <= 0.64 ? "0px" : "var(--hero-copy-y)");
+
       const video = hero.querySelector(".intro-video");
-      if(video && progress >= 0.16 && progress <= 0.875 && !video.paused){
+      if(video && progress >= 0.16 && progress <= 0.89 && !video.paused){
         video.pause();
       }
     }
@@ -644,5 +466,5 @@ loadVideoSettings();
   setTimeout(queueUpdate, 80);
   setTimeout(queueUpdate, 450);
   setTimeout(queueUpdate, 1200);
-  setInterval(queueUpdate, 50);
+  setInterval(queueUpdate, 30);
 })();

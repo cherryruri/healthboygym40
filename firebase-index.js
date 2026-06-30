@@ -326,6 +326,33 @@ if(mypageBtn){
     const style = document.createElement("style");
     style.id = "kakao-statement-hero-style";
     style.textContent = `
+      .review-proof-title{
+        flex-direction:row !important;
+        align-items:center !important;
+        justify-content:center !important;
+        flex-wrap:nowrap !important;
+        gap:var(--proof-divider-gap, var(--review-proof-gap, 18px)) !important;
+        white-space:nowrap !important;
+      }
+      .review-proof-title .review-proof-line{
+        display:inline-block !important;
+        width:auto !important;
+        white-space:nowrap !important;
+      }
+      .review-proof-title .review-proof-divider{
+        display:block !important;
+        flex:0 0 auto !important;
+        width:var(--proof-divider-width, 0px) !important;
+        min-width:0 !important;
+        height:2px !important;
+        border-radius:999px !important;
+        background:rgba(255,255,255,.94) !important;
+        opacity:var(--proof-divider-opacity, 0) !important;
+        transform:scaleX(var(--proof-divider-scale, 1)) translateZ(0) !important;
+        transform-origin:center !important;
+        box-shadow:0 0 24px rgba(255,255,255,.34) !important;
+        transition:width .28s cubic-bezier(.22,.61,.36,1), opacity .22s linear !important;
+      }
       @media (max-width: 768px){
         html,
         body{
@@ -377,6 +404,15 @@ if(mypageBtn){
         .intro-reveal-copy .intro-branch-line{
           margin-top:6px !important;
         }
+        .review-proof-title{
+          width:min(620px, 96vw) !important;
+          gap:var(--proof-divider-gap, 10px) !important;
+          font-size:clamp(27px, 7vw, 34px) !important;
+          line-height:1 !important;
+        }
+        .review-proof-title .review-proof-divider{
+          height:2px !important;
+        }
         .hero-expand-sticky > .review-cover-panel{
           background:rgba(0,0,0,.24) !important;
           backdrop-filter:none !important;
@@ -394,6 +430,15 @@ if(mypageBtn){
   function numberFromCss(value){
     const number = Number.parseFloat(value);
     return Number.isFinite(number) ? number : 0;
+  }
+
+  function clamp(value, min, max){
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function easeInOut(value){
+    const clamped = clamp(value, 0, 1);
+    return clamped * clamped * (3 - 2 * clamped);
   }
 
   function getHero(){
@@ -433,6 +478,26 @@ if(mypageBtn){
     }
 
     document.documentElement.classList.remove("kakao-inspired-hero");
+  }
+
+  function syncReviewProofDivider(){
+    const hero = getHero();
+    const divider = document.querySelector(".review-proof-title .review-proof-divider");
+    if(!hero || !divider) return;
+
+    const progress = getHeroProgress(hero);
+    const isMobile = mobileMedia.matches;
+    const appear = easeInOut((progress - (isMobile ? 0.748 : 0.95)) / (isMobile ? 0.045 : 0.016));
+    const disappear = easeInOut((progress - (isMobile ? 0.915 : 0.986)) / (isMobile ? 0.062 : 0.012));
+    const visible = clamp(appear * (1 - disappear), 0, 1);
+    const maxWidth = isMobile ? 48 : 150;
+    const minGap = isMobile ? 8 : 16;
+    const extraGap = isMobile ? 8 : 18;
+
+    hero.style.setProperty("--proof-divider-width", `${(maxWidth * visible).toFixed(2)}px`);
+    hero.style.setProperty("--proof-divider-opacity", visible.toFixed(4));
+    hero.style.setProperty("--proof-divider-gap", `${(minGap + extraGap * visible).toFixed(2)}px`);
+    hero.style.setProperty("--proof-divider-scale", visible > 0.001 ? "1" : "0.2");
   }
 
   function isReviewStatsAutoHoldTarget(top){
@@ -566,6 +631,7 @@ if(mypageBtn){
 
     ensureStyle();
     restoreOriginalHeroFlow();
+    syncReviewProofDivider();
 
     if(!mobileMedia.matches) return;
 

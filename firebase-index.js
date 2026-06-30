@@ -379,6 +379,10 @@ if(mypageBtn){
     return element.getBoundingClientRect().top + window.pageYOffset;
   }
 
+  function getScrollTop(){
+    return window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
+
   function isReviewStatsAutoHoldTarget(top){
     const hero = getHero();
     const heroTop = pageTop(hero);
@@ -389,6 +393,25 @@ if(mypageBtn){
     const progress = (top - heroTop) / scrollable;
 
     return progress >= 0.62 && progress <= 0.72;
+  }
+
+  function isLargeBackwardHeroJump(top){
+    const hero = getHero();
+    const heroTop = pageTop(hero);
+
+    if(!hero || heroTop === null || !Number.isFinite(top)) return false;
+
+    const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+    const currentTop = getScrollTop();
+    const heroBottom = heroTop + hero.offsetHeight;
+    const progress = getHeroProgress(hero);
+    const inHeroFlow =
+      currentTop >= heroTop - viewportHeight * 0.2 &&
+      currentTop <= heroBottom + viewportHeight * 0.8;
+    const reviewFlowActive = progress >= 0.55 && progress <= 1.15;
+    const jumpsBackTooFar = top < currentTop - viewportHeight * 0.7;
+
+    return inHeroFlow && reviewFlowActive && jumpsBackTooFar;
   }
 
   function shouldKeepHeroVideoLive(){
@@ -414,7 +437,8 @@ if(mypageBtn){
           top = Number(y);
         }
 
-        if(Date.now() - lastUserScrollAt < 1800 && isReviewStatsAutoHoldTarget(top)){
+        const userScrollIsActive = Date.now() - lastUserScrollAt < 3200;
+        if(userScrollIsActive && (isReviewStatsAutoHoldTarget(top) || isLargeBackwardHeroJump(top))){
           return;
         }
       }
@@ -507,8 +531,10 @@ if(mypageBtn){
   patchScrollTo();
   queueUpdate();
 
+  window.addEventListener("pointerdown", markUserScroll, {capture:true, passive:true});
   window.addEventListener("touchstart", markUserScroll, {capture:true, passive:true});
   window.addEventListener("touchmove", markUserScroll, {capture:true, passive:true});
+  window.addEventListener("touchend", markUserScroll, {capture:true, passive:true});
   window.addEventListener("wheel", markUserScroll, {capture:true, passive:true});
   window.addEventListener("keydown", markUserScroll, {capture:true});
   window.addEventListener("scroll", queueUpdate, {passive:true});

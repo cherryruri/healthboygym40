@@ -307,21 +307,49 @@ if(mypageBtn){
   });
 }
 
-(function restoreMobileReviewVideoLayer(){
+(function improveMobileHeroComfort(){
   const mobileMedia = window.matchMedia("(max-width: 768px)");
+  const originalScrollTo = window.scrollTo.bind(window);
+  const scrollKeys = new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End", "ArrowUp", "PageUp", "Home"]);
+  let lastUserScrollAt = 0;
+  let patchedScrollTo = false;
+  let comfortTicking = false;
 
   function ensureStyle(){
-    if(document.getElementById("mobile-review-video-restore-style")) return;
+    if(document.getElementById("mobile-hero-comfort-style")) return;
 
     const style = document.createElement("style");
-    style.id = "mobile-review-video-restore-style";
+    style.id = "mobile-hero-comfort-style";
     style.textContent = `
       @media (max-width: 768px){
+        html,
+        body{
+          scroll-behavior:auto !important;
+        }
+        .intro{
+          height:560vh !important;
+        }
         .hero-video-frame{
-          opacity:var(--hero-video-opacity, 1) !important;
+          opacity:1 !important;
+          background:#050505 !important;
+          transition:none !important;
+          will-change:transform;
+        }
+        .intro-video{
+          display:block !important;
+          opacity:1 !important;
+          backface-visibility:hidden;
+          transform:translateZ(0);
+          will-change:transform;
         }
         .hero-expand-sticky > .review-cover-panel{
-          background:rgba(0,0,0,.30) !important;
+          background:rgba(0,0,0,.24) !important;
+          backdrop-filter:none !important;
+        }
+        .review-stats-section,
+        .review-proof-section,
+        .review-cards{
+          will-change:opacity, transform;
         }
       }
     `;
@@ -333,44 +361,163 @@ if(mypageBtn){
     return Number.isFinite(number) ? number : 0;
   }
 
-  function update(){
-    if(!mobileMedia.matches) return;
+  function getHero(){
+    return document.querySelector(".hero-expand-section");
+  }
 
-    const hero = document.querySelector(".hero-expand-section");
-    if(!hero) return;
+  function getHeroProgress(hero){
+    if(!hero) return 0;
 
-    ensureStyle();
-
-    const progress = numberFromCss(
+    return numberFromCss(
       hero.style.getPropertyValue("--hero-progress") ||
       getComputedStyle(hero).getPropertyValue("--hero-progress")
     );
+  }
 
-    if(progress >= 0.58 && progress <= 0.98){
-      hero.style.setProperty("--hero-video-opacity", "1");
-      hero.style.setProperty("--review-bg-opacity", "0.30");
-      hero.style.setProperty("--hero-overlay", "0.32");
+  function pageTop(element){
+    if(!element) return null;
+    return element.getBoundingClientRect().top + window.pageYOffset;
+  }
 
-      const video = document.querySelector(".intro-video");
-      if(video && video.paused && !document.hidden){
-        const playPromise = video.play();
-        if(playPromise && typeof playPromise.catch === "function"){
-          playPromise.catch(()=>{});
+  function isReviewStatsAutoHoldTarget(top){
+    const hero = getHero();
+    const heroTop = pageTop(hero);
+
+    if(!hero || heroTop === null || !Number.isFinite(top)) return false;
+
+    const scrollable = Math.max(1, hero.offsetHeight - window.innerHeight);
+    const progress = (top - heroTop) / scrollable;
+
+    return progress >= 0.62 && progress <= 0.72;
+  }
+
+  function shouldKeepHeroVideoLive(){
+    if(!mobileMedia.matches || document.hidden) return false;
+
+    const hero = getHero();
+    const progress = getHeroProgress(hero);
+
+    return Boolean(hero && progress >= 0.45 && progress <= 1.08);
+  }
+
+  function patchScrollTo(){
+    if(patchedScrollTo) return;
+
+    patchedScrollTo = true;
+    window.scrollTo = function patchedMobileHeroScrollTo(arg, y){
+      if(mobileMedia.matches){
+        let top = null;
+
+        if(arg && typeof arg === "object"){
+          top = Number(arg.top);
+        }else if(arguments.length > 1){
+          top = Number(y);
+        }
+
+        if(Date.now() - lastUserScrollAt < 1800 && isReviewStatsAutoHoldTarget(top)){
+          return;
         }
       }
-    }else if(progress < 0.56){
+
+      return originalScrollTo.apply(window, arguments);
+    };
+  }
+
+  function markUserScroll(event){
+    if(event && event.type === "keydown" && !scrollKeys.has(event.key)) return;
+
+    lastUserScrollAt = Date.now();
+    queueUpdate();
+  }
+
+  function patchVideoPause(video){
+    if(!video || video.__mobileHeroComfortPausePatched) return;
+
+    const originalPause = video.pause.bind(video);
+    video.__mobileHeroComfortPausePatched = true;
+    video.pause = function comfortAwarePause(){
+      if(shouldKeepHeroVideoLive()) return;
+      return originalPause();
+    };
+  }
+
+  function keepVideoPlaying(){
+    const video = document.querySelector(".intro-video");
+    if(!video) return;
+
+    patchVideoPause(video);
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.preload = "auto";
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("playsinline", "");
+
+    if(video.readyState === 0){
+      video.load();
+    }
+
+    if(shouldKeepHeroVideoLive() && video.paused){
+      const playPromise = video.play();
+      if(playPromise && typeof playPromise.catch === "function"){
+        playPromise.catch(()=>{});
+      }
+    }
+  }
+
+  function applyComfortVars(){
+    if(!mobileMedia.matches) return;
+
+    const hero = getHero();
+    if(!hero) return;
+
+    const progress = getHeroProgress(hero);
+
+    if(progress >= 0.45 && progress <= 1.08){
+      hero.style.setProperty("--hero-video-opacity", "1");
+      hero.style.setProperty("--review-bg-opacity", "0.24");
+      hero.style.setProperty("--hero-overlay", progress >= 0.52 ? "0.28" : "0.18");
+    }else if(progress < 0.42){
       hero.style.removeProperty("--hero-video-opacity");
     }
   }
 
+  function update(){
+    comfortTicking = false;
+
+    if(!mobileMedia.matches) return;
+
+    ensureStyle();
+    patchScrollTo();
+    applyComfortVars();
+    keepVideoPlaying();
+  }
+
   function queueUpdate(){
+    if(comfortTicking) return;
+
+    comfortTicking = true;
     requestAnimationFrame(update);
   }
 
   ensureStyle();
+  patchScrollTo();
   queueUpdate();
+
+  window.addEventListener("touchstart", markUserScroll, {capture:true, passive:true});
+  window.addEventListener("touchmove", markUserScroll, {capture:true, passive:true});
+  window.addEventListener("wheel", markUserScroll, {capture:true, passive:true});
+  window.addEventListener("keydown", markUserScroll, {capture:true});
   window.addEventListener("scroll", queueUpdate, {passive:true});
   window.addEventListener("resize", queueUpdate, {passive:true});
+  window.addEventListener("pageshow", queueUpdate, {passive:true});
   document.addEventListener("visibilitychange", queueUpdate);
-  setInterval(update, 350);
+  document.addEventListener("DOMContentLoaded", queueUpdate);
+  setTimeout(queueUpdate, 80);
+  setTimeout(queueUpdate, 350);
+  setTimeout(queueUpdate, 900);
+  setInterval(update, 160);
 })();

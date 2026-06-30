@@ -306,3 +306,71 @@ if(mypageBtn){
     }
   });
 }
+
+(function restoreMobileReviewVideoLayer(){
+  const mobileMedia = window.matchMedia("(max-width: 768px)");
+
+  function ensureStyle(){
+    if(document.getElementById("mobile-review-video-restore-style")) return;
+
+    const style = document.createElement("style");
+    style.id = "mobile-review-video-restore-style";
+    style.textContent = `
+      @media (max-width: 768px){
+        .hero-video-frame{
+          opacity:var(--hero-video-opacity, 1) !important;
+        }
+        .hero-expand-sticky > .review-cover-panel{
+          background:rgba(0,0,0,.30) !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function numberFromCss(value){
+    const number = Number.parseFloat(value);
+    return Number.isFinite(number) ? number : 0;
+  }
+
+  function update(){
+    if(!mobileMedia.matches) return;
+
+    const hero = document.querySelector(".hero-expand-section");
+    if(!hero) return;
+
+    ensureStyle();
+
+    const progress = numberFromCss(
+      hero.style.getPropertyValue("--hero-progress") ||
+      getComputedStyle(hero).getPropertyValue("--hero-progress")
+    );
+
+    if(progress >= 0.58 && progress <= 0.98){
+      hero.style.setProperty("--hero-video-opacity", "1");
+      hero.style.setProperty("--review-bg-opacity", "0.30");
+      hero.style.setProperty("--hero-overlay", "0.32");
+
+      const video = document.querySelector(".intro-video");
+      if(video && video.paused && !document.hidden){
+        const playPromise = video.play();
+        if(playPromise && typeof playPromise.catch === "function"){
+          playPromise.catch(()=>{});
+        }
+      }
+    }else if(progress < 0.56){
+      hero.style.removeProperty("--hero-video-opacity");
+    }
+  }
+
+  function queueUpdate(){
+    requestAnimationFrame(update);
+  }
+
+  ensureStyle();
+  queueUpdate();
+  window.addEventListener("scroll", queueUpdate, {passive:true});
+  window.addEventListener("resize", queueUpdate, {passive:true});
+  document.addEventListener("visibilitychange", queueUpdate);
+  setInterval(update, 350);
+})();

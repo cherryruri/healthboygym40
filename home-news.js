@@ -507,3 +507,142 @@ loadVideoSettings();
   setTimeout(queueUpdate, 1100);
   setInterval(queueUpdate, 80);
 })();
+
+(function correctStatsVideoAndProofTiming(){
+  const mobileMedia = window.matchMedia("(max-width: 768px)");
+  let ticking = false;
+
+  function ensureStyle(){
+    let style = document.getElementById("stats-video-proof-correction-style");
+
+    if(!style){
+      style = document.createElement("style");
+      style.id = "stats-video-proof-correction-style";
+    }
+
+    style.textContent = `
+      .hero-expand-sticky > .review-cover-panel{
+        background:rgba(0,0,0,var(--correct-review-bg-opacity, var(--review-bg-live-opacity, var(--review-bg-opacity, 0)))) !important;
+      }
+      .review-proof-title{
+        opacity:var(--correct-proof-title-opacity, var(--final-proof-title-opacity, var(--review-proof-opacity, 0))) !important;
+        transform:translate(-50%, -50%) scale(1) !important;
+      }
+      .review-proof-title .review-proof-divider{
+        width:var(--correct-proof-divider-width, var(--final-proof-divider-width, 0px)) !important;
+        opacity:var(--correct-proof-divider-opacity, var(--final-proof-divider-opacity, 0)) !important;
+      }
+      @media (max-width: 768px){
+        .hero-video-frame{
+          opacity:1 !important;
+          transform:translate3d(-50%, 0, 0) !important;
+          transition:none !important;
+          will-change:auto !important;
+          backface-visibility:hidden;
+          contain:paint;
+        }
+        .intro-video{
+          opacity:var(--correct-video-opacity, 1) !important;
+          filter:none !important;
+          transform:translate3d(0, 0, 0) !important;
+          transition:opacity .18s linear !important;
+          backface-visibility:hidden;
+        }
+      }
+    `;
+
+    if(document.head && style.parentNode !== document.head){
+      document.head.appendChild(style);
+    }else if(document.head && style.nextSibling){
+      document.head.appendChild(style);
+    }
+  }
+
+  function numberFromCss(value){
+    const number = Number.parseFloat(value);
+    return Number.isFinite(number) ? number : 0;
+  }
+
+  function clamp(value, min, max){
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function ease(value){
+    const clamped = clamp(value, 0, 1);
+    return clamped * clamped * (3 - 2 * clamped);
+  }
+
+  function getProgress(hero){
+    return numberFromCss(
+      hero.style.getPropertyValue("--hero-progress") ||
+      getComputedStyle(hero).getPropertyValue("--hero-progress")
+    );
+  }
+
+  function update(){
+    ticking = false;
+    ensureStyle();
+
+    const hero = document.querySelector(".hero-expand-section");
+    if(!hero) return;
+
+    const progress = getProgress(hero);
+    const isMobile = mobileMedia.matches;
+    const statsDone =
+      document.documentElement.classList.contains("review-stats-counted") ||
+      document.documentElement.classList.contains("review-stats-hold-complete") ||
+      progress >= (isMobile ? 0.86 : 0.955);
+
+    const statsIn = ease((progress - (isMobile ? 0.61 : 0.79)) / (isMobile ? 0.05 : 0.04));
+    const statsOut = ease((progress - (isMobile ? 0.83 : 0.94)) / (isMobile ? 0.09 : 0.035));
+    const statsVisible = clamp(statsIn * (1 - statsOut), 0, 1);
+    const proofStart = isMobile ? 0.885 : 0.968;
+    const proofVisible = statsDone ? ease((progress - proofStart) / (isMobile ? 0.085 : 0.018)) : 0;
+    const dividerOut = ease((progress - (isMobile ? 0.955 : 0.988)) / (isMobile ? 0.075 : 0.012));
+    const dividerOpacity = clamp(proofVisible * (1 - dividerOut), 0, 1);
+    const maxWidth = isMobile ? 48 : 150;
+    const dividerWidth = proofVisible > 0.02 ? maxWidth * (1 - dividerOut) : maxWidth;
+    const blackIn = ease((progress - (isMobile ? 0.86 : 0.955)) / (isMobile ? 0.15 : 0.03));
+    const videoFade = ease((progress - (isMobile ? 0.875 : 0.965)) / (isMobile ? 0.14 : 0.03));
+    const cardsVisible = statsDone ? ease((progress - (isMobile ? 0.965 : 0.992)) / (isMobile ? 0.05 : 0.006)) : 0;
+
+    hero.style.setProperty("--correct-review-bg-opacity", (0.16 * statsVisible + 0.92 * blackIn).toFixed(4));
+    hero.style.setProperty("--review-stats-live-opacity", statsVisible.toFixed(4));
+    hero.style.setProperty("--correct-proof-title-opacity", proofVisible.toFixed(4));
+    hero.style.setProperty("--correct-proof-divider-opacity", dividerOpacity.toFixed(4));
+    hero.style.setProperty("--correct-proof-divider-width", `${Math.max(0, dividerWidth).toFixed(2)}px`);
+    hero.style.setProperty("--proof-divider-gap", `${(isMobile ? 10 : 20).toFixed(2)}px`);
+    hero.style.setProperty("--review-proof-y", "0px");
+    hero.style.setProperty("--review-proof-scale", "1");
+    hero.style.setProperty("--review-cards-live-opacity", cardsVisible.toFixed(4));
+    hero.style.setProperty("--review-cards-opacity", cardsVisible.toFixed(4));
+    hero.style.setProperty("--correct-video-opacity", Math.max(0.08, 1 - videoFade * 0.92).toFixed(3));
+
+    if(isMobile){
+      const video = hero.querySelector(".intro-video");
+      if(video && progress >= 0.16 && progress <= 0.875 && !video.paused){
+        video.pause();
+      }
+    }
+  }
+
+  function queueUpdate(){
+    if(ticking) return;
+
+    ticking = true;
+    requestAnimationFrame(update);
+  }
+
+  ensureStyle();
+  queueUpdate();
+
+  window.addEventListener("scroll", queueUpdate, {passive:true});
+  window.addEventListener("resize", queueUpdate, {passive:true});
+  window.addEventListener("pageshow", queueUpdate, {passive:true});
+  document.addEventListener("DOMContentLoaded", queueUpdate);
+  document.addEventListener("visibilitychange", queueUpdate);
+  setTimeout(queueUpdate, 80);
+  setTimeout(queueUpdate, 450);
+  setTimeout(queueUpdate, 1200);
+  setInterval(queueUpdate, 50);
+})();

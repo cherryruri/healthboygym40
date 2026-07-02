@@ -9617,6 +9617,10 @@ li{
   word-break:keep-all;
 }
 
+[data-admin-only][hidden]{
+  display:none !important;
+}
+
 .logo a{
   font-size:26px;
   font-weight:900;

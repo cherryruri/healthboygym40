@@ -33,6 +33,17 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+let latestIsAdmin = false;
+
+function setAdminOnlyMenus(isAdmin){
+  latestIsAdmin = Boolean(isAdmin);
+
+  document.querySelectorAll("[data-admin-only]").forEach(element=>{
+    element.hidden = !latestIsAdmin;
+    element.setAttribute("aria-hidden", String(!latestIsAdmin));
+  });
+}
+
 function getUserId(user){
   return user && user.email ? user.email.split("@")[0] : "회원";
 }
@@ -217,7 +228,14 @@ onAuthStateChanged(auth, async user=>{
 
   setUserMenu(user, data);
   setMobileUserMenu(user, data);
+  setAdminOnlyMenus(data && data.role === "admin");
 });
+
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", ()=>setAdminOnlyMenus(latestIsAdmin));
+}else{
+  setAdminOnlyMenus(latestIsAdmin);
+}
 
 document.addEventListener("click", async event=>{
   const deleteButton = event.target.closest("#mobileProfileDelete");
@@ -466,7 +484,7 @@ if(mypageBtn){
         }
         .hero-video-frame{
           opacity:1 !important;
-          background:#fff !important;
+          background:#050505 !important;
           transition:none !important;
           will-change:transform;
         }

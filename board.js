@@ -35,12 +35,20 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const officialBoards = new Set(["noticeboard", "news"]);
+const adminOnlyBoards = new Set(["infoboard"]);
 const communityBoards = ["free", "praise", "review"];
 
 let currentUser = null;
 let currentUserData = null;
 const initialBoard = new URLSearchParams(location.search).get("board") || "free";
-let currentBoard = officialBoards.has(initialBoard) ? "noticeboard" : "free";
+let currentBoard =
+  adminOnlyBoards.has(initialBoard)
+    ? initialBoard
+    : officialBoards.has(initialBoard)
+      ? "noticeboard"
+      : communityBoards.includes(initialBoard) || initialBoard === "teen"
+        ? initialBoard
+        : "free";
 let currentPage = 1;
 let currentCategory =
   initialBoard === "praise"
@@ -95,6 +103,11 @@ const boardMeta = {
       ["trainer", "이달의 트레이너"]
     ]
   },
+  infoboard: {
+    title: "인포게시판",
+    desc: "관리자만 확인할 수 있는 내부 안내 게시판입니다.",
+    mode: "table"
+  },
   review: {
     title: "리얼 후기",
     desc: "회원님들이 직접 경험하고 작성해주신 100% 리얼 운동 후기입니다.",
@@ -125,6 +138,10 @@ function isAdmin(){
   return currentUserData && currentUserData.role === "admin";
 }
 
+function isAdminOnlyBoard(boardName = currentBoard){
+  return adminOnlyBoards.has(boardName);
+}
+
 function escapeHTML(value){
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -147,6 +164,7 @@ function getPostCategory(post){
 
   if(post.board === "praise") return "praise";
   if(post.board === "review") return "pt";
+  if(post.board === "infoboard") return "info";
   if(post.board === "news") return "news";
   if(post.isNotice || post.board === "noticeboard") return "notice";
   if(post.board === "free" && (post.isSecret || post.isPublic === false)) return "request";
@@ -161,12 +179,14 @@ function getPostCategoryLabel(post){
   if(category === "pt") return "PT후기";
   if(category === "trainer") return "이달의 트레이너";
   if(category === "news") return "센터소식";
+  if(category === "info") return "인포게시판";
   if(category === "request") return "건의사항";
   if(category === "free") return "자유게시판";
   return "공지문";
 }
 
 function canWriteCurrentBoard(){
+  if(isAdminOnlyBoard()) return isAdmin();
   if(officialBoards.has(currentBoard)) return isAdmin();
   return true;
 }
@@ -175,9 +195,10 @@ function updateWriteButton(){
   if(!writeBtn) return;
 
   const official = officialBoards.has(currentBoard);
+  const adminOnly = isAdminOnlyBoard();
   const canWrite = canWriteCurrentBoard();
 
-  writeBtn.hidden = official && !canWrite;
+  writeBtn.hidden = (official || adminOnly) && !canWrite;
   writeBtn.textContent = official ? "공지 작성" : "글쓰기";
 }
 
@@ -260,8 +281,30 @@ onAuthStateChanged(auth, async user=>{
   currentUser = user;
   currentUserData = await loadUserData(user);
   updateBoardInfo();
+  if(!ensureBoardAccess()) return;
   loadPosts();
 });
+
+function ensureBoardAccess(){
+  if(!isAdminOnlyBoard() || isAdmin()) return true;
+
+  if(postList){
+    postList.innerHTML = `<div class="board-empty">관리자만 볼 수 있는 게시판입니다.</div>`;
+  }
+
+  if(paginationContainer) paginationContainer.innerHTML = "";
+  if(writeBtn) writeBtn.hidden = true;
+
+  if(currentUser){
+    alert("관리자만 볼 수 있는 게시판입니다.");
+    location.href = "board.html";
+  }else{
+    alert("관리자 로그인 후 이용할 수 있습니다.");
+    location.href = "login.html";
+  }
+
+  return false;
+}
 
 document.querySelectorAll(".board-tab").forEach(tab=>{
   if(tab.dataset.board === currentBoard){
@@ -303,6 +346,11 @@ if(boardSearch){
 
 if(writeBtn){
   writeBtn.addEventListener("click", ()=>{
+    if(isAdminOnlyBoard() && !isAdmin()){
+      alert("관리자만 인포게시판에 글을 쓸 수 있습니다.");
+      return;
+    }
+
     if(officialBoards.has(currentBoard) && !isAdmin()){
       alert("관리자만 공지와 뉴스를 작성할 수 있습니다.");
       return;
@@ -321,6 +369,10 @@ if(writeBtn){
 updateBoardInfo();
 
 function getWriteQueryString(){
+  if(currentBoard === "infoboard"){
+    return "board=infoboard&category=info";
+  }
+
   if(currentBoard === "noticeboard"){
     if(currentCategory === "news"){
       return "board=news&category=news";
@@ -351,6 +403,7 @@ function getWriteQueryString(){
 function getQueryBoards(){
   if(currentBoard === "free") return communityBoards;
   if(currentBoard === "noticeboard") return ["noticeboard", "news"];
+  if(currentBoard === "infoboard") return ["infoboard"];
   return [currentBoard];
 }
 
@@ -415,12 +468,18 @@ function getVisiblePosts(){
 }
 
 function canOpenPost(post){
+  if((post.board === "infoboard" || post.isAdminOnly) && !isAdmin()) return false;
   if(!post.isSecret) return true;
   if(isAdmin()) return true;
   return currentUser && currentUser.uid === post.writerUid;
 }
 
 function openPost(docId, post){
+  if((post.board === "infoboard" || post.isAdminOnly) && !isAdmin()){
+    alert("관리자만 볼 수 있는 게시글입니다.");
+    return;
+  }
+
   if(!canOpenPost(post)){
     alert("비밀글입니다. 작성자만 볼 수 있어요.");
     return;

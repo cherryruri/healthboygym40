@@ -64,8 +64,8 @@ const commentBtn = document.getElementById("commentBtn");
 onAuthStateChanged(auth, async (user) => {
   currentUser = user;
   currentUserData = await loadUserData(user);
-  loadPost();
-  loadComments();
+  const loaded = await loadPost();
+  if(loaded) loadComments();
 });
 
 async function loadUserData(user){
@@ -84,6 +84,10 @@ function isAdmin(){
   return currentUserData && currentUserData.role === "admin";
 }
 
+function isAdminOnlyPost(post){
+  return post && (post.board === "infoboard" || post.isAdminOnly);
+}
+
 function isRequestPost(post){
   if(!post) return false;
   if(post.category === "request") return true;
@@ -92,15 +96,34 @@ function isRequestPost(post){
 
 async function loadPost() {
 
+  if(!postId){
+    alert("게시글 ID가 없습니다.");
+    location.href = "board.html";
+    return false;
+  }
+
   const snap = await getDoc(doc(db, "boards", postId));
 
   if (!snap.exists()) {
     alert("없는 글입니다");
     location.href = "board.html";
-    return;
+    return false;
   }
 
   const data = snap.data();
+
+  if(isAdminOnlyPost(data) && !isAdmin()){
+    if(currentUser){
+      alert("관리자만 볼 수 있는 게시글입니다.");
+      location.href = "board.html";
+    }else{
+      alert("관리자 로그인 후 이용할 수 있습니다.");
+      location.href = "login.html";
+    }
+
+    return false;
+  }
+
   currentPost = data;
 
   titleEl.textContent = data.title;
@@ -111,7 +134,9 @@ async function loadPost() {
     dateEl.textContent = data.createdAt.toDate().toLocaleDateString("ko-KR");
   }
 
-  statusEl.textContent = data.isPublic ? "공개글" : "비밀글";
+  statusEl.textContent = isAdminOnlyPost(data) ? "관리자 전용" : data.isPublic ? "공개글" : "비밀글";
+
+  return true;
 }
 
 /* ================= COMMENTS ================= */
@@ -408,5 +433,5 @@ deleteBtn.addEventListener("click", async () => {
   await deleteDoc(doc(db,"boards",postId));
 
   alert("삭제되었습니다.");
-  location.href = "board.html";
+  location.href = `board.html?board=${currentPost?.board || "free"}`;
 });

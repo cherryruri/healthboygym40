@@ -361,10 +361,10 @@ loadVideoSettings();
           contain:paint;
         }
         html body .intro-video{
-          opacity:var(--absolute-video-opacity, 1) !important;
+          opacity:1 !important;
           filter:none !important;
           transform:translate3d(0, 0, 0) !important;
-          transition:opacity .18s linear !important;
+          transition:none !important;
           backface-visibility:hidden;
           will-change:auto !important;
         }
@@ -423,7 +423,6 @@ loadVideoSettings();
     const dividerVisible = clamp(proofVisible * (1 - dividerOut), 0, 1);
     const maxWidth = isMobile ? 48 : 150;
     const blackIn = ease((progress - (isMobile ? 0.88 : 0.958)) / (isMobile ? 0.13 : 0.03));
-    const videoFade = ease((progress - (isMobile ? 0.895 : 0.966)) / (isMobile ? 0.14 : 0.028));
     const cardsVisible = ease((progress - (isMobile ? 0.992 : 0.996)) / (isMobile ? 0.028 : 0.004));
 
     hero.style.setProperty("--absolute-review-bg-opacity", (0.12 * statsVisible + 0.92 * blackIn).toFixed(4));
@@ -438,13 +437,8 @@ loadVideoSettings();
     hero.style.setProperty("--review-proof-scale", "1");
 
     if(isMobile){
-      hero.style.setProperty("--absolute-video-opacity", Math.max(0.08, 1 - videoFade * 0.92).toFixed(3));
+      hero.style.setProperty("--absolute-video-opacity", "1");
       hero.style.setProperty("--absolute-copy-y", progress >= 0.16 && progress <= 0.64 ? "0px" : "var(--hero-copy-y)");
-
-      const video = hero.querySelector(".intro-video");
-      if(video && progress >= 0.16 && progress <= 0.89 && !video.paused){
-        video.pause();
-      }
     }
   }
 

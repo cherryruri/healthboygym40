@@ -38,6 +38,7 @@
       <span class="mobile-menu-section-title member">수내점 회원 전용</span>
       <a href="board.html?board=free">자유게시판</a>
       <a href="board.html?board=noticeboard">공지문 / 뉴스</a>
+      <a href="board.html?board=infoboard" data-admin-only hidden>인포게시판</a>
     </nav>
   `;
 
@@ -111,6 +112,7 @@
     const links = Array.from(menu.querySelectorAll("a"));
     const hasBoard = links.some(link=>link.getAttribute("href") === "board.html");
     const hasNotice = links.some(link=>link.getAttribute("href") === "board.html?board=noticeboard");
+    const hasInfoBoard = links.some(link=>link.getAttribute("href") === "board.html?board=infoboard");
 
     const loginItem =
       menu.querySelector(".login-menu, #userMenu");
@@ -120,6 +122,23 @@
       noticeItem.className = "notice-menu-link";
       noticeItem.innerHTML = `<a href="board.html?board=noticeboard">공지문/뉴스</a>`;
       menu.insertBefore(noticeItem, loginItem || null);
+    }
+
+    if(!hasInfoBoard){
+      const infoItem = document.createElement("li");
+      const noticeLink = menu.querySelector('a[href="board.html?board=noticeboard"]');
+      const noticeItem = noticeLink ? noticeLink.closest("li") : null;
+
+      infoItem.className = "info-menu-link";
+      infoItem.dataset.adminOnly = "true";
+      infoItem.hidden = true;
+      infoItem.innerHTML = `<a href="board.html?board=infoboard">인포게시판</a>`;
+
+      if(noticeItem && noticeItem.nextSibling){
+        menu.insertBefore(infoItem, noticeItem.nextSibling);
+      }else{
+        menu.insertBefore(infoItem, loginItem || null);
+      }
     }
 
     if(hasBoard) return;
@@ -240,10 +259,10 @@
         }
         .hero-video-frame{
           background:#050505 !important;
-          opacity:var(--hero-video-opacity, 1) !important;
+          opacity:1 !important;
           backface-visibility:hidden;
           transform:translate3d(-50%, 0, 0);
-          transition:opacity .18s linear;
+          transition:border-radius .12s linear;
           will-change:opacity, transform;
         }
         .hero-expand-sticky > .review-cover-panel{
@@ -674,15 +693,6 @@
 
     const hero = document.querySelector(".hero-expand-section");
     const progress = hero ? getHeroProgress(hero) : 0;
-    const reviewSceneActive = progress >= 0.60;
-
-    if(reviewSceneActive){
-      if(!video.paused){
-        video.pause();
-      }
-      return;
-    }
-
     video.muted = true;
     video.defaultMuted = true;
     video.autoplay = true;
@@ -814,9 +824,9 @@
           opacity:var(--hero-white-bg-opacity, var(--hero-title-opacity, 1)) !important;
         }
         .hero-video-frame{
-          opacity:var(--stable-hero-video-opacity, 1) !important;
+          opacity:1 !important;
           transform:translate3d(-50%, 0, 0) !important;
-          transition:opacity .22s linear !important;
+          transition:none !important;
           will-change:opacity !important;
           backface-visibility:hidden;
           contain:paint;
@@ -865,7 +875,7 @@
   }
 
   function keepVideoPlaying(hero, progress){
-    if(!mobileMedia.matches || document.hidden || progress < 0.12 || progress > 0.64) return;
+    if(!mobileMedia.matches || document.hidden || progress < 0.12 || progress > 1.08) return;
 
     const video = hero.querySelector(".intro-video");
     if(!video || !video.paused) return;

@@ -34,6 +34,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const officialBoards = new Set(["noticeboard", "news"]);
+const adminOnlyBoards = new Set(["infoboard"]);
 
 let currentUser = null;
 let currentUserData = null;
@@ -59,6 +60,7 @@ const boardNames = {
   free: "자유게시판",
   praise: "칭찬합니다",
   noticeboard: "공지문 / 뉴스",
+  infoboard: "인포게시판",
   review: "PT후기",
   teen: "동기부여 모음",
   news: "헬스보이짐 뉴스"
@@ -69,6 +71,7 @@ const categoryNames = {
   praise: "칭찬합니다",
   pt: "PT후기",
   request: "건의 사항",
+  info: "인포게시판",
   notice: "공지문",
   news: "센터소식",
   trainer: "이달의 트레이너"
@@ -76,6 +79,10 @@ const categoryNames = {
 
 function isAdmin(){
   return currentUserData && currentUserData.role === "admin";
+}
+
+function isAdminOnlyBoard(boardName = getEffectiveBoard()){
+  return adminOnlyBoards.has(boardName);
 }
 
 async function loadUserData(user){
@@ -99,6 +106,7 @@ function getEffectiveCategory(effectiveBoard){
   if(effectiveBoard === "praise") return "praise";
   if(effectiveBoard === "review") return "pt";
   if(effectiveBoard === "news") return "news";
+  if(isAdminOnlyBoard(effectiveBoard)) return "info";
   if(officialBoards.has(effectiveBoard)) return "notice";
   return "free";
 }
@@ -119,6 +127,12 @@ function updateEditorHeader(){
 
 function ensureOfficialPermission(){
   const effectiveBoard = getEffectiveBoard();
+
+  if(isAdminOnlyBoard(effectiveBoard) && !isAdmin()){
+    alert("인포게시판은 관리자만 작성할 수 있습니다.");
+    location.href = "board.html";
+    return false;
+  }
 
   if(officialBoards.has(effectiveBoard) && !isAdmin()){
     alert("공지와 뉴스는 관리자만 작성할 수 있습니다.");
@@ -240,6 +254,7 @@ submitBtn.addEventListener("click", async ()=>{
   const title = titleInput.value.trim();
   const content = contentBox.innerHTML.trim();
   const isOfficial = officialBoards.has(effectiveBoard);
+  const isAdminOnly = isAdminOnlyBoard(effectiveBoard);
 
   if(!title){
     alert("제목을 입력해주세요.");
@@ -259,6 +274,7 @@ submitBtn.addEventListener("click", async ()=>{
     category,
     isSecret: category === "request",
     isPublic: category !== "request",
+    isAdminOnly,
     isNotice: isOfficial
   };
 

@@ -326,6 +326,8 @@ if(mypageBtn){
 }
 
 (function tuneKakaoStyleIntroStatement(){
+  return;
+
   const mobileMedia = window.matchMedia("(max-width: 768px)");
   const originalScrollTo = window.scrollTo.bind(window);
   const scrollKeys = new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End", "ArrowUp", "PageUp", "Home"]);

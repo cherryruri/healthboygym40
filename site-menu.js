@@ -246,7 +246,7 @@
           touch-action:pan-y !important;
         }
         .intro{
-          height:760vh !important;
+          height:1050vh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky{
@@ -752,47 +752,25 @@
   injectMobileScrollStyle();
   clearMobileScrollLocks();
   watchMobileScrollLocks();
-  queueReviewStatsHold();
-  queueReviewProofHold();
-  queueIntroVideoGuard();
 
   window.addEventListener("touchmove", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("wheel", bypassScrollHijack, {capture:true, passive:true});
   window.addEventListener("keydown", bypassScrollKey, {capture:true});
-  window.addEventListener("scroll", queueReviewStatsHold, {passive:true});
-  window.addEventListener("scroll", queueReviewProofHold, {passive:true});
-  window.addEventListener("scroll", queueIntroVideoGuard, {passive:true});
   window.addEventListener("resize", clearMobileScrollLocks, {passive:true});
-  window.addEventListener("resize", queueReviewStatsHold, {passive:true});
-  window.addEventListener("resize", queueReviewProofHold, {passive:true});
-  window.addEventListener("resize", queueIntroVideoGuard, {passive:true});
   window.addEventListener("pageshow", clearMobileScrollLocks, {passive:true});
-  window.addEventListener("pageshow", queueIntroVideoGuard, {passive:true});
-  document.addEventListener("visibilitychange", queueIntroVideoGuard);
   document.addEventListener("allpassTypingComplete", ()=>{
     setTimeout(revealPassLocatorAfterTyping, 80);
   });
   document.addEventListener("DOMContentLoaded", clearMobileScrollLocks);
-  document.addEventListener("DOMContentLoaded", queueReviewStatsHold);
-  document.addEventListener("DOMContentLoaded", queueReviewProofHold);
-  document.addEventListener("DOMContentLoaded", queueIntroVideoGuard);
   setTimeout(clearMobileScrollLocks, 600);
   setTimeout(clearMobileScrollLocks, 1800);
   setTimeout(clearMobileScrollLocks, 3200);
-  setTimeout(queueReviewStatsHold, 800);
-  setTimeout(queueReviewStatsHold, 2000);
-  setTimeout(queueReviewProofHold, 1200);
-  setTimeout(queueReviewProofHold, 2400);
-  setTimeout(queueIntroVideoGuard, 0);
-  setTimeout(queueIntroVideoGuard, 120);
-  setTimeout(queueIntroVideoGuard, 430);
-  setTimeout(queueIntroVideoGuard, 900);
-  setTimeout(queueIntroVideoGuard, 1800);
-  setTimeout(queueIntroVideoGuard, 3200);
   setTimeout(revealPassLocatorAfterTyping, 3200);
 })();
 
 (function stabilizeMobileHeroReviewProof(){
+  return;
+
   const mobileMedia = window.matchMedia("(max-width: 768px)");
   let ticking = false;
 

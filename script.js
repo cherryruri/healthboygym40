@@ -2200,6 +2200,9 @@ document.addEventListener("DOMContentLoaded", function(){
     video.playsInline =
       true;
 
+    video.loop =
+      true;
+
     video.preload =
       "auto";
 
@@ -2214,6 +2217,39 @@ document.addEventListener("DOMContentLoaded", function(){
       }
 
       };
+
+    const keepMobileLoopAwayFromBlackFrame =
+      ()=>{
+
+      if(window.innerWidth > 768) return;
+
+      const duration =
+        video.duration;
+
+      if(!Number.isFinite(duration) || duration <= 1) return;
+
+      if(duration - video.currentTime > 0.45) return;
+
+      video.currentTime =
+        0.08;
+
+      playVideo();
+
+      };
+
+    video.addEventListener(
+      "timeupdate",
+      keepMobileLoopAwayFromBlackFrame,
+      {passive:true}
+    );
+
+    video.addEventListener(
+      "ended",
+      ()=>{
+        video.currentTime = 0.08;
+        playVideo();
+      }
+    );
 
     if(window.innerWidth > 768){
       playVideo();
@@ -3620,16 +3656,16 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.68 : 0.835;
 
       const statsFadeStart =
-        isMobile ? 0.72 : 0.94;
+        isMobile ? 0.76 : 0.94;
 
       const statsFadeEnd =
-        isMobile ? 0.755 : 0.952;
+        isMobile ? 0.86 : 0.952;
 
       const reviewDarkStart =
         isMobile ? 0.61 : 0.95;
 
       const reviewDarkEnd =
-        isMobile ? 0.82 : 0.99;
+        isMobile ? 0.86 : 0.99;
 
       const frameReturnStart =
         isMobile ? 0.94 : 0.994;
@@ -3638,16 +3674,16 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.99 : 0.9995;
 
       const cardsStart =
-        isMobile ? 0.965 : 0.9995;
+        isMobile ? 0.90 : 0.9995;
 
       const cardsEnd =
-        isMobile ? 0.998 : 0.9999;
+        isMobile ? 0.985 : 0.9999;
 
       const proofStart =
         isMobile ? 0.755 : 0.952;
 
       const proofEnd =
-        isMobile ? 0.79 : 0.962;
+        isMobile ? 0.87 : 0.962;
 
       const lineFadeStart =
         isMobile ? 1.1 : 0.962;
@@ -3656,10 +3692,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 1.1 : 0.999;
 
       const proofLiftStart =
-        isMobile ? 0.93 : 0.9983;
+        isMobile ? 0.90 : 0.9983;
 
       const proofLiftEnd =
-        isMobile ? 0.965 : 0.9997;
+        isMobile ? 0.97 : 0.9997;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3718,7 +3754,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const proofExitProgress =
         isMobile && heroCounterComplete
-          ? easeInOut(clamp((progress - 0.94) / 0.035, 0, 1))
+          ? easeInOut(clamp((progress - 0.98) / 0.05, 0, 1))
           : 0;
 
       const proofDividerAlive =
@@ -3729,7 +3765,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const proofCardFade =
         isMobile
-          ? clamp(cardsProgress / 0.58, 0, 1)
+          ? clamp((cardsProgress - 0.24) / 0.76, 0, 1)
           : Math.max(0, cardsProgress - 0.55) / 0.45;
 
       const proofFadeProgress =
@@ -3919,16 +3955,16 @@ document.addEventListener("DOMContentLoaded", function(){
           orderMatch ? Math.max(0, Number(orderMatch[1]) - 1) : index;
 
         const orderStep =
-          isMobile ? 0.072 : 0.11;
+          isMobile ? 0.082 : 0.11;
 
         const slideRange =
-          isMobile ? 0.44 : 0.26;
+          isMobile ? 0.56 : 0.26;
 
         const slideProgress =
           easeInOut(clamp((cardsProgress - orderIndex * orderStep) / slideRange, 0, 1));
 
         const textProgress =
-          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.18 : 0.08)) / (isMobile ? 0.42 : 0.28), 0, 1));
+          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.14 : 0.08)) / (isMobile ? 0.48 : 0.28), 0, 1));
 
         slide.style.setProperty(
           "--slide-opacity",

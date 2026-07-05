@@ -4,8 +4,67 @@
     window.matchMedia("(max-width: 768px)").matches;
   var device =
     isMobile ? "mobile" : "desktop";
+  var currentScript =
+    document.currentScript;
 
   document.documentElement.setAttribute("data-home-device", device);
   window.HEALTHBOY_HOME_DEVICE =
     device;
+
+  function getAttr(name){
+    return currentScript
+      ? currentScript.getAttribute(name)
+      : "";
+  }
+
+  function escapeAttr(value){
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;");
+  }
+
+  function loadStyle(href){
+    if(!href) return;
+
+    if(document.readyState === "loading"){
+      document.write('<link rel="stylesheet" href="' + escapeAttr(href) + '">');
+      return;
+    }
+
+    var link =
+      document.createElement("link");
+
+    link.rel =
+      "stylesheet";
+    link.href =
+      href;
+    document.head.appendChild(link);
+  }
+
+  function loadScript(src){
+    if(!src) return;
+
+    if(document.readyState === "loading"){
+      document.write('<script src="' + escapeAttr(src) + '"><\/script>');
+      return;
+    }
+
+    var script =
+      document.createElement("script");
+
+    script.src =
+      src;
+    script.async =
+      false;
+    document.head.appendChild(script);
+  }
+
+  loadStyle(
+    getAttr(device === "mobile" ? "data-mobile-css" : "data-desktop-css")
+  );
+
+  loadScript(
+    getAttr(device === "mobile" ? "data-mobile-js" : "data-desktop-js")
+  );
 })();

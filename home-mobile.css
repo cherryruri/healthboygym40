@@ -9,3 +9,25 @@ html[data-home-device="mobile"] .hero-video-frame{
 html[data-home-device="mobile"] .hero-expand-sticky > .review-cover-panel{
   contain:layout paint style;
 }
+
+html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
+  width:min(520px, 92vw);
+  font-size:clamp(33px, 8.8vw, 44px) !important;
+  font-weight:850 !important;
+  line-height:1.1 !important;
+  letter-spacing:0 !important;
+}
+
+@media(max-width:480px){
+  html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
+    width:min(360px, 92vw);
+    font-size:34px !important;
+  }
+}
+
+@media(max-width:390px){
+  html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
+    width:min(350px, 92vw);
+    font-size:33px !important;
+  }
+}

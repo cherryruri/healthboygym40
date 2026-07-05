@@ -9,3 +9,11 @@ html[data-home-device="desktop"] .hero-expand-sticky > .review-cover-panel .revi
 html[data-home-device="desktop"] .hero-expand-sticky > .review-cover-panel .all_slider{
   will-change:opacity, transform;
 }
+
+html[data-home-device="desktop"] .intro-reveal-copy .intro-instant-line{
+  width:min(900px, 92vw);
+  font-size:var(--type-section) !important;
+  font-weight:var(--weight-title) !important;
+  line-height:var(--leading-heading) !important;
+  letter-spacing:0 !important;
+}

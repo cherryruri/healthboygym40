@@ -2204,7 +2204,7 @@ document.addEventListener("DOMContentLoaded", function(){
       true;
 
     video.preload =
-      "metadata";
+      "none";
 
     const playVideo =
       ()=>{
@@ -2251,20 +2251,73 @@ document.addEventListener("DOMContentLoaded", function(){
       }
     );
 
-    if(window.innerWidth > 768){
-      playVideo();
+    const attachVideoSource =
+      ()=>{
+
+        if(video.querySelector("source")) return true;
+
+        const src =
+          video.dataset.lazySrc;
+
+        if(!src) return false;
+
+        const source =
+          document.createElement("source");
+
+        source.src =
+          src;
+
+        source.type =
+          "video/mp4";
+
+        video.appendChild(source);
+
+        video.preload =
+          "metadata";
+
+        video.load();
+
+        return true;
+
+      };
+
+    const shouldKeepImageOnly =
+      window.innerWidth <= 768 ||
+      (
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      );
+
+    if(shouldKeepImageOnly){
       return;
     }
 
-    video.load();
+    const scheduleDesktopVideo =
+      ()=>{
 
-    if(video.readyState >= 2){
-      playVideo();
-    }else{
-      video.addEventListener("loadeddata", playVideo, {once:true});
-      video.addEventListener("canplay", playVideo, {once:true});
-      window.setTimeout(playVideo, 80);
-    }
+        const start =
+          ()=>{
+
+            if(!attachVideoSource()) return;
+
+            if(video.readyState >= 2){
+              playVideo();
+            }else{
+              video.addEventListener("loadeddata", playVideo, {once:true});
+              video.addEventListener("canplay", playVideo, {once:true});
+            }
+
+          };
+
+        if("requestIdleCallback" in window){
+          window.requestIdleCallback(start, {timeout:2200});
+        }else{
+          window.setTimeout(start, 1400);
+        }
+
+      };
+
+    window.setTimeout(scheduleDesktopVideo, 900);
 
   }
 
@@ -3006,10 +3059,10 @@ document.addEventListener("DOMContentLoaded", function(){
         clamp(-rect.top / scrollable, 0, 1);
 
       const start =
-        window.innerWidth <= 768 ? .61 : .84;
+        window.innerWidth <= 768 ? .40 : .50;
 
       const end =
-        window.innerWidth <= 768 ? .69 : .90;
+        window.innerWidth <= 768 ? .48 : .58;
 
       const progress =
         clamp((heroProgress - start) / (end - start), 0, 1);

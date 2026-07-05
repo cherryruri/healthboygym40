@@ -374,7 +374,7 @@ header {
   height:var(--hero-frame-height);
   border-radius:var(--hero-frame-radius);
   overflow:hidden;
-  background:#050505;
+  background:#050505 url('센터전체사진1.jpg') center / cover no-repeat;
   box-shadow:none;
   transform:translateX(-50%);
   transition:border-radius .12s linear;
@@ -387,6 +387,10 @@ header {
   object-fit:cover;
   background:#050505;
   filter:brightness(1.08) contrast(.96) saturate(1.04);
+}
+
+.intro-video:not([src]) {
+  background:transparent;
 }
 
 .hero-video-frame::after {

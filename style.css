@@ -10134,7 +10134,7 @@ li{
   align-items:center !important;
   justify-content:center !important;
   gap:var(--review-proof-gap) !important;
-  width:min(1180px, 96vw) !important;
+  width:min(1180px, calc(100vw - 48px)) !important;
   font-size:clamp(40px, 4.9vw, 86px) !important;
   font-weight:900 !important;
   line-height:1 !important;
@@ -10152,7 +10152,9 @@ li{
 
 .review-proof-divider{
   display:block !important;
+  flex:0 0 auto !important;
   width:var(--review-proof-divider-width) !important;
+  max-width:136px !important;
   height:2px !important;
   border-radius:999px !important;
   background:rgba(255,255,255,.92) !important;
@@ -10182,14 +10184,22 @@ li{
   }
 
   .review-proof-title{
-    width:min(620px, 96vw) !important;
-    gap:var(--review-proof-gap) !important;
-    font-size:clamp(28px, 7.1vw, 34px) !important;
-    line-height:1 !important;
+    flex-direction:column !important;
+    width:min(520px, calc(100vw - 34px)) !important;
+    gap:clamp(8px, 2.4vw, 12px) !important;
+    font-size:clamp(30px, 8.2vw, 38px) !important;
+    line-height:1.08 !important;
+    white-space:normal !important;
+  }
+
+  .review-proof-line{
+    display:block !important;
+    width:100% !important;
   }
 
   .review-proof-divider{
     width:var(--review-proof-divider-width) !important;
+    max-width:46px !important;
     height:2px !important;
   }
 
@@ -10200,7 +10210,7 @@ li{
 
 @media(max-width:390px){
   .review-proof-title{
-    font-size:27px !important;
+    font-size:31px !important;
   }
 }
 
@@ -10518,4 +10528,10 @@ li{
   #brand #inc01 .list .review-slide .review-tags span:nth-child(n+4){
     display:none;
   }
+}
+
+html.review-proof-divider-hidden .review-proof-divider{
+  width:0 !important;
+  opacity:0 !important;
+  box-shadow:none !important;
 }

@@ -266,7 +266,7 @@
           will-change:opacity, transform;
         }
         .hero-expand-sticky > .review-cover-panel{
-          background:rgba(0,0,0,.94) !important;
+          background:rgba(0,0,0,var(--review-bg-opacity, .36)) !important;
           backface-visibility:hidden;
           transform:translate3d(0, var(--review-cover-y), 0) !important;
         }
@@ -517,9 +517,9 @@
 
     hero.style.setProperty("--review-content-y", "0px");
     hero.style.setProperty("--review-stats-opacity", "1");
-    hero.style.setProperty("--review-bg-opacity", "0.86");
-    hero.style.setProperty("--hero-overlay", "0.84");
-    hero.style.setProperty("--hero-video-opacity", mobile ? "0.04" : "1");
+    hero.style.setProperty("--review-bg-opacity", mobile ? "0.34" : "0.24");
+    hero.style.setProperty("--hero-overlay", mobile ? "0.30" : "0.28");
+    hero.style.setProperty("--hero-video-opacity", "1");
     hero.style.setProperty("--review-proof-opacity", "0");
     hero.style.setProperty("--review-proof-divider-opacity", "0");
     hero.style.setProperty("--review-proof-divider-width", "0px");
@@ -553,18 +553,18 @@
     }, 0);
   }
 
-  function forceReviewProofVisible(hero){
+  function forceReviewProofVisible(hero, dividerVisible = true){
     const mobile = isMobile();
 
     hero.style.setProperty("--review-content-y", "0px");
     hero.style.setProperty("--review-stats-opacity", "0");
-    hero.style.setProperty("--hero-video-opacity", mobile ? "0.04" : "1");
+    hero.style.setProperty("--hero-video-opacity", "1");
     hero.style.setProperty("--review-proof-opacity", "1");
     hero.style.setProperty("--review-proof-y", "0px");
     hero.style.setProperty("--review-proof-scale", "1");
-    hero.style.setProperty("--review-proof-gap", `${mobile ? 13 : 30}px`);
-    hero.style.setProperty("--review-proof-divider-opacity", "1");
-    hero.style.setProperty("--review-proof-divider-width", `${mobile ? 38 : 150}px`);
+    hero.style.setProperty("--review-proof-gap", `${dividerVisible ? (mobile ? 12 : 28) : (mobile ? 8 : 14)}px`);
+    hero.style.setProperty("--review-proof-divider-opacity", dividerVisible ? "1" : "0");
+    hero.style.setProperty("--review-proof-divider-width", dividerVisible ? `${mobile ? 46 : 136}px` : "0px");
     hero.style.setProperty("--review-cards-opacity", "0");
     hero.style.setProperty("--review-cards-y", `${mobile ? 560 : 520}px`);
     hero.style.setProperty("--review-cards-x", `${mobile ? 220 : 340}px`);
@@ -588,13 +588,14 @@
 
     const progress = getHeroProgress(hero);
     const mobile = isMobile();
-    const holdStart = mobile ? 1.05 : 0.954;
+    const holdStart = mobile ? 0.88 : 0.94;
     const resetBefore = holdStart - 0.055;
-    const minHoldMs = mobile ? 1200 : 3400;
+    const minHoldMs = mobile ? 1500 : 2400;
 
     if(progress < resetBefore){
       reviewProofHoldStartedAt = 0;
       reviewProofHoldDone = false;
+      root.classList.remove("review-proof-divider-hidden");
       return;
     }
 
@@ -604,13 +605,18 @@
       reviewProofHoldStartedAt = performance.now();
     }
 
-    if(performance.now() - reviewProofHoldStartedAt < minHoldMs){
-      forceReviewProofVisible(hero);
+    const elapsed = performance.now() - reviewProofHoldStartedAt;
+    const dividerVisible = elapsed < (mobile ? 900 : 1100);
+    root.classList.toggle("review-proof-divider-hidden", !dividerVisible);
+
+    if(elapsed < minHoldMs){
+      forceReviewProofVisible(hero, dividerVisible);
       setTimeout(queueReviewProofHold, 120);
       return;
     }
 
     reviewProofHoldDone = true;
+    root.classList.add("review-proof-divider-hidden");
     releaseReviewProofHold();
   }
 
@@ -784,7 +790,7 @@
 
     style.textContent = `
       .review-proof-title{
-        opacity:var(--stable-review-proof-opacity, var(--review-proof-opacity, 0)) !important;
+        opacity:var(--review-proof-opacity, 0) !important;
         transition:opacity .18s linear !important;
       }
       .review-proof-title .review-proof-line{
@@ -792,6 +798,9 @@
         transform:none !important;
       }
       @media (max-width: 768px){
+        .review-proof-title{
+          opacity:calc(var(--stable-review-proof-opacity, 1) * var(--review-proof-opacity, 0)) !important;
+        }
         .hero-expand-sticky{
           background:var(--stable-hero-stage-bg, #fff) !important;
           transform:translateZ(0);
@@ -879,7 +888,7 @@
 
     const progress = getHeroProgress(hero);
     const isMobile = mobileMedia.matches;
-    const proofVisible = ease((progress - (isMobile ? 0.735 : 0.944)) / (isMobile ? 0.045 : 0.018));
+    const proofVisible = ease((progress - (isMobile ? 0.745 : 0.918)) / (isMobile ? 0.11 : 0.05));
 
     hero.style.setProperty("--stable-review-proof-opacity", proofVisible.toFixed(4));
 

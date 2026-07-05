@@ -2281,29 +2281,11 @@ document.addEventListener("DOMContentLoaded", function(){
     caption.dataset.scrollGateReady =
       "true";
 
-    if(window.innerWidth <= 768){
-      document.documentElement.classList.remove(
-        "hero-caption-scroll-locked",
-        "hero-mobile-snap-playing",
-        "hero-stats-bridge-playing"
-      );
-
-      try{
-        window.localStorage.setItem("healthboygymIntroCaptionGateSeen", "1");
-      }catch(error){}
-
-      return;
-    }
-
-    if(window.innerWidth > 768){
-      document.documentElement.classList.remove(
-        "hero-caption-scroll-locked",
-        "hero-mobile-snap-playing",
-        "hero-stats-bridge-playing"
-      );
-
-      return;
-    }
+    document.documentElement.classList.remove(
+      "hero-caption-scroll-locked",
+      "hero-mobile-snap-playing",
+      "hero-stats-bridge-playing"
+    );
 
     const introGateSeenKey =
       "healthboygymIntroCaptionGateSeen";
@@ -2406,13 +2388,13 @@ document.addEventListener("DOMContentLoaded", function(){
           hero.querySelectorAll(".intro-reveal-copy .reveal-word").length;
 
         const cinematicWordStart =
-          isMobile ? 0.34 : 0.32;
+          isMobile ? 0.12 : 0.15;
 
         const cinematicWordStep =
-          isMobile ? 0.032 : 0.024;
+          isMobile ? 0 : 0.014;
 
         const cinematicWordRange =
-          isMobile ? 0.15 : 0.085;
+          isMobile ? 0.07 : 0.07;
 
         return cinematicWordStart +
           Math.max(0, wordCount - 1) * cinematicWordStep +
@@ -2425,8 +2407,8 @@ document.addEventListener("DOMContentLoaded", function(){
           window.innerWidth <= 768;
 
         return Math.min(
-          isMobile ? 0.715 : 0.60,
-          Math.max(isMobile ? 0.62 : 0.53, getStatementCompleteProgress())
+          isMobile ? 0.32 : 0.38,
+          Math.max(isMobile ? 0.24 : 0.30, getStatementCompleteProgress())
         );
       };
 
@@ -2435,18 +2417,17 @@ document.addEventListener("DOMContentLoaded", function(){
         const isMobile =
           window.innerWidth <= 768;
 
-        return isMobile ? 0.745 : 0.855;
+        return isMobile ? 0.48 : 0.58;
       };
 
     const getBridgeLead =
-      ()=>window.innerWidth <= 768 ? 0.09 : 0.065;
+      ()=>window.innerWidth <= 768 ? 0.13 : 0.14;
 
     const getBridgeExit =
       ()=>window.innerWidth <= 768 ? 0.04 : 0.04;
 
     const shouldLetReviewAreaScrollBack =
-      progress=>window.innerWidth <= 768 &&
-        progress > getStatsTargetProgress() + getBridgeExit();
+      progress=>progress > getStatsTargetProgress() + getBridgeExit();
 
     const restartCaptionReveal =
       ()=>{
@@ -2793,7 +2774,11 @@ document.addEventListener("DOMContentLoaded", function(){
           const startProgress =
             getHeroProgress();
 
-          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
+          if(
+            startProgress < getStatementTargetProgress() - getBridgeLead() ||
+            startProgress >= getStatsTargetProgress() - 0.012 ||
+            startProgress > getStatsTargetProgress() + getBridgeExit()
+          ) return;
 
           event.preventDefault();
           playStatsBridge();
@@ -2850,7 +2835,11 @@ document.addEventListener("DOMContentLoaded", function(){
           getHeroProgress();
 
         if(travel > 0){
-          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
+          if(
+            startProgress < getStatementTargetProgress() - getBridgeLead() ||
+            startProgress >= getStatsTargetProgress() - 0.012 ||
+            startProgress > getStatsTargetProgress() + getBridgeExit()
+          ) return;
 
           event.preventDefault();
           playStatsBridge();
@@ -2884,7 +2873,11 @@ document.addEventListener("DOMContentLoaded", function(){
           getHeroProgress();
 
         if(scrollLockKeys.has(event.key)){
-          if(startProgress < getStatementTargetProgress() - getBridgeLead() || startProgress > getStatsTargetProgress() + getBridgeExit()) return;
+          if(
+            startProgress < getStatementTargetProgress() - getBridgeLead() ||
+            startProgress >= getStatsTargetProgress() - 0.012 ||
+            startProgress > getStatsTargetProgress() + getBridgeExit()
+          ) return;
 
           event.preventDefault();
           playStatsBridge();
@@ -2907,20 +2900,12 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       };
 
-    window.addEventListener("wheel", onReplayWheel, {passive:false});
-    window.addEventListener("touchstart", onReplayTouchStart, {passive:true});
-    window.addEventListener("touchmove", onReplayTouchMove, {passive:false});
-    window.addEventListener("keydown", onReplayKeyDown);
     window.addEventListener("wheel", onBridgeWheel, {passive:false});
     window.addEventListener("touchstart", onBridgeTouchStart, {passive:true});
     window.addEventListener("touchmove", onBridgeTouchMove, {passive:false});
     window.addEventListener("keydown", onBridgeKeyDown);
 
-    if(isMobileViewport() && hasSeenIntroGate()){
-      document.documentElement.classList.remove("hero-caption-scroll-locked");
-    }else{
-      armGate(holdMs);
-    }
+    document.documentElement.classList.remove("hero-caption-scroll-locked");
 
   }
 
@@ -3438,8 +3423,8 @@ document.addEventListener("DOMContentLoaded", function(){
             )
           : (
               delta < 0
-                ? (absDelta > 0.08 ? 0.045 : 0.07)
-                : (absDelta > 0.08 ? 0.19 : 0.12)
+                ? (absDelta > 0.08 ? 0.10 : 0.16)
+                : (absDelta > 0.08 ? 0.48 : 0.28)
             );
 
       const elapsedFrames =
@@ -3594,31 +3579,31 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? -14 : -54;
 
       const expandEnd =
-        isMobile ? 0.23 : 0.34;
+        isMobile ? 0.16 : 0.20;
 
       const copyStart =
-        isMobile ? 0.16 : 0.27;
+        isMobile ? 0.09 : 0.13;
 
       const copyRange =
-        isMobile ? 0.10 : 0.16;
+        isMobile ? 0.085 : 0.10;
 
       const lineStart =
-        isMobile ? 0.18 : 0.31;
+        isMobile ? 0.11 : 0.15;
 
       const lineStep =
-        isMobile ? 0.018 : 0.035;
+        isMobile ? 0.01 : 0.018;
 
       const lineRange =
-        isMobile ? 0.08 : 0.18;
+        isMobile ? 0.07 : 0.095;
 
       const wordStart =
-        isMobile ? 0.18 : 0.32;
+        isMobile ? 0.11 : 0.155;
 
       const wordStep =
-        isMobile ? 0 : 0.024;
+        isMobile ? 0 : 0.014;
 
       const wordRange =
-        isMobile ? 0.08 : 0.085;
+        isMobile ? 0.07 : 0.07;
 
       const underlineStart =
         lineStart + lineStep + lineRange * 0.78;
@@ -3633,58 +3618,58 @@ document.addEventListener("DOMContentLoaded", function(){
         easeInOut(clamp((progress - copyStart) / copyRange, 0, 1));
 
       const statsIntroStart =
-        isMobile ? 0.61 : 0.795;
+        isMobile ? 0.40 : 0.50;
 
       const statsIntroEnd =
-        isMobile ? 0.69 : 0.855;
+        isMobile ? 0.48 : 0.58;
 
       const messageExitStart =
-        isMobile ? 0.57 : 0.765;
+        isMobile ? 0.37 : 0.46;
 
       const messageExitEnd =
-        isMobile ? 0.68 : 0.835;
+        isMobile ? 0.47 : 0.55;
 
       const statsFadeStart =
-        isMobile ? 0.77 : 0.91;
+        isMobile ? 0.52 : 0.61;
 
       const statsFadeEnd =
-        isMobile ? 0.86 : 0.935;
+        isMobile ? 0.60 : 0.66;
 
       const reviewDarkStart =
-        isMobile ? 0.61 : 0.95;
+        isMobile ? 0.46 : 0.62;
 
       const reviewDarkEnd =
-        isMobile ? 0.94 : 0.99;
+        isMobile ? 0.80 : 0.84;
 
       const frameReturnStart =
-        isMobile ? 0.90 : 0.94;
+        isMobile ? 0.62 : 0.66;
 
       const frameReturnEnd =
-        isMobile ? 0.982 : 0.985;
+        isMobile ? 0.88 : 0.84;
 
       const cardsStart =
-        isMobile ? 0.86 : 0.955;
+        isMobile ? 0.64 : 0.72;
 
       const cardsEnd =
-        isMobile ? 0.982 : 0.992;
+        isMobile ? 0.88 : 0.84;
 
       const proofStart =
-        isMobile ? 0.755 : 0.925;
+        isMobile ? 0.54 : 0.62;
 
       const proofEnd =
-        isMobile ? 0.875 : 0.956;
+        isMobile ? 0.63 : 0.69;
 
       const lineFadeStart =
-        isMobile ? 0.91 : 0.965;
+        isMobile ? 0.75 : 0.78;
 
       const lineFadeEnd =
-        isMobile ? 0.965 : 0.985;
+        isMobile ? 0.86 : 0.83;
 
       const proofLiftStart =
-        isMobile ? 0.865 : 0.948;
+        isMobile ? 0.64 : 0.72;
 
       const proofLiftEnd =
-        isMobile ? 0.982 : 0.982;
+        isMobile ? 0.88 : 0.84;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));

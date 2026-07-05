@@ -3648,10 +3648,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.88 : 0.84;
 
       const cardsStart =
-        isMobile ? 0.64 : 0.72;
+        isMobile ? 0.89 : 0.86;
 
       const cardsEnd =
-        isMobile ? 0.88 : 0.84;
+        isMobile ? 0.97 : 0.94;
 
       const proofStart =
         isMobile ? 0.54 : 0.62;
@@ -3666,10 +3666,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.86 : 0.83;
 
       const proofLiftStart =
-        isMobile ? 0.64 : 0.72;
+        isMobile ? 0.70 : 0.70;
 
       const proofLiftEnd =
-        isMobile ? 0.88 : 0.84;
+        isMobile ? 0.88 : 0.86;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3852,7 +3852,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-cards-y",
-        `${(isMobile ? 60 : 70) + (1 - cardsProgress) * (isMobile ? 500 : 450)}px`
+        `${(isMobile ? 110 : 125) + (1 - cardsProgress) * (isMobile ? 500 : 450)}px`
       );
 
       hero.style.setProperty(
@@ -3872,7 +3872,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-y",
-        `${(isMobile ? 82 : 112) - proofProgress * (isMobile ? 82 : 112) - proofLiftProgress * (isMobile ? 180 : 150)}px`
+        `${(isMobile ? 82 : 112) - proofProgress * (isMobile ? 82 : 112) - proofLiftProgress * (isMobile ? 145 : 190)}px`
       );
 
       hero.style.setProperty(
@@ -3882,7 +3882,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-gap",
-        `${(isMobile ? 8 : 16) + proofDividerAlive * (isMobile ? 5 : 14)}px`
+        `${(isMobile ? 4 : 0) + proofDividerAlive * (isMobile ? 12 : 30)}px`
       );
 
       hero.style.setProperty(
@@ -3892,7 +3892,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-divider-width",
-        `${isMobile ? 46 : 136}px`
+        `${(isMobile ? 46 : 136) * proofDividerAlive}px`
       );
 
       const liveReviewSlides =

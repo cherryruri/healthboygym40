@@ -10212,7 +10212,7 @@ li{
   .review-proof-title{
     flex-direction:column !important;
     width:min(520px, calc(100vw - 34px)) !important;
-    gap:clamp(8px, 2.4vw, 12px) !important;
+    gap:var(--review-proof-gap) !important;
     font-size:clamp(30px, 8.2vw, 38px) !important;
     line-height:1.08 !important;
     white-space:normal !important;

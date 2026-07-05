@@ -5825,8 +5825,17 @@ body.menu-open .mobile-login-area{
 }
 
 .review-cover-panel .review-stats-section .stat-number{
+  display:inline-flex;
+  align-items:baseline;
+  justify-content:center;
+  white-space:nowrap;
+  word-break:keep-all;
   font-size:clamp(42px, 4.4vw, 76px);
   line-height:.95;
+}
+
+.review-cover-panel .review-stats-section .stat-number::after{
+  flex:0 0 auto;
 }
 
 .review-cover-panel .review-stats-section .stat-box p{

@@ -2204,7 +2204,7 @@ document.addEventListener("DOMContentLoaded", function(){
       true;
 
     video.preload =
-      "auto";
+      "metadata";
 
     const playVideo =
       ()=>{
@@ -2417,7 +2417,7 @@ document.addEventListener("DOMContentLoaded", function(){
         const isMobile =
           window.innerWidth <= 768;
 
-        return isMobile ? 0.48 : 0.58;
+        return isMobile ? 0.48 : 0.60;
       };
 
     const getReviewHoldTargetProgress =
@@ -3383,8 +3383,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
   prepareIntroCaption();
 
-  initMobileIntroVideo();
-
   stageLoaderIntro();
 
   setTimeout(openMain, 2860);
@@ -3527,7 +3525,7 @@ document.addEventListener("DOMContentLoaded", function(){
         introStats;
 
       const duration =
-        window.innerWidth <= 768 ? 1300 : 1500;
+        window.innerWidth <= 768 ? 1100 : 1050;
 
       const startedAt =
         performance.now();
@@ -3549,7 +3547,11 @@ document.addEventListener("DOMContentLoaded", function(){
           const value =
             progress >= 1
               ? target
-              : Math.floor(target * progress);
+              : (
+                  stat.classList.contains("rank") && progress > 0
+                    ? Math.max(1, Math.round(target * progress))
+                    : Math.floor(target * progress)
+                );
 
           stat.textContent =
             value.toLocaleString();
@@ -3696,19 +3698,19 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.47 : 0.55;
 
       const statsFadeStart =
-        isMobile ? 0.52 : 0.61;
+        isMobile ? 0.52 : 0.66;
 
       const statsFadeEnd =
-        isMobile ? 0.60 : 0.66;
+        isMobile ? 0.60 : 0.72;
 
       const reviewDarkStart =
-        isMobile ? 0.46 : 0.62;
+        isMobile ? 0.46 : 0.66;
 
       const reviewDarkEnd =
         isMobile ? 0.80 : 0.84;
 
       const frameReturnStart =
-        isMobile ? 0.62 : 0.66;
+        isMobile ? 0.62 : 0.70;
 
       const frameReturnEnd =
         isMobile ? 0.88 : 0.84;
@@ -3720,19 +3722,19 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.945 : 0.915;
 
       const proofStart =
-        isMobile ? 0.54 : 0.62;
+        isMobile ? 0.54 : 0.68;
 
       const proofEnd =
-        isMobile ? 0.63 : 0.69;
+        isMobile ? 0.63 : 0.74;
 
       const lineFadeStart =
-        isMobile ? 0.75 : 0.78;
+        isMobile ? 0.75 : 0.80;
 
       const lineFadeEnd =
-        isMobile ? 0.86 : 0.83;
+        isMobile ? 0.86 : 0.86;
 
       const proofLiftStart =
-        isMobile ? 0.70 : 0.70;
+        isMobile ? 0.70 : 0.74;
 
       const proofLiftEnd =
         isMobile ? 0.88 : 0.86;
@@ -3743,7 +3745,10 @@ document.addEventListener("DOMContentLoaded", function(){
       const messageExitProgress =
         easeInOut(clamp((progress - messageExitStart) / (messageExitEnd - messageExitStart), 0, 1));
 
-      if(progress >= proofStart && !heroCounterComplete && !isMobile){
+      const counterForceFinishProgress =
+        isMobile ? proofStart : 0.76;
+
+      if(progress >= counterForceFinishProgress && !heroCounterComplete && !isMobile){
         finishHeroCounter();
       }
 
@@ -3788,7 +3793,7 @@ document.addEventListener("DOMContentLoaded", function(){
       const proofDividerOpacity =
         proofProgress * proofDividerAlive;
 
-      if(statsIntroProgress > 0.12){
+      if(statsIntroProgress > 0.02){
         startHeroCounter();
       }
 

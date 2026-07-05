@@ -17,3 +17,12 @@ html[data-home-device="desktop"] .intro-reveal-copy .intro-instant-line{
   line-height:var(--leading-heading) !important;
   letter-spacing:0 !important;
 }
+
+html[data-home-device="desktop"] .review-stats-section .stat-rank-caption{
+  display:inline-flex !important;
+  align-items:baseline;
+  justify-content:center;
+  gap:.28em;
+  white-space:nowrap !important;
+  word-break:keep-all !important;
+}

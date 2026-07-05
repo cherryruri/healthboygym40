@@ -18,10 +18,25 @@ html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
   letter-spacing:0 !important;
 }
 
+html[data-home-device="mobile"] .review-stats-section .stat-rank-caption{
+  display:inline-flex !important;
+  align-items:baseline;
+  justify-content:center;
+  gap:.22em;
+  max-width:100%;
+  white-space:nowrap !important;
+  word-break:keep-all !important;
+  font-size:10.5px !important;
+}
+
 @media(max-width:480px){
   html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
     width:min(360px, 92vw);
     font-size:34px !important;
+  }
+
+  html[data-home-device="mobile"] .review-stats-section .stat-rank-caption{
+    font-size:10px !important;
   }
 }
 
@@ -29,5 +44,9 @@ html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
   html[data-home-device="mobile"] .intro-reveal-copy .intro-instant-line{
     width:min(350px, 92vw);
     font-size:33px !important;
+  }
+
+  html[data-home-device="mobile"] .review-stats-section .stat-rank-caption{
+    font-size:9.5px !important;
   }
 }

@@ -3663,10 +3663,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.982 : 0.985;
 
       const cardsStart =
-        isMobile ? 0.865 : 0.958;
+        isMobile ? 0.86 : 0.955;
 
       const cardsEnd =
-        isMobile ? 0.985 : 0.995;
+        isMobile ? 0.982 : 0.992;
 
       const proofStart =
         isMobile ? 0.755 : 0.925;
@@ -3675,16 +3675,16 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.875 : 0.956;
 
       const lineFadeStart =
-        isMobile ? 0.90 : 0.968;
+        isMobile ? 0.91 : 0.965;
 
       const lineFadeEnd =
-        isMobile ? 0.982 : 0.995;
+        isMobile ? 0.965 : 0.985;
 
       const proofLiftStart =
-        isMobile ? 0.875 : 0.955;
+        isMobile ? 0.865 : 0.948;
 
       const proofLiftEnd =
-        isMobile ? 0.965 : 0.985;
+        isMobile ? 0.982 : 0.982;
 
       const statsIntroProgress =
         easeInOut(clamp((progress - statsIntroStart) / (statsIntroEnd - statsIntroStart), 0, 1));
@@ -3731,24 +3731,11 @@ document.addEventListener("DOMContentLoaded", function(){
           ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
           : 0;
 
-      const proofExitProgress =
-        isMobile && heroCounterComplete
-          ? easeInOut(clamp((progress - 0.982) / 0.018, 0, 1))
-          : 0;
-
       const proofDividerAlive =
         clamp(1 - lineFadeProgress, 0, 1);
 
       const proofDividerOpacity =
-        proofProgress * clamp(proofDividerAlive / 0.22, 0, 1);
-
-      const proofCardFade =
-        isMobile
-          ? clamp((cardsProgress - 0.58) / 0.32, 0, 1)
-          : Math.max(0, cardsProgress - 0.55) / 0.45;
-
-      const proofFadeProgress =
-        Math.max(proofExitProgress, proofCardFade);
+        proofProgress * proofDividerAlive;
 
       if(statsIntroProgress > 0.12){
         startHeroCounter();
@@ -3880,7 +3867,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-cards-y",
-        `${(isMobile ? 560 : 520) - cardsProgress * (isMobile ? 560 : 520)}px`
+        `${(isMobile ? 60 : 70) + (1 - cardsProgress) * (isMobile ? 500 : 450)}px`
       );
 
       hero.style.setProperty(
@@ -3895,12 +3882,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-opacity",
-        (proofProgress * (1 - proofFadeProgress)).toFixed(4)
+        proofProgress.toFixed(4)
       );
 
       hero.style.setProperty(
         "--review-proof-y",
-        `${(isMobile ? 82 : 112) - proofProgress * (isMobile ? 82 : 112) - proofLiftProgress * (isMobile ? 92 : 150)}px`
+        `${(isMobile ? 82 : 112) - proofProgress * (isMobile ? 82 : 112) - proofLiftProgress * (isMobile ? 180 : 150)}px`
       );
 
       hero.style.setProperty(
@@ -3920,7 +3907,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       hero.style.setProperty(
         "--review-proof-divider-width",
-        `${(isMobile ? 38 : 150) * clamp(proofProgress * 1.18, 0, 1) * proofDividerAlive}px`
+        `${isMobile ? 46 : 136}px`
       );
 
       const liveReviewSlides =

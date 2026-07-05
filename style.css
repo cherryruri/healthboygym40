@@ -10531,7 +10531,6 @@ li{
 }
 
 html.review-proof-divider-hidden .review-proof-divider{
-  width:0 !important;
   opacity:0 !important;
   box-shadow:none !important;
 }

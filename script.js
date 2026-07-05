@@ -2161,6 +2161,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
       if(line.dataset.wordPrepared === "true") return;
 
+      if(line.dataset.instantReveal === "true"){
+        line.dataset.wordPrepared =
+          "true";
+
+        return;
+      }
+
       const source =
         line.dataset.text || line.textContent.trim();
 

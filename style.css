@@ -732,6 +732,18 @@ body.loaded .intro-desc:not(.is-split) .intro-desc-line:nth-child(2){
   font-weight:800;
 }
 
+.intro-reveal-copy .intro-instant-line{
+  width:min(100%, 980px);
+  background:none;
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  font-size:clamp(30px, 4.1vw, 64px);
+  line-height:1.14;
+  font-weight:850;
+  white-space:normal;
+  text-wrap:balance;
+}
+
 @media (max-width:1440px){
   .intro-reveal-copy .intro-greeting-line{
     font-size:clamp(32px, 4vw, 54px);
@@ -9899,6 +9911,7 @@ li{
 .intro-reveal-copy .intro-greeting-line,
 .intro-reveal-copy .intro-comfort-line,
 .intro-reveal-copy .intro-branch-line,
+.intro-reveal-copy .intro-instant-line,
 .review-proof-title,
 .news-hub-title h2{
   font-size:var(--type-section) !important;
@@ -9909,7 +9922,8 @@ li{
 
 #brand #inc01 .brand-cross .brand-type-line,
 .intro-reveal-copy .intro-comfort-line,
-.intro-reveal-copy .intro-branch-line{
+.intro-reveal-copy .intro-branch-line,
+.intro-reveal-copy .intro-instant-line{
   width:min(900px, 92vw);
   font-weight:var(--weight-title) !important;
   line-height:var(--leading-heading) !important;
@@ -9940,6 +9954,7 @@ li{
   .intro-reveal-copy .intro-greeting-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line,
+  .intro-reveal-copy .intro-instant-line,
   .review-proof-title{
     font-size:clamp(33px, 8.8vw, 44px) !important;
     font-weight:850 !important;
@@ -9948,7 +9963,8 @@ li{
 
   #brand #inc01 .brand-cross .brand-type-line,
   .intro-reveal-copy .intro-comfort-line,
-  .intro-reveal-copy .intro-branch-line{
+  .intro-reveal-copy .intro-branch-line,
+  .intro-reveal-copy .intro-instant-line{
     width:min(520px, 92vw);
     line-height:1.1 !important;
   }
@@ -10014,13 +10030,15 @@ li{
   .intro-reveal-copy .intro-greeting-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line,
+  .intro-reveal-copy .intro-instant-line,
   .review-proof-title{
     font-size:34px !important;
   }
 
   #brand #inc01 .brand-cross .brand-type-line,
   .intro-reveal-copy .intro-comfort-line,
-  .intro-reveal-copy .intro-branch-line{
+  .intro-reveal-copy .intro-branch-line,
+  .intro-reveal-copy .intro-instant-line{
     width:min(360px, 92vw);
     line-height:1.1 !important;
   }
@@ -10030,6 +10048,7 @@ li{
   .intro-reveal-copy .intro-greeting-line,
   .intro-reveal-copy .intro-comfort-line,
   .intro-reveal-copy .intro-branch-line,
+  .intro-reveal-copy .intro-instant-line,
   .review-proof-title{
     font-size:33px !important;
   }

@@ -2420,6 +2420,14 @@ document.addEventListener("DOMContentLoaded", function(){
         return isMobile ? 0.48 : 0.58;
       };
 
+    const getReviewHoldTargetProgress =
+      ()=>{
+        const isMobile =
+          window.innerWidth <= 768;
+
+        return isMobile ? 0.955 : 0.925;
+      };
+
     const getBridgeLead =
       ()=>window.innerWidth <= 768 ? 0.13 : 0.14;
 
@@ -2650,6 +2658,22 @@ document.addEventListener("DOMContentLoaded", function(){
         playHeroSnap(targetProgress);
       };
 
+    const playReviewHoldBridge =
+      ()=>{
+        const startProgress =
+          getHeroProgress();
+
+        const targetProgress =
+          getReviewHoldTargetProgress();
+
+        if(
+          startProgress < getStatsTargetProgress() - 0.012 ||
+          startProgress >= targetProgress - 0.012
+        ) return;
+
+        playHeroSnap(targetProgress);
+      };
+
     const playStatementBridge =
       ()=>{
         const startProgress =
@@ -2774,14 +2798,28 @@ document.addEventListener("DOMContentLoaded", function(){
           const startProgress =
             getHeroProgress();
 
-          if(
-            startProgress < getStatementTargetProgress() - getBridgeLead() ||
-            startProgress >= getStatsTargetProgress() - 0.012 ||
-            startProgress > getStatsTargetProgress() + getBridgeExit()
-          ) return;
+          if(startProgress < getStatementTargetProgress() - getBridgeLead()) return;
+
+          if(startProgress >= getReviewHoldTargetProgress() - 0.012){
+            if(startProgress >= 0.995) return;
+
+            event.preventDefault();
+            playHeroSnap(1);
+            return;
+          }
 
           event.preventDefault();
-          playStatsBridge();
+
+          if(startProgress < getStatsTargetProgress() - 0.012){
+            playStatsBridge();
+            return;
+          }
+
+          if(startProgress < getReviewHoldTargetProgress() - 0.012){
+            playReviewHoldBridge();
+            return;
+          }
+
           return;
         }
 
@@ -2835,14 +2873,28 @@ document.addEventListener("DOMContentLoaded", function(){
           getHeroProgress();
 
         if(travel > 0){
-          if(
-            startProgress < getStatementTargetProgress() - getBridgeLead() ||
-            startProgress >= getStatsTargetProgress() - 0.012 ||
-            startProgress > getStatsTargetProgress() + getBridgeExit()
-          ) return;
+          if(startProgress < getStatementTargetProgress() - getBridgeLead()) return;
+
+          if(startProgress >= getReviewHoldTargetProgress() - 0.012){
+            if(startProgress >= 0.995) return;
+
+            event.preventDefault();
+            playHeroSnap(1);
+            return;
+          }
 
           event.preventDefault();
-          playStatsBridge();
+
+          if(startProgress < getStatsTargetProgress() - 0.012){
+            playStatsBridge();
+            return;
+          }
+
+          if(startProgress < getReviewHoldTargetProgress() - 0.012){
+            playReviewHoldBridge();
+            return;
+          }
+
           return;
         }
 
@@ -2873,14 +2925,28 @@ document.addEventListener("DOMContentLoaded", function(){
           getHeroProgress();
 
         if(scrollLockKeys.has(event.key)){
-          if(
-            startProgress < getStatementTargetProgress() - getBridgeLead() ||
-            startProgress >= getStatsTargetProgress() - 0.012 ||
-            startProgress > getStatsTargetProgress() + getBridgeExit()
-          ) return;
+          if(startProgress < getStatementTargetProgress() - getBridgeLead()) return;
+
+          if(startProgress >= getReviewHoldTargetProgress() - 0.012){
+            if(startProgress >= 0.995) return;
+
+            event.preventDefault();
+            playHeroSnap(1);
+            return;
+          }
 
           event.preventDefault();
-          playStatsBridge();
+
+          if(startProgress < getStatsTargetProgress() - 0.012){
+            playStatsBridge();
+            return;
+          }
+
+          if(startProgress < getReviewHoldTargetProgress() - 0.012){
+            playReviewHoldBridge();
+            return;
+          }
+
           return;
         }
 
@@ -3648,10 +3714,10 @@ document.addEventListener("DOMContentLoaded", function(){
         isMobile ? 0.88 : 0.84;
 
       const cardsStart =
-        isMobile ? 0.89 : 0.86;
+        isMobile ? 0.875 : 0.845;
 
       const cardsEnd =
-        isMobile ? 0.97 : 0.94;
+        isMobile ? 0.945 : 0.915;
 
       const proofStart =
         isMobile ? 0.54 : 0.62;
@@ -3906,16 +3972,16 @@ document.addEventListener("DOMContentLoaded", function(){
           orderMatch ? Math.max(0, Number(orderMatch[1]) - 1) : index;
 
         const orderStep =
-          isMobile ? 0.055 : 0.06;
+          isMobile ? 0.038 : 0.034;
 
         const slideRange =
-          isMobile ? 0.62 : 0.48;
+          isMobile ? 0.36 : 0.30;
 
         const slideProgress =
           easeInOut(clamp((cardsProgress - orderIndex * orderStep) / slideRange, 0, 1));
 
         const textProgress =
-          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.03 : 0.045)) / (isMobile ? 0.50 : 0.42), 0, 1));
+          easeInOut(clamp((cardsProgress - orderIndex * orderStep - (isMobile ? 0.024 : 0.03)) / (isMobile ? 0.34 : 0.28), 0, 1));
 
         slide.style.setProperty(
           "--slide-opacity",

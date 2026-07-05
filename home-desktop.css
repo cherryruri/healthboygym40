@@ -1,0 +1,11 @@
+html[data-home-device="desktop"] .hero-expand-sticky > .review-cover-panel{
+  contain:layout paint style;
+}
+
+html[data-home-device="desktop"] .hero-expand-sticky > .review-cover-panel .review-stats-section{
+  will-change:opacity, transform;
+}
+
+html[data-home-device="desktop"] .hero-expand-sticky > .review-cover-panel .all_slider{
+  will-change:opacity, transform;
+}

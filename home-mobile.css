@@ -1,0 +1,11 @@
+html[data-home-device="mobile"] .intro-video{
+  display:none;
+}
+
+html[data-home-device="mobile"] .hero-video-frame{
+  background-position:center;
+}
+
+html[data-home-device="mobile"] .hero-expand-sticky > .review-cover-panel{
+  contain:layout paint style;
+}

@@ -16,10 +16,19 @@ const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const mobileQuery = window.matchMedia("(max-width: 768px)");
+const maxBannerImages = 4;
+const bannerAutoDelay = 4200;
 
 let currentUser = null;
 let profileState = null;
 let shell = null;
+let bannerState = {
+  images: [],
+  activeIndex: 0,
+  timer: null,
+  touchStartX: 0,
+  touchEndX: 0
+};
 
 const icons = {
   folder: svgData(`
@@ -79,12 +88,14 @@ function startMobileMypage() {
   root.insertBefore(shell, root.firstChild);
 
   attachEvents(root);
+  renderBannerSection();
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) return;
     currentUser = user;
     root.style.display = "block";
     await loadProfile(user);
+    await loadBannerImages();
     syncShell();
   });
 }
@@ -105,12 +116,24 @@ function getShellMarkup() {
         <span>지금부터 바로 운동 시작하세요! 이벤트</span>
       </div>
 
-      <div class="mobile-promo-card" aria-label="이벤트 배너">
-        <span>3월 봄맞이 세탁해봄</span>
-        <strong>아우터, 침구류<br>무제한 할인 중!</strong>
-        <div class="mobile-promo-basket" aria-hidden="true"><i class="mobile-promo-discount">20%</i></div>
-        <div class="mobile-promo-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-      </div>
+      <section class="mobile-banner-section" id="mobileBannerSection" aria-label="이벤트 배너">
+        <button type="button" class="mobile-banner-edit-button" id="mobileBannerEdit" hidden>수정하기</button>
+        <div class="mobile-promo-card mobile-promo-slider" id="mobileBannerSlider">
+          <div class="mobile-promo-track" id="mobileBannerTrack"></div>
+          <div class="mobile-promo-dots" id="mobileBannerDots" aria-label="배너 선택"></div>
+        </div>
+        <div class="mobile-banner-admin" id="mobileBannerAdmin" hidden>
+          <div class="mobile-banner-admin-top">
+            <strong class="mobile-banner-title">배너 이미지</strong>
+            <span class="mobile-banner-count" id="mobileBannerCount">0/4</span>
+            <button type="button" class="mobile-banner-add-button" id="mobileBannerAdd">이미지 추가</button>
+          </div>
+          <input type="file" id="mobileBannerInput" accept="image/*" multiple hidden>
+          <p class="mobile-banner-note">최대 4장까지 등록할 수 있어요. 등록한 이미지는 회원에게도 보입니다.</p>
+          <div class="mobile-banner-list" id="mobileBannerList"></div>
+          <button type="button" class="mobile-banner-close-button" id="mobileBannerClose">닫기</button>
+        </div>
+      </section>
 
       <div class="mobile-action-grid">
         <a class="mobile-action-card mobile-inquiry-card" href="board.html?board=free&category=request">
@@ -190,6 +213,18 @@ function attachEvents(root) {
     document.getElementById("profileImageInput")?.click();
   });
 
+  shell.querySelector("#mobileBannerEdit")?.addEventListener("click", toggleBannerAdmin);
+  shell.querySelector("#mobileBannerAdd")?.addEventListener("click", () => shell.querySelector("#mobileBannerInput")?.click());
+  shell.querySelector("#mobileBannerInput")?.addEventListener("change", handleBannerUpload);
+  shell.querySelector("#mobileBannerClose")?.addEventListener("click", () => {
+    const admin = shell.querySelector("#mobileBannerAdmin");
+    if (admin) admin.hidden = true;
+  });
+
+  const slider = shell.querySelector("#mobileBannerSlider");
+  slider?.addEventListener("touchstart", handleBannerTouchStart, { passive: true });
+  slider?.addEventListener("touchend", handleBannerTouchEnd);
+
   shell.querySelectorAll("[data-focus-target]").forEach((button) => {
     button.addEventListener("click", () => {
       const targetId = button.getAttribute("data-focus-target");
@@ -244,8 +279,30 @@ async function loadProfile(user) {
     phone: getPhone(data),
     memberText: getMemberText(data),
     program: getProgram(data),
-    photo: data.photoDataUrl || data.profileImage || user.photoURL || ""
+    photo: data.photoDataUrl || data.profileImage || user.photoURL || "",
+    isAdmin: isAdminUser(data)
   };
+}
+
+async function loadBannerImages() {
+  try {
+    const snap = await getDoc(getBannerDocRef());
+    const data = snap.exists() ? snap.data() : {};
+    const images = Array.isArray(data.images) ? data.images : [];
+    bannerState.images = images
+      .map((item) => typeof item === "string" ? item : item?.src)
+      .filter((src) => typeof src === "string" && src.startsWith("data:image/"))
+      .slice(0, maxBannerImages);
+    bannerState.activeIndex = Math.min(bannerState.activeIndex, Math.max(0, bannerState.images.length - 1));
+  } catch (error) {
+    console.warn("배너 이미지를 불러오지 못했습니다.", error);
+    bannerState.images = [];
+    bannerState.activeIndex = 0;
+  }
+}
+
+function getBannerDocRef() {
+  return doc(db, "siteSettings", "mobileMypageBanners");
 }
 
 function getUserId(user) {
@@ -256,6 +313,10 @@ function getUserId(user) {
 function toTitleCase(value) {
   if (!value) return "회원";
   return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function isAdminUser(data) {
+  return data.role === "admin" || data.isAdmin === true || data.admin === true || data.permission === "admin";
 }
 
 function getPhone(data) {
@@ -290,6 +351,7 @@ function syncShell() {
   setText("mobileMemberText", profileState.memberText);
   syncProgramButtons();
   syncPhoto();
+  renderBannerSection();
 }
 
 function syncPhoto() {
@@ -310,6 +372,244 @@ function syncProgramButtons() {
   shell.querySelectorAll(".mobile-program-option").forEach((button) => {
     button.classList.toggle("is-active", button.dataset.program === profileState.program);
   });
+}
+
+function renderBannerSection() {
+  if (!shell) return;
+
+  const editButton = shell.querySelector("#mobileBannerEdit");
+  if (editButton) editButton.hidden = !profileState?.isAdmin;
+
+  renderBannerSlides();
+  renderBannerAdmin();
+  startBannerTimer();
+}
+
+function renderBannerSlides() {
+  if (!shell) return;
+
+  const track = shell.querySelector("#mobileBannerTrack");
+  const dots = shell.querySelector("#mobileBannerDots");
+  if (!track || !dots) return;
+
+  const images = bannerState.images;
+
+  if (images.length > 0) {
+    track.innerHTML = images.map((src, index) => `
+      <div class="mobile-promo-slide" aria-label="배너 ${index + 1}">
+        <img src="${src}" alt="이벤트 배너 ${index + 1}">
+      </div>
+    `).join("");
+  } else {
+    track.innerHTML = `
+      <div class="mobile-promo-slide mobile-promo-empty" aria-label="기본 이벤트 배너">
+        <span>3월 봄맞이 세탁해봄</span>
+        <strong>아우터, 침구류<br>무제한 할인 중!</strong>
+        <div class="mobile-promo-basket" aria-hidden="true"><i class="mobile-promo-discount">20%</i></div>
+      </div>
+    `;
+  }
+
+  const dotCount = Math.max(1, images.length);
+  dots.innerHTML = Array.from({ length: dotCount }, (_, index) => `
+    <button type="button" class="mobile-promo-dot" data-banner-dot="${index}" aria-label="${index + 1}번째 배너"></button>
+  `).join("");
+
+  dots.querySelectorAll("[data-banner-dot]").forEach((button) => {
+    button.addEventListener("click", () => goToBanner(Number(button.dataset.bannerDot)));
+  });
+
+  goToBanner(bannerState.activeIndex, false);
+}
+
+function renderBannerAdmin() {
+  if (!shell) return;
+
+  const adminPanel = shell.querySelector("#mobileBannerAdmin");
+  const count = shell.querySelector("#mobileBannerCount");
+  const addButton = shell.querySelector("#mobileBannerAdd");
+  const list = shell.querySelector("#mobileBannerList");
+
+  if (!adminPanel || !count || !addButton || !list) return;
+
+  const isAdmin = !!profileState?.isAdmin;
+  if (!isAdmin) adminPanel.hidden = true;
+
+  count.textContent = `${bannerState.images.length}/${maxBannerImages}`;
+  addButton.disabled = !isAdmin || bannerState.images.length >= maxBannerImages;
+
+  if (bannerState.images.length === 0) {
+    list.innerHTML = `<div class="mobile-banner-empty">등록된 배너 이미지가 없습니다.</div>`;
+    return;
+  }
+
+  list.innerHTML = bannerState.images.map((src, index) => `
+    <div class="mobile-banner-item">
+      <img class="mobile-banner-thumb" src="${src}" alt="배너 ${index + 1}">
+      <span class="mobile-banner-label">배너 이미지 ${index + 1}</span>
+      <button type="button" class="mobile-banner-delete-button" data-delete-banner="${index}">삭제</button>
+    </div>
+  `).join("");
+
+  list.querySelectorAll("[data-delete-banner]").forEach((button) => {
+    button.addEventListener("click", () => deleteBannerImage(Number(button.dataset.deleteBanner)));
+  });
+}
+
+function toggleBannerAdmin() {
+  if (!assertBannerAdmin()) return;
+
+  const admin = shell.querySelector("#mobileBannerAdmin");
+  if (!admin) return;
+
+  admin.hidden = !admin.hidden;
+  renderBannerAdmin();
+}
+
+async function handleBannerUpload(event) {
+  if (!assertBannerAdmin()) return;
+
+  const input = event.target;
+  const files = Array.from(input.files || []);
+  const available = maxBannerImages - bannerState.images.length;
+
+  if (available <= 0) {
+    alert("배너 이미지는 최대 4장까지 등록할 수 있습니다.");
+    input.value = "";
+    return;
+  }
+
+  const selected = files.slice(0, available);
+  if (selected.length < files.length) {
+    alert("최대 4장까지만 등록됩니다.");
+  }
+
+  try {
+    const encoded = [];
+    for (const file of selected) {
+      encoded.push(await resizeBannerImage(file));
+    }
+
+    bannerState.images = [...bannerState.images, ...encoded].slice(0, maxBannerImages);
+    bannerState.activeIndex = Math.max(0, bannerState.images.length - encoded.length);
+    await saveBannerImages();
+    renderBannerSection();
+    alert("배너 이미지가 등록되었습니다.");
+  } catch (error) {
+    console.error(error);
+    alert("배너 이미지를 저장하지 못했습니다. 다른 이미지를 다시 시도해주세요.");
+  } finally {
+    input.value = "";
+  }
+}
+
+async function deleteBannerImage(index) {
+  if (!assertBannerAdmin()) return;
+  if (!Number.isInteger(index) || index < 0 || index >= bannerState.images.length) return;
+  if (!confirm("이 배너 이미지를 삭제할까요?")) return;
+
+  try {
+    bannerState.images.splice(index, 1);
+    bannerState.activeIndex = Math.min(bannerState.activeIndex, Math.max(0, bannerState.images.length - 1));
+    await saveBannerImages();
+    renderBannerSection();
+  } catch (error) {
+    console.error(error);
+    alert("배너 이미지를 삭제하지 못했습니다.");
+  }
+}
+
+async function saveBannerImages() {
+  if (!currentUser || !profileState?.isAdmin) return;
+
+  await setDoc(getBannerDocRef(), {
+    images: bannerState.images,
+    updatedAt: new Date().toISOString(),
+    updatedBy: currentUser.uid
+  }, { merge: true });
+}
+
+function resizeBannerImage(file) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) {
+      reject(new Error("이미지 파일만 등록할 수 있습니다."));
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const image = new Image();
+
+      image.onload = () => {
+        const maxWidth = 960;
+        const maxHeight = 420;
+        const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+        const canvas = document.createElement("canvas");
+        const context = canvas.getContext("2d");
+
+        canvas.width = width;
+        canvas.height = height;
+        context.fillStyle = "#ffffff";
+        context.fillRect(0, 0, width, height);
+        context.drawImage(image, 0, 0, width, height);
+
+        resolve(canvas.toDataURL("image/jpeg", 0.78));
+      };
+
+      image.onerror = reject;
+      image.src = reader.result;
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function assertBannerAdmin() {
+  if (profileState?.isAdmin) return true;
+  alert("관리자만 배너를 수정할 수 있습니다.");
+  return false;
+}
+
+function handleBannerTouchStart(event) {
+  bannerState.touchStartX = event.changedTouches[0]?.clientX || 0;
+  bannerState.touchEndX = bannerState.touchStartX;
+}
+
+function handleBannerTouchEnd(event) {
+  bannerState.touchEndX = event.changedTouches[0]?.clientX || bannerState.touchStartX;
+  const distance = bannerState.touchStartX - bannerState.touchEndX;
+
+  if (Math.abs(distance) < 36 || bannerState.images.length <= 1) return;
+  goToBanner(distance > 0 ? bannerState.activeIndex + 1 : bannerState.activeIndex - 1);
+}
+
+function startBannerTimer() {
+  window.clearInterval(bannerState.timer);
+  if (bannerState.images.length <= 1) return;
+
+  bannerState.timer = window.setInterval(() => {
+    goToBanner(bannerState.activeIndex + 1, false);
+  }, bannerAutoDelay);
+}
+
+function goToBanner(index, restartTimer = true) {
+  const count = Math.max(1, bannerState.images.length);
+  bannerState.activeIndex = ((index % count) + count) % count;
+
+  const track = shell?.querySelector("#mobileBannerTrack");
+  if (track) {
+    track.style.transform = `translateX(-${bannerState.activeIndex * 100}%)`;
+  }
+
+  shell?.querySelectorAll("[data-banner-dot]").forEach((button) => {
+    button.classList.toggle("is-active", Number(button.dataset.bannerDot) === bannerState.activeIndex);
+  });
+
+  if (restartTimer) startBannerTimer();
 }
 
 function setText(id, value) {

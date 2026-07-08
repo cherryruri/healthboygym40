@@ -61,6 +61,7 @@ html[data-home-device="mobile"] .hero-expand-sticky > .review-cover-panel .all_s
 html[data-home-device="mobile"] .review-cover-panel .swiper-wrapper,
 html[data-home-device="mobile"] #brand #inc01 .list .swiper-wrapper{
   align-items:stretch !important;
+  transition-timing-function:linear !important;
 }
 
 html[data-home-device="mobile"] .review-cover-panel .review-slide,
@@ -79,28 +80,24 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide a{
   height:414px !important;
   min-height:414px !important;
   overflow:hidden !important;
-  border:1px solid rgba(3,199,90,.18) !important;
+  border:1px solid rgba(17,24,39,.10) !important;
   border-radius:14px !important;
   background:
-    linear-gradient(180deg, #ffffff 0%, #fbfdfc 58%, #f3fbf7 100%) !important;
+    linear-gradient(180deg, #ffffff 0%, #fbfbfc 58%, #f4f5f7 100%) !important;
   box-shadow:0 20px 56px rgba(0,0,0,.30) !important;
 }
 
 html[data-home-device="mobile"] .review-cover-panel .review-slide a::before,
 html[data-home-device="mobile"] #brand #inc01 .list .review-slide a::before{
-  content:"NAVER REVIEW" !important;
-  top:18px !important;
-  left:18px !important;
-  color:#03c75a !important;
-  font-size:9.5px !important;
-  font-weight:950 !important;
-  letter-spacing:.05em !important;
+  content:none !important;
+  display:none !important;
 }
 
 html[data-home-device="mobile"] .review-cover-panel .review-card-text,
 html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-card-text{
   display:grid !important;
-  grid-template-rows:auto auto minmax(0, 1fr) auto auto !important;
+  grid-template-rows:auto auto auto auto auto !important;
+  align-content:start !important;
   gap:0 !important;
   inset:0 !important;
   left:0 !important;
@@ -108,7 +105,7 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-card-t
   bottom:auto !important;
   min-height:0 !important;
   height:100% !important;
-  padding:40px 18px 18px !important;
+  padding:20px 18px 18px !important;
   overflow:hidden !important;
 }
 
@@ -137,6 +134,7 @@ html[data-home-device="mobile"] .review-cover-panel .review-copy,
 html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-copy{
   min-height:0 !important;
   max-height:none !important;
+  margin:0 !important;
   overflow:hidden !important;
   display:-webkit-box !important;
   -webkit-box-orient:vertical !important;
@@ -155,11 +153,11 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-tags{
   align-content:flex-start !important;
   gap:6px !important;
   width:100% !important;
-  max-height:68px !important;
-  margin:14px 0 0 !important;
-  padding-top:12px !important;
+  max-height:62px !important;
+  margin:7px 0 0 !important;
+  padding-top:0 !important;
   overflow:hidden !important;
-  border-top:1px solid #edf2f0 !important;
+  border-top:0 !important;
 }
 
 html[data-home-device="mobile"] .review-cover-panel .review-tags span,
@@ -169,11 +167,11 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-tags s
   max-width:100% !important;
   min-height:26px !important;
   padding:5px 9px 5px 6px !important;
-  border:1px solid rgba(3,199,90,.22) !important;
+  border:1px solid rgba(17,24,39,.12) !important;
   border-radius:999px !important;
-  background:#f1fbf5 !important;
-  color:#118246 !important;
-  -webkit-text-fill-color:#118246 !important;
+  background:rgba(243,244,246,.88) !important;
+  color:#5f6670 !important;
+  -webkit-text-fill-color:#5f6670 !important;
   font-size:10px !important;
   font-weight:850 !important;
   line-height:1 !important;
@@ -191,10 +189,10 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-tags s
   height:17px !important;
   margin-right:5px !important;
   border-radius:50% !important;
-  background:#fff !important;
+  background:rgba(255,255,255,.82) !important;
   font-size:10px !important;
   line-height:1 !important;
-  box-shadow:0 1px 4px rgba(3,199,90,.16) !important;
+  box-shadow:0 1px 4px rgba(17,24,39,.08) !important;
 }
 
 html[data-home-device="mobile"] .review-cover-panel .review-tags span:nth-child(n+4),
@@ -210,9 +208,9 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-more{
   width:max-content !important;
   max-width:100% !important;
   min-height:22px !important;
-  margin-top:11px !important;
-  color:#03a84e !important;
-  -webkit-text-fill-color:#03a84e !important;
+  margin-top:10px !important;
+  color:#4b5563 !important;
+  -webkit-text-fill-color:#4b5563 !important;
   font-size:12px !important;
   font-weight:900 !important;
   line-height:1 !important;
@@ -228,7 +226,7 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-more{
 
   html[data-home-device="mobile"] .review-cover-panel .review-card-text,
   html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-card-text{
-    padding:38px 16px 16px !important;
+    padding:18px 16px 16px !important;
   }
 
   html[data-home-device="mobile"] .review-cover-panel .review-title,

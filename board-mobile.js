@@ -268,18 +268,27 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
     listEl.innerHTML = `<div class="mobile-board-loading">게시글을 불러오는 중입니다</div>`;
 
     try{
-      const q = query(
-        collection(db, "boards"),
-        where("board", "in", communityBoardNames),
-        orderBy("createdAt", "desc")
+      const snaps = await Promise.all(
+        communityBoardNames.map(boardName=>
+          getDocs(
+            query(
+              collection(db, "boards"),
+              where("board", "==", boardName),
+              orderBy("createdAt", "desc")
+            )
+          )
+        )
       );
-      const snap = await getDocs(q);
+
       posts = [];
 
-      snap.forEach(docSnap=>{
-        posts.push({ id:docSnap.id, data:docSnap.data() });
+      snaps.forEach(snap=>{
+        snap.forEach(docSnap=>{
+          posts.push({ id:docSnap.id, data:docSnap.data() });
+        });
       });
 
+      posts.sort((a, b)=>getCreatedTime(b.data) - getCreatedTime(a.data));
       renderPosts();
     }catch(error){
       console.log(error);
@@ -388,6 +397,17 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   function getAvatarText(writer){
     const text = String(writer || "U").trim();
     return text ? text.charAt(0).toUpperCase() : "U";
+  }
+
+  function getCreatedTime(post){
+    const createdAt = post.createdAt;
+
+    if(createdAt && createdAt.toDate){
+      return createdAt.toDate().getTime();
+    }
+
+    const time = new Date(createdAt || 0).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   function timeAgo(timestamp){

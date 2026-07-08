@@ -219,10 +219,6 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   }
 
   function updateUrl(){
-    const query = activeCategory === "all"
-      ? "board=free"
-      : getWriteQueryString().replace("board=", "view=").replace("category=", "category=");
-
     if(activeCategory === "all"){
       history.replaceState(null, "", "board.html");
       return;
@@ -325,7 +321,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
           ${thumb ? `<div class="mobile-post-thumb"><img src="${escapeAttr(thumb)}" alt=""></div>` : ""}
         </div>
         <div class="mobile-post-meta">
-          <span class="point ${point > 0 ? "has-point" : ""}">원 ${formatNumber(point)}</span>
+          <span class="point ${point > 0 ? "has-point" : ""}">${formatNumber(point)}원</span>
           <span>♥ ${formatNumber(data.likes || data.likeCount || 0)}</span>
           <span>● ${formatNumber(data.commentCount || data.comments || 0)}</span>
           <time>${escapeHTML(timeAgo(data.createdAt))}</time>
@@ -418,7 +414,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
-      .replace(/\"/g, "&quot;")
+      .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
   }
 

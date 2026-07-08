@@ -146,7 +146,7 @@ html[data-home-device="desktop"] #brand #inc01 .list .review-slide .review-tags 
   padding:5px 10px 5px 6px !important;
   border:1px solid rgba(17,24,39,.12) !important;
   border-radius:999px !important;
-  background:rgba(243,244,246,.88) !important;
+  background:#f3f4f6 !important;
   color:#5f6670 !important;
   -webkit-text-fill-color:#5f6670 !important;
   font-size:11px !important;
@@ -166,7 +166,7 @@ html[data-home-device="desktop"] #brand #inc01 .list .review-slide .review-tags 
   height:18px !important;
   margin-right:5px !important;
   border-radius:50% !important;
-  background:rgba(255,255,255,.82) !important;
+  background:#ffffff !important;
   font-size:11px !important;
   line-height:1 !important;
   box-shadow:0 1px 4px rgba(17,24,39,.08) !important;

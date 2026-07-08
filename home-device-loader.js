@@ -6,6 +6,8 @@
     isMobile ? "mobile" : "desktop";
   var currentScript =
     document.currentScript;
+  var assetVersion =
+    "20260709-review-gray-flow";
 
   document.documentElement.setAttribute("data-home-device", device);
   window.HEALTHBOY_HOME_DEVICE =
@@ -15,6 +17,11 @@
     return currentScript
       ? currentScript.getAttribute(name)
       : "";
+  }
+
+  function withAssetVersion(url){
+    if(!url) return "";
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + "hbv=" + assetVersion;
   }
 
   function escapeAttr(value){
@@ -61,10 +68,14 @@
   }
 
   loadStyle(
-    getAttr(device === "mobile" ? "data-mobile-css" : "data-desktop-css")
+    withAssetVersion(
+      getAttr(device === "mobile" ? "data-mobile-css" : "data-desktop-css")
+    )
   );
 
   loadScript(
-    getAttr(device === "mobile" ? "data-mobile-js" : "data-desktop-js")
+    withAssetVersion(
+      getAttr(device === "mobile" ? "data-mobile-js" : "data-desktop-js")
+    )
   );
 })();

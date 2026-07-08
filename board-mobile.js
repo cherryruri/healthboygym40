@@ -90,6 +90,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   let currentUser = null;
   let currentUserData = null;
+  let authReady = false;
   let posts = [];
   let activeCategory = getInitialCategory();
   let activeGroup = getGroupForCategory(activeCategory);
@@ -101,16 +102,23 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   document.addEventListener("DOMContentLoaded", initMobileBoard);
 
   onAuthStateChanged(auth, async user=>{
+    authReady = true;
     currentUser = user;
     currentUserData = await loadUserData(user);
-    renderPosts();
+
+    if(shell){
+      await loadPosts();
+    }
   });
 
   async function initMobileBoard(){
     mountShell();
     bindOriginalWriteButton();
     renderTabs();
-    await loadPosts();
+
+    if(authReady){
+      await loadPosts();
+    }
   }
 
   function getInitialCategory(){
@@ -264,6 +272,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   async function loadPosts(){
     if(!listEl) return;
+
+    if(!currentUser){
+      listEl.innerHTML = `<div class="mobile-board-empty">로그인 후 게시글을 확인할 수 있습니다.</div>`;
+      return;
+    }
 
     listEl.innerHTML = `<div class="mobile-board-loading">게시글을 불러오는 중입니다</div>`;
 

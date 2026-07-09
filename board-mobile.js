@@ -152,6 +152,9 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       </div>
       <nav class="mobile-board-tabs" aria-label="게시판 큰 분류"></nav>
       <nav class="mobile-board-subtabs" aria-label="게시판 세부 분류"></nav>
+      <div class="mobile-board-actions">
+        <button type="button" class="mobile-board-write-btn" data-mobile-write>글쓰기</button>
+      </div>
       <div class="mobile-board-list"><div class="mobile-board-loading">게시글을 불러오는 중입니다</div></div>
     `;
 
@@ -163,6 +166,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
     shell.addEventListener("click", event=>{
       const backButton = event.target.closest("[data-mobile-back]");
+      const writeButton = event.target.closest("[data-mobile-write]");
       const groupButton = event.target.closest("[data-mobile-group]");
       const categoryButton = event.target.closest("[data-mobile-category]");
 
@@ -172,6 +176,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         }else{
           location.href = "index.html";
         }
+        return;
+      }
+
+      if(writeButton){
+        goWrite();
         return;
       }
 
@@ -195,15 +204,18 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
       event.preventDefault();
       event.stopImmediatePropagation();
-
-      if(!currentUser){
-        alert("로그인한 회원만 글을 쓸 수 있습니다.");
-        location.href = "login.html";
-        return;
-      }
-
-      location.href = `editor.html?${getWriteQueryString()}`;
+      goWrite();
     }, true);
+  }
+
+  function goWrite(){
+    if(!currentUser){
+      alert("로그인한 회원만 글을 쓸 수 있습니다.");
+      location.href = "login.html";
+      return;
+    }
+
+    location.href = `editor.html?${getWriteQueryString()}`;
   }
 
   function setGroup(group){
@@ -272,11 +284,6 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   async function loadPosts(){
     if(!listEl) return;
-
-    if(!currentUser){
-      listEl.innerHTML = `<div class="mobile-board-empty">로그인 후 게시글을 확인할 수 있습니다.</div>`;
-      return;
-    }
 
     listEl.innerHTML = `<div class="mobile-board-loading">게시글을 불러오는 중입니다</div>`;
 

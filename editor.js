@@ -69,7 +69,10 @@ const boardNames = {
 const categoryNames = {
   free: "자유게시판",
   praise: "칭찬합니다",
+  diet: "운동&식단 인증",
   pt: "PT후기",
+  before_after: "비포&애프터",
+  challenge: "바디챌린지후기",
   request: "건의 사항",
   info: "인포게시판",
   notice: "공지문",
@@ -251,6 +254,12 @@ submitBtn.addEventListener("click", async ()=>{
 
   if(!ensureOfficialPermission()) return;
 
+  if(!currentUser){
+    alert("로그인한 회원만 글을 쓸 수 있습니다.");
+    location.href = "login.html";
+    return;
+  }
+
   const title = titleInput.value.trim();
   const content = contentBox.innerHTML.trim();
   const isOfficial = officialBoards.has(effectiveBoard);
@@ -278,23 +287,32 @@ submitBtn.addEventListener("click", async ()=>{
     isNotice: isOfficial
   };
 
-  if(editId){
-    await updateDoc(doc(db, "boards", editId), payload);
-    alert("수정되었습니다.");
-    location.href = `post.html?id=${editId}`;
-    return;
+  submitBtn.disabled = true;
+
+  try{
+    if(editId){
+      await updateDoc(doc(db, "boards", editId), payload);
+      alert("수정되었습니다.");
+      location.href = `post.html?id=${editId}`;
+      return;
+    }
+
+    await addDoc(collection(db, "boards"), {
+      ...payload,
+      writerId: currentUser.email.split("@")[0],
+      writerUid: currentUser.uid,
+      views: 0,
+      createdAt: serverTimestamp()
+    });
+
+    alert("글이 등록되었습니다.");
+    location.href = `board.html?board=${effectiveBoard}`;
+  }catch(error){
+    console.error(error);
+    alert("게시글을 등록하지 못했습니다. 잠시 후 다시 시도해주세요.");
+  }finally{
+    submitBtn.disabled = false;
   }
-
-  await addDoc(collection(db, "boards"), {
-    ...payload,
-    writerId: currentUser.email.split("@")[0],
-    writerUid: currentUser.uid,
-    views: 0,
-    createdAt: serverTimestamp()
-  });
-
-  alert("글이 등록되었습니다.");
-  location.href = `board.html?board=${effectiveBoard}`;
 });
 
 if(fontSizeSelect){

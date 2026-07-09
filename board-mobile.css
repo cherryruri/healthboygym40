@@ -8,16 +8,12 @@
     color:#20242b;
   }
 
-  body.mobile-board-view header{
-    display:none !important;
-  }
-
   body.mobile-board-view .board-page{
     width:100%;
     max-width:430px !important;
     min-height:100vh;
     margin:0 auto !important;
-    padding:0 18px 54px !important;
+    padding:86px 18px 54px !important;
     background:#fff !important;
   }
 
@@ -39,8 +35,8 @@
   }
 
   .mobile-board-appbar{
-    height:58px;
-    display:flex;
+    display:none;
+    height:0;
     align-items:center;
     justify-content:space-between;
     background:#fff;
@@ -102,9 +98,10 @@
   .mobile-board-subtabs{
     display:flex;
     align-items:center;
+    justify-content:center;
     gap:8px;
     min-height:48px;
-    padding:10px 10px;
+    padding:10px 8px;
     overflow-x:auto;
     background:#fafafa;
     -webkit-overflow-scrolling:touch;
@@ -138,6 +135,28 @@
   .mobile-board-subtabs button.active{
     background:#ffecad;
     color:#c4911f;
+  }
+
+  .mobile-board-actions{
+    display:flex;
+    justify-content:flex-end;
+    padding:12px 2px 4px;
+    background:#fff;
+  }
+
+  .mobile-board-write-btn{
+    height:38px;
+    padding:0 18px;
+    border:0;
+    border-radius:999px;
+    background:#111;
+    color:#fff;
+    font-size:13px !important;
+    font-weight:900 !important;
+    line-height:1 !important;
+    letter-spacing:0 !important;
+    box-shadow:0 10px 20px rgba(0,0,0,.14);
+    cursor:pointer;
   }
 
   .mobile-board-list{

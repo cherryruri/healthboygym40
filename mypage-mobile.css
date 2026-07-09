@@ -3,7 +3,6 @@
     background: #ffffff;
   }
 
-  body.mobile-mypage-ready > header,
   body.mobile-mypage-ready .my-welcome {
     display: none !important;
   }
@@ -13,7 +12,7 @@
     max-width: 390px;
     min-height: 100vh;
     margin: 0 auto;
-    padding: 0 !important;
+    padding: 76px 0 0 !important;
     background: #f2f2f2;
     box-shadow: none;
   }
@@ -26,14 +25,14 @@
 
   .mobile-mypage-shell {
     display: block;
-    min-height: 100vh;
+    min-height: calc(100vh - 76px);
     color: #0b0b0b;
     background: #f2f2f2;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
   .mobile-mypage-page {
-    min-height: 100vh;
+    min-height: calc(100vh - 76px);
     box-sizing: border-box;
   }
 
@@ -42,7 +41,7 @@
   }
 
   .mobile-mypage-home {
-    padding: 42px 22px 34px;
+    padding: 24px 22px 34px;
   }
 
   .mobile-profile-head {
@@ -336,7 +335,7 @@
   }
 
   .mobile-mypage-edit {
-    padding: 64px 27px 40px;
+    padding: 28px 27px 40px;
   }
 
   .mobile-edit-section + .mobile-edit-section {

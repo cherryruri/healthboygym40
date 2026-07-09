@@ -1,4 +1,8 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
+import {
+  initializeApp,
+  getApp,
+  getApps
+} from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 
 import {
   getAuth,
@@ -27,7 +31,7 @@ const firebaseConfig = {
   measurementId: "G-4CJK3XF633"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 

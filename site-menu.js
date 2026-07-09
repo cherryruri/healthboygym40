@@ -34,10 +34,12 @@
       <a href="index.html#trainer">트레이너 소개</a>
       <a href="index.html#hours">운영시간</a>
       <a href="index.html#location">오시는 길</a>
+      <a href="board.html">게시판</a>
+      <a href="board.html?board=noticeboard">공지문 / 뉴스</a>
+      <a href="index.html#newsHub">새 소식</a>
       <a href="index.html#faq">자주 묻는 질문</a>
       <span class="mobile-menu-section-title member">수내점 회원 전용</span>
       <a href="board.html?board=free">자유게시판</a>
-      <a href="board.html?board=noticeboard">공지문 / 뉴스</a>
       <a href="board.html?board=infoboard" data-admin-only hidden>인포게시판</a>
     </nav>
   `;

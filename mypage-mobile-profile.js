@@ -18,6 +18,7 @@ const db = getFirestore(app);
 const mobileQuery = window.matchMedia("(max-width: 768px)");
 const maxBannerImages = 4;
 const bannerAutoDelay = 4200;
+const adminIds = new Set(["cherryruri"]);
 
 let currentUser = null;
 let profileState = null;
@@ -117,11 +118,11 @@ function getShellMarkup() {
       </div>
 
       <section class="mobile-banner-section" id="mobileBannerSection" aria-label="이벤트 배너">
-        <button type="button" class="mobile-banner-edit-button" id="mobileBannerEdit" hidden>수정하기</button>
         <div class="mobile-promo-card mobile-promo-slider" id="mobileBannerSlider">
           <div class="mobile-promo-track" id="mobileBannerTrack"></div>
           <div class="mobile-promo-dots" id="mobileBannerDots" aria-label="배너 선택"></div>
         </div>
+        <button type="button" class="mobile-banner-edit-button" id="mobileBannerEdit" hidden>변경하기</button>
         <div class="mobile-banner-admin" id="mobileBannerAdmin" hidden>
           <div class="mobile-banner-admin-top">
             <strong class="mobile-banner-title">배너 이미지</strong>
@@ -280,7 +281,7 @@ async function loadProfile(user) {
     memberText: getMemberText(data),
     program: getProgram(data),
     photo: data.photoDataUrl || data.profileImage || user.photoURL || "",
-    isAdmin: isAdminUser(data)
+    isAdmin: isAdminUser(data, user)
   };
 }
 
@@ -315,8 +316,17 @@ function toTitleCase(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
-function isAdminUser(data) {
-  return data.role === "admin" || data.isAdmin === true || data.admin === true || data.permission === "admin";
+function isAdminUser(data, user) {
+  const userId = getUserId(user).toLowerCase();
+  const dataId = String(data.id || data.userId || "").toLowerCase();
+  return (
+    adminIds.has(userId) ||
+    adminIds.has(dataId) ||
+    data.role === "admin" ||
+    data.isAdmin === true ||
+    data.admin === true ||
+    data.permission === "admin"
+  );
 }
 
 function getPhone(data) {

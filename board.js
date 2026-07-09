@@ -40,18 +40,24 @@ const communityBoards = ["free", "praise", "review"];
 
 let currentUser = null;
 let currentUserData = null;
-const initialBoard = new URLSearchParams(location.search).get("board") || "free";
+const boardParams = new URLSearchParams(location.search);
+const initialBoard = boardParams.get("board") || "free";
+const initialCategory = boardParams.get("category") || "";
 let currentBoard =
   adminOnlyBoards.has(initialBoard)
     ? initialBoard
     : officialBoards.has(initialBoard)
       ? "noticeboard"
-      : communityBoards.includes(initialBoard) || initialBoard === "teen"
-        ? initialBoard
+      : communityBoards.includes(initialBoard)
+        ? "free"
+        : initialBoard === "teen"
+          ? initialBoard
         : "free";
 let currentPage = 1;
 let currentCategory =
-  initialBoard === "praise"
+  initialCategory
+    ? initialCategory
+    : initialBoard === "praise"
     ? "praise"
     : initialBoard === "review"
       ? "pt"
@@ -75,17 +81,56 @@ const boardTitle = document.querySelector(".board-header h1");
 
 let boardCategoryBar = document.getElementById("boardCategoryBar");
 
+const communityCategoryGroups = [
+  {
+    value: "all",
+    label: "전체",
+    categories: []
+  },
+  {
+    value: "community",
+    label: "자유게시판",
+    categories: [
+      ["praise", "칭찬합니다"],
+      ["free", "자유게시판"],
+      ["diet", "운동&식단 인증"]
+    ]
+  },
+  {
+    value: "review",
+    label: "후기",
+    categories: [
+      ["pt", "PT후기"],
+      ["before_after", "비포&애프터"],
+      ["challenge", "바디챌린지후기"]
+    ]
+  }
+];
+
+const communityCategoryGroupMap = {
+  praise: "community",
+  free: "community",
+  diet: "community",
+  request: "community",
+  pt: "review",
+  before_after: "review",
+  challenge: "review"
+};
+
 const boardMeta = {
   free: {
     title: "자유게시판",
     desc: "수내점 회원님들의 자유로운 이야기와 칭찬, PT 후기, 건의 사항을 확인하는 공간입니다.",
     mode: "consult",
+    categoryGroups: communityCategoryGroups,
     categories: [
       ["all", "전체"],
       ["free", "자유게시판"],
       ["praise", "칭찬합니다"],
+      ["diet", "운동&식단 인증"],
       ["pt", "PT후기"],
-      ["request", "건의 사항"]
+      ["before_after", "비포&애프터"],
+      ["challenge", "바디챌린지후기"]
     ]
   },
   praise: {
@@ -176,7 +221,10 @@ function getPostCategoryLabel(post){
   const category = getPostCategory(post);
 
   if(category === "praise") return "칭찬합니다";
+  if(category === "diet") return "운동&식단 인증";
   if(category === "pt") return "PT후기";
+  if(category === "before_after") return "비포&애프터";
+  if(category === "challenge") return "바디챌린지후기";
   if(category === "trainer") return "이달의 트레이너";
   if(category === "news") return "센터소식";
   if(category === "info") return "인포게시판";
@@ -221,10 +269,51 @@ function updateCategoryBar(){
 
   if(!bar) return;
 
+  if(Array.isArray(meta.categoryGroups)){
+    const knownCategories = new Set(
+      meta.categoryGroups.flatMap(group=>group.categories.map(([value])=>value))
+    );
+    knownCategories.add("all");
+
+    if(!knownCategories.has(currentCategory)){
+      currentCategory = "all";
+    }
+
+    const activeGroup = getActiveCommunityGroup();
+    const activeGroupMeta =
+      meta.categoryGroups.find(group=>group.value === activeGroup) || meta.categoryGroups[0];
+    const subCategories = activeGroupMeta.categories || [];
+
+    bar.hidden = false;
+    bar.classList.add("is-grouped");
+    bar.innerHTML = `
+      <div class="board-category-primary">
+        ${meta.categoryGroups
+          .map(group=>`
+            <button type="button" class="${activeGroup === group.value ? "active" : ""}" data-category-group="${group.value}">
+              ${escapeHTML(group.label)}
+            </button>
+          `)
+          .join("")}
+      </div>
+      <div class="board-category-secondary" ${subCategories.length ? "" : "hidden"}>
+        ${subCategories
+          .map(([value, label])=>`
+            <button type="button" class="${currentCategory === value ? "active" : ""}" data-category="${value}">
+              ${escapeHTML(label)}
+            </button>
+          `)
+          .join("")}
+      </div>
+    `;
+    return;
+  }
+
   if(!Array.isArray(meta.categories)){
     bar.hidden = true;
     bar.innerHTML = "";
     currentCategory = "all";
+    bar.classList.remove("is-grouped");
     return;
   }
 
@@ -233,6 +322,7 @@ function updateCategoryBar(){
   }
 
   bar.hidden = false;
+  bar.classList.remove("is-grouped");
   bar.innerHTML = meta.categories
     .map(([value, label])=>`
       <button type="button" class="${currentCategory === value ? "active" : ""}" data-category="${value}">
@@ -240,6 +330,37 @@ function updateCategoryBar(){
       </button>
     `)
     .join("");
+}
+
+function getActiveCommunityGroup(){
+  if(currentCategory === "all") return "all";
+  return communityCategoryGroupMap[currentCategory] || "all";
+}
+
+function getFirstCategoryForGroup(groupValue){
+  const meta = getMeta();
+  const group =
+    Array.isArray(meta.categoryGroups)
+      ? meta.categoryGroups.find(item=>item.value === groupValue)
+      : null;
+
+  if(!group || !group.categories.length) return "all";
+  return group.categories[0][0];
+}
+
+function updateBoardUrl(){
+  if(currentBoard === "free"){
+    if(currentCategory === "all"){
+      history.replaceState(null, "", "board.html");
+      return;
+    }
+
+    const boardName = getBoardForCategory(currentCategory);
+    history.replaceState(null, "", `board.html?board=${boardName}&category=${currentCategory}`);
+    return;
+  }
+
+  history.replaceState(null, "", `board.html?board=${currentBoard}`);
 }
 
 function updateBoardInfo(){
@@ -327,12 +448,23 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
 });
 
 document.addEventListener("click", event=>{
+  const groupButton = event.target.closest("#boardCategoryBar [data-category-group]");
   const categoryButton = event.target.closest("#boardCategoryBar button");
 
-  if(!categoryButton) return;
+  if(groupButton){
+    currentCategory = getFirstCategoryForGroup(groupButton.dataset.categoryGroup);
+    currentPage = 1;
+    updateBoardUrl();
+    updateCategoryBar();
+    renderPage(currentPage);
+    return;
+  }
+
+  if(!categoryButton || !categoryButton.dataset.category) return;
 
   currentCategory = categoryButton.dataset.category || "all";
   currentPage = 1;
+  updateBoardUrl();
   updateCategoryBar();
   renderPage(currentPage);
 });
@@ -389,8 +521,20 @@ function getWriteQueryString(){
     return "board=praise&category=praise";
   }
 
+  if(currentCategory === "diet"){
+    return "board=free&category=diet";
+  }
+
   if(currentCategory === "pt"){
     return "board=review&category=pt";
+  }
+
+  if(currentCategory === "before_after"){
+    return "board=review&category=before_after";
+  }
+
+  if(currentCategory === "challenge"){
+    return "board=review&category=challenge";
   }
 
   if(currentCategory === "request"){
@@ -398,6 +542,12 @@ function getWriteQueryString(){
   }
 
   return "board=free&category=free";
+}
+
+function getBoardForCategory(category){
+  if(category === "praise") return "praise";
+  if(category === "pt" || category === "before_after" || category === "challenge") return "review";
+  return "free";
 }
 
 function getQueryBoards(){

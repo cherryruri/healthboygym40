@@ -208,6 +208,8 @@ document.body.classList.remove("welcoming");
 
   renderProfileImage("", userId);
 
+  let dashboardUserData = {};
+
   try{
     console.log("현재UID", user.uid);
     const userRef = doc(db, "users", user.uid);
@@ -216,6 +218,7 @@ console.log("문서존재", userSnap.exists());
 
     if(userSnap.exists()){
       const data = userSnap.data();
+      dashboardUserData = data;
 
       const phone = [
         data.phone1,
@@ -246,7 +249,7 @@ console.log("문서존재", userSnap.exists());
       setText(infoRole, "일반 회원");
     }
 
-   loadMyDashboard(user);
+   loadMyDashboard(user, dashboardUserData);
 
 
   }catch(error){
@@ -288,15 +291,29 @@ if(mypageBtn){
 }
 
 
-async function loadMyDashboard(user){
+async function loadMyDashboard(user, userData = {}){
 
   const myPostList = document.getElementById("myPostList");
   const myCommentList = document.getElementById("myCommentList");
+  const myRequestList = document.getElementById("myRequestList");
+  const requestDashboardTitle = document.getElementById("requestDashboardTitle");
+  const requestDashboardLink = document.getElementById("requestDashboardLink");
   const joinedDays = document.getElementById("joinedDays");
   const joinedDate = document.getElementById("joinedDate");
 
-  const userId = user.email.split("@")[0];
-  const userEmail = user.email;
+  const userEmail = user.email || "";
+  const userId = userEmail.includes("@") ? userEmail.split("@")[0] : "회원";
+  const admin = isAdminProfile(userData, user);
+
+  if(requestDashboardTitle){
+    requestDashboardTitle.textContent = admin ? "회원 1:1 문의" : "나의 1:1 문의";
+  }
+
+  if(requestDashboardLink){
+    requestDashboardLink.href = admin
+      ? "board.html?board=request&category=request&scope=all"
+      : "board.html?board=request&category=request&scope=mine";
+  }
 
   if(myPostList){
     myPostList.innerHTML = "게시물 불러오는 중...";
@@ -306,10 +323,15 @@ async function loadMyDashboard(user){
     myCommentList.innerHTML = "댓글 불러오는 중...";
   }
 
+  if(myRequestList){
+    myRequestList.innerHTML = "문의 불러오는 중...";
+  }
+
   const postSnap = await getDocs(collection(db, "boards"));
 
   let myPosts = [];
   let myComments = [];
+  let requestPosts = [];
 
   for(const docSnap of postSnap.docs){
 
@@ -321,7 +343,16 @@ async function loadMyDashboard(user){
       post.email === userEmail ||
       post.writerEmail === userEmail;
 
-    if(isMyPost){
+    const isRequest = isRequestPost(post);
+
+    if(isRequest && (admin || isMyPost)){
+      requestPosts.push({
+        id: docSnap.id,
+        ...post
+      });
+    }
+
+    if(isMyPost && !isRequest){
       myPosts.push({
         id: docSnap.id,
         ...post
@@ -366,6 +397,30 @@ async function loadMyDashboard(user){
     const bt = b.createdAt?.toDate ? b.createdAt.toDate().getTime() : 0;
     return bt - at;
   });
+
+  requestPosts.sort((a,b)=>{
+    const at = getPostTime(a);
+    const bt = getPostTime(b);
+    return bt - at;
+  });
+
+  if(myRequestList){
+    myRequestList.innerHTML = "";
+
+    if(requestPosts.length === 0){
+      myRequestList.innerHTML = `<div class="dash-item">${admin ? "요청된 1:1 문의가 없습니다." : "작성한 1:1 문의가 없습니다."}</div>`;
+    }else{
+      requestPosts.slice(0,4).forEach(post=>{
+        const answered = hasRequestAnswer(post);
+        myRequestList.innerHTML += `
+          <a class="dash-item request-dash-item" href="post.html?id=${post.id}">
+            <strong>${escapeHTML(post.title || "제목 없음")}</strong>
+            <em class="${answered ? "done" : ""}">${answered ? "답변이 완료되었습니다" : "답변대기중"}</em>
+          </a>
+        `;
+      });
+    }
+  }
 
   if(myPostList){
     myPostList.innerHTML = "";
@@ -422,6 +477,48 @@ async function loadMyDashboard(user){
       }
     }
   }
+}
+
+function isAdminProfile(data, user){
+  const adminIds = new Set(["cherryruri"]);
+  const email = user?.email || "";
+  const userId = email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+  const dataId = String(data?.id || data?.userId || "").toLowerCase();
+
+  return (
+    data?.role === "admin" ||
+    data?.isAdmin === true ||
+    data?.admin === true ||
+    data?.permission === "admin" ||
+    adminIds.has(userId) ||
+    adminIds.has(dataId)
+  );
+}
+
+function isRequestPost(post){
+  if(!post) return false;
+  if(post.category === "request") return true;
+  return post.board === "free" && (post.isSecret || post.isPublic === false);
+}
+
+function hasRequestAnswer(post){
+  return !!(post && (post.isAnswered || post.answer || post.answerText || post.answeredAt));
+}
+
+function getPostTime(post){
+  const createdAt = post?.createdAt;
+  if(createdAt?.toDate) return createdAt.toDate().getTime();
+  const time = new Date(createdAt || 0).getTime();
+  return Number.isFinite(time) ? time : 0;
+}
+
+function escapeHTML(value){
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 const editProfileBtn = document.getElementById("editProfileBtn");
 const saveProfileBtn = document.getElementById("saveProfileBtn");

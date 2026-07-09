@@ -59,6 +59,7 @@ const editId = params.get("id");
 const boardNames = {
   free: "자유게시판",
   praise: "칭찬합니다",
+  request: "1:1 문의",
   noticeboard: "공지문 / 뉴스",
   infoboard: "인포게시판",
   review: "PT후기",
@@ -73,7 +74,7 @@ const categoryNames = {
   pt: "PT후기",
   before_after: "비포&애프터",
   challenge: "바디챌린지후기",
-  request: "건의 사항",
+  request: "1:1 문의",
   info: "인포게시판",
   notice: "공지문",
   news: "센터소식",
@@ -348,7 +349,9 @@ submitBtn.addEventListener("click", async ()=>{
     }
 
     alert("글이 등록되었습니다.");
-    location.href = `board.html?board=${effectiveBoard}`;
+    location.href = category === "request"
+      ? "board.html?board=request&category=request"
+      : `board.html?board=${effectiveBoard}`;
   }catch(error){
     console.error(error);
     alert(`게시글을 등록하지 못했습니다. ${error.code || error.message || "잠시 후 다시 시도해주세요."}`);

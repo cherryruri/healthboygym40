@@ -289,7 +289,7 @@ body.welcoming .mobile-bottom-nav{
 
   .mypage-dashboard{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,minmax(0,1fr));
     gap:24px;
   }
 
@@ -312,10 +312,26 @@ body.welcoming .mobile-bottom-nav{
 
   .dash-card h3{
     color:#111;
-    font-size:26px;
+    font-size:24px;
     font-weight:900;
     letter-spacing:-0.06em;
     margin-bottom:20px;
+  }
+
+  .dash-title-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  .dash-title-row a{
+    flex-shrink:0;
+    color:#777;
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-decoration:none;
   }
 
   .dash-list{
@@ -336,6 +352,31 @@ body.welcoming .mobile-bottom-nav{
     text-decoration:none;
     font-weight:800;
     line-height:1.5;
+  }
+
+  .request-dash-item strong{
+    display:block;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .request-dash-item em{
+    display:inline-flex;
+    align-items:center;
+    margin-top:8px;
+    padding:5px 9px;
+    border-radius:999px;
+    background:#fff3c4;
+    color:#8a6500;
+    font-style:normal;
+    font-size:11px;
+    font-weight:900;
+  }
+
+  .request-dash-item em.done{
+    background:#111;
+    color:#fff200;
   }
 
   .joined-card{

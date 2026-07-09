@@ -40,6 +40,7 @@ const firebaseConfig = {
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const adminIds = new Set(["cherryruri"]);
 
 /* ================= STATE ================= */
 
@@ -58,6 +59,10 @@ const statusEl = document.getElementById("postStatus");
 const commentList = document.getElementById("commentList");
 const commentText = document.getElementById("commentText");
 const commentBtn = document.getElementById("commentBtn");
+const commentSection = document.querySelector(".comment-section");
+const commentHeading = document.querySelector(".comment-section h3");
+const commentInput = document.querySelector(".comment-input");
+const postActions = document.getElementById("postActions");
 
 /* ================= LOAD POST ================= */
 
@@ -80,8 +85,23 @@ async function loadUserData(user){
   }
 }
 
+function getCurrentUserId(){
+  const email = currentUser?.email || "";
+  return email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+}
+
 function isAdmin(){
-  return currentUserData && currentUserData.role === "admin";
+  const userId = getCurrentUserId();
+  const dataId = String(currentUserData?.id || currentUserData?.userId || "").toLowerCase();
+
+  return (
+    currentUserData?.role === "admin" ||
+    currentUserData?.isAdmin === true ||
+    currentUserData?.admin === true ||
+    currentUserData?.permission === "admin" ||
+    adminIds.has(userId) ||
+    adminIds.has(dataId)
+  );
 }
 
 function isAdminOnlyPost(post){
@@ -92,6 +112,29 @@ function isRequestPost(post){
   if(!post) return false;
   if(post.category === "request") return true;
   return post.board === "free" && (post.isSecret || post.isPublic === false);
+}
+
+function isPostOwner(post){
+  if(!currentUser || !post) return false;
+
+  const email = currentUser.email || "";
+  const userId = email.includes("@") ? email.split("@")[0] : "";
+
+  return (
+    post.writerUid === currentUser.uid ||
+    post.writerEmail === email ||
+    post.email === email ||
+    post.writerId === userId ||
+    post.writer === userId
+  );
+}
+
+function hasRequestAnswer(post){
+  return !!(post && (post.isAnswered || post.answer || post.answerText || post.answeredAt));
+}
+
+function getRequestStatusText(post){
+  return hasRequestAnswer(post) ? "답변이 완료되었습니다" : "답변대기중";
 }
 
 async function loadPost() {
@@ -124,6 +167,18 @@ async function loadPost() {
     return false;
   }
 
+  if(data.isSecret && !isAdmin() && !isPostOwner(data)){
+    if(currentUser){
+      alert("비공개 문의입니다. 작성자만 볼 수 있어요.");
+      location.href = "board.html";
+    }else{
+      alert("로그인 후 확인할 수 있는 비공개 문의입니다.");
+      location.href = "login.html";
+    }
+
+    return false;
+  }
+
   currentPost = data;
 
   titleEl.textContent = data.title;
@@ -134,7 +189,19 @@ async function loadPost() {
     dateEl.textContent = data.createdAt.toDate().toLocaleDateString("ko-KR");
   }
 
-  statusEl.textContent = isAdminOnlyPost(data) ? "관리자 전용" : data.isPublic ? "공개글" : "비밀글";
+  statusEl.textContent =
+    isRequestPost(data)
+      ? getRequestStatusText(data)
+      : isAdminOnlyPost(data)
+        ? "관리자 전용"
+        : data.isPublic
+          ? "공개글"
+          : "비밀글";
+  statusEl.classList.toggle("done", isRequestPost(data) && hasRequestAnswer(data));
+
+  setupPostActions(data);
+  setupCommentUi(data);
+  markRequestAnswerRead(data);
 
   return true;
 }
@@ -152,12 +219,39 @@ async function loadComments() {
 
   const snap = await getDocs(q);
 
-  snap.forEach((docSnap) => {
+  const comments = [];
 
-    const c = docSnap.data();
+  snap.forEach((docSnap) => {
+    comments.push({
+      id: docSnap.id,
+      data: docSnap.data()
+    });
+  });
+
+  const requestMode = isRequestPost(currentPost);
+  const visibleComments = requestMode
+    ? comments.filter(({ data })=>data.writerRole === "admin" || data.isAdminAnswer === true)
+    : comments;
+
+  if(requestMode && visibleComments.length === 0){
+    commentList.innerHTML = `<div class="request-answer-empty">아직 답변이 등록되지 않았습니다.</div>`;
+    return;
+  }
+
+  visibleComments.forEach(({ id, data:c }) => {
 
 const isMine = currentUser?.email?.split("@")[0] === c.writer;
 const isLiked = c.likedBy?.includes(currentUser?.email);
+const canEditComment = requestMode ? isAdmin() && isMine : isMine;
+const likeMarkup = requestMode ? "" : `
+<button class="like-btn ${isLiked ? "liked" : ""}" data-id="${id}">
+  ${isLiked ? "💛" : "🤍"} ${c.likes || 0}
+</button>
+`;
+const actionsMarkup = canEditComment ? `
+  <button class="edit-comment-btn" data-id="${id}">수정</button>
+  <button class="delete-comment-btn" data-id="${id}">삭제</button>
+` : "";
 
 const div = document.createElement("div");
 div.className = "comment";
@@ -180,10 +274,7 @@ div.innerHTML = `
   <span class="writer">${c.writer}</span>
   <span class="time">${timeAgo(c.createdAt)}</span>
 
-
-<button class="like-btn ${isLiked ? "liked" : ""}" data-id="${docSnap.id}">
-  ${isLiked ? "💛" : "🤍"} ${c.likes || 0}
-</button>
+${likeMarkup}
 
 </div>
 
@@ -196,10 +287,7 @@ div.innerHTML = `
             ${c.text}
           </div>
 
-${isMine ? `
-  <button class="edit-comment-btn" data-id="${docSnap.id}">수정</button>
-  <button class="delete-comment-btn" data-id="${docSnap.id}">삭제</button>
-` : ""}
+${actionsMarkup}
   
 
         </div>
@@ -226,13 +314,21 @@ commentBtn.addEventListener("click", async ()=>{
 
   if(!commentText.value.trim()) return;
 
+  if(isRequestPost(currentPost) && !isAdmin()){
+    alert("1:1 문의 답변은 관리자만 등록할 수 있습니다.");
+    return;
+  }
+
+  const answerText = commentText.value.trim();
+
   await addDoc(
     collection(db, "boards", postId, "comments"),
     {
-      text: commentText.value,
+      text: answerText,
       writer: currentUser.email.split("@")[0],
       writerUid: currentUser.uid,
       writerRole: isAdmin() ? "admin" : "user",
+      isAdminAnswer: isAdmin() && isRequestPost(currentPost),
       createdAt: serverTimestamp()
     }
   );
@@ -240,9 +336,25 @@ commentBtn.addEventListener("click", async ()=>{
   if(isAdmin() && isRequestPost(currentPost)){
     await updateDoc(doc(db, "boards", postId), {
       isAnswered: true,
+      answer: answerText,
+      answerText,
       answeredAt: serverTimestamp(),
       answeredBy: currentUser.uid
     });
+
+    currentPost = {
+      ...currentPost,
+      isAnswered: true,
+      answer: answerText,
+      answerText,
+      answeredAt: new Date().toISOString(),
+      answeredBy: currentUser.uid
+    };
+
+    if(statusEl){
+      statusEl.textContent = getRequestStatusText(currentPost);
+      statusEl.classList.add("done");
+    }
   }
 
   commentText.value = "";
@@ -345,6 +457,7 @@ function timeAgo(timestamp) {
 commentList.addEventListener("click", async (e)=>{
 
   if(e.target.classList.contains("like-btn")){
+    if(isRequestPost(currentPost)) return;
 
     const id = e.target.dataset.id;
 
@@ -421,17 +534,84 @@ const editBtn = document.getElementById("editPostBtn");
 const deleteBtn = document.getElementById("deletePostBtn");
 
 // 수정
-editBtn.addEventListener("click", () => {
-  location.href = `editor.html?id=${postId}`;
-});
+if(editBtn){
+  editBtn.addEventListener("click", () => {
+    if(!currentPost || (!isAdmin() && !isPostOwner(currentPost))) return;
+    location.href = `editor.html?id=${postId}`;
+  });
+}
 
 // 삭제
-deleteBtn.addEventListener("click", async () => {
+if(deleteBtn){
+  deleteBtn.addEventListener("click", async () => {
 
-  if(!confirm("정말 삭제하시겠습니까?")) return;
+    if(!currentPost || (!isAdmin() && !isPostOwner(currentPost))) return;
+    if(!confirm("정말 삭제하시겠습니까?")) return;
 
-  await deleteDoc(doc(db,"boards",postId));
+    await deleteDoc(doc(db,"boards",postId));
 
-  alert("삭제되었습니다.");
-  location.href = `board.html?board=${currentPost?.board || "free"}`;
-});
+    alert("삭제되었습니다.");
+    location.href = isRequestPost(currentPost)
+      ? "board.html?board=request&category=request"
+      : `board.html?board=${currentPost?.board || "free"}`;
+  });
+}
+
+function setupPostActions(post){
+  if(!postActions) return;
+
+  const canManage = isAdmin() || isPostOwner(post);
+  postActions.hidden = !canManage;
+  postActions.classList.toggle("show", canManage);
+}
+
+function setupCommentUi(post){
+  const requestMode = isRequestPost(post);
+
+  if(commentSection){
+    commentSection.classList.toggle("request-answer-section", requestMode);
+  }
+
+  if(commentHeading){
+    commentHeading.textContent = requestMode ? "관리자 답변" : "댓글";
+  }
+
+  if(commentInput){
+    commentInput.hidden = requestMode && !isAdmin();
+  }
+
+  if(commentText){
+    commentText.placeholder = requestMode ? "답변 내용을 입력해주세요." : "";
+  }
+
+  if(commentBtn){
+    commentBtn.textContent = requestMode ? "답변달기" : "등록";
+  }
+}
+
+function markRequestAnswerRead(post){
+  if(!currentUser || isAdmin() || !isRequestPost(post) || !isPostOwner(post) || !hasRequestAnswer(post)) return;
+
+  const answeredAt = getRequestAnswerMarker(post);
+  localStorage.setItem(getRequestReadKey(postId), String(answeredAt));
+}
+
+function getRequestReadKey(id){
+  return `healthboyRequestRead:${currentUser?.uid || "guest"}:${id}`;
+}
+
+function getRequestAnswerMarker(post){
+  return (
+    getTimestampMs(post.answeredAt) ||
+    getTimestampMs(post.updatedAt) ||
+    getTimestampMs(post.createdAt) ||
+    1
+  );
+}
+
+function getTimestampMs(value){
+  if(!value) return 0;
+  if(value.toDate) return value.toDate().getTime();
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
+}

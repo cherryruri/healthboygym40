@@ -36,6 +36,7 @@ const initialCategory = params.get("category") || "";
 const communityBoardNames = ["free", "praise", "review"];
 const officialBoardNames = new Set(["noticeboard", "news", "infoboard"]);
 const isMobile = window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
+const adminIds = new Set(["cherryruri"]);
 
 if(!isMobile || officialBoardNames.has(initialBoard)){
   // Desktop and official boards keep the existing board renderer.
@@ -54,6 +55,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       categories:[
         ["praise", "칭찬합니다"],
         ["free", "자유게시판"],
+        ["request", "1:1 문의"],
         ["diet", "운동&식단 인증"]
       ]
     },
@@ -75,7 +77,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
     pt:"PT후기",
     before_after:"비포&애프터",
     challenge:"바디챌린지후기",
-    request:"건의사항"
+    request:"1:1 문의"
   };
 
   const categoryGroup = {
@@ -123,6 +125,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   function getInitialCategory(){
     if(initialCategory && labels[initialCategory]) return initialCategory;
+    if(initialBoard === "request") return "request";
     if(initialBoard === "praise") return "praise";
     if(initialBoard === "review") return "pt";
     return "all";
@@ -268,6 +271,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         </button>
       `)
       .join("");
+
+    const writeButton = shell.querySelector("[data-mobile-write]");
+    if(writeButton){
+      writeButton.textContent = activeCategory === "request" ? "문의 작성" : "글쓰기";
+    }
   }
 
   async function loadUserData(user){
@@ -335,8 +343,15 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       const thumb = getPostThumbnail(data);
       const point = Number(data.points || data.point || data.reward || 0);
       const writer = data.writerId || "회원";
+      const isRequest = category === "request";
+      const answered = hasRequestAnswer(data);
+      const unread = isRequest && hasUnreadRequestAnswer(id, data);
 
       card.className = "mobile-post-card";
+      if(isRequest){
+        card.classList.add("is-request");
+      }
+
       card.innerHTML = `
         <div class="mobile-post-author">
           <span class="mobile-post-avatar">${escapeHTML(getAvatarText(writer))}</span>
@@ -344,13 +359,16 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         </div>
         <div class="mobile-post-main">
           <div class="mobile-post-text">
-            <h2 class="mobile-post-title">${escapeHTML(data.title || "제목 없음")}</h2>
+            <h2 class="mobile-post-title">
+              ${escapeHTML(data.title || "제목 없음")}
+              ${unread ? `<span class="mobile-post-new">NEW</span>` : ""}
+            </h2>
             <span class="mobile-post-category">${escapeHTML(label)}</span>
           </div>
           ${thumb ? `<div class="mobile-post-thumb"><img src="${escapeAttr(thumb)}" alt=""></div>` : ""}
         </div>
         <div class="mobile-post-meta">
-          <span class="point ${point > 0 ? "has-point" : ""}">${formatNumber(point)}원</span>
+          ${isRequest ? `<span class="mobile-request-status ${answered ? "done" : ""}">${answered ? "답변이 완료되었습니다" : "답변대기중"}</span>` : `<span class="point ${point > 0 ? "has-point" : ""}">${formatNumber(point)}원</span>`}
           <span>♥ ${formatNumber(data.likes || data.likeCount || 0)}</span>
           <span>● ${formatNumber(data.commentCount || data.comments || 0)}</span>
           <time>${escapeHTML(timeAgo(data.createdAt))}</time>
@@ -365,6 +383,13 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   function getVisiblePosts(){
     return posts.filter(({ data })=>{
       const category = getPostCategory(data);
+      const isRequest = category === "request";
+
+      if(isRequest){
+        if(activeCategory !== "request") return false;
+        if(!isAdmin() && !isPostOwner(data)) return false;
+        return true;
+      }
 
       if(activeCategory === "all") return true;
       return category === activeCategory;
@@ -398,20 +423,84 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   function canOpenPost(post){
     if(!post.isSecret) return true;
-    if(currentUserData && currentUserData.role === "admin") return true;
-    return currentUser && currentUser.uid === post.writerUid;
+    if(isAdmin()) return true;
+    return isPostOwner(post);
   }
 
   function getWriteQueryString(){
     const category = activeCategory === "all" ? "free" : activeCategory;
     const board = getBoardForCategory(category);
+    if(category === "request") return "board=free&category=request";
     return `board=${board}&category=${category}`;
   }
 
   function getBoardForCategory(category){
+    if(category === "request") return "request";
     if(category === "praise") return "praise";
     if(category === "pt" || category === "before_after" || category === "challenge") return "review";
     return "free";
+  }
+
+  function isAdmin(){
+    const email = currentUser?.email || "";
+    const userId = email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+    const dataId = String(currentUserData?.id || currentUserData?.userId || "").toLowerCase();
+
+    return (
+      currentUserData?.role === "admin" ||
+      currentUserData?.isAdmin === true ||
+      currentUserData?.admin === true ||
+      currentUserData?.permission === "admin" ||
+      adminIds.has(userId) ||
+      adminIds.has(dataId)
+    );
+  }
+
+  function isPostOwner(post){
+    if(!currentUser || !post) return false;
+
+    const email = currentUser.email || "";
+    const userId = email.includes("@") ? email.split("@")[0] : "";
+
+    return (
+      post.writerUid === currentUser.uid ||
+      post.writerEmail === email ||
+      post.email === email ||
+      post.writerId === userId ||
+      post.writer === userId
+    );
+  }
+
+  function hasRequestAnswer(post){
+    return !!(post && (post.isAnswered || post.answer || post.answerText || post.answeredAt));
+  }
+
+  function hasUnreadRequestAnswer(id, post){
+    if(!currentUser || isAdmin() || !isPostOwner(post) || !hasRequestAnswer(post)) return false;
+
+    const answeredAt = getRequestAnswerMarker(post);
+    const readAt = Number(localStorage.getItem(getRequestReadKey(id)) || 0);
+    return answeredAt > readAt;
+  }
+
+  function getRequestAnswerMarker(post){
+    return (
+      getTimestampMs(post.answeredAt) ||
+      getTimestampMs(post.updatedAt) ||
+      getTimestampMs(post.createdAt) ||
+      1
+    );
+  }
+
+  function getRequestReadKey(id){
+    return `healthboyRequestRead:${currentUser?.uid || "guest"}:${id}`;
+  }
+
+  function getTimestampMs(value){
+    if(!value) return 0;
+    if(value.toDate) return value.toDate().getTime();
+    const time = new Date(value).getTime();
+    return Number.isFinite(time) ? time : 0;
   }
 
   function getAvatarText(writer){

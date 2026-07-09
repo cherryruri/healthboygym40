@@ -232,6 +232,21 @@
     word-break:keep-all;
   }
 
+  .mobile-post-new{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-left:6px;
+    padding:3px 6px;
+    border-radius:999px;
+    background:#ffdf3f;
+    color:#111;
+    font-size:10px;
+    font-weight:950;
+    line-height:1;
+    vertical-align:middle;
+  }
+
   .mobile-post-category{
     display:block;
     margin-top:7px;
@@ -281,6 +296,23 @@
 
   .mobile-post-meta .point.has-point{
     color:#3b82f6;
+  }
+
+  .mobile-request-status{
+    min-width:112px;
+    padding:7px 10px;
+    border-radius:999px;
+    background:#fff3c4;
+    color:#8a6500;
+    font-size:11px;
+    font-weight:950;
+    line-height:1;
+    white-space:nowrap;
+  }
+
+  .mobile-request-status.done{
+    background:#111;
+    color:#fff;
   }
 
   .mobile-post-meta time{

@@ -37,14 +37,18 @@ const db = getFirestore(app);
 const officialBoards = new Set(["noticeboard", "news"]);
 const adminOnlyBoards = new Set(["infoboard"]);
 const communityBoards = ["free", "praise", "review"];
+const adminIds = new Set(["cherryruri"]);
 
 let currentUser = null;
 let currentUserData = null;
 const boardParams = new URLSearchParams(location.search);
 const initialBoard = boardParams.get("board") || "free";
 const initialCategory = boardParams.get("category") || "";
+const initialIsRequest = initialBoard === "request" || initialCategory === "request";
 let currentBoard =
-  adminOnlyBoards.has(initialBoard)
+  initialIsRequest
+    ? "request"
+    : adminOnlyBoards.has(initialBoard)
     ? initialBoard
     : officialBoards.has(initialBoard)
       ? "noticeboard"
@@ -55,7 +59,9 @@ let currentBoard =
         : "free";
 let currentPage = 1;
 let currentCategory =
-  initialCategory
+  initialIsRequest
+    ? "request"
+    : initialCategory
     ? initialCategory
     : initialBoard === "praise"
     ? "praise"
@@ -120,9 +126,8 @@ const communityCategoryGroupMap = {
 const boardMeta = {
   free: {
     title: "자유게시판",
-    desc: "수내점 회원님들의 자유로운 이야기와 칭찬, PT 후기, 건의 사항을 확인하는 공간입니다.",
+    desc: "수내점 회원님들의 자유로운 이야기와 칭찬, PT 후기를 확인하는 공간입니다.",
     mode: "consult",
-    categoryGroups: communityCategoryGroups,
     categories: [
       ["all", "전체"],
       ["free", "자유게시판"],
@@ -131,6 +136,14 @@ const boardMeta = {
       ["pt", "PT후기"],
       ["before_after", "비포&애프터"],
       ["challenge", "바디챌린지후기"]
+    ]
+  },
+  request: {
+    title: "1:1 문의",
+    desc: "문의 내용은 작성자와 관리자만 확인할 수 있는 비공개 공간입니다.",
+    mode: "consult",
+    categories: [
+      ["request", "1:1 문의"]
     ]
   },
   praise: {
@@ -179,8 +192,23 @@ function getMeta(){
   return boardMeta[currentBoard] || boardMeta.free;
 }
 
+function getCurrentUserId(){
+  const email = currentUser?.email || "";
+  return email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+}
+
 function isAdmin(){
-  return currentUserData && currentUserData.role === "admin";
+  const userId = getCurrentUserId();
+  const dataId = String(currentUserData?.id || currentUserData?.userId || "").toLowerCase();
+
+  return (
+    currentUserData?.role === "admin" ||
+    currentUserData?.isAdmin === true ||
+    currentUserData?.admin === true ||
+    currentUserData?.permission === "admin" ||
+    adminIds.has(userId) ||
+    adminIds.has(dataId)
+  );
 }
 
 function isAdminOnlyBoard(boardName = currentBoard){
@@ -228,9 +256,36 @@ function getPostCategoryLabel(post){
   if(category === "trainer") return "이달의 트레이너";
   if(category === "news") return "센터소식";
   if(category === "info") return "인포게시판";
-  if(category === "request") return "건의사항";
+  if(category === "request") return "1:1 문의";
   if(category === "free") return "자유게시판";
   return "공지문";
+}
+
+function isRequestContext(){
+  return currentBoard === "request" || currentCategory === "request";
+}
+
+function isPostOwner(post){
+  if(!currentUser || !post) return false;
+
+  const email = currentUser.email || "";
+  const userId = email.includes("@") ? email.split("@")[0] : "";
+
+  return (
+    post.writerUid === currentUser.uid ||
+    post.writerEmail === email ||
+    post.email === email ||
+    post.writerId === userId ||
+    post.writer === userId
+  );
+}
+
+function hasRequestAnswer(post){
+  return !!(post && (post.isAnswered || post.answer || post.answerText || post.answeredAt));
+}
+
+function getRequestStatusText(post){
+  return hasRequestAnswer(post) ? "답변이 완료되었습니다" : "답변대기중";
 }
 
 function canWriteCurrentBoard(){
@@ -247,7 +302,7 @@ function updateWriteButton(){
   const canWrite = canWriteCurrentBoard();
 
   writeBtn.hidden = (official || adminOnly) && !canWrite;
-  writeBtn.textContent = official ? "공지 작성" : "글쓰기";
+  writeBtn.textContent = currentBoard === "request" ? "문의 작성" : official ? "공지 작성" : "글쓰기";
 }
 
 function ensureCategoryBar(){
@@ -349,6 +404,11 @@ function getFirstCategoryForGroup(groupValue){
 }
 
 function updateBoardUrl(){
+  if(currentBoard === "request"){
+    history.replaceState(null, "", "board.html?board=request&category=request");
+    return;
+  }
+
   if(currentBoard === "free"){
     if(currentCategory === "all"){
       history.replaceState(null, "", "board.html");
@@ -517,6 +577,10 @@ function getWriteQueryString(){
     return "board=noticeboard&category=notice";
   }
 
+  if(currentBoard === "request" || currentCategory === "request"){
+    return "board=free&category=request";
+  }
+
   if(currentCategory === "praise"){
     return "board=praise&category=praise";
   }
@@ -537,20 +601,18 @@ function getWriteQueryString(){
     return "board=review&category=challenge";
   }
 
-  if(currentCategory === "request"){
-    return "board=free&category=request";
-  }
-
   return "board=free&category=free";
 }
 
 function getBoardForCategory(category){
+  if(category === "request") return "request";
   if(category === "praise") return "praise";
   if(category === "pt" || category === "before_after" || category === "challenge") return "review";
   return "free";
 }
 
 function getQueryBoards(){
+  if(currentBoard === "request") return ["free"];
   if(currentBoard === "free") return communityBoards;
   if(currentBoard === "noticeboard") return ["noticeboard", "news"];
   if(currentBoard === "infoboard") return ["infoboard"];
@@ -602,6 +664,15 @@ function getVisiblePosts(){
 
   return allPosts.filter(({ data })=>{
     const category = getPostCategory(data);
+    const isRequest = category === "request";
+
+    if(isRequest){
+      if(!isRequestContext()) return false;
+      if(!isAdmin() && !isPostOwner(data)) return false;
+    }else if(currentBoard === "request"){
+      return false;
+    }
+
     const categoryMatches =
       currentCategory === "all" ||
       category === currentCategory ||
@@ -621,7 +692,7 @@ function canOpenPost(post){
   if((post.board === "infoboard" || post.isAdminOnly) && !isAdmin()) return false;
   if(!post.isSecret) return true;
   if(isAdmin()) return true;
-  return currentUser && currentUser.uid === post.writerUid;
+  return isPostOwner(post);
 }
 
 function openPost(docId, post){
@@ -631,7 +702,7 @@ function openPost(docId, post){
   }
 
   if(!canOpenPost(post)){
-    alert("비밀글입니다. 작성자만 볼 수 있어요.");
+    alert("비공개 문의입니다. 작성자만 볼 수 있어요.");
     return;
   }
 
@@ -708,9 +779,9 @@ function renderConsultPosts(posts){
     card.className = "consult-post-card board-post";
 
     const label = getPostCategoryLabel(data);
-    const isRequest = getPostCategory(data) === "request" && currentCategory === "request";
-    const status = data.answer || data.isAnswered ? "상담완료" : "상담대기";
-    const locked = data.isPublic ? "" : "비밀글";
+    const isRequest = getPostCategory(data) === "request" && isRequestContext();
+    const status = getRequestStatusText(data);
+    const locked = isRequest ? "비공개" : data.isPublic ? "" : "비밀글";
 
     if(isRequest){
       card.classList.add("has-status");
@@ -720,7 +791,7 @@ function renderConsultPosts(posts){
       <div class="consult-post-meta-top">${escapeHTML(label)}</div>
       <div class="consult-post-main">
         <h2>${escapeHTML(data.title)}</h2>
-        ${isRequest ? `<span class="consult-status ${status === "상담완료" ? "done" : ""}">${status}</span>` : ""}
+        ${isRequest ? `<span class="consult-status ${hasRequestAnswer(data) ? "done" : ""}">${status}</span>` : ""}
       </div>
       <div class="consult-post-meta-bottom">
         <span>${escapeHTML(data.writerId || "회원")}</span>

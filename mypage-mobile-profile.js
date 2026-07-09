@@ -1,6 +1,6 @@
 import { initializeApp, getApp, getApps } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-app.js";
 import { getAuth, onAuthStateChanged, deleteUser } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -137,8 +137,9 @@ function getShellMarkup() {
       </section>
 
       <div class="mobile-action-grid">
-        <a class="mobile-action-card mobile-inquiry-card" href="board.html?board=free&category=request">
-          <strong>나의 1:1 문의</strong>
+        <a class="mobile-action-card mobile-inquiry-card" id="mobileInquiryCard" href="board.html?board=request&category=request&scope=mine">
+          <strong id="mobileInquiryTitle">나의 1:1 문의</strong>
+          <span class="mobile-inquiry-new" id="mobileInquiryBadge" hidden>NEW</span>
           <img src="${icons.orangeChat}" alt="">
         </a>
         <a class="mobile-action-card" href="my-posts.html">
@@ -361,7 +362,105 @@ function syncShell() {
   setText("mobileMemberText", profileState.memberText);
   syncProgramButtons();
   syncPhoto();
+  syncInquiryCard();
   renderBannerSection();
+}
+
+function syncInquiryCard() {
+  if (!shell || !profileState) return;
+
+  const card = shell.querySelector("#mobileInquiryCard");
+  const title = shell.querySelector("#mobileInquiryTitle");
+  const badge = shell.querySelector("#mobileInquiryBadge");
+  const isAdmin = !!profileState.isAdmin;
+
+  if (card) {
+    card.href = isAdmin
+      ? "board.html?board=request&category=request&scope=all"
+      : "board.html?board=request&category=request&scope=mine";
+  }
+
+  if (title) {
+    title.textContent = isAdmin ? "회원 1:1 문의" : "나의 1:1 문의";
+  }
+
+  if (badge) badge.hidden = true;
+
+  if (!isAdmin) {
+    refreshInquiryBadge();
+  }
+}
+
+async function refreshInquiryBadge() {
+  if (!currentUser || !shell || !profileState || profileState.isAdmin) return;
+
+  const badge = shell.querySelector("#mobileInquiryBadge");
+  if (!badge) return;
+
+  try {
+    const snap = await getDocs(collection(db, "boards"));
+    let unreadCount = 0;
+
+    snap.forEach((docSnap) => {
+      const post = docSnap.data();
+      if (!isRequestPost(post) || !isPostOwner(post) || !hasRequestAnswer(post)) return;
+
+      const answeredAt = getRequestAnswerMarker(post);
+      const readAt = Number(localStorage.getItem(getRequestReadKey(docSnap.id)) || 0);
+      if (answeredAt > readAt) unreadCount += 1;
+    });
+
+    badge.hidden = unreadCount === 0;
+    badge.textContent = unreadCount > 1 ? `NEW ${unreadCount}` : "NEW";
+  } catch (error) {
+    console.warn("1:1 문의 알림을 확인하지 못했습니다.", error);
+    badge.hidden = true;
+  }
+}
+
+function isRequestPost(post) {
+  if (!post) return false;
+  if (post.category === "request") return true;
+  return post.board === "free" && (post.isSecret || post.isPublic === false);
+}
+
+function isPostOwner(post) {
+  if (!currentUser || !post) return false;
+
+  const email = currentUser.email || "";
+  const userId = email.includes("@") ? email.split("@")[0] : "";
+
+  return (
+    post.writerUid === currentUser.uid ||
+    post.writerEmail === email ||
+    post.email === email ||
+    post.writerId === userId ||
+    post.writer === userId
+  );
+}
+
+function hasRequestAnswer(post) {
+  return !!(post && (post.isAnswered || post.answer || post.answerText || post.answeredAt));
+}
+
+function getRequestReadKey(id) {
+  return `healthboyRequestRead:${currentUser?.uid || "guest"}:${id}`;
+}
+
+function getRequestAnswerMarker(post) {
+  return (
+    getTimestampMs(post.answeredAt) ||
+    getTimestampMs(post.updatedAt) ||
+    getTimestampMs(post.createdAt) ||
+    1
+  );
+}
+
+function getTimestampMs(value) {
+  if (!value) return 0;
+  if (value.toDate) return value.toDate().getTime();
+  const time = new Date(value).getTime();
+  return Number.isFinite(time) ? time : 0;
 }
 
 function syncPhoto() {

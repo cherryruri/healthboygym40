@@ -28,10 +28,20 @@ text-decoration:none;
 .post-status{
 padding:8px 14px;
 border-radius:999px;
-background:#111;
-color:#fff200;
+background:#fff7bd;
+color:#6f6200;
 font-size:12px;
 font-weight:900;
+}
+
+.post-status.done{
+background:#111;
+color:#fff200;
+}
+
+#postActions[hidden],
+.comment-input[hidden]{
+display:none !important;
 }
 
 .post-card h1{
@@ -687,6 +697,23 @@ cursor:pointer;
   margin-top:44px;
   border-top:1px solid #eee;
   padding-top:28px;
+}
+
+.request-answer-section{
+  padding:28px;
+  background:#fafafa;
+  border:1px solid #eee;
+  border-radius:18px;
+}
+
+.request-answer-empty{
+  padding:26px 18px;
+  border-radius:14px;
+  background:#fff;
+  color:#8a8a8a;
+  font-size:14px;
+  font-weight:800;
+  text-align:center;
 }
 
 @media(max-width:768px){

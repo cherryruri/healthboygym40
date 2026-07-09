@@ -669,8 +669,9 @@ body {
   position:absolute;
   right:0;
   top:50%;
-  min-width:82px;
+  min-width:174px;
   height:34px;
+  padding:0 18px;
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -685,6 +686,11 @@ body {
 .consult-status.done{
   background:#050505;
   color:#fff;
+}
+
+.consult-status:not(.done){
+  background:#fff7bd;
+  color:#6f6200;
 }
 
 .consult-post-meta-bottom{
@@ -818,6 +824,7 @@ body {
 .board-category-bar{
   max-width:min(100%, 650px);
   margin:0 auto 42px;
+  flex-wrap:wrap;
 }
 
 .board-page[data-board-mode="official"] .board-category-bar{
@@ -838,7 +845,7 @@ body {
 }
 
 .consult-post-card.has-status{
-  padding-right:132px;
+  padding-right:208px;
 }
 
 .consult-post-card:not(.has-status) .consult-post-main{
@@ -881,7 +888,8 @@ body {
   }
 
   .consult-post-card.has-status{
-    padding-right:88px;
+    padding-right:0;
+    padding-bottom:68px;
   }
 }
 
@@ -989,6 +997,7 @@ body {
 /* ===== yellow board category tabs ===== */
 .board-category-bar{
   background:#fff7bd !important;
+  max-width:min(100%, 900px);
 }
 
 .board-category-bar button{
@@ -1010,6 +1019,26 @@ body {
 .official-post-tag{
   background:#fff200 !important;
   color:#111 !important;
+}
+
+.board-page[data-board="request"] .consult-post-card{
+  padding-right:208px;
+}
+
+@media(max-width:768px){
+  .board-page[data-board="request"] .consult-post-card{
+    padding-right:0;
+    padding-bottom:68px;
+  }
+
+  .board-page[data-board="request"] .consult-status,
+  .consult-post-card.has-status .consult-status{
+    right:auto;
+    left:0;
+    top:auto;
+    bottom:18px;
+    transform:none;
+  }
 }
 
 /* ===== unified board tabs and visible search ===== */

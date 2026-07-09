@@ -114,6 +114,18 @@ function getEffectiveCategory(effectiveBoard){
   return "free";
 }
 
+function getLegacyCategory(category){
+  if(category === "diet") return "free";
+  if(category === "before_after" || category === "challenge") return "pt";
+  return category;
+}
+
+function getLegacyBoard(boardName, category){
+  if(category === "praise") return "praise";
+  if(category === "pt" || category === "before_after" || category === "challenge") return "review";
+  return boardName;
+}
+
 function updateEditorHeader(){
   const effectiveBoard = getEffectiveBoard();
 
@@ -297,19 +309,49 @@ submitBtn.addEventListener("click", async ()=>{
       return;
     }
 
-    await addDoc(collection(db, "boards"), {
+    const writerEmail = currentUser.email || "";
+    const writerId = writerEmail.includes("@") ? writerEmail.split("@")[0] : "회원";
+    const newPost = {
       ...payload,
-      writerId: currentUser.email.split("@")[0],
+      writer: writerId,
+      writerId,
       writerUid: currentUser.uid,
+      writerEmail,
       views: 0,
       createdAt: serverTimestamp()
-    });
+    };
+
+    try{
+      await addDoc(collection(db, "boards"), newPost);
+    }catch(error){
+      const legacyCategory = getLegacyCategory(category);
+      const legacyBoard = getLegacyBoard(effectiveBoard, category);
+
+      if(legacyCategory === category && legacyBoard === effectiveBoard){
+        throw error;
+      }
+
+      await addDoc(collection(db, "boards"), {
+        board: legacyBoard,
+        title,
+        content,
+        category: legacyCategory,
+        isSecret: legacyCategory === "request",
+        isPublic: legacyCategory !== "request",
+        writer: writerId,
+        writerId,
+        writerUid: currentUser.uid,
+        writerEmail,
+        views: 0,
+        createdAt: serverTimestamp()
+      });
+    }
 
     alert("글이 등록되었습니다.");
     location.href = `board.html?board=${effectiveBoard}`;
   }catch(error){
     console.error(error);
-    alert("게시글을 등록하지 못했습니다. 잠시 후 다시 시도해주세요.");
+    alert(`게시글을 등록하지 못했습니다. ${error.code || error.message || "잠시 후 다시 시도해주세요."}`);
   }finally{
     submitBtn.disabled = false;
   }

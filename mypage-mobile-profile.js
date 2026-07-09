@@ -297,7 +297,7 @@ async function loadBannerImages() {
     bannerState.activeIndex = Math.min(bannerState.activeIndex, Math.max(0, bannerState.images.length - 1));
   } catch (error) {
     console.warn("배너 이미지를 불러오지 못했습니다.", error);
-    bannerState.images = [];
+    bannerState.images = await getFallbackBannerImages();
     bannerState.activeIndex = 0;
   }
 }
@@ -532,16 +532,40 @@ async function deleteBannerImage(index) {
 async function saveBannerImages() {
   if (!currentUser || !profileState?.isAdmin) return;
 
-  await setDoc(getBannerDocRef(), {
+  const payload = {
     images: bannerState.images,
     updatedAt: new Date().toISOString(),
     updatedBy: currentUser.uid
-  }, { merge: true });
+  };
+
+  try {
+    await setDoc(getBannerDocRef(), payload, { merge: true });
+  } catch (error) {
+    console.warn("공용 배너 저장 실패, 사용자 백업으로 저장합니다.", error);
+
+    try {
+      await setDoc(doc(db, "users", currentUser.uid), {
+        mobileMypageBanners: payload
+      }, { merge: true });
+    } catch (backupError) {
+      console.warn("사용자 배너 백업 저장 실패, 로컬 백업만 사용합니다.", backupError);
+    }
+  }
+
+  try {
+    localStorage.setItem("healthboyMobileMypageBanners", JSON.stringify(payload));
+  } catch (error) {
+    console.warn("배너 로컬 백업 저장 실패", error);
+  }
 }
 
 function resizeBannerImage(file) {
   return new Promise((resolve, reject) => {
-    if (!file || !file.type.startsWith("image/")) {
+    const imageName = file?.name || "";
+    const imageType = file?.type || "";
+    const looksLikeImage = /\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(imageName);
+
+    if (!file || (!imageType.startsWith("image/") && !looksLikeImage)) {
       reject(new Error("이미지 파일만 등록할 수 있습니다."));
       return;
     }
@@ -552,21 +576,21 @@ function resizeBannerImage(file) {
       const image = new Image();
 
       image.onload = () => {
-        const maxWidth = 960;
-        const maxHeight = 420;
-        const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
-        const width = Math.max(1, Math.round(image.width * scale));
-        const height = Math.max(1, Math.round(image.height * scale));
+        const width = 760;
+        const height = 320;
+        const scale = Math.max(width / image.width, height / image.height);
+        const drawWidth = Math.ceil(image.width * scale);
+        const drawHeight = Math.ceil(image.height * scale);
+        const offsetX = Math.round((width - drawWidth) / 2);
+        const offsetY = Math.round((height - drawHeight) / 2);
         const canvas = document.createElement("canvas");
         const context = canvas.getContext("2d");
 
         canvas.width = width;
         canvas.height = height;
-        context.fillStyle = "#ffffff";
-        context.fillRect(0, 0, width, height);
-        context.drawImage(image, 0, 0, width, height);
+        context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
 
-        resolve(canvas.toDataURL("image/jpeg", 0.78));
+        resolve(canvas.toDataURL("image/jpeg", 0.68));
       };
 
       image.onerror = reject;
@@ -576,6 +600,30 @@ function resizeBannerImage(file) {
     reader.onerror = reject;
     reader.readAsDataURL(file);
   });
+}
+
+async function getFallbackBannerImages() {
+  if (currentUser) {
+    try {
+      const snap = await getDoc(doc(db, "users", currentUser.uid));
+      const data = snap.exists() ? snap.data() : {};
+      const images = data.mobileMypageBanners?.images;
+
+      if (Array.isArray(images)) {
+        return images.slice(0, maxBannerImages);
+      }
+    } catch (error) {
+      console.warn("사용자 배너 백업 불러오기 실패", error);
+    }
+  }
+
+  try {
+    const raw = localStorage.getItem("healthboyMobileMypageBanners");
+    const data = raw ? JSON.parse(raw) : null;
+    return Array.isArray(data?.images) ? data.images.slice(0, maxBannerImages) : [];
+  } catch (error) {
+    return [];
+  }
 }
 
 function assertBannerAdmin() {

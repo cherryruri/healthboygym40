@@ -28,8 +28,6 @@
     <nav class="mobile-menu-list" aria-label="모바일 메뉴">
       <span class="mobile-menu-section-title">헬스보이짐 수내점 소개</span>
       <a href="index.html#about">센터 소개</a>
-      <a href="index.html#brand">브랜드 소개</a>
-      <a href="index.html#pass">올패스 안내</a>
       <a href="index.html#facility">시설 투어</a>
       <a href="index.html#trainer">트레이너 소개</a>
       <a href="index.html#hours">운영시간</a>
@@ -159,6 +157,76 @@
       .forEach(button=>button.setAttribute("aria-expanded", "false"));
   }
 
+  const OPTIONAL_HOME_SECTIONS = {
+    "#trainer":"show-trainer-section",
+    "#hours":"show-hours-section"
+  };
+
+  function revealOptionalHomeSection(hash){
+    const className = OPTIONAL_HOME_SECTIONS[hash];
+
+    if(!className) return false;
+
+    const target = document.querySelector(hash);
+
+    if(!target) return false;
+
+    document.body.classList.add(className);
+
+    if(window.ScrollTrigger){
+      requestAnimationFrame(()=>window.ScrollTrigger.refresh());
+    }
+
+    return true;
+  }
+
+  function scrollToOptionalHomeSection(hash, smooth = true){
+    const target = document.querySelector(hash);
+
+    if(!target) return;
+
+    requestAnimationFrame(()=>{
+      target.scrollIntoView({
+        behavior:smooth ? "smooth" : "auto",
+        block:"start"
+      });
+    });
+  }
+
+  function getMenuLinkHash(link){
+    const href = link ? link.getAttribute("href") : "";
+
+    if(!href) return "";
+
+    try{
+      return new URL(href, window.location.href).hash;
+    }catch(error){
+      return href.startsWith("#") ? href : "";
+    }
+  }
+
+  function handleOptionalHomeMenuLink(link){
+    const hash = getMenuLinkHash(link);
+
+    if(!revealOptionalHomeSection(hash)) return false;
+
+    if(window.location.hash !== hash){
+      window.history.pushState(null, "", hash);
+    }
+
+    scrollToOptionalHomeSection(hash);
+
+    return true;
+  }
+
+  function revealCurrentHashSection(){
+    const hash = window.location.hash;
+
+    if(!revealOptionalHomeSection(hash)) return;
+
+    scrollToOptionalHomeSection(hash, false);
+  }
+
   function initSiteMenu(){
     if(document.documentElement.dataset.siteMenuReady === "true") return;
     document.documentElement.dataset.siteMenuReady = "true";
@@ -178,10 +246,21 @@
         return;
       }
 
-      if(event.target.closest(".mobile-menu-list a")){
+      const menuLink = event.target.closest(".mobile-menu-list a");
+
+      if(menuLink){
+        if(handleOptionalHomeMenuLink(menuLink)){
+          event.preventDefault();
+          closeMenu();
+          return;
+        }
+
         closeMenu();
       }
     });
+
+    revealCurrentHashSection();
+    window.addEventListener("hashchange", revealCurrentHashSection);
   }
 
   if(document.readyState === "loading"){

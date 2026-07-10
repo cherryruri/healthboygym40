@@ -5563,6 +5563,15 @@ body.menu-open .mobile-login-area{
   background:#fff;
 }
 
+/* Home flow now skips these sections; keep the markup for menu/future use. */
+#brand #inc01 > .brand-cross,
+#brand #inc01 > .pass-transition-panel,
+#brand #inc01 > .pass-locator-section,
+body:not(.show-trainer-section) #trainer,
+body:not(.show-hours-section) #hours{
+  display:none !important;
+}
+
 #brand #inc01 .list .bg01 a{background-image:url('img/main/inc01/img03.jpg')}
 #brand #inc01 .list .bg02 a{background-image:url('img/main/inc01/img04.jpg')}
 #brand #inc01 .list .bg03 a{background-image:url('img/main/inc01/img05.jpg')}

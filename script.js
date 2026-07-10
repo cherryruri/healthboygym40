@@ -4584,6 +4584,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(!window.gsap || !window.ScrollTrigger) return;
 
+    const brandCross =
+      section.querySelector(".brand-cross");
+
+    if(!brandCross || window.getComputedStyle(brandCross).display === "none") return;
+
     gsap.registerPlugin(ScrollTrigger);
 
     gsap.to("#brand #inc01 .brand-cross .txt", {

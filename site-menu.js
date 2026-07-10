@@ -246,15 +246,17 @@
         return;
       }
 
+      const optionalHomeLink = event.target.closest("a[href]");
+
+      if(optionalHomeLink && handleOptionalHomeMenuLink(optionalHomeLink)){
+        event.preventDefault();
+        closeMenu();
+        return;
+      }
+
       const menuLink = event.target.closest(".mobile-menu-list a");
 
       if(menuLink){
-        if(handleOptionalHomeMenuLink(menuLink)){
-          event.preventDefault();
-          closeMenu();
-          return;
-        }
-
         closeMenu();
       }
     });

@@ -8588,6 +8588,24 @@ html.pass-reveal-complete header{
   font-size:11px;
 }
 
+@media(min-width:769px){
+  header .navbar{
+    flex-direction:row !important;
+  }
+
+  header .menu{
+    display:flex !important;
+    visibility:visible !important;
+    opacity:1 !important;
+  }
+
+  header .mobile-menu-btn,
+  header .mobile-menu-overlay,
+  header .mobile-side-menu{
+    display:none !important;
+  }
+}
+
 .board-menu-link a{
   color:#000;
 }

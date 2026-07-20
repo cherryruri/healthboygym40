@@ -50,6 +50,8 @@ const thumbnailInput = document.getElementById("postThumbnail");
 const thumbnailLabel = document.getElementById("thumbnailLabel");
 const thumbnailPreview = document.getElementById("thumbnailPreview");
 const removeThumbnail = document.getElementById("removeThumbnail");
+const noticeOption = document.getElementById("editorNoticeOption");
+const noticeCheckbox = document.getElementById("postIsNotice");
 
 const params = new URLSearchParams(location.search);
 const board = params.get("board") || "free";
@@ -138,6 +140,14 @@ function updateEditorHeader(){
 
   if(thumbnailField){
     thumbnailField.hidden = !officialBoards.has(effectiveBoard);
+  }
+
+  if(noticeOption){
+    noticeOption.hidden = !isAdmin();
+  }
+
+  if(noticeCheckbox && !isAdmin()){
+    noticeCheckbox.checked = false;
   }
 }
 
@@ -297,7 +307,7 @@ submitBtn.addEventListener("click", async ()=>{
     isSecret: category === "request",
     isPublic: category !== "request",
     isAdminOnly,
-    isNotice: isOfficial
+    isNotice: Boolean(isAdmin() && noticeCheckbox && noticeCheckbox.checked)
   };
 
   submitBtn.disabled = true;
@@ -339,6 +349,7 @@ submitBtn.addEventListener("click", async ()=>{
         category: legacyCategory,
         isSecret: legacyCategory === "request",
         isPublic: legacyCategory !== "request",
+        isNotice: Boolean(isAdmin() && noticeCheckbox && noticeCheckbox.checked),
         writer: writerId,
         writerId,
         writerUid: currentUser.uid,
@@ -440,6 +451,10 @@ async function loadPostForEdit(){
   titleInput.value = post.title || "";
   contentBox.innerHTML = post.content || "";
   setThumbnailPreview(post.thumbnailDataUrl || "");
+
+  if(noticeCheckbox){
+    noticeCheckbox.checked = post.isNotice === true;
+  }
 
   submitBtn.textContent = "수정하기";
   submitBtn.style.background = "#444";

@@ -6,7 +6,7 @@
 <title>게시판</title>
 
 <link rel="stylesheet" href="style.css?v=20260705-review-flow18">
-<link rel="stylesheet" href="board.css?v=20260721-issoft-board1">
+<link rel="stylesheet" href="board.css?v=20260721-operation-hero1">
 <link rel="stylesheet" href="board-mobile.css?v=20260721-compact-list1">
 </head>
 <body class="loaded">
@@ -44,7 +44,31 @@
 <div class="board-layout">
 
   <div class="board-main">
-    <div class="board-header">
+
+    <section class="board-operation-hero" aria-labelledby="boardOperationTitle">
+      <div class="board-operation-geometry" aria-hidden="true"></div>
+      <div class="board-operation-content">
+        <span class="board-operation-eyebrow">COMMUNITY GUIDELINE</span>
+        <h2 id="boardOperationTitle">BETTER<br>TOGETHER</h2>
+        <strong>건강한 운동 문화를 만드는 열린 게시판</strong>
+        <div class="board-operation-copy">
+          <p>헬스보이짐 수내점 회원들의 운동 경험과 유용한 정보를 나누는 공간입니다.</p>
+          <p>서로를 존중하는 표현을 사용하고, 개인정보·광고·비방성 게시물은 삼가 주세요.</p>
+          <p>운영 목적에 맞지 않는 게시물은 사전 안내 후 이동 또는 삭제될 수 있습니다.</p>
+        </div>
+        <ul class="board-operation-rules">
+          <li><b>존중과 배려</b><span>건강한 표현으로 소통해 주세요.</span></li>
+          <li><b>개인정보 보호</b><span>연락처와 민감한 정보는 게시하지 마세요.</span></li>
+          <li><b>카테고리 준수</b><span>게시글 성격에 맞는 게시판을 선택해 주세요.</span></li>
+        </ul>
+        <a class="board-operation-scroll" href="#boardContent">
+          <span>게시글 보기</span>
+          <i aria-hidden="true">↓</i>
+        </a>
+      </div>
+    </section>
+
+    <div class="board-header" id="boardContent">
       <h1>자유게시판</h1>
       <p id="boardDesc">
         헬스보이짐 수내점 회원님들의 자유로운 이야기와 후기를 확인하는 공간입니다.

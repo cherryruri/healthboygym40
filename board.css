@@ -2393,3 +2393,74 @@ body{
     font-size:13px;
   }
 }
+
+/* ===== solid black hero and overlay navigation ===== */
+.board-operation-hero.board-review-proof{
+  background:#000 !important;
+}
+
+.board-operation-hero.board-review-proof::before,
+.board-operation-hero.board-review-proof::after{
+  display:none !important;
+}
+
+body header{
+  transition:background .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+body .logo a,
+body .menu a,
+body #loginLink,
+body #logoutBtn,
+body .download-btn,
+body .mobile-menu-btn{
+  transition:color .25s ease, border-color .25s ease, background .25s ease;
+}
+
+body.board-header-over-hero header{
+  background:transparent !important;
+  border-bottom-color:rgba(255,255,255,.12) !important;
+  box-shadow:none !important;
+}
+
+body.board-header-over-hero .logo a,
+body.board-header-over-hero .menu a,
+body.board-header-over-hero #loginLink,
+body.board-header-over-hero #logoutBtn{
+  color:#fff !important;
+}
+
+body.board-header-over-hero .menu a::after{
+  background:#fff200 !important;
+}
+
+body.board-header-over-hero .download-btn{
+  border-color:rgba(255,255,255,.8) !important;
+  background:transparent !important;
+  color:#fff !important;
+}
+
+body.board-header-over-hero .download-btn:hover{
+  border-color:#fff !important;
+  background:#fff !important;
+  color:#000 !important;
+}
+
+body.board-header-over-hero .mobile-menu-btn{
+  border-color:rgba(255,255,255,.46) !important;
+  background:rgba(0,0,0,.22) !important;
+  color:#fff !important;
+}
+
+body.board-header-over-hero .mobile-menu-btn::before,
+body.board-header-over-hero .mobile-menu-btn::after,
+body.board-header-over-hero .mobile-menu-btn span{
+  background:#fff !important;
+  color:#fff !important;
+}
+
+@media(max-width:768px){
+  body.board-header-over-hero header{
+    background:transparent !important;
+  }
+}

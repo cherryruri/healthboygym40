@@ -10,37 +10,71 @@
 <link rel="stylesheet" href="board-mobile.css?v=20260721-motion-board2">
 <link rel="stylesheet" href="board-redesign-20260721.css?v=2">
 <link rel="stylesheet" href="board-clean-20260721.css?v=1">
+<link rel="stylesheet" href="board-corporate-20260721.css?v=1">
 </head>
 <body class="loaded board-header-over-hero">
 
-<header>
-  <nav class="navbar">
-    <div class="logo">
-      <a href="index.html">HEALTHBOYGYM</a>
-    </div>
-
-    <ul class="menu">
-      <li><a href="index.html#about">센터 소개</a></li>
-      <li><a href="index.html#brand">브랜드 소개</a></li>
-      <li><a href="index.html#pass">올패스 안내</a></li>
-      <li><a href="index.html#facility">시설 투어</a></li>
-      <li><a href="index.html#trainer">트레이너 소개</a></li>
-      <li><a href="index.html#hours">운영 시간</a></li>
-      <li><a href="index.html#location">오시는 길</a></li>
-      <li><a href="board.html">게시판</a></li>
-      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
-
-      <li id="userMenu">
-        <a href="login.html" id="loginLink">LOGIN</a>
-        <button id="logoutBtn" style="display:none;">LOGOUT</button>
-      </li>
-    </ul>
-
-    <a href="https://map.naver.com/p/search/%ED%97%AC%EC%8A%A4%EB%B3%B4%EC%9D%B4%EC%A7%90%20%EC%88%98%EB%82%B4%EC%A0%90" target="_blank" class="download-btn">
-      네이버 문의 및 예약 바로가기
-    </a>
-  </nav>
+<header class="board-corporate-header">
+  <a class="board-corporate-logo" href="index.html" aria-label="헬스보이짐 홈">HEALTHBOYGYM</a>
+  <div class="board-corporate-actions">
+    <a href="board.html?board=noticeboard"><span aria-hidden="true">▧</span> News</a>
+    <button type="button" id="boardCorporateMenuOpen" aria-controls="boardCorporateMenu" aria-expanded="false">
+      <span>Menu</span><span class="menu-chevrons" aria-hidden="true">›››</span>
+    </button>
+  </div>
 </header>
+
+<aside class="board-corporate-menu" id="boardCorporateMenu" aria-hidden="true" aria-label="전체 메뉴">
+  <div class="board-corporate-menu-top">
+    <a class="board-corporate-logo" href="index.html">HEALTHBOYGYM</a>
+    <button class="board-corporate-menu-close" id="boardCorporateMenuClose" type="button" aria-label="메뉴 닫기"></button>
+  </div>
+  <nav class="board-corporate-menu-grid">
+    <section class="board-corporate-menu-group">
+      <h2>About Us</h2>
+      <div class="board-corporate-menu-links">
+        <a href="index.html#about">센터 소개</a>
+        <a href="index.html#brand">브랜드 소개</a>
+        <a href="index.html#facility">시설 투어</a>
+        <a href="index.html#trainer">트레이너 소개</a>
+      </div>
+    </section>
+    <section class="board-corporate-menu-group">
+      <h2>Membership</h2>
+      <div class="board-corporate-menu-links">
+        <a href="index.html#pass">올패스 안내</a>
+        <a href="index.html#hours">운영 시간</a>
+        <a href="index.html#location">오시는 길</a>
+      </div>
+    </section>
+    <section class="board-corporate-menu-group">
+      <h2>Community</h2>
+      <div class="board-corporate-menu-links">
+        <a href="board.html">자유게시판</a>
+        <a href="board.html?board=noticeboard">공지문/뉴스</a>
+        <a href="board.html?board=request">1:1 문의</a>
+      </div>
+    </section>
+    <section class="board-corporate-menu-group">
+      <h2>Account</h2>
+      <div class="board-corporate-menu-links" id="userMenu">
+        <a href="mypage.html">마이페이지</a>
+        <a href="login.html" id="loginLink">로그인</a>
+        <button id="logoutBtn" type="button" style="display:none;">로그아웃</button>
+      </div>
+    </section>
+    <section class="board-corporate-menu-group">
+      <h2>Reservation</h2>
+      <div class="board-corporate-menu-links">
+        <a href="https://map.naver.com/p/search/%ED%97%AC%EC%8A%A4%EB%B3%B4%EC%9D%B4%EC%A7%90%20%EC%88%98%EB%82%B4%EC%A0%90" target="_blank" rel="noopener">네이버 문의 및 예약</a>
+      </div>
+    </section>
+  </nav>
+</aside>
+
+<div class="board-corporate-splash" id="boardCorporateSplash" aria-hidden="true">
+  <p><span>WE ARE</span><span>HEALTHBOYGYM</span></p>
+</div>
 
 <section class="board-page" data-board-mode="consult" data-board="free">
 <div class="board-layout">
@@ -49,29 +83,19 @@
 
 
 
-    <section class="board-operation-hero board-motion-hero" aria-labelledby="boardOperationTitle">
-      <div class="board-hero-ghost" aria-hidden="true">
-        <span>TRAIN · SHARE · GROW · </span>
-        <span>TRAIN · SHARE · GROW · </span>
-      </div>
+    <section class="board-operation-hero board-corporate-hero" aria-labelledby="boardOperationTitle">
+      <span class="board-corporate-ghost left" aria-hidden="true">WE ARE</span>
       <div class="board-operation-content">
-        <p class="board-operation-kicker"><span>HEALTHBOYGYM</span><i></i><span>COMMUNITY</span></p>
-        <h2 id="boardOperationTitle" aria-label="COMMUNITY">
-          <span style="--letter:0">C</span><span style="--letter:1">O</span><span style="--letter:2">M</span><span style="--letter:3">M</span><span style="--letter:4">U</span><span style="--letter:5">N</span><span style="--letter:6">I</span><span style="--letter:7">T</span><span style="--letter:8">Y</span>
-        </h2>
-        <strong class="board-operation-lead"><span>함께 움직이고,</span> <span>함께 성장하는 공간.</span></strong>
-        <div class="board-operation-copy">
-          <p>운동 경험과 유용한 정보를 자유롭게 나누는 헬스보이짐 수내점 커뮤니티입니다.</p>
-          <p>서로를 존중하는 표현으로 건강한 운동 문화를 함께 만들어 주세요.</p>
-        </div>
-        <div class="board-operation-label">
-          <span>BOARD GUIDE</span>
-          <i aria-hidden="true">↘</i>
-        </div>
+        <h2 id="boardOperationTitle">COMMUNITY</h2>
+        <p class="board-corporate-description">
+          운동으로 연결되고 경험으로 성장하는<br>
+          헬스보이짐 수내점의 열린 커뮤니티입니다.
+        </p>
       </div>
+      <span class="board-corporate-ghost right" aria-hidden="true">HEALTHBOY</span>
       <a class="board-operation-scroll" href="#boardContent" aria-label="게시글 목록으로 이동">
-        <i aria-hidden="true">↓</i>
-        <span>EXPLORE</span>
+        <i aria-hidden="true">⌄</i>
+        <span>scroll</span>
       </a>
     </section>
 
@@ -160,5 +184,6 @@
   })();
 </script>
 
+<script src="board-corporate-20260721.js?v=1"></script>
 </body>
 </html>

@@ -1227,3 +1227,108 @@ body {
   padding-left:24px;
   background:#fff5c2;
 }
+
+/* ===== compact board list spacing ===== */
+.board-table{
+  border-radius:0;
+}
+
+.board-row{
+  min-height:56px;
+}
+
+.board-row.board-head{
+  min-height:48px;
+}
+
+.board-row > div{
+  padding-left:14px;
+  padding-right:14px;
+}
+
+.board-row:not(.board-head):hover{
+  transform:none;
+  box-shadow:none;
+  background:#fafafa;
+  border-bottom-color:#e5e7eb;
+}
+
+.consult-post-card{
+  min-height:82px;
+  padding-top:14px;
+  padding-bottom:14px;
+}
+
+.consult-post-card.has-status,
+.board-page[data-board="request"] .consult-post-card{
+  padding-right:178px;
+}
+
+.consult-post-card:hover{
+  padding-left:10px;
+}
+
+.consult-post-meta-top{
+  margin-bottom:6px;
+  font-size:12px !important;
+}
+
+.consult-post-main h2{
+  font-size:18px !important;
+  line-height:1.32 !important;
+}
+
+.consult-status{
+  min-width:146px;
+  height:30px;
+  padding:0 14px;
+  font-size:12px !important;
+}
+
+.consult-post-meta-bottom{
+  gap:16px;
+  margin-top:8px;
+  font-size:12px !important;
+}
+
+.consult-post-card.is-notice{
+  padding-top:14px;
+  padding-bottom:14px;
+  padding-left:14px;
+}
+
+.consult-post-card.is-notice:hover{
+  padding-left:18px;
+}
+
+.board-bottom{
+  margin-top:24px;
+}
+
+.pagination{
+  margin-top:32px;
+}
+
+@media(max-width:768px){
+  .board-row{
+    min-height:54px;
+  }
+
+  .consult-post-card,
+  .consult-post-card.has-status,
+  .board-page[data-board="request"] .consult-post-card{
+    min-height:0;
+    padding-top:13px;
+    padding-bottom:13px;
+  }
+
+  .consult-post-card.has-status,
+  .board-page[data-board="request"] .consult-post-card{
+    padding-bottom:54px;
+  }
+
+  .board-page[data-board="request"] .consult-status,
+  .consult-post-card.has-status .consult-status{
+    bottom:12px;
+  }
+}

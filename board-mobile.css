@@ -462,3 +462,16 @@
     color:#fff !important;
   }
 }
+
+
+/* footprint intro: keep the header white and the scroll control at the hero bottom */
+@media(max-width:768px){
+  body.board-header-over-hero header{
+    background:transparent !important;
+  }
+
+  .board-footprint-hero > .board-operation-scroll{
+    left:50% !important;
+    bottom:24px !important;
+  }
+}

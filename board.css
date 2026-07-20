@@ -2464,3 +2464,169 @@ body.board-header-over-hero .mobile-menu-btn span{
     background:transparent !important;
   }
 }
+
+/* ===== final black navigation and premium hero typography ===== */
+body header,
+body.board-header-over-hero header{
+  background:#050505 !important;
+  border-bottom:1px solid rgba(255,255,255,.12) !important;
+  box-shadow:none !important;
+}
+
+body.board-header-over-hero header{
+  background:transparent !important;
+}
+
+body header .logo a,
+body header #logo-text,
+body header .menu a,
+body header #loginLink,
+body header #logoutBtn{
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+
+body header #logoutBtn{
+  border:0 !important;
+  background:transparent !important;
+}
+
+body header .menu a::after{
+  background:#fff200 !important;
+}
+
+body header .download-btn{
+  border-color:rgba(255,255,255,.76) !important;
+  background:transparent !important;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+}
+
+body header .download-btn:hover{
+  border-color:#fff !important;
+  background:#fff !important;
+  color:#050505 !important;
+  -webkit-text-fill-color:#050505 !important;
+}
+
+.board-proof-eyebrow{
+  display:inline-flex;
+  min-height:30px;
+  margin-bottom:30px;
+  padding:0 14px;
+  align-items:center;
+  border:1px solid rgba(255,242,0,.48);
+  border-radius:999px;
+  background:rgba(255,242,0,.08);
+  color:#fff200;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.22em;
+  box-shadow:0 0 32px rgba(255,242,0,.08);
+}
+
+.board-operation-hero.board-review-proof .board-proof-heading{
+  gap:22px;
+  font-size:clamp(42px, 4.8vw, 72px);
+  font-weight:950;
+  letter-spacing:-.045em;
+}
+
+.board-proof-heading > span:first-child{
+  color:transparent;
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.5px rgba(255,255,255,.9);
+  text-shadow:none;
+}
+
+.board-proof-heading > span:last-child{
+  color:#fff;
+  -webkit-text-fill-color:#fff;
+  text-shadow:0 20px 55px rgba(0,0,0,.5);
+}
+
+.board-proof-heading > i{
+  flex-basis:110px;
+  width:110px;
+  background:linear-gradient(90deg, rgba(255,255,255,.35), #fff200, rgba(255,255,255,.35));
+  box-shadow:0 0 25px rgba(255,242,0,.3);
+}
+
+.board-review-proof .board-operation-copy{
+  max-width:820px;
+  margin-top:42px;
+}
+
+.board-review-proof .board-operation-copy p:first-child{
+  margin-bottom:9px;
+  color:#fff;
+  font-size:17px;
+  font-weight:850;
+}
+
+.board-review-proof .board-operation-copy p:not(:first-child){
+  color:rgba(255,255,255,.62);
+  font-size:14px;
+}
+
+.board-review-proof .board-operation-label{
+  min-height:42px;
+  margin-top:30px;
+  padding:0 18px;
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(8px);
+}
+
+@media(max-width:768px){
+  body header,
+  body.board-header-over-hero header{
+    background:#050505 !important;
+  }
+
+  body.board-header-over-hero header{
+    background:transparent !important;
+  }
+
+  body header .logo a,
+  body header #logo-text{
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+  }
+
+  body header .mobile-menu-btn{
+    border-color:rgba(255,255,255,.48) !important;
+    background:rgba(0,0,0,.32) !important;
+    color:#fff !important;
+  }
+
+  body header .mobile-menu-btn::before,
+  body header .mobile-menu-btn::after,
+  body header .mobile-menu-btn span{
+    background:#fff !important;
+    color:#fff !important;
+  }
+
+  .board-operation-hero.board-review-proof .board-proof-heading{
+    gap:12px;
+    font-size:clamp(32px, 9vw, 44px);
+    letter-spacing:-.035em;
+  }
+
+  .board-proof-heading > i{
+    width:42px;
+  }
+
+  .board-review-proof .board-operation-copy{
+    margin-top:30px;
+  }
+
+  .board-review-proof .board-operation-copy p:first-child{
+    font-size:15px;
+  }
+
+  .board-review-proof .board-operation-copy p:not(:first-child){
+    font-size:12px;
+  }
+}

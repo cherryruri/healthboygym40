@@ -34,6 +34,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 let latestIsAdmin = false;
+const adminIds = new Set(["cherryruri"]);
 
 function setAdminOnlyMenus(isAdmin){
   latestIsAdmin = Boolean(isAdmin);
@@ -42,6 +43,20 @@ function setAdminOnlyMenus(isAdmin){
     element.hidden = !latestIsAdmin;
     element.setAttribute("aria-hidden", String(!latestIsAdmin));
   });
+}
+function isAdminUser(user, data){
+  const email = user?.email || "";
+  const userId = email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+  const dataId = String(data?.id || data?.userId || "").toLowerCase();
+
+  return (
+    data?.role === "admin" ||
+    data?.isAdmin === true ||
+    data?.admin === true ||
+    data?.permission === "admin" ||
+    adminIds.has(userId) ||
+    adminIds.has(dataId)
+  );
 }
 
 function getUserId(user){
@@ -228,11 +243,13 @@ onAuthStateChanged(auth, async user=>{
 
   setUserMenu(user, data);
   setMobileUserMenu(user, data);
-  setAdminOnlyMenus(data && data.role === "admin");
+  setAdminOnlyMenus(isAdminUser(user, data));
 });
 
 if(document.readyState === "loading"){
-  document.addEventListener("DOMContentLoaded", ()=>setAdminOnlyMenus(latestIsAdmin));
+  document.addEventListener("DOMContentLoaded", ()=>{
+    setAdminOnlyMenus(latestIsAdmin);
+  });
 }else{
   setAdminOnlyMenus(latestIsAdmin);
 }

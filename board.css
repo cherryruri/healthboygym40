@@ -2052,3 +2052,196 @@ body{
     font-size:11px;
   }
 }
+
+/* ===== full-screen history-style board hero ===== */
+.board-operation-hero{
+  width:100vw;
+  min-height:clamp(680px, 100vh, 860px);
+  margin:-160px 0 112px calc(50% - 50vw);
+  padding:clamp(150px, 17vh, 190px) clamp(34px, 7vw, 108px) 90px;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  border-radius:0;
+  background:
+    linear-gradient(90deg, rgba(5,9,12,.98) 0%, rgba(9,17,22,.92) 44%, rgba(13,25,31,.7) 100%),
+    radial-gradient(circle at 82% 18%, rgba(255,184,46,.16), transparent 26%),
+    #0b1217;
+}
+
+.board-operation-hero::before{
+  inset:-18% -7% -25% 34%;
+  opacity:.92;
+  background:
+    linear-gradient(150deg, transparent 0 21%, rgba(255,255,255,.14) 21.2% 21.45%, transparent 21.7% 43%, rgba(0,0,0,.5) 43.2% 43.7%, transparent 44%),
+    linear-gradient(32deg, transparent 0 26%, rgba(255,255,255,.1) 26.2% 26.45%, transparent 26.7% 54%, rgba(0,0,0,.55) 54.2% 54.7%, transparent 55%),
+    conic-gradient(from 20deg at 58% 52%, #263943 0 11%, #111d24 11.5% 23%, #344953 23.5% 34%, #14232b 34.5% 47%, #2b3e47 47.5% 61%, #0d181f 61.5% 74%, #30434d 74.5% 88%, #15232b 88.5%);
+  clip-path:polygon(8% 3%, 100% 0, 96% 88%, 47% 100%, 0 61%);
+  transform:rotate(-4deg) scale(1.06);
+}
+
+.board-operation-hero::after{
+  left:-10%;
+  right:-10%;
+  bottom:-39%;
+  height:58%;
+  background:#030506;
+  box-shadow:0 -24px 80px rgba(0,0,0,.65);
+}
+
+.board-operation-geometry{
+  right:4%;
+  bottom:10%;
+  width:42vw;
+  height:42vw;
+  max-width:620px;
+  max-height:620px;
+  border-color:rgba(255,255,255,.1);
+  transform:rotate(34deg);
+  opacity:.42;
+}
+
+.board-operation-geometry::before{ inset:12%; border-color:rgba(255,255,255,.12); }
+.board-operation-geometry::after{ inset:27%; border:1px solid rgba(255,184,46,.2); background:rgba(255,184,46,.04); }
+
+.board-operation-content{
+  position:relative;
+  width:100%;
+  max-width:920px;
+  margin:0 auto 0 max(0px, calc((100vw - 1320px) / 2));
+}
+
+.board-operation-eyebrow,
+.board-operation-rules{ display:none; }
+
+.board-operation-hero h2{
+  margin:0 0 30px;
+  color:#fff;
+  font-size:clamp(68px, 8vw, 116px);
+  font-weight:950;
+  line-height:.9;
+  letter-spacing:-.055em;
+  white-space:nowrap;
+}
+
+.board-operation-hero strong{
+  margin-bottom:25px;
+  color:#fff;
+  font-size:clamp(21px, 2vw, 27px);
+  font-weight:850;
+}
+
+.board-operation-copy{
+  max-width:760px;
+  color:rgba(255,255,255,.88);
+  font-size:16px;
+  font-weight:570;
+  line-height:1.9;
+}
+
+.board-operation-copy p{ margin:0; }
+
+.board-operation-label{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  margin-top:30px;
+  color:#fff;
+  font-size:16px;
+  font-weight:850;
+}
+
+.board-operation-label i{
+  color:rgba(255,255,255,.32);
+  font-size:18px;
+  font-style:normal;
+  line-height:1;
+}
+
+.board-operation-label i + i{
+  margin-left:-10px;
+  transform:translateY(6px);
+}
+
+.board-operation-scroll{
+  position:absolute;
+  left:50%;
+  bottom:30px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:rgba(255,255,255,.48);
+  font-size:12px;
+  font-weight:500;
+  transform:translateX(-50%);
+}
+
+.board-operation-scroll > i{
+  width:58px;
+  height:58px;
+  border:1px solid rgba(255,255,255,.7);
+  outline:1px dashed rgba(255,255,255,.5);
+  outline-offset:6px;
+  background:rgba(0,0,0,.44);
+  color:#fff;
+  font-size:20px;
+  box-shadow:0 0 0 5px rgba(0,0,0,.28);
+}
+
+.board-operation-scroll:hover > i{
+  background:rgba(255,184,46,.18);
+  transform:translateY(3px);
+}
+
+@media(max-width:768px){
+  .board-operation-hero{
+    width:100vw;
+    min-height:720px;
+    margin:-98px 0 64px calc(50% - 50vw);
+    padding:130px 24px 96px;
+    align-items:center;
+  }
+
+  .board-operation-hero::before{
+    inset:2% -72% 5% 20%;
+    opacity:.55;
+  }
+
+  .board-operation-hero::after{
+    bottom:-20%;
+    height:36%;
+  }
+
+  .board-operation-content{ margin:0; }
+
+  .board-operation-hero h2{
+    margin-bottom:24px;
+    font-size:clamp(48px, 15vw, 68px);
+    white-space:normal;
+  }
+
+  .board-operation-hero strong{
+    margin-bottom:18px;
+    font-size:20px;
+  }
+
+  .board-operation-copy{
+    font-size:13px;
+    line-height:1.78;
+  }
+
+  .board-operation-copy p{ margin-bottom:5px; }
+
+  .board-operation-label{
+    margin-top:24px;
+    font-size:14px;
+  }
+
+  .board-operation-scroll{ bottom:28px; }
+
+  .board-operation-scroll > i{
+    width:48px;
+    height:48px;
+  }
+}

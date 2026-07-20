@@ -1173,3 +1173,57 @@ body {
     font-size:12px !important;
   }
 }
+
+
+/* ===== pinned notice posts ===== */
+.notice-title-prefix{
+  color:#9a6700;
+  font-weight:1000;
+}
+
+.board-row.is-notice{
+  border-bottom-color:#ead68b;
+  background:#fff9df;
+}
+
+.board-row.is-notice:hover{
+  background:#fff5c2;
+}
+
+.board-row.is-notice > div:first-child{
+  color:#9a6700 !important;
+  font-weight:950 !important;
+}
+
+.board-row.is-notice .board-title{
+  color:#050505;
+  font-weight:1000;
+}
+
+.official-post-card.is-notice,
+.consult-post-card.is-notice{
+  border-radius:10px;
+  background:#fff9df;
+}
+
+.official-post-card.is-notice{
+  padding:10px;
+  box-shadow:0 14px 34px rgba(128,91,0,.12);
+}
+
+.official-post-card.is-notice .official-post-body h2,
+.consult-post-card.is-notice .consult-post-main h2{
+  color:#050505;
+  font-weight:1000;
+}
+
+.consult-post-card.is-notice{
+  padding-left:18px;
+  padding-right:18px;
+  border-bottom:2px solid #d8b84b;
+}
+
+.consult-post-card.is-notice:hover{
+  padding-left:24px;
+  background:#fff5c2;
+}

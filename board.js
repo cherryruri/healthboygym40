@@ -715,7 +715,9 @@ function renderPage(page){
   postList.innerHTML = "";
 
   const meta = getMeta();
-  const posts = getVisiblePosts();
+  const posts = getVisiblePosts().sort((a, b)=>{
+    return Number(Boolean(b.data.isNotice)) - Number(Boolean(a.data.isNotice));
+  });
 
   if(posts.length === 0){
     postList.innerHTML = `<div class="board-empty">등록된 글이 없습니다.</div>`;
@@ -745,6 +747,7 @@ function renderOfficialPosts(posts){
   posts.forEach(({ id, data })=>{
     const card = document.createElement("article");
     card.className = "official-post-card board-post";
+    if(data.isNotice) card.classList.add("is-notice");
 
     const label = getPostCategoryLabel(data);
     const title = escapeHTML(data.title);
@@ -758,7 +761,7 @@ function renderOfficialPosts(posts){
       </div>
       <div class="official-post-body">
         <span class="official-post-kicker">${escapeHTML(label)}</span>
-        <h2>${title}</h2>
+        <h2>${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${title}</h2>
         <time>${date}</time>
       </div>
     `;
@@ -777,6 +780,7 @@ function renderConsultPosts(posts){
   posts.forEach(({ id, data })=>{
     const card = document.createElement("article");
     card.className = "consult-post-card board-post";
+    if(data.isNotice) card.classList.add("is-notice");
 
     const label = getPostCategoryLabel(data);
     const isRequest = getPostCategory(data) === "request" && isRequestContext();
@@ -790,7 +794,7 @@ function renderConsultPosts(posts){
     card.innerHTML = `
       <div class="consult-post-meta-top">${escapeHTML(label)}</div>
       <div class="consult-post-main">
-        <h2>${escapeHTML(data.title)}</h2>
+        <h2>${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${escapeHTML(data.title)}</h2>
         ${isRequest ? `<span class="consult-status ${hasRequestAnswer(data) ? "done" : ""}">${status}</span>` : ""}
       </div>
       <div class="consult-post-meta-bottom">
@@ -813,10 +817,11 @@ function renderTablePosts(posts, startIndex, totalCount){
   posts.forEach(({ id, data })=>{
     const row = document.createElement("div");
     row.className = "board-row board-post";
+    if(data.isNotice) row.classList.add("is-notice");
 
     row.innerHTML = `
       <div>${data.isNotice ? "공지" : no}</div>
-      <div class="board-title">${data.isPublic ? "" : "비밀"} ${escapeHTML(data.title)}</div>
+      <div class="board-title">${data.isPublic ? "" : "비밀"} ${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${escapeHTML(data.title)}</div>
       <div>${escapeHTML(data.writerId || "회원")}</div>
       <div>${formatDate(data)}</div>
       <div>${data.views || 0}</div>

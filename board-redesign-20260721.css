@@ -308,3 +308,16 @@
     font-size:13px !important;
   }
 }
+
+
+/* keep the notice prefix readable on the dark pinned row */
+.board-content-shell .consult-post-card.is-notice .notice-title-prefix{
+  min-width:0 !important;
+  height:auto !important;
+  padding:0 !important;
+  display:inline !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:var(--board-accent) !important;
+  line-height:inherit !important;
+}

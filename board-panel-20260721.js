@@ -11,20 +11,13 @@
   body.classList.add('board-panel-ready');
   panel.setAttribute('tabindex', '-1');
 
-  const back = document.createElement('button');
-  back.type = 'button';
-  back.className = 'board-panel-back';
-  back.textContent = 'INTRO';
-  back.setAttribute('aria-label', '인트로 화면으로 돌아가기');
-  panel.prepend(back);
-
   let active = false;
   let locked = false;
   let touchStartY = 0;
 
   const lockBriefly = () => {
     locked = true;
-    window.setTimeout(() => { locked = false; }, 980);
+    window.setTimeout(() => { locked = false; }, 760);
   };
 
   const showBoard = (updateHash = true) => {
@@ -36,7 +29,7 @@
     panel.removeAttribute('aria-hidden');
     panel.scrollTop = 0;
     if (updateHash) history.replaceState(null, '', '#boardContent');
-    window.setTimeout(() => panel.focus({ preventScroll:true }), 720);
+    window.setTimeout(() => panel.focus({ preventScroll:true }), 600);
   };
 
   const showIntro = (updateHash = true) => {
@@ -47,15 +40,13 @@
     hero.removeAttribute('aria-hidden');
     panel.setAttribute('aria-hidden', 'true');
     if (updateHash) history.replaceState(null, '', location.pathname + location.search);
-    window.setTimeout(() => trigger.focus({ preventScroll:true }), 720);
+    window.setTimeout(() => trigger.focus({ preventScroll:true }), 600);
   };
 
   trigger.addEventListener('click', (event) => {
     event.preventDefault();
     showBoard();
   });
-
-  back.addEventListener('click', () => showIntro());
 
   window.addEventListener('wheel', (event) => {
     if (locked) {

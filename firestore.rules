@@ -1,0 +1,177 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userPath(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function isAdmin() {
+      let profile = signedIn() && exists(userPath(request.auth.uid))
+        ? get(userPath(request.auth.uid)).data
+        : {};
+      return signedIn() && (
+        profile.get('role', '') == 'admin' ||
+        profile.get('isAdmin', false) == true ||
+        profile.get('admin', false) == true ||
+        profile.get('permission', '') == 'admin'
+      );
+    }
+
+    function owns(data) {
+      return signedIn() && (
+        data.get('writerUid', '') == request.auth.uid ||
+        data.get('writerEmail', '') == request.auth.token.email
+      );
+    }
+
+    function isRequestPost(postId) {
+      let post = get(/databases/$(database)/documents/boards/$(postId)).data;
+      return post.get('category', '') == 'request' ||
+        (post.get('board', '') == 'free' &&
+          (post.get('isSecret', false) == true ||
+           post.get('isPublic', true) == false));
+    }
+
+    match /users/{userId} {
+      allow get: if signedIn() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdmin();
+
+      allow create: if signedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.get('role', '') == 'user' &&
+        request.resource.data.get('email', '') == request.auth.token.email &&
+        !request.resource.data.keys().hasAny([
+          'isAdmin', 'admin', 'permission'
+        ]);
+
+      allow update: if isAdmin() || (
+        signedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'name',
+          'phone',
+          'photoDataUrl',
+          'preferredProgram',
+          'updatedAt',
+          'mobileMypageBanners'
+        ])
+      );
+
+      allow delete: if signedIn() &&
+        (request.auth.uid == userId || isAdmin());
+    }
+
+    match /userIds/{loginId} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn() &&
+        request.resource.data.get('uid', '') == request.auth.uid &&
+        request.resource.data.get('id', '') == loginId &&
+        request.resource.data.get('email', '') == request.auth.token.email;
+      allow update, delete: if false;
+    }
+
+    match /phoneNumbers/{phoneId} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn() &&
+        request.resource.data.get('uid', '') == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /memberKeys/{memberKey} {
+      allow get: if true;
+      allow list: if false;
+      allow create: if signedIn() &&
+        request.resource.data.get('uid', '') == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /boards/{postId} {
+      allow read: if true;
+
+      allow create: if signedIn() &&
+        request.resource.data.get('writerUid', '') == request.auth.uid &&
+        (
+          request.resource.data.get('isNotice', false) == false ||
+          isAdmin()
+        ) &&
+        (
+          request.resource.data.get('isAdminOnly', false) == false ||
+          isAdmin()
+        ) &&
+        (
+          !(request.resource.data.get('board', '') in [
+            'noticeboard', 'news', 'infoboard'
+          ]) ||
+          isAdmin()
+        );
+
+      allow update: if isAdmin() || (
+        owns(resource.data) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title',
+          'content',
+          'thumbnailDataUrl',
+          'isSecret',
+          'isPublic'
+        ])
+      );
+
+      allow delete: if isAdmin() || owns(resource.data);
+
+      match /comments/{commentId} {
+        allow read: if true;
+
+        allow create: if signedIn() &&
+          request.resource.data.get('writerUid', '') == request.auth.uid &&
+          (
+            isAdmin() ||
+            (
+              !isRequestPost(postId) &&
+              request.resource.data.get('writerRole', 'user') != 'admin' &&
+              request.resource.data.get('isAdminAnswer', false) == false
+            )
+          );
+
+        allow update: if isAdmin() || (
+          owns(resource.data) &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'text'
+          ])
+        ) || (
+          signedIn() &&
+          !isRequestPost(postId) &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'likes', 'likedBy'
+          ])
+        );
+
+        allow delete: if isAdmin() || owns(resource.data);
+      }
+
+      match /likes/{userId} {
+        allow read: if true;
+        allow create: if signedIn() &&
+          request.auth.uid == userId &&
+          request.resource.data.keys().hasOnly(['createdAt']);
+        allow update: if false;
+        allow delete: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    match /siteSettings/{settingId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

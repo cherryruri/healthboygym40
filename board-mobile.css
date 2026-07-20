@@ -346,3 +346,28 @@
     font-size:12px !important;
   }
 }
+
+
+/* ===== mobile pinned notice posts ===== */
+@media(max-width:768px){
+  .mobile-post-card.is-notice{
+    border-left:4px solid #d2a81e;
+    border-bottom-color:#ead68b;
+    background:#fff9df;
+  }
+
+  .mobile-post-card.is-notice .mobile-post-title{
+    color:#050505;
+    font-weight:1000 !important;
+  }
+
+  .mobile-notice-prefix{
+    color:#9a6700;
+    font-weight:1000;
+  }
+
+  .mobile-post-card.is-notice .mobile-post-category{
+    color:#80631a;
+    font-weight:950;
+  }
+}

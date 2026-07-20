@@ -316,7 +316,10 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         });
       });
 
-      posts.sort((a, b)=>getCreatedTime(b.data) - getCreatedTime(a.data));
+      posts.sort((a, b)=>{
+        const noticeOrder = Number(Boolean(b.data.isNotice)) - Number(Boolean(a.data.isNotice));
+        return noticeOrder || getCreatedTime(b.data) - getCreatedTime(a.data);
+      });
       renderPosts();
     }catch(error){
       console.log(error);
@@ -348,6 +351,9 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       const unread = isRequest && hasUnreadRequestAnswer(id, data);
 
       card.className = "mobile-post-card";
+      if(data.isNotice){
+        card.classList.add("is-notice");
+      }
       if(isRequest){
         card.classList.add("is-request");
       }
@@ -360,7 +366,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         <div class="mobile-post-main">
           <div class="mobile-post-text">
             <h2 class="mobile-post-title">
-              ${escapeHTML(data.title || "제목 없음")}
+              ${data.isNotice ? '<span class="mobile-notice-prefix">(공지)</span> ' : ""}${escapeHTML(data.title || "제목 없음")}
               ${unread ? `<span class="mobile-post-new">NEW</span>` : ""}
             </h2>
             <span class="mobile-post-category">${escapeHTML(label)}</span>

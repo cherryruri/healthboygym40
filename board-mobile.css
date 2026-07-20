@@ -429,3 +429,36 @@
     padding-right:12px;
   }
 }
+
+/* ===== force white board navigation on mobile ===== */
+@media(max-width:768px){
+  body header,
+  body.board-header-over-hero header{
+    background:#050505 !important;
+    border-bottom-color:rgba(255,255,255,.12) !important;
+    box-shadow:none !important;
+  }
+
+  body.board-header-over-hero header{
+    background:transparent !important;
+  }
+
+  body header .logo a,
+  body header #logo-text{
+    color:#fff !important;
+    -webkit-text-fill-color:#fff !important;
+  }
+
+  body header .mobile-menu-btn{
+    border-color:rgba(255,255,255,.5) !important;
+    background:rgba(0,0,0,.3) !important;
+    color:#fff !important;
+  }
+
+  body header .mobile-menu-btn::before,
+  body header .mobile-menu-btn::after,
+  body header .mobile-menu-btn span{
+    background:#fff !important;
+    color:#fff !important;
+  }
+}

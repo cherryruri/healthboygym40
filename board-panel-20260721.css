@@ -1,0 +1,160 @@
+/* Full-page panel transition for the desktop board */
+@media(min-width:769px){
+  html:has(body.board-panel-ready),
+  body.board-panel-ready{
+    width:100%;
+    height:100%;
+    overflow:hidden !important;
+    overscroll-behavior:none;
+  }
+
+  body.board-panel-ready .board-page{
+    position:relative !important;
+    width:100% !important;
+    height:100svh !important;
+    min-height:100svh !important;
+    padding:0 !important;
+    overflow:hidden !important;
+    background:#fff !important;
+  }
+
+  body.board-panel-ready .board-layout,
+  body.board-panel-ready .board-main{
+    position:relative !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:0 !important;
+    margin:0 !important;
+    overflow:hidden !important;
+  }
+
+  body.board-panel-ready .board-operation-hero.board-motion-hero{
+    position:absolute !important;
+    inset:0 !important;
+    z-index:2 !important;
+    width:100% !important;
+    height:100% !important;
+    min-height:100% !important;
+    margin:0 !important;
+    padding:120px max(36px,calc((100vw - 1320px)/2)) 112px !important;
+    opacity:1;
+    transform:translate3d(0,0,0);
+    transition:
+      transform .95s cubic-bezier(.76,0,.24,1),
+      opacity .7s ease;
+    will-change:transform,opacity;
+  }
+
+  body.board-panel-ready .board-content-shell{
+    position:absolute !important;
+    z-index:1 !important;
+    top:80px !important;
+    bottom:0 !important;
+    left:50% !important;
+    width:min(1040px,calc(100% - 60px)) !important;
+    height:auto !important;
+    margin:0 !important;
+    padding:66px 0 46px !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    overscroll-behavior:contain;
+    scrollbar-width:thin;
+    scrollbar-color:#aaa transparent;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transform:translate3d(-50%,100%,0);
+    transition:
+      transform .95s cubic-bezier(.76,0,.24,1),
+      opacity .55s .12s ease,
+      visibility 0s .95s;
+    will-change:transform,opacity;
+  }
+
+  body.board-panel-active .board-operation-hero.board-motion-hero{
+    opacity:.05;
+    pointer-events:none;
+    transform:translate3d(0,-100%,0);
+  }
+
+  body.board-panel-active .board-content-shell{
+    z-index:3 !important;
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+    transform:translate3d(-50%,0,0);
+    transition:
+      transform .95s cubic-bezier(.76,0,.24,1),
+      opacity .55s .12s ease,
+      visibility 0s;
+  }
+
+  body.board-panel-active header,
+  body.board-panel-active.board-header-over-hero header{
+    background:#050505 !important;
+    border-bottom:1px solid rgba(255,255,255,.14) !important;
+  }
+
+  body.board-panel-ready .board-operation-scroll{
+    cursor:pointer;
+  }
+
+  body.board-panel-ready .board-operation-scroll::after{
+    content:"";
+    position:absolute;
+    inset:-18px -22px;
+  }
+
+  .board-panel-back{
+    position:absolute;
+    z-index:8;
+    top:22px;
+    right:0;
+    height:34px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    gap:9px;
+    border:0;
+    background:transparent;
+    color:#777;
+    font:800 10px/1 Arial,sans-serif;
+    letter-spacing:.14em;
+    cursor:pointer;
+    transition:color .2s ease;
+  }
+
+  .board-panel-back::before{
+    content:"↑";
+    width:28px;
+    height:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #aaa;
+    border-radius:50%;
+    color:#222;
+    font-size:13px;
+    transition:transform .2s ease,border-color .2s ease;
+  }
+
+  .board-panel-back:hover{color:#111}
+  .board-panel-back:hover::before{
+    border-color:#111;
+    transform:translateY(-3px);
+  }
+
+  body.board-panel-ready .board-content-shell .board-header{
+    margin-bottom:55px !important;
+  }
+
+  body.board-panel-ready .board-content-shell:focus{outline:none}
+}
+
+@media(prefers-reduced-motion:reduce) and (min-width:769px){
+  body.board-panel-ready .board-operation-hero.board-motion-hero,
+  body.board-panel-ready .board-content-shell{
+    transition-duration:.01ms !important;
+    transition-delay:0s !important;
+  }
+}

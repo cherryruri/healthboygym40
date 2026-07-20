@@ -479,3 +479,74 @@ border-radius:6px;
     font-size:20px !important;
   }
 }
+
+
+/* ===== admin notice option ===== */
+.editor-notice-option{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:18px 0 4px;
+  padding:16px 18px;
+  border:1px solid #e8d58c;
+  border-radius:14px;
+  background:#fff9df;
+  color:#171717;
+  cursor:pointer;
+}
+
+.editor-notice-option[hidden]{
+  display:none !important;
+}
+
+.editor-notice-option input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.editor-notice-check{
+  position:relative;
+  flex:0 0 24px;
+  width:24px;
+  height:24px;
+  border:2px solid #a98618;
+  border-radius:7px;
+  background:#fff;
+}
+
+.editor-notice-option input:checked + .editor-notice-check{
+  border-color:#111;
+  background:#111;
+}
+
+.editor-notice-option input:checked + .editor-notice-check::after{
+  content:"";
+  position:absolute;
+  left:7px;
+  top:3px;
+  width:6px;
+  height:11px;
+  border:solid #fff;
+  border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+
+.editor-notice-copy{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.editor-notice-copy strong{
+  font-size:14px;
+  font-weight:950;
+  line-height:1.25;
+}
+
+.editor-notice-copy small{
+  color:#76601d;
+  font-size:12px;
+  font-weight:700;
+  line-height:1.4;
+}

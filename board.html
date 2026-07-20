@@ -6,7 +6,7 @@
 <title>게시판</title>
 
 <link rel="stylesheet" href="style.css?v=20260705-review-flow18">
-<link rel="stylesheet" href="board.css?v=20260721-compact-list1">
+<link rel="stylesheet" href="board.css?v=20260721-reference-list1">
 <link rel="stylesheet" href="board-mobile.css?v=20260721-compact-list1">
 </head>
 <body class="loaded">
@@ -58,6 +58,12 @@
       <button type="button" data-category="pt">PT후기</button>
     </div>
 
+
+    <div class="board-bottom">
+      <input type="text" id="boardSearch" placeholder="검색어를 입력하세요">
+      <button id="writeBtn" class="write-btn">글쓰기</button>
+    </div>
+
     <div class="board-table">
       <div class="board-row board-head">
         <div>No</div>
@@ -70,10 +76,6 @@
       <div id="postList"></div>
     </div>
 
-    <div class="board-bottom">
-      <input type="text" id="boardSearch" placeholder="Search">
-      <button id="writeBtn" class="write-btn">글쓰기</button>
-    </div>
 
     <div id="pagination" class="pagination"></div>
   </div>

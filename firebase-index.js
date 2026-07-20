@@ -353,7 +353,7 @@ if(mypageBtn){
       .hero-expand-sticky > .review-cover-panel{
         background:rgba(0,0,0,var(--review-bg-live-opacity, var(--review-bg-opacity, 0))) !important;
         backdrop-filter:none !important;
-        transition:background .5s cubic-bezier(.22,.61,.36,1) !important;
+        transition:background .68s cubic-bezier(.22,.61,.36,1) !important;
       }
       .hero-expand-sticky > .review-cover-panel .review-stats-section{
         opacity:var(--review-stats-live-opacity, var(--review-stats-opacity, 0)) !important;
@@ -398,7 +398,7 @@ if(mypageBtn){
         opacity:var(--review-cards-live-opacity, var(--review-cards-opacity, 0)) !important;
         transform:translate(-50%, var(--review-cards-live-y, 24px)) !important;
         z-index:8 !important;
-        transition:opacity .28s linear, transform .34s cubic-bezier(.22,.61,.36,1) !important;
+        transition:opacity .42s linear, transform .58s cubic-bezier(.22,.61,.36,1) !important;
       }
       .review-cover-panel .review-slide{
         width:min(72vw, 292px) !important;
@@ -407,11 +407,11 @@ if(mypageBtn){
         height:auto !important;
         min-height:0 !important;
         overflow:hidden !important;
-        border-radius:16px !important;
-        background:#fff !important;
+        border-radius:20px !important;
+        background:linear-gradient(180deg, #fff 0%, #f7f8fa 100%) !important;
         opacity:var(--review-cards-live-opacity, var(--slide-opacity, 0)) !important;
         transform:translateX(var(--review-cards-live-x, 0px)) !important;
-        box-shadow:0 22px 52px rgba(0,0,0,.24) !important;
+        box-shadow:0 24px 64px rgba(0,0,0,.20) !important;
       }
       .review-cover-panel .review-slide a,
       #brand #inc01 .list .review01 a,
@@ -427,7 +427,9 @@ if(mypageBtn){
         height:100% !important;
         min-height:0 !important;
         background-image:none !important;
-        background:#fff !important;
+        background:linear-gradient(180deg, #fff 0%, #f7f8fa 100%) !important;
+        border-radius:inherit !important;
+        box-shadow:none !important;
         color:#111 !important;
       }
       .review-cover-panel .review-slide a::before,
@@ -443,11 +445,11 @@ if(mypageBtn){
         width:100% !important;
         height:100% !important;
         min-height:0 !important;
-        padding:22px 20px 18px !important;
+        padding:24px 22px 20px !important;
         display:flex !important;
         flex-direction:column !important;
         justify-content:space-between !important;
-        gap:10px !important;
+        gap:12px !important;
         color:#111 !important;
         opacity:1 !important;
         transform:none !important;
@@ -529,7 +531,7 @@ if(mypageBtn){
         }
         .review-proof-title{
           width:min(620px, 96vw) !important;
-          top:var(--review-proof-top, 35%) !important;
+          top:var(--review-proof-top, 31%) !important;
           gap:var(--proof-divider-gap, 10px) !important;
           font-size:clamp(27px, 7vw, 34px) !important;
           line-height:1 !important;
@@ -538,16 +540,16 @@ if(mypageBtn){
           height:2px !important;
         }
         .hero-expand-sticky > .review-cover-panel .all_slider{
-          top:var(--review-cards-top, 59%) !important;
+          top:var(--review-cards-top, 60%) !important;
           padding:0 !important;
         }
         .review-cover-panel .review-slide{
           width:min(76vw, 286px) !important;
           max-width:286px !important;
-          border-radius:15px !important;
+          border-radius:18px !important;
         }
         .review-cover-panel .review-card-text{
-          padding:20px 18px 17px !important;
+          padding:22px 19px 19px !important;
         }
         .review-cover-panel .review-title{
           font-size:19px !important;
@@ -635,12 +637,12 @@ if(mypageBtn){
     const blackFadeRange = isMobile ? 0.17 : 0.16;
     const blackOpacity = easeInOut((progress - blackFadeStart) / blackFadeRange) * 0.92;
 
-    const proofStart = isMobile ? 0.735 : 0.944;
-    const proofRange = isMobile ? 0.055 : 0.02;
+    const proofStart = isMobile ? 0.72 : 0.925;
+    const proofRange = isMobile ? 0.075 : 0.04;
     const proofVisible = easeInOut((progress - proofStart) / proofRange);
 
-    const cardStart = isMobile ? 0.775 : 0.958;
-    const cardRange = isMobile ? 0.055 : 0.022;
+    const cardStart = isMobile ? 0.805 : 0.965;
+    const cardRange = isMobile ? 0.075 : 0.026;
     const cardExitStart = isMobile ? 0.984 : 0.997;
     const cardExitRange = isMobile ? 0.03 : 0.004;
     const cardShow = easeInOut((progress - cardStart) / cardRange);
@@ -655,8 +657,8 @@ if(mypageBtn){
 
     hero.style.setProperty("--hero-white-bg-opacity", clamp(whiteOpacity, 0, 1).toFixed(4));
     hero.style.setProperty("--review-bg-live-opacity", clamp(blackOpacity, 0, 0.92).toFixed(4));
-    hero.style.setProperty("--review-proof-top", isMobile ? "35%" : "40%");
-    hero.style.setProperty("--review-cards-top", isMobile ? "59%" : "61%");
+    hero.style.setProperty("--review-proof-top", isMobile ? "31%" : "36%");
+    hero.style.setProperty("--review-cards-top", isMobile ? "60%" : "63%");
     hero.style.setProperty("--review-cards-live-opacity", cardVisible.toFixed(4));
     hero.style.setProperty("--review-cards-live-y", `${((1 - cardVisible) * 26).toFixed(2)}px`);
     hero.style.setProperty("--review-cards-live-x", "0px");

@@ -6,7 +6,7 @@
 <title>글쓰기</title>
 
 <link rel="stylesheet" href="style.css?v=20260705-review-flow18">
-<link rel="stylesheet" href="editor.css?v=20260618-type-scale">
+<link rel="stylesheet" href="editor.css?v=20260721-admin-notice1">
 
 </head>
 
@@ -116,6 +116,15 @@
 
 <div id="postContent" class="editor-content" contenteditable="true" data-placeholder="내용을 입력하세요"></div>
 
+<label id="editorNoticeOption" class="editor-notice-option" hidden>
+  <input type="checkbox" id="postIsNotice">
+  <span class="editor-notice-check" aria-hidden="true"></span>
+  <span class="editor-notice-copy">
+    <strong>공지로 표시하기</strong>
+    <small>체크하면 게시판 최상단에 강조되어 표시됩니다.</small>
+  </span>
+</label>
+
 <div class="editor-actions">
   <a href="board.html" class="cancel-btn">취소</a>
   <button type="button" id="submitPost" class="submit-btn">등록하기</button>
@@ -132,7 +141,7 @@
 
 <script src="site-menu.js?v=20260710-home-menu1"></script>
 <script type="module" src="firebase-index.js?v=20260705-review-flow18"></script>
-<script type="module" src="editor.js?v=20260709-request-board1"></script>
+<script type="module" src="editor.js?v=20260721-admin-notice1"></script>
 
 </body>
 </html>

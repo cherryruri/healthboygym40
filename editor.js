@@ -40,6 +40,7 @@ let currentUser = null;
 let currentUserData = null;
 let thumbnailDataUrl = "";
 let loadedBoard = null;
+let loadedCategory = null;
 
 const titleInput = document.getElementById("postTitle");
 const contentBox = document.getElementById("postContent");
@@ -108,6 +109,7 @@ function getEffectiveBoard(){
 }
 
 function getEffectiveCategory(effectiveBoard){
+  if(loadedCategory) return loadedCategory;
   if(categoryParam) return categoryParam;
   if(effectiveBoard === "praise") return "praise";
   if(effectiveBoard === "review") return "pt";
@@ -446,6 +448,7 @@ async function loadPostForEdit(){
 
   const post = snap.data();
   loadedBoard = post.board || board;
+  loadedCategory = post.category || null;
   updateEditorHeader();
 
   titleInput.value = post.title || "";

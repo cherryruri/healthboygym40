@@ -6,10 +6,10 @@
 <title>게시판</title>
 
 <link rel="stylesheet" href="style.css?v=20260705-review-flow18">
-<link rel="stylesheet" href="board.css?v=20260721-review-proof-hero1">
+<link rel="stylesheet" href="board.css?v=20260721-black-hero-nav1">
 <link rel="stylesheet" href="board-mobile.css?v=20260721-compact-list1">
 </head>
-<body class="loaded">
+<body class="loaded board-header-over-hero">
 
 <header>
   <nav class="navbar">
@@ -131,6 +131,24 @@
       }, 500);
     }
   });
+</script>
+
+
+<script>
+  (() => {
+    const hero = document.querySelector('.board-operation-hero');
+
+    if (!hero) return;
+
+    const syncBoardHeaderTone = () => {
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      document.body.classList.toggle('board-header-over-hero', heroBottom > 82);
+    };
+
+    syncBoardHeaderTone();
+    window.addEventListener('scroll', syncBoardHeaderTone, { passive: true });
+    window.addEventListener('resize', syncBoardHeaderTone);
+  })();
 </script>
 
 </body>

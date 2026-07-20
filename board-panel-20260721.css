@@ -1,4 +1,4 @@
-/* Full-page panel transition for the desktop board */
+/* Full-screen fade transition for the desktop board */
 @media(min-width:769px){
   html:has(body.board-panel-ready),
   body.board-panel-ready{
@@ -38,11 +38,12 @@
     margin:0 !important;
     padding:120px max(36px,calc((100vw - 1320px)/2)) 112px !important;
     opacity:1;
-    transform:translate3d(0,0,0);
+    visibility:visible;
+    transform:none !important;
     transition:
-      transform .95s cubic-bezier(.76,0,.24,1),
-      opacity .7s ease;
-    will-change:transform,opacity;
+      opacity .72s cubic-bezier(.4,0,.2,1),
+      visibility 0s;
+    will-change:opacity;
   }
 
   body.board-panel-ready .board-content-shell{
@@ -60,21 +61,25 @@
     overscroll-behavior:contain;
     scrollbar-width:thin;
     scrollbar-color:#aaa transparent;
+    background:#fff;
     opacity:0;
     visibility:hidden;
     pointer-events:none;
-    transform:translate3d(-50%,100%,0);
+    transform:translate3d(-50%,0,0) !important;
     transition:
-      transform .95s cubic-bezier(.76,0,.24,1),
-      opacity .55s .12s ease,
-      visibility 0s .95s;
-    will-change:transform,opacity;
+      opacity .72s cubic-bezier(.4,0,.2,1),
+      visibility 0s .72s;
+    will-change:opacity;
   }
 
   body.board-panel-active .board-operation-hero.board-motion-hero{
-    opacity:.05;
+    opacity:0;
+    visibility:hidden;
     pointer-events:none;
-    transform:translate3d(0,-100%,0);
+    transform:none !important;
+    transition:
+      opacity .62s cubic-bezier(.4,0,.2,1),
+      visibility 0s .62s;
   }
 
   body.board-panel-active .board-content-shell{
@@ -82,10 +87,9 @@
     opacity:1;
     visibility:visible;
     pointer-events:auto;
-    transform:translate3d(-50%,0,0);
+    transform:translate3d(-50%,0,0) !important;
     transition:
-      transform .95s cubic-bezier(.76,0,.24,1),
-      opacity .55s .12s ease,
+      opacity .72s .08s cubic-bezier(.4,0,.2,1),
       visibility 0s;
   }
 
@@ -103,45 +107,6 @@
     content:"";
     position:absolute;
     inset:-18px -22px;
-  }
-
-  .board-panel-back{
-    position:absolute;
-    z-index:8;
-    top:22px;
-    right:0;
-    height:34px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    gap:9px;
-    border:0;
-    background:transparent;
-    color:#777;
-    font:800 10px/1 Arial,sans-serif;
-    letter-spacing:.14em;
-    cursor:pointer;
-    transition:color .2s ease;
-  }
-
-  .board-panel-back::before{
-    content:"↑";
-    width:28px;
-    height:28px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border:1px solid #aaa;
-    border-radius:50%;
-    color:#222;
-    font-size:13px;
-    transition:transform .2s ease,border-color .2s ease;
-  }
-
-  .board-panel-back:hover{color:#111}
-  .board-panel-back:hover::before{
-    border-color:#111;
-    transform:translateY(-3px);
   }
 
   body.board-panel-ready .board-content-shell .board-header{

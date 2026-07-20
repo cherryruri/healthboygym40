@@ -6,8 +6,8 @@
 <title>게시판</title>
 
 <link rel="stylesheet" href="style.css?v=20260705-review-flow18">
-<link rel="stylesheet" href="board.css?v=20260721-footprint-hero1">
-<link rel="stylesheet" href="board-mobile.css?v=20260721-footprint-hero1">
+<link rel="stylesheet" href="board.css?v=20260721-motion-board1">
+<link rel="stylesheet" href="board-mobile.css?v=20260721-motion-board1">
 </head>
 <body class="loaded board-header-over-hero">
 
@@ -47,61 +47,72 @@
 
 
 
-    <section class="board-operation-hero board-footprint-hero" aria-labelledby="boardOperationTitle">
+    <section class="board-operation-hero board-motion-hero" aria-labelledby="boardOperationTitle">
+      <div class="board-hero-ghost" aria-hidden="true">
+        <span>TRAIN · SHARE · GROW · </span>
+        <span>TRAIN · SHARE · GROW · </span>
+      </div>
       <div class="board-operation-content">
-        <h2 id="boardOperationTitle">COMMUNITY</h2>
-        <strong class="board-operation-lead">함께 만드는 건강한 운동 문화</strong>
+        <p class="board-operation-kicker"><span>HEALTHBOYGYM</span><i></i><span>COMMUNITY</span></p>
+        <h2 id="boardOperationTitle" aria-label="COMMUNITY">
+          <span style="--letter:0">C</span><span style="--letter:1">O</span><span style="--letter:2">M</span><span style="--letter:3">M</span><span style="--letter:4">U</span><span style="--letter:5">N</span><span style="--letter:6">I</span><span style="--letter:7">T</span><span style="--letter:8">Y</span>
+        </h2>
+        <strong class="board-operation-lead"><span>함께 움직이고,</span> <span>함께 성장하는 공간.</span></strong>
         <div class="board-operation-copy">
-          <p>헬스보이짐 수내점 회원들의 운동 경험과 유용한 정보를 나누는 열린 공간입니다.</p>
-          <p>서로를 존중하는 표현을 사용하고 개인정보, 광고성 게시물, 비방성 콘텐츠는 삼가 주세요.</p>
-          <p>게시판 운영 목적에 맞지 않는 글은 안내 후 이동 또는 삭제될 수 있습니다.</p>
+          <p>운동 경험과 유용한 정보를 자유롭게 나누는 헬스보이짐 수내점 커뮤니티입니다.</p>
+          <p>서로를 존중하는 표현으로 건강한 운동 문화를 함께 만들어 주세요.</p>
         </div>
         <div class="board-operation-label">
-          <span>게시판 운영 안내</span>
-          <i aria-hidden="true">⌄</i>
-          <i aria-hidden="true">⌄</i>
+          <span>BOARD GUIDE</span>
+          <i aria-hidden="true">↘</i>
         </div>
       </div>
       <a class="board-operation-scroll" href="#boardContent" aria-label="게시글 목록으로 이동">
-        <i aria-hidden="true">⌄</i>
-        <span>scroll</span>
+        <i aria-hidden="true">↓</i>
+        <span>EXPLORE</span>
       </a>
     </section>
 
-    <div class="board-header" id="boardContent">
-      <h1>자유게시판</h1>
-      <p id="boardDesc">
-        헬스보이짐 수내점 회원님들의 자유로운 이야기와 후기를 확인하는 공간입니다.
-      </p>
-    </div>
-
-    <div id="boardCategoryBar" class="board-category-bar">
-      <button type="button" class="active" data-category="all">전체</button>
-      <button type="button" data-category="free">자유게시판</button>
-      <button type="button" data-category="praise">칭찬합니다</button>
-      <button type="button" data-category="pt">PT후기</button>
-    </div>
-
-
-
-    <div class="board-table">
-      <div class="board-row board-head">
-        <div>No</div>
-        <div>제목</div>
-        <div>글쓴이</div>
-        <div>작성시간</div>
-        <div>조회수</div>
+    <section class="board-content-shell" aria-label="게시판 글 목록">
+      <div class="board-header" id="boardContent">
+        <span class="board-section-index">01 / COMMUNITY BOARD</span>
+        <div class="board-header-copy">
+          <h1>자유게시판</h1>
+          <p id="boardDesc">헬스보이짐 수내점 회원님들의 자유로운 이야기와 후기를 확인하는 공간입니다.</p>
+        </div>
       </div>
-      <div id="noticeList"></div>
-      <div id="postList"></div>
-    </div>
 
+      <div class="board-toolbar">
+        <div id="boardCategoryBar" class="board-category-bar">
+          <button type="button" class="active" data-category="all">전체</button>
+          <button type="button" data-category="free">자유게시판</button>
+          <button type="button" data-category="praise">칭찬합니다</button>
+          <button type="button" data-category="pt">PT후기</button>
+        </div>
+        <div class="board-bottom">
+          <label class="board-search-field">
+            <span class="sr-only">게시글 검색</span>
+            <input type="text" id="boardSearch" placeholder="검색어를 입력하세요.">
+            <i aria-hidden="true"></i>
+          </label>
+          <button id="writeBtn" class="write-btn"><span>글쓰기</span><i aria-hidden="true">＋</i></button>
+        </div>
+      </div>
 
-    <div id="pagination" class="pagination"></div>
-    <div class="board-bottom">
-      <input type="text" id="boardSearch" placeholder="검색어를 입력하세요.">
-      <button id="writeBtn" class="write-btn">글쓰기</button>
-    </div>
+      <div class="board-table">
+        <div class="board-row board-head">
+          <div>No</div>
+          <div>제목</div>
+          <div>글쓴이</div>
+          <div>작성시간</div>
+          <div>조회수</div>
+        </div>
+        <div id="noticeList"></div>
+        <div id="postList"></div>
+      </div>
+
+      <div id="pagination" class="pagination"></div>
+    </section>
 
   </div>
 

@@ -3,15 +3,28 @@ document.addEventListener("DOMContentLoaded", function(){
   /* 로더 */
   if("scrollRestoration" in window.history){
     window.history.scrollRestoration =
-      "manual";
-  }
-
-  if(!window.location.hash){
-    window.scrollTo(0, 0);
+      "auto";
   }
 
   let siteStarted =
     false;
+
+  const loaderSessionKey =
+    "healthboygymLoaderSeen";
+
+  function hasSeenLoader(){
+    try{
+      return window.sessionStorage.getItem(loaderSessionKey) === "1";
+    }catch(error){
+      return false;
+    }
+  }
+
+  function markLoaderSeen(){
+    try{
+      window.sessionStorage.setItem(loaderSessionKey, "1");
+    }catch(error){}
+  }
 
   function getHomeFlowConfig(){
 
@@ -3446,6 +3459,15 @@ document.addEventListener("DOMContentLoaded", function(){
       mainContent.style.display = "block";
     }
 
+    if(hasSeenLoader()){
+      document.body.classList.add("loaded");
+      if(loader) loader.style.display = "none";
+      startSite();
+      initHashNavigation();
+      queueHashScroll();
+      return;
+    }
+
     if(!loader){
       document.body.classList.add("loaded");
       startSite();
@@ -3455,6 +3477,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     setLoaderTarget();
+    markLoaderSeen();
 
     const isMobileLoader =
       window.innerWidth <= 768;
@@ -3504,9 +3527,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
   prepareIntroCaption();
 
-  stageLoaderIntro();
+  if(!hasSeenLoader()){
+    stageLoaderIntro();
+  }
 
-  setTimeout(openMain, 2860);
+  setTimeout(openMain, hasSeenLoader() ? 0 : 2860);
 
 
 
@@ -3544,6 +3569,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let lastHeroSmoothAt =
       0;
+
+    let heroUpdateFrame =
+      0;
+
+    let needsHeroFollowUp =
+      false;
 
     function smoothHeroProgress(rawProgress){
 
@@ -3686,6 +3717,7 @@ document.addEventListener("DOMContentLoaded", function(){
             true;
 
           document.documentElement.classList.add("review-stats-counted");
+          queueHeroUpdate();
         }
 
       }
@@ -3722,6 +3754,7 @@ document.addEventListener("DOMContentLoaded", function(){
         true;
 
       document.documentElement.classList.add("review-stats-counted");
+      queueHeroUpdate();
 
     }
 
@@ -3738,6 +3771,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const progress =
         smoothHeroProgress(rawProgress);
+
+      needsHeroFollowUp =
+        Math.abs(rawProgress - progress) > 0.00035;
 
       hero.style.setProperty(
         "--hero-progress",
@@ -4248,27 +4284,43 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
-    function tick(){
+    function queueHeroUpdate(){
 
-      update();
-      requestAnimationFrame(tick);
+      if(heroUpdateFrame) return;
+
+      heroUpdateFrame =
+        requestAnimationFrame(()=>{
+          heroUpdateFrame =
+            0;
+
+          update();
+
+          if(needsHeroFollowUp){
+            queueHeroUpdate();
+          }
+        });
 
     }
 
-    tick();
+    queueHeroUpdate();
 
     window.addEventListener(
       "scroll",
-      update,
+      queueHeroUpdate,
       { passive:true }
     );
 
-    setInterval(update, 100);
-
     window.addEventListener(
       "resize",
-      update
+      queueHeroUpdate,
+      {passive:true}
     );
+
+    window.addEventListener("orientationchange", queueHeroUpdate, {passive:true});
+    window.addEventListener("pageshow", queueHeroUpdate, {passive:true});
+    document.addEventListener("visibilitychange", ()=>{
+      if(!document.hidden) queueHeroUpdate();
+    });
 
   }
 

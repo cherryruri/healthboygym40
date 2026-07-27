@@ -419,7 +419,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
         <div class="mobile-post-main">
           <div class="mobile-post-text">
             <h2 class="mobile-post-title">
-              ${data.isNotice ? '<span class="mobile-notice-prefix">|&nbsp;&nbsp;공지&nbsp;&nbsp;|</span> ' : ""}${escapeHTML(data.title || "제목 없음")}
+              ${data.isNotice ? '<span class="mobile-notice-prefix">| 공지 |</span>' : ""}${escapeHTML(data.title || "제목 없음")}
               ${unread ? `<span class="mobile-post-new">NEW</span>` : ""}
             </h2>
             <span class="mobile-post-category">${escapeHTML(label)}</span>

@@ -126,16 +126,50 @@
 
 .board-content-shell .notice-title-prefix,
 .mobile-post-card .mobile-notice-prefix{
-  display:inline !important;
+  position:relative !important;
+  top:1px !important;
+  display:inline-block !important;
   min-width:0 !important;
   height:auto !important;
   padding:0 !important;
+  margin:0 26px 0 0 !important;
   border-radius:0 !important;
   background:transparent !important;
   font-size:1em !important;
   font-weight:inherit !important;
   line-height:inherit !important;
   letter-spacing:0 !important;
+  vertical-align:baseline !important;
+  transform:none !important;
+}
+
+.board-content-shell .consult-post-card.is-notice,
+.board-content-shell .consult-post-card.is-notice:hover,
+.board-content-shell .board-row.is-notice,
+.board-content-shell .board-row.is-notice:hover{
+  border-color:#eee3aa !important;
+  background:#fffbea !important;
+  color:#575347 !important;
+}
+
+.board-content-shell .consult-post-card.is-notice::before{
+  background:#e5cf69 !important;
+}
+
+.board-content-shell .consult-post-card.is-notice .consult-post-meta-top,
+.board-content-shell .consult-post-card.is-notice .consult-post-meta-bottom{
+  color:#8a8575 !important;
+}
+
+.board-content-shell .consult-post-card.is-notice .consult-post-main h2,
+.board-content-shell .board-row.is-notice .board-title{
+  color:#17160f !important;
+}
+
+.board-content-shell .consult-post-card.is-notice .notice-title-prefix,
+.board-content-shell .board-row.is-notice .notice-title-prefix,
+.board-content-shell .board-row.is-notice > div:first-child{
+  color:#8a6f00 !important;
 }
 
 @media(min-width:769px){
@@ -155,5 +189,88 @@
 @media(max-width:768px){
   html.board-intro-seen .board-operation-hero.board-motion-hero{
     display:none !important;
+  }
+
+  .board-page{
+    width:100% !important;
+    max-width:none !important;
+    min-height:100svh !important;
+    margin:0 !important;
+    padding:76px 18px 48px !important;
+    background:#fff !important;
+  }
+
+  .board-page .board-layout,
+  .board-page .board-main,
+  .board-page .board-content-shell{
+    width:100% !important;
+    max-width:none !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+
+  .board-page .board-content-shell{
+    padding:46px 0 24px !important;
+  }
+
+  .board-page .board-content-shell .board-header{
+    margin-bottom:30px !important;
+    padding-bottom:24px !important;
+  }
+
+  .board-page .board-content-shell .board-header-copy h1{
+    font-size:36px !important;
+  }
+
+  .board-page .board-content-shell .consult-post-card,
+  .board-page .board-content-shell .consult-post-card.is-notice,
+  .board-page .board-content-shell .consult-post-card.is-notice:hover{
+    min-height:0 !important;
+    height:auto !important;
+    padding:18px 10px !important;
+    display:block !important;
+    transform:none !important;
+  }
+
+  .board-page .consult-post-meta-top{
+    margin:0 0 8px !important;
+  }
+
+  .board-page .consult-post-main h2{
+    display:flex !important;
+    align-items:baseline !important;
+    min-width:0 !important;
+    font-size:15px !important;
+    line-height:1.5 !important;
+    white-space:normal !important;
+  }
+
+  .board-page .notice-title-prefix{
+    flex:0 0 auto !important;
+    margin-right:18px !important;
+  }
+
+  .board-page .consult-post-meta-bottom{
+    margin-top:12px !important;
+    justify-content:flex-start !important;
+    gap:14px !important;
+    font-size:11px !important;
+  }
+
+  .board-page .board-toolbar{
+    display:block !important;
+  }
+
+  .board-page .board-bottom{
+    margin-top:18px !important;
+  }
+
+  .board-page .board-content-shell .board-table{
+    display:block !important;
+    margin-top:26px !important;
+  }
+
+  .board-page .board-content-shell .pagination{
+    display:flex !important;
   }
 }

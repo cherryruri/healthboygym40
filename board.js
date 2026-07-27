@@ -163,7 +163,7 @@ const boardMeta = {
   infoboard: {
     title: "인포게시판",
     desc: "로그인한 관리자만 확인할 수 있는 내부 인포 게시판입니다.",
-    mode: "table",
+    mode: "consult",
     categories: [
       ["all", "전체"],
       ["info_fc", "FC"],

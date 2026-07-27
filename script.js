@@ -3591,6 +3591,16 @@ document.addEventListener("DOMContentLoaded", function(){
         return 0;
       }
 
+      if(window.innerWidth <= 768){
+        displayedHeroProgress =
+          rawProgress;
+
+        lastHeroSmoothAt =
+          now;
+
+        return rawProgress;
+      }
+
       if(
         document.documentElement.classList.contains("hero-stats-bridge-playing") ||
         document.documentElement.classList.contains("hero-mobile-snap-playing")
@@ -3981,42 +3991,45 @@ document.addEventListener("DOMContentLoaded", function(){
           isMobile ? proofStart : 0.76
         );
 
-      if(progress >= counterForceFinishProgress && !heroCounterComplete && !isMobile){
+      if(progress >= counterForceFinishProgress && !heroCounterComplete){
         finishHeroCounter();
       }
 
+      const canRevealReview =
+        heroCounterComplete || isMobile;
+
       const statsFadeProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - statsFadeStart) / (statsFadeEnd - statsFadeStart), 0, 1))
           : 0;
 
       const cardsProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - cardsStart) / (cardsEnd - cardsStart), 0, 1))
           : 0;
 
       const proofProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - proofStart) / (proofEnd - proofStart), 0, 1))
           : 0;
 
       const proofLiftProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - proofLiftStart) / (proofLiftEnd - proofLiftStart), 0, 1))
           : 0;
 
       const reviewDarkProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - reviewDarkStart) / (reviewDarkEnd - reviewDarkStart), 0, 1))
           : 0;
 
       const frameReturnProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - frameReturnStart) / (frameReturnEnd - frameReturnStart), 0, 1))
           : 0;
 
       const lineFadeProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
           : 0;
 

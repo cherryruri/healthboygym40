@@ -3,15 +3,28 @@ document.addEventListener("DOMContentLoaded", function(){
   /* 로더 */
   if("scrollRestoration" in window.history){
     window.history.scrollRestoration =
-      "manual";
-  }
-
-  if(!window.location.hash){
-    window.scrollTo(0, 0);
+      "auto";
   }
 
   let siteStarted =
     false;
+
+  const loaderSessionKey =
+    "healthboygymLoaderSeen";
+
+  function hasSeenLoader(){
+    try{
+      return window.sessionStorage.getItem(loaderSessionKey) === "1";
+    }catch(error){
+      return false;
+    }
+  }
+
+  function markLoaderSeen(){
+    try{
+      window.sessionStorage.setItem(loaderSessionKey, "1");
+    }catch(error){}
+  }
 
   function getHomeFlowConfig(){
 
@@ -3446,6 +3459,15 @@ document.addEventListener("DOMContentLoaded", function(){
       mainContent.style.display = "block";
     }
 
+    if(hasSeenLoader()){
+      document.body.classList.add("loaded");
+      if(loader) loader.style.display = "none";
+      startSite();
+      initHashNavigation();
+      queueHashScroll();
+      return;
+    }
+
     if(!loader){
       document.body.classList.add("loaded");
       startSite();
@@ -3455,6 +3477,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     setLoaderTarget();
+    markLoaderSeen();
 
     const isMobileLoader =
       window.innerWidth <= 768;
@@ -3504,9 +3527,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
   prepareIntroCaption();
 
-  stageLoaderIntro();
+  if(!hasSeenLoader()){
+    stageLoaderIntro();
+  }
 
-  setTimeout(openMain, 2860);
+  setTimeout(openMain, hasSeenLoader() ? 0 : 2860);
 
 
 
@@ -3545,6 +3570,12 @@ document.addEventListener("DOMContentLoaded", function(){
     let lastHeroSmoothAt =
       0;
 
+    let heroUpdateFrame =
+      0;
+
+    let needsHeroFollowUp =
+      false;
+
     function smoothHeroProgress(rawProgress){
 
       const now =
@@ -3558,6 +3589,16 @@ document.addEventListener("DOMContentLoaded", function(){
           now;
 
         return 0;
+      }
+
+      if(window.innerWidth <= 768){
+        displayedHeroProgress =
+          rawProgress;
+
+        lastHeroSmoothAt =
+          now;
+
+        return rawProgress;
       }
 
       if(
@@ -3686,6 +3727,7 @@ document.addEventListener("DOMContentLoaded", function(){
             true;
 
           document.documentElement.classList.add("review-stats-counted");
+          queueHeroUpdate();
         }
 
       }
@@ -3722,6 +3764,7 @@ document.addEventListener("DOMContentLoaded", function(){
         true;
 
       document.documentElement.classList.add("review-stats-counted");
+      queueHeroUpdate();
 
     }
 
@@ -3738,6 +3781,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const progress =
         smoothHeroProgress(rawProgress);
+
+      needsHeroFollowUp =
+        Math.abs(rawProgress - progress) > 0.00035;
 
       hero.style.setProperty(
         "--hero-progress",
@@ -3945,42 +3991,45 @@ document.addEventListener("DOMContentLoaded", function(){
           isMobile ? proofStart : 0.76
         );
 
-      if(progress >= counterForceFinishProgress && !heroCounterComplete && !isMobile){
+      if(progress >= counterForceFinishProgress && !heroCounterComplete){
         finishHeroCounter();
       }
 
+      const canRevealReview =
+        heroCounterComplete || isMobile;
+
       const statsFadeProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - statsFadeStart) / (statsFadeEnd - statsFadeStart), 0, 1))
           : 0;
 
       const cardsProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - cardsStart) / (cardsEnd - cardsStart), 0, 1))
           : 0;
 
       const proofProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - proofStart) / (proofEnd - proofStart), 0, 1))
           : 0;
 
       const proofLiftProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - proofLiftStart) / (proofLiftEnd - proofLiftStart), 0, 1))
           : 0;
 
       const reviewDarkProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - reviewDarkStart) / (reviewDarkEnd - reviewDarkStart), 0, 1))
           : 0;
 
       const frameReturnProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - frameReturnStart) / (frameReturnEnd - frameReturnStart), 0, 1))
           : 0;
 
       const lineFadeProgress =
-        heroCounterComplete
+        canRevealReview
           ? easeInOut(clamp((progress - lineFadeStart) / (lineFadeEnd - lineFadeStart), 0, 1))
           : 0;
 
@@ -4248,27 +4297,43 @@ document.addEventListener("DOMContentLoaded", function(){
 
     }
 
-    function tick(){
+    function queueHeroUpdate(){
 
-      update();
-      requestAnimationFrame(tick);
+      if(heroUpdateFrame) return;
+
+      heroUpdateFrame =
+        requestAnimationFrame(()=>{
+          heroUpdateFrame =
+            0;
+
+          update();
+
+          if(needsHeroFollowUp){
+            queueHeroUpdate();
+          }
+        });
 
     }
 
-    tick();
+    queueHeroUpdate();
 
     window.addEventListener(
       "scroll",
-      update,
+      queueHeroUpdate,
       { passive:true }
     );
 
-    setInterval(update, 100);
-
     window.addEventListener(
       "resize",
-      update
+      queueHeroUpdate,
+      {passive:true}
     );
+
+    window.addEventListener("orientationchange", queueHeroUpdate, {passive:true});
+    window.addEventListener("pageshow", queueHeroUpdate, {passive:true});
+    document.addEventListener("visibilitychange", ()=>{
+      if(!document.hidden) queueHeroUpdate();
+    });
 
   }
 

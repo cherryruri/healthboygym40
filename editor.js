@@ -35,6 +35,7 @@ const db = getFirestore(app);
 
 const officialBoards = new Set(["noticeboard", "news"]);
 const adminOnlyBoards = new Set(["infoboard"]);
+const adminIds = new Set(["cherryruri"]);
 
 let currentUser = null;
 let currentUserData = null;
@@ -49,6 +50,9 @@ const editorBoardName = document.getElementById("editorBoardName");
 const thumbnailField = document.getElementById("editorThumbnailField");
 const thumbnailInput = document.getElementById("postThumbnail");
 const thumbnailLabel = document.getElementById("thumbnailLabel");
+const categoryField = document.getElementById("editorCategoryField");
+const postCategory = document.getElementById("postCategory");
+const cancelBtn = document.querySelector(".cancel-btn");
 const thumbnailPreview = document.getElementById("thumbnailPreview");
 const removeThumbnail = document.getElementById("removeThumbnail");
 const noticeOption = document.getElementById("editorNoticeOption");
@@ -58,6 +62,11 @@ const params = new URLSearchParams(location.search);
 const board = params.get("board") || "free";
 const categoryParam = params.get("category") || "";
 const editId = params.get("id");
+if(postCategory && ["info_fc", "info_pilates", "info_health", "info_pt"].includes(categoryParam)){
+  postCategory.value = categoryParam;
+}
+
+
 
 const boardNames = {
   free: "자유게시판",
@@ -80,12 +89,27 @@ const categoryNames = {
   request: "1:1 문의",
   info: "인포게시판",
   notice: "공지문",
+  info_fc: "FC",
+  info_pilates: "필라테스",
+  info_health: "헬스",
+  info_pt: "PT",
   news: "센터소식",
   trainer: "이달의 트레이너"
 };
 
 function isAdmin(){
-  return currentUserData && currentUserData.role === "admin";
+  const email = currentUser?.email || "";
+  const userId = email.includes("@") ? email.split("@")[0].toLowerCase() : "";
+  const dataId = String(currentUserData?.id || currentUserData?.userId || "").toLowerCase();
+
+  return (
+    currentUserData?.role === "admin" ||
+    currentUserData?.isAdmin === true ||
+    currentUserData?.admin === true ||
+    currentUserData?.permission === "admin" ||
+    adminIds.has(userId) ||
+    adminIds.has(dataId)
+  );
 }
 
 function isAdminOnlyBoard(boardName = getEffectiveBoard()){
@@ -110,11 +134,18 @@ function getEffectiveBoard(){
 
 function getEffectiveCategory(effectiveBoard){
   if(loadedCategory) return loadedCategory;
+
+  if(effectiveBoard === "infoboard"){
+    const allowedCategories = new Set(["info_fc", "info_pilates", "info_health", "info_pt"]);
+    const selectedCategory = postCategory?.value || categoryParam;
+    return allowedCategories.has(selectedCategory) ? selectedCategory : "info_fc";
+  }
+
   if(categoryParam) return categoryParam;
+
   if(effectiveBoard === "praise") return "praise";
   if(effectiveBoard === "review") return "pt";
   if(effectiveBoard === "news") return "news";
-  if(isAdminOnlyBoard(effectiveBoard)) return "info";
   if(officialBoards.has(effectiveBoard)) return "notice";
   return "free";
 }
@@ -150,6 +181,17 @@ function updateEditorHeader(){
 
   if(noticeCheckbox && !isAdmin()){
     noticeCheckbox.checked = false;
+  }
+
+  if(categoryField){
+    categoryField.hidden = effectiveBoard !== "infoboard";
+  }
+
+  if(cancelBtn){
+    const category = getEffectiveCategory(effectiveBoard);
+    cancelBtn.href = effectiveBoard === "infoboard"
+      ? `board.html?board=infoboard&category=${category}`
+      : "board.html";
   }
 }
 
@@ -364,7 +406,7 @@ submitBtn.addEventListener("click", async ()=>{
     alert("글이 등록되었습니다.");
     location.href = category === "request"
       ? "board.html?board=request&category=request"
-      : `board.html?board=${effectiveBoard}`;
+      : `board.html?board=${effectiveBoard}&category=${category}`;
   }catch(error){
     console.error(error);
     alert(`게시글을 등록하지 못했습니다. ${error.code || error.message || "잠시 후 다시 시도해주세요."}`);
@@ -449,7 +491,13 @@ async function loadPostForEdit(){
   const post = snap.data();
   loadedBoard = post.board || board;
   loadedCategory = post.category || null;
+
+  if(postCategory && post.category){
+    postCategory.value = post.category;
+  }
   updateEditorHeader();
+
+
 
   titleInput.value = post.title || "";
   contentBox.innerHTML = post.content || "";
@@ -464,3 +512,6 @@ async function loadPostForEdit(){
 }
 
 updateEditorHeader();
+if(postCategory){
+  postCategory.addEventListener("change", updateEditorHeader);
+}

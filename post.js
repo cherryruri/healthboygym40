@@ -105,7 +105,7 @@ function isAdmin(){
 }
 
 function isAdminOnlyPost(post){
-  return post && (post.board === "infoboard" || post.isAdminOnly);
+  return post && post.board === "infoboard";
 }
 
 function isRequestPost(post){

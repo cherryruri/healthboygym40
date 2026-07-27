@@ -33,8 +33,9 @@ const firebaseConfig = {
 const params = new URLSearchParams(location.search);
 const initialBoard = params.get("board") || "free";
 const initialCategory = params.get("category") || "";
-const communityBoardNames = ["free", "praise", "review"];
-const officialBoardNames = new Set(["noticeboard", "news", "infoboard"]);
+const isInfoBoard = initialBoard === "infoboard";
+const communityBoardNames = isInfoBoard ? ["infoboard"] : ["free", "praise", "review"];
+const officialBoardNames = new Set(["noticeboard", "news"]);
 const isMobile = window.matchMedia && window.matchMedia("(max-width: 768px)").matches;
 const adminIds = new Set(["cherryruri"]);
 
@@ -45,7 +46,28 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   const auth = getAuth(app);
   const db = getFirestore(app);
 
-  const groups = {
+  const groups = isInfoBoard ? {
+    all: {
+      label:"전체",
+      categories:[]
+    },
+    info_fc: {
+      label:"FC",
+      categories:[["info_fc", "FC"]]
+    },
+    info_pilates: {
+      label:"필라테스",
+      categories:[["info_pilates", "필라테스"]]
+    },
+    info_health: {
+      label:"헬스",
+      categories:[["info_health", "헬스"]]
+    },
+    info_pt: {
+      label:"PT",
+      categories:[["info_pt", "PT"]]
+    }
+  } : {
     all: {
       label:"전체",
       categories:[]
@@ -80,7 +102,21 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
     request:"1:1 문의"
   };
 
-  const categoryGroup = {
+  if(isInfoBoard){
+    Object.assign(labels, {
+      info_fc:"FC",
+      info_pilates:"필라테스",
+      info_health:"헬스",
+      info_pt:"PT"
+    });
+  }
+
+  const categoryGroup = isInfoBoard ? {
+    info_fc:"info_fc",
+    info_pilates:"info_pilates",
+    info_health:"info_health",
+    info_pt:"info_pt"
+  } : {
     praise:"community",
     free:"community",
     diet:"community",
@@ -125,6 +161,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   function getInitialCategory(){
     if(initialCategory && labels[initialCategory]) return initialCategory;
+    if(isInfoBoard) return "all";
     if(initialBoard === "request") return "request";
     if(initialBoard === "praise") return "praise";
     if(initialBoard === "review") return "pt";
@@ -218,6 +255,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       return;
     }
 
+    if(isInfoBoard && !isAdmin()){
+      alert("관리자만 인포게시판에 글을 쓸 수 있습니다.");
+      return;
+    }
+
     location.href = `editor.html?${getWriteQueryString()}`;
   }
 
@@ -242,6 +284,12 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   }
 
   function updateUrl(){
+    if(isInfoBoard){
+      const categoryQuery = activeCategory === "all" ? "" : `&category=${activeCategory}`;
+      history.replaceState(null, "", `board.html?board=infoboard${categoryQuery}`);
+      return;
+    }
+
     if(activeCategory === "all"){
       history.replaceState(null, "", "board.html");
       return;
@@ -263,7 +311,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
       .join("");
 
     const subCategories = groups[activeGroup].categories || [];
-    subtabsEl.hidden = activeGroup === "all" || subCategories.length === 0;
+    subtabsEl.hidden = isInfoBoard || activeGroup === "all" || subCategories.length === 0;
     subtabsEl.innerHTML = subCategories
       .map(([value, label])=>`
         <button type="button" class="${activeCategory === value ? "active" : ""}" data-mobile-category="${value}">
@@ -292,6 +340,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   async function loadPosts(){
     if(!listEl) return;
+
+    if(isInfoBoard && !isAdmin()){
+      listEl.innerHTML = `<div class="mobile-board-empty">로그인한 관리자만 볼 수 있는 게시판입니다.</div>`;
+      return;
+    }
 
     listEl.innerHTML = `<div class="mobile-board-loading">게시글을 불러오는 중입니다</div>`;
 
@@ -404,6 +457,7 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
 
   function getPostCategory(post){
     if(post.category) return post.category;
+    if(post.board === "infoboard") return "info_fc";
     if(post.board === "praise") return "praise";
     if(post.board === "review") return "pt";
     if(post.board === "free" && (post.isSecret || post.isPublic === false)) return "request";
@@ -434,6 +488,11 @@ if(!isMobile || officialBoardNames.has(initialBoard)){
   }
 
   function getWriteQueryString(){
+    if(isInfoBoard){
+      const category = activeCategory === "all" ? "info_fc" : activeCategory;
+      return `board=infoboard&category=${category}`;
+    }
+
     const category = activeCategory === "all" ? "free" : activeCategory;
     const board = getBoardForCategory(category);
     if(category === "request") return "board=free&category=request";

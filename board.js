@@ -16,8 +16,7 @@ import {
   getDoc,
   getDocs,
   query,
-  where,
-  orderBy
+  where
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -163,8 +162,15 @@ const boardMeta = {
   },
   infoboard: {
     title: "인포게시판",
-    desc: "관리자만 확인할 수 있는 내부 안내 게시판입니다.",
-    mode: "table"
+    desc: "로그인한 관리자만 확인할 수 있는 내부 인포 게시판입니다.",
+    mode: "consult",
+    categories: [
+      ["all", "전체"],
+      ["info_fc", "FC"],
+      ["info_pilates", "필라테스"],
+      ["info_health", "헬스"],
+      ["info_pt", "PT"]
+    ]
   },
   review: {
     title: "리얼 후기",
@@ -237,7 +243,7 @@ function getPostCategory(post){
 
   if(post.board === "praise") return "praise";
   if(post.board === "review") return "pt";
-  if(post.board === "infoboard") return "info";
+  if(post.board === "infoboard") return "info_fc";
   if(post.board === "news") return "news";
   if(post.isNotice || post.board === "noticeboard") return "notice";
   if(post.board === "free" && (post.isSecret || post.isPublic === false)) return "request";
@@ -256,6 +262,10 @@ function getPostCategoryLabel(post){
   if(category === "trainer") return "이달의 트레이너";
   if(category === "news") return "센터소식";
   if(category === "info") return "인포게시판";
+  if(category === "info_fc") return "FC";
+  if(category === "info_pilates") return "필라테스";
+  if(category === "info_health") return "헬스";
+  if(category === "info_pt") return "PT";
   if(category === "request") return "1:1 문의";
   if(category === "free") return "자유게시판";
   return "공지문";
@@ -420,6 +430,12 @@ function updateBoardUrl(){
     return;
   }
 
+  if(currentBoard === "infoboard"){
+    const categoryQuery = currentCategory === "all" ? "" : `&category=${currentCategory}`;
+    history.replaceState(null, "", `board.html?board=infoboard${categoryQuery}`);
+    return;
+  }
+
   history.replaceState(null, "", `board.html?board=${currentBoard}`);
 }
 
@@ -470,14 +486,14 @@ function ensureBoardAccess(){
   if(!isAdminOnlyBoard() || isAdmin()) return true;
 
   if(postList){
-    postList.innerHTML = `<div class="board-empty">관리자만 볼 수 있는 게시판입니다.</div>`;
+    postList.innerHTML = `<div class="board-empty">로그인한 관리자만 볼 수 있는 게시판입니다.</div>`;
   }
 
   if(paginationContainer) paginationContainer.innerHTML = "";
   if(writeBtn) writeBtn.hidden = true;
 
   if(currentUser){
-    alert("관리자만 볼 수 있는 게시판입니다.");
+    alert("관리자만 이용할 수 있는 게시판입니다.");
     location.href = "board.html";
   }else{
     alert("관리자 로그인 후 이용할 수 있습니다.");
@@ -562,7 +578,8 @@ updateBoardInfo();
 
 function getWriteQueryString(){
   if(currentBoard === "infoboard"){
-    return "board=infoboard&category=info";
+    const category = currentCategory === "all" ? "info_fc" : currentCategory;
+    return `board=infoboard&category=${category}`;
   }
 
   if(currentBoard === "noticeboard"){
@@ -628,27 +645,26 @@ async function loadPosts(){
 
   try{
     const boards = getQueryBoards();
-    const q =
-      boards.length > 1
-        ? query(
-            collection(db, "boards"),
-            where("board", "in", boards),
-            orderBy("createdAt", "desc")
-          )
-        : query(
-            collection(db, "boards"),
-            where("board", "==", boards[0]),
-            orderBy("createdAt", "desc")
-          );
-
-    const snap = await getDocs(q);
+    const snapshots = await Promise.all(
+      boards.map(boardName=>getDocs(
+        query(collection(db, "boards"), where("board", "==", boardName))
+      ))
+    );
     allPosts = [];
 
-    snap.forEach(docSnap=>{
-      allPosts.push({
-        id: docSnap.id,
-        data: docSnap.data()
+    snapshots.forEach(snap=>{
+      snap.forEach(docSnap=>{
+        allPosts.push({
+          id: docSnap.id,
+          data: docSnap.data()
+        });
       });
+    });
+
+    allPosts.sort((a, b)=>{
+      const aTime = a.data.createdAt?.toMillis?.() || 0;
+      const bTime = b.data.createdAt?.toMillis?.() || 0;
+      return bTime - aTime;
     });
 
     renderPage(currentPage);

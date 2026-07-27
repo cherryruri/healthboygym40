@@ -123,3 +123,37 @@
     transition-delay:0s !important;
   }
 }
+
+.board-content-shell .notice-title-prefix,
+.mobile-post-card .mobile-notice-prefix{
+  display:inline !important;
+  min-width:0 !important;
+  height:auto !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  font-size:1em !important;
+  font-weight:inherit !important;
+  line-height:inherit !important;
+  letter-spacing:0 !important;
+}
+
+@media(min-width:769px){
+  html.board-intro-seen .board-operation-hero.board-motion-hero{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+
+  html.board-intro-seen .board-content-shell{
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+  }
+}
+
+@media(max-width:768px){
+  html.board-intro-seen .board-operation-hero.board-motion-hero{
+    display:none !important;
+  }
+}

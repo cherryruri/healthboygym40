@@ -1,6 +1,5 @@
 (() => {
   const desktop = window.matchMedia('(min-width: 769px)');
-  if (!desktop.matches) return;
 
   const body = document.body;
   const hero = document.querySelector('.board-operation-hero');
@@ -8,10 +7,52 @@
   const trigger = document.querySelector('.board-operation-scroll');
   if (!hero || !panel || !trigger) return;
 
+  const params = new URLSearchParams(location.search);
+  const isInfoBoard = params.get('board') === 'infoboard';
+  const introType = isInfoBoard ? 'info' : 'community';
+  const introKey = `hbg-board-intro-seen-v1:${introType}`;
+  const titleText = isInfoBoard ? 'INFO BOARD' : 'COMMUNITY';
+  const title = document.getElementById('boardOperationTitle');
+  const kickerLabel = document.querySelector('.board-operation-kicker span:last-child');
+  const lead = document.querySelector('.board-operation-lead');
+  const copy = document.querySelector('.board-operation-copy');
+  const guideLabel = document.querySelector('.board-operation-label span');
+  const sectionIndex = document.querySelector('.board-section-index');
+
+  if (kickerLabel) kickerLabel.textContent = titleText;
+  if (title) {
+    title.setAttribute('aria-label', titleText);
+    title.innerHTML = Array.from(titleText)
+      .map((letter, index) => `<span style="--letter:${index}">${letter === ' ' ? '&nbsp;' : letter}</span>`)
+      .join('');
+  }
+
+  if (isInfoBoard) {
+    if (lead) lead.innerHTML = '<span>센터 운영 정보를,</span> <span>한곳에서 공유합니다.</span>';
+    if (copy) {
+      copy.innerHTML = `
+        <p>헬스보이짐 수내점 관리자 전용 인포게시판입니다.</p>
+        <p>FC, 필라테스, 헬스, PT 운영 정보를 빠르고 정확하게 확인하세요.</p>
+      `;
+    }
+    if (guideLabel) guideLabel.textContent = 'INFO GUIDE';
+    if (sectionIndex) sectionIndex.textContent = '01 / INFO BOARD';
+  }
+
+  let hasSeenIntro = document.documentElement.classList.contains('board-intro-seen');
+
+  try {
+    hasSeenIntro = localStorage.getItem(introKey) === '1';
+    if (!hasSeenIntro) localStorage.setItem(introKey, '1');
+  } catch (error) {}
+
+  if (!desktop.matches) return;
+
   body.classList.add('board-panel-ready');
   panel.setAttribute('tabindex', '-1');
 
-  let active = false;
+  let active = hasSeenIntro;
+  let introDismissed = hasSeenIntro;
   let locked = false;
   let touchStartY = 0;
 
@@ -23,6 +64,7 @@
   const showBoard = (updateHash = true) => {
     if (active || locked) return;
     active = true;
+    introDismissed = true;
     lockBriefly();
     body.classList.add('board-panel-active');
     hero.setAttribute('aria-hidden', 'true');
@@ -33,7 +75,7 @@
   };
 
   const showIntro = (updateHash = true) => {
-    if (!active || locked) return;
+    if (!active || locked || introDismissed) return;
     active = false;
     lockBriefly();
     body.classList.remove('board-panel-active');
@@ -96,8 +138,9 @@
     else if (active) showIntro(false);
   });
 
-  if (location.hash === '#boardContent') {
+  if (hasSeenIntro || location.hash === '#boardContent') {
     active = true;
+    introDismissed = true;
     body.classList.add('board-panel-active');
     hero.setAttribute('aria-hidden', 'true');
     panel.removeAttribute('aria-hidden');

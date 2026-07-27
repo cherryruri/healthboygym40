@@ -777,7 +777,7 @@ function renderOfficialPosts(posts){
       </div>
       <div class="official-post-body">
         <span class="official-post-kicker">${escapeHTML(label)}</span>
-        <h2>${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${title}</h2>
+        <h2>${data.isNotice ? '<span class="notice-title-prefix">|&nbsp;&nbsp;공지&nbsp;&nbsp;|</span> ' : ""}${title}</h2>
         <time>${date}</time>
       </div>
     `;
@@ -810,7 +810,7 @@ function renderConsultPosts(posts){
     card.innerHTML = `
       <div class="consult-post-meta-top">${escapeHTML(label)}</div>
       <div class="consult-post-main">
-        <h2>${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${escapeHTML(data.title)}</h2>
+        <h2>${data.isNotice ? '<span class="notice-title-prefix">|&nbsp;&nbsp;공지&nbsp;&nbsp;|</span> ' : ""}${escapeHTML(data.title)}</h2>
         ${isRequest ? `<span class="consult-status ${hasRequestAnswer(data) ? "done" : ""}">${status}</span>` : ""}
       </div>
       <div class="consult-post-meta-bottom">
@@ -837,7 +837,7 @@ function renderTablePosts(posts, startIndex, totalCount){
 
     row.innerHTML = `
       <div>${data.isNotice ? "공지" : no}</div>
-      <div class="board-title">${data.isPublic ? "" : "비밀"} ${data.isNotice ? '<span class="notice-title-prefix">(공지)</span> ' : ""}${escapeHTML(data.title)}</div>
+      <div class="board-title">${data.isPublic ? "" : "비밀"} ${data.isNotice ? '<span class="notice-title-prefix">|&nbsp;&nbsp;공지&nbsp;&nbsp;|</span> ' : ""}${escapeHTML(data.title)}</div>
       <div>${escapeHTML(data.writerId || "회원")}</div>
       <div>${formatDate(data)}</div>
       <div>${data.views || 0}</div>

@@ -9693,6 +9693,14 @@ li{
   display:none !important;
 }
 
+html[data-admin-menu-access="true"] .mobile-menu-list [data-admin-only]{
+  display:block !important;
+}
+
+html[data-admin-menu-access="true"] .menu [data-admin-only]{
+  display:list-item !important;
+}
+
 .logo a{
   font-size:26px;
   font-weight:900;

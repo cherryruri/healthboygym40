@@ -106,7 +106,7 @@
 
   window.setTimeout(function(){
     onIdle(loadAuth, 3000);
-  }, 6000);
+  }, 1600);
 
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", watchNewsSection, {once:true});

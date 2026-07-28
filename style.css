@@ -10249,7 +10249,7 @@ li{
 
 @media(max-width:768px){
   .intro{
-    height:540vh !important;
+    height:480svh !important;
   }
 
   .hero-expand-sticky{

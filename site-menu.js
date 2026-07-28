@@ -329,7 +329,7 @@
           touch-action:pan-y !important;
         }
         .intro{
-          height:1350svh !important;
+          height:480svh !important;
           --hero-stage-bg:#fff;
         }
         .hero-expand-sticky{

@@ -9,7 +9,7 @@
   }
 
   .board-page .board-toolbar{
-    display:contents !important;
+    display:block !important;
   }
 
   .board-page .board-category-bar{
@@ -24,6 +24,30 @@
     order:4;
     width:100% !important;
     margin:24px 0 0 !important;
+  }
+
+  .board-page .board-content-shell .pagination button{
+    color:#3f3d38 !important;
+    font-size:13px !important;
+    font-weight:850 !important;
+    opacity:1 !important;
+  }
+
+  .board-page .board-content-shell .pagination button.dummy-page,
+  .board-page .board-content-shell .pagination button:disabled{
+    color:#706d65 !important;
+    opacity:.72 !important;
+  }
+
+  .board-page .board-content-shell .pagination button.page-arrow:disabled{
+    color:#aaa69d !important;
+    opacity:.5 !important;
+  }
+
+  .board-page .board-content-shell .pagination button.active{
+    background:#111 !important;
+    color:#fff !important;
+    opacity:1 !important;
   }
 
   .board-page .board-content-shell .board-bottom,

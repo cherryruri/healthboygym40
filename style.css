@@ -16,6 +16,7 @@ body {
     overflow-x:clip !important;
     overflow-y:auto !important;
     touch-action:pan-y !important;
+    scroll-behavior:auto !important;
   }
 
   body{

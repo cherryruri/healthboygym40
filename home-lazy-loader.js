@@ -92,13 +92,21 @@
     loadAuth();
   }, {capture:true});
 
+  document.addEventListener("pointerdown", function(event){
+    if(!event.target.closest(".mobile-menu-btn")) return;
+
+    loadAuth();
+  }, {capture:true, passive:true});
+
   document.addEventListener("change", function(event){
     if(!event.target.closest("#mobileProfileInput")) return;
 
     loadAuth();
   }, {capture:true});
 
-  onIdle(loadAuth, 1200);
+  window.setTimeout(function(){
+    onIdle(loadAuth, 3000);
+  }, 6000);
 
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", watchNewsSection, {once:true});

@@ -324,6 +324,7 @@
           overflow-x:clip !important;
           overflow-y:auto !important;
           touch-action:pan-y !important;
+          scroll-behavior:auto !important;
         }
         body{
           overflow-x:clip !important;
@@ -478,15 +479,8 @@
     return Boolean(target.closest(".mobile-side-menu, .facility-photo-modal.is-open, [data-pass-locator].is-revealed"));
   }
 
-  function isInHeroOrAllPassScene(){
+  function isInAllPassScene(){
     const y = window.pageYOffset;
-    const hero = document.querySelector(".hero-expand-section");
-    const heroTop = pageTop(hero);
-
-    if(hero && heroTop !== null && y >= heroTop - 2 && y <= heroTop + hero.offsetHeight + 8){
-      return true;
-    }
-
     const brandCross = document.querySelector("#brand #inc01 .brand-cross");
     const brandTop = pageTop(brandCross);
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
@@ -500,14 +494,18 @@
   }
 
   function shouldBypassScrollHijack(event){
-    if(!isMobile() || isMobileException(event.target)) return false;
+    if(!isMobile() || !event.target || !event.target.closest) return false;
+    if(event.target.closest(".hero-expand-section")) return false;
+    if(isMobileException(event.target)) return false;
     if(isAllPassTypingActive() && root.classList.contains("allpass-scroll-locked")) return false;
-    return lockClasses.some(className=>root.classList.contains(className)) || isInHeroOrAllPassScene();
+    return lockClasses.some(className=>root.classList.contains(className)) || isInAllPassScene();
   }
 
   function bypassScrollHijack(event){
     if(!shouldBypassScrollHijack(event)) return;
-    clearMobileScrollLocks();
+    if(hasMobileScrollLock()){
+      clearMobileScrollLocks();
+    }
     event.stopImmediatePropagation();
   }
 

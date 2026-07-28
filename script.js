@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function(){
     siteStarted =
       true;
 
-    const startupSteps = [
+    const heroSteps = [
       initMobileIntroVideo,
       placePassUnderAllPass,
       placeReviewsAfterIntro,
@@ -59,7 +59,10 @@ document.addEventListener("DOMContentLoaded", function(){
       initHeroExpand,
       initReviewCoverPanel,
       fadeIn,
-      observeCounter,
+      observeCounter
+    ];
+
+    const belowFoldSteps = [
       startTyping,
       startBrandTyping,
       initAllPassTyping,
@@ -72,13 +75,42 @@ document.addEventListener("DOMContentLoaded", function(){
       initCoBrandExperience
     ];
 
-    startupSteps.forEach(step=>{
+    const runStep = step=>{
       try{
         step();
       }catch(error){
         console.error(error);
       }
-    });
+    };
+
+    heroSteps.forEach(runStep);
+
+    if(window.innerWidth > 768){
+      belowFoldSteps.forEach(runStep);
+      return;
+    }
+
+    let nextStepIndex = 0;
+
+    const runNextBelowFoldStep = ()=>{
+      if(nextStepIndex >= belowFoldSteps.length) return;
+
+      runStep(belowFoldSteps[nextStepIndex]);
+      nextStepIndex += 1;
+      queueNextBelowFoldStep();
+    };
+
+    const queueNextBelowFoldStep = ()=>{
+      if(nextStepIndex >= belowFoldSteps.length) return;
+
+      if("requestIdleCallback" in window){
+        window.requestIdleCallback(runNextBelowFoldStep, {timeout:8000});
+      }else{
+        window.setTimeout(runNextBelowFoldStep, 120);
+      }
+    };
+
+    queueNextBelowFoldStep();
 
   }
 
@@ -3089,10 +3121,12 @@ document.addEventListener("DOMContentLoaded", function(){
         }
       };
 
-    window.addEventListener("wheel", onBridgeWheel, {passive:false});
-    window.addEventListener("touchstart", onBridgeTouchStart, {passive:true});
-    window.addEventListener("touchmove", onBridgeTouchMove, {passive:false});
-    window.addEventListener("keydown", onBridgeKeyDown);
+    if(window.innerWidth > 768){
+      window.addEventListener("wheel", onBridgeWheel, {passive:false});
+      window.addEventListener("touchstart", onBridgeTouchStart, {passive:true});
+      window.addEventListener("touchmove", onBridgeTouchMove, {passive:false});
+      window.addEventListener("keydown", onBridgeKeyDown);
+    }
 
     document.documentElement.classList.remove("hero-caption-scroll-locked");
 

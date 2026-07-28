@@ -236,6 +236,8 @@
       ensureMobilePieces(navbar);
     });
 
+    document.dispatchEvent(new CustomEvent("siteMenuReady"));
+
     document.addEventListener("click", event=>{
       if(event.target.closest(".mobile-menu-btn")){
         return;

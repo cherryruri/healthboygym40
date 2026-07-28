@@ -57,10 +57,6 @@
     window.setTimeout(callback, Math.min(timeout, 3200));
   }
 
-  function afterFirstScene(callback){
-    window.setTimeout(callback, 12000);
-  }
-
   function watchNewsSection(){
     var section =
       document.querySelector("#newsHub");
@@ -102,7 +98,7 @@
     loadAuth();
   }, {capture:true});
 
-  afterFirstScene(loadAuth);
+  onIdle(loadAuth, 1200);
 
   if(document.readyState === "loading"){
     document.addEventListener("DOMContentLoaded", watchNewsSection, {once:true});

@@ -38,6 +38,8 @@ const adminIds = new Set(["cherryruri"]);
 
 function setAdminOnlyMenus(isAdmin){
   latestIsAdmin = Boolean(isAdmin);
+  document.documentElement.dataset.adminMenuReady = "true";
+  document.documentElement.dataset.adminMenuAccess = String(latestIsAdmin);
 
   document.querySelectorAll("[data-admin-only]").forEach(element=>{
     element.hidden = !latestIsAdmin;
@@ -253,6 +255,10 @@ if(document.readyState === "loading"){
 }else{
   setAdminOnlyMenus(latestIsAdmin);
 }
+
+document.addEventListener("siteMenuReady", ()=>{
+  setAdminOnlyMenus(latestIsAdmin);
+});
 
 document.addEventListener("click", async event=>{
   const deleteButton = event.target.closest("#mobileProfileDelete");

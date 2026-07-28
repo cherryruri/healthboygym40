@@ -9146,7 +9146,10 @@ html.pass-reveal-complete header{
     background:rgba(0,0,0,.66);
     backdrop-filter:blur(9px);
     -webkit-backdrop-filter:blur(9px);
-    overflow:hidden;
+    overflow-x:hidden;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
   }
 
   .mobile-menu-section-title{

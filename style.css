@@ -11019,38 +11019,16 @@ html.review-proof-divider-hidden .review-proof-divider{
   }
 }
 
-/* ================= Mobile intro spacing and canvas cleanup (2026-08) ================= */
+/* ================= Mobile intro canvas cleanup (2026-08) ================= */
 @media(max-width:768px){
   html,
-  body{
-    background:#fff !important;
-  }
-
   body,
-  .main-content,
-  main,
-  .intro,
-  .hero-expand-sticky{
-    width:100% !important;
-    max-width:none !important;
-    box-shadow:none !important;
-  }
-
   .main-content,
   main,
   .intro,
   .hero-expand-sticky,
   .hero-expand-sticky::before{
     background-color:#fff !important;
-  }
-
-  .intro-inner{
-    top:-24px !important;
-  }
-
-  .hero-video-frame{
-    bottom:calc(var(--hero-frame-bottom, 0px) + 36px) !important;
-    box-shadow:none !important;
   }
 }
 

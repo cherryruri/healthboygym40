@@ -3827,6 +3827,14 @@ document.addEventListener("DOMContentLoaded", function(){
       const isMobile =
         window.innerWidth <= 768;
 
+      if(isMobile){
+        hero.style.setProperty(
+          "--hero-stage-bg",
+          "#030303 url('assets/mobile-intro-bronze-wave.svg') center top / cover no-repeat",
+          "important"
+        );
+      }
+
       const headerOffset =
         isMobile ? 76 : 80;
 

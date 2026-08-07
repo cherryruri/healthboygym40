@@ -122,4 +122,33 @@
   }
 
   installContinuousReviewSlider();
+
+  function lockMobileBronzeBackground(){
+    var intro =
+      document.querySelector(".intro");
+
+    if(!intro) return;
+
+    intro.style.setProperty(
+      "--hero-stage-bg",
+      "#030303 url('assets/mobile-intro-bronze-wave.svg') center top / cover no-repeat",
+      "important"
+    );
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      lockMobileBronzeBackground,
+      { once:true }
+    );
+  }else{
+    lockMobileBronzeBackground();
+  }
+
+  window.addEventListener(
+    "load",
+    lockMobileBronzeBackground,
+    { once:true }
+  );
 })();

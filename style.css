@@ -11032,3 +11032,78 @@ html.review-proof-divider-hidden .review-proof-divider{
   }
 }
 
+/* ================= Mobile intro guide (2026-08) ================= */
+.intro-mobile-guide{
+  display:none;
+}
+
+@media(max-width:768px){
+  .intro-main{
+    font-size:clamp(27px, 7.2vw, 31px) !important;
+    line-height:1.12 !important;
+  }
+
+  .intro-mobile-guide{
+    position:absolute;
+    left:50%;
+    top:calc(50% + 95px);
+    z-index:3;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:12px;
+    width:max-content;
+    max-width:calc(100vw - 40px);
+    transform:translateX(-50%);
+    pointer-events:auto;
+  }
+
+  .intro-mobile-guide a{
+    color:#222;
+    font-size:12px;
+    font-weight:750;
+    line-height:1.35;
+    letter-spacing:-.025em;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+
+  .intro-mobile-scroll-bar{
+    position:relative;
+    display:block;
+    width:1px;
+    height:30px;
+    overflow:hidden;
+    background:#d5d5d5;
+  }
+
+  .intro-mobile-scroll-bar i{
+    position:absolute;
+    left:0;
+    top:-100%;
+    display:block;
+    width:1px;
+    height:100%;
+    background:#222;
+    animation:introMobileScrollLine 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes introMobileScrollLine{
+  0%{
+    transform:translateY(0);
+  }
+  70%,
+  100%{
+    transform:translateY(200%);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .intro-mobile-scroll-bar i{
+    animation:none;
+    top:0;
+    height:45%;
+  }
+}
+

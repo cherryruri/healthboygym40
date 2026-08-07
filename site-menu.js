@@ -352,9 +352,8 @@
           height:calc(100svh - 79px) !important;
           min-height:calc(100svh - 79px) !important;
         }
-        .hero-expand-sticky,
-        .hero-expand-sticky::before{
-          background:var(--hero-stage-bg, #fff) !important;
+        .hero-expand-sticky{
+          background-color:var(--hero-stage-bg, #080604) !important;
         }
         .hero-video-frame{
           background:#050505 !important;

@@ -11107,3 +11107,93 @@ html.review-proof-divider-hidden .review-proof-divider{
   }
 }
 
+
+
+/* ================= Mobile bronze intro theme (2026-08) ================= */
+@media(max-width:768px){
+  html,
+  body,
+  .main-content,
+  main,
+  .intro{
+    background-color:#030303 !important;
+  }
+
+  header,
+  header .navbar{
+    background:#030303 !important;
+  }
+
+  header{
+    border-bottom:1px solid rgba(255,255,255,.14) !important;
+    box-shadow:none !important;
+  }
+
+  .logo a,
+  #logo-text{
+    color:#fff !important;
+  }
+
+  .mobile-menu-btn{
+    width:42px;
+    height:42px;
+    padding:0;
+    border:0 !important;
+    border-radius:0;
+    background:transparent !important;
+    color:#fff !important;
+    box-shadow:none !important;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+    font-size:30px;
+    line-height:1;
+  }
+
+  .hero-expand-sticky,
+  .hero-expand-sticky::before{
+    background-color:#030303 !important;
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18)),
+      url('assets/mobile-intro-bronze-wave.svg') !important;
+    background-position:center top, center top !important;
+    background-size:cover, cover !important;
+    background-repeat:no-repeat !important;
+  }
+
+  .hero-expand-sticky::before{
+    opacity:var(--hero-title-opacity, 1);
+  }
+
+  .intro-main,
+  .intro-title-line{
+    color:#fff !important;
+  }
+
+  .intro-desc,
+  .intro-desc-line,
+  .intro-desc .desc-char,
+  body.loaded .intro-desc .desc-char{
+    color:rgba(255,255,255,.94) !important;
+  }
+
+  .intro-desc .desc-char{
+    opacity:.9;
+  }
+
+  .intro-mobile-guide a{
+    color:#fff !important;
+    text-shadow:0 1px 12px rgba(0,0,0,.55);
+  }
+
+  .intro-mobile-scroll-bar{
+    background:rgba(255,255,255,.34) !important;
+  }
+
+  .intro-mobile-scroll-bar i{
+    background:#fff !important;
+  }
+
+  .hero-video-frame{
+    box-shadow:0 18px 38px rgba(0,0,0,.28);
+  }
+}

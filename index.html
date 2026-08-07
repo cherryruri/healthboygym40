@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
-<link rel="stylesheet" href="style.css?v=20260807-mobile-drawer1">
+<link rel="stylesheet" href="style.css?v=20260807-fullscreen-video1">
 <link rel="stylesheet" href="css/swiper.min.css">
 <script
   src="home-device-loader.js?v=20260705-device-flow4"
@@ -14,7 +14,7 @@
   data-mobile-js="home-mobile.js?v=20260705-device-flow4"
 ></script>
 </head>
-<body>
+<body class="home-video-first">
 
 
   
@@ -146,36 +146,45 @@
 
 <main>
 
-<section class="intro hero-expand-section">
-  <div class="hero-expand-sticky">
-    <div class="intro-inner">
-      <h1 class="intro-main" aria-label="대한민국 No.1 피트니스 브랜드">
-        <span class="intro-title-line">대한민국 No.1</span>
-        <span class="intro-title-line">피트니스 브랜드</span>
-      </h1>
-      <p class="intro-desc" data-caption-reveal aria-label="헬스 · PT · 6:1 그룹필라테스까지 한 공간에서 완성하는 프리미엄 피트니스">
-        <span class="intro-desc-line" data-text="헬스 · PT · 6:1 그룹필라테스까지">헬스 · PT · 6:1 그룹필라테스까지</span>
-        <span class="intro-desc-line" data-text="한 공간에서 완성하는 프리미엄 피트니스">한 공간에서 완성하는 프리미엄 피트니스</span>
-      </p>
-    </div>
+<section class="intro simple-video-hero" aria-label="헬스보이짐 수내점 메인 영상">
+  <video
+    class="intro-video simple-hero-video"
+    src="센터 드론 영상.mp4"
+    poster="센터전체사진1.jpg"
+    autoplay
+    muted
+    loop
+    playsinline
+    preload="auto"
+    aria-label="헬스보이짐 수내점 센터 전경 영상"
+  ></video>
 
-    <div class="hero-video-frame">
-      <video class="intro-video" muted loop playsinline preload="none" poster="센터전체사진1.jpg" data-lazy-src="센터 드론 영상.mp4"></video>
-    </div>
+  <div class="simple-hero-shade" aria-hidden="true"></div>
 
-    <div class="intro-statement intro-reveal-copy" aria-hidden="true">
-      <p>
-        <span class="reveal-line intro-instant-line" data-instant-reveal="true">안녕하세요 헬스보이짐 수내점입니다</span>
-      </p>
-    </div>
-
-    <div class="review-proof-title" aria-hidden="true">
-      <span class="review-proof-line">리뷰가 증명하는</span>
-      <span class="review-proof-divider"></span>
-      <span class="review-proof-line">헬스장</span>
-    </div>
-
+  <div class="simple-hero-copy">
+    <p class="simple-hero-eyebrow">HEALTHBOYGYM SUNAE</p>
+    <h1>운동의 기준을 바꾸는 공간<br>헬스보이짐 수내점</h1>
+    <p class="simple-hero-description">헬스 · PT · 6:1 그룹필라테스까지<br>한 공간에서 완성하는 프리미엄 피트니스</p>
   </div>
+
+  <aside class="simple-hero-card" aria-label="센터 방문 안내">
+    <span>CENTER GUIDE</span>
+    <h2>헬스보이짐 수내점</h2>
+    <p>수내역 1번 출구에서 267m<br>내정로173번길 49, 5층</p>
+    <a href="https://map.naver.com/v5/search/내정로173번길49" target="_blank" rel="noopener">
+      네이버 문의 및 예약
+      <span aria-hidden="true">→</span>
+    </a>
+  </aside>
+
+  <button type="button" class="simple-hero-video-toggle" aria-label="영상 일시정지" aria-pressed="false">
+    <span aria-hidden="true"></span>
+  </button>
+
+  <a class="simple-hero-scroll" href="#brand" aria-label="다음 콘텐츠로 이동">
+    <span>SCROLL</span>
+    <i aria-hidden="true"></i>
+  </a>
 </section>
 
 <section id="brand" class="brand-co-section">
@@ -1068,7 +1077,7 @@
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-mobile-drawer1"></script>
-<script src="script.js?v=20260728-mobile-smooth1"></script>
+<script src="script.js?v=20260807-fullscreen-video1"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

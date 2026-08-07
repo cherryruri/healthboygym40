@@ -5154,5 +5154,123 @@ document.addEventListener("DOMContentLoaded", function(){
   
    
 
+
+  /* 전체 화면 센터 영상 히어로 */
+  const simpleHero =
+    document.querySelector(".simple-video-hero");
+
+  const simpleHeroVideo =
+    simpleHero && simpleHero.querySelector(".simple-hero-video");
+
+  const simpleHeroToggle =
+    simpleHero && simpleHero.querySelector(".simple-hero-video-toggle");
+
+  if(simpleHero && simpleHeroVideo && simpleHeroToggle){
+
+    simpleHeroVideo.muted = true;
+    simpleHeroVideo.defaultMuted = true;
+    simpleHeroVideo.loop = true;
+    simpleHeroVideo.autoplay = true;
+    simpleHeroVideo.playsInline = true;
+    simpleHeroVideo.preload = "auto";
+
+    simpleHeroVideo.setAttribute("muted", "");
+    simpleHeroVideo.setAttribute("autoplay", "");
+    simpleHeroVideo.setAttribute("playsinline", "");
+
+    function syncSimpleHeroToggle(){
+
+      const isPaused =
+        simpleHeroVideo.paused;
+
+      simpleHeroToggle.classList.toggle(
+        "is-paused",
+        isPaused
+      );
+
+      simpleHeroToggle.setAttribute(
+        "aria-pressed",
+        String(isPaused)
+      );
+
+      simpleHeroToggle.setAttribute(
+        "aria-label",
+        isPaused ? "영상 재생" : "영상 일시정지"
+      );
+
+    }
+
+    function playSimpleHeroVideo(){
+
+      const promise =
+        simpleHeroVideo.play();
+
+      if(promise && typeof promise.then === "function"){
+        promise
+          .then(syncSimpleHeroToggle)
+          .catch(syncSimpleHeroToggle);
+      }else{
+        syncSimpleHeroToggle();
+      }
+
+    }
+
+    simpleHeroToggle.addEventListener("click", ()=>{
+
+      if(simpleHeroVideo.paused){
+        simpleHeroVideo.dataset.userPaused = "false";
+        playSimpleHeroVideo();
+      }else{
+        simpleHeroVideo.dataset.userPaused = "true";
+        simpleHeroVideo.pause();
+        syncSimpleHeroToggle();
+      }
+
+    });
+
+    simpleHeroVideo.addEventListener(
+      "play",
+      syncSimpleHeroToggle
+    );
+
+    simpleHeroVideo.addEventListener(
+      "pause",
+      syncSimpleHeroToggle
+    );
+
+    simpleHeroVideo.addEventListener(
+      "loadeddata",
+      ()=>{
+        if(simpleHeroVideo.dataset.userPaused !== "true"){
+          playSimpleHeroVideo();
+        }
+      },
+      {once:true}
+    );
+
+    window.addEventListener("pageshow", ()=>{
+
+      if(simpleHeroVideo.dataset.userPaused !== "true"){
+        playSimpleHeroVideo();
+      }
+
+    });
+
+    document.addEventListener("visibilitychange", ()=>{
+
+      if(
+        !document.hidden &&
+        simpleHeroVideo.dataset.userPaused !== "true"
+      ){
+        playSimpleHeroVideo();
+      }
+
+    });
+
+    syncSimpleHeroToggle();
+    playSimpleHeroVideo();
+
+  }
+
 });
 

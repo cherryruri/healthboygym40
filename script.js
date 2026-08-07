@@ -3830,7 +3830,7 @@ document.addEventListener("DOMContentLoaded", function(){
       if(isMobile){
         hero.style.setProperty(
           "--hero-stage-bg",
-          "#030303 url('assets/mobile-intro-bronze-wave.svg') center top / cover no-repeat",
+          "#030303 url('assets/mobile-intro-original.png') center top / cover no-repeat",
           "important"
         );
       }

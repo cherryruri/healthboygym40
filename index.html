@@ -126,18 +126,42 @@ document.addEventListener("DOMContentLoaded", function(){
   white-space:nowrap;
   text-shadow:0 1px 8px rgba(0,0,0,.42);
   opacity:0;
-  transform:translateX(-50%);
-  transition:opacity .28s ease;
+  transform:translate(-50%, -50%);
+  transform-origin:center;
+  mix-blend-mode:difference;
+  transition:
+    left 1.04s cubic-bezier(.19,1,.22,1),
+    top 1.04s cubic-bezier(.19,1,.22,1),
+    transform 1.04s cubic-bezier(.19,1,.22,1),
+    font-size 1.04s cubic-bezier(.19,1,.22,1),
+    color .28s ease,
+    opacity .36s ease;
   pointer-events:none;
 }
 
-.logo-screen.logo-visible .loader-tagline{
+.logo-screen.logo-visible .loader-tagline,
+.logo-screen.is-wiping .loader-tagline{
   opacity:1;
 }
 
-.logo-screen.is-wiping .loader-tagline,
-.logo-screen.logo-on-white .loader-tagline,
+.logo-screen.logo-on-white .loader-tagline{
+  color:#000;
+  mix-blend-mode:normal;
+  opacity:1;
+}
+
 .logo-screen.dock-to-logo .loader-tagline{
+  left:var(--loader-target-x);
+  top:calc(var(--loader-target-y) - 17px);
+  color:#000;
+  mix-blend-mode:normal;
+  font-size:8px;
+  letter-spacing:.01em;
+  opacity:1;
+  transform:translate(-50%, -50%);
+}
+
+.logo-screen.release .loader-tagline{
   opacity:0;
 }
 

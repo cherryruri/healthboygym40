@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 932" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020202"/>
+      <stop offset=".52" stop-color="#090705"/>
+      <stop offset="1" stop-color="#020202"/>
+    </linearGradient>
+    <linearGradient id="bronze" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#3a2415" stop-opacity=".12"/>
+      <stop offset=".42" stop-color="#d3a16f" stop-opacity=".8"/>
+      <stop offset=".62" stop-color="#9a6944" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#f0c28c" stop-opacity=".18"/>
+    </linearGradient>
+    <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="threads" width="7" height="7" patternUnits="userSpaceOnUse">
+      <path d="M1 0V932" stroke="#d9ad79" stroke-opacity=".105" stroke-width=".55"/>
+      <path d="M4 0V932" stroke="#8c6545" stroke-opacity=".065" stroke-width=".35"/>
+    </pattern>
+  </defs>
+  <rect width="430" height="932" fill="url(#bg)"/>
+  <rect width="430" height="932" fill="url(#threads)"/>
+  <g fill="none" stroke="url(#bronze)" filter="url(#glow)" stroke-linecap="round">
+    <path d="M-120 520 C18 415 92 270 210 196 S390 126 548 -38" stroke-width="2.2" opacity=".72"/>
+    <path d="M-125 540 C20 430 98 288 218 213 S398 143 554 -22" stroke-width="1.15" opacity=".5"/>
+    <path d="M-135 560 C12 450 108 307 228 233 S408 160 566 -5" stroke-width=".7" opacity=".42"/>
+    <path d="M-92 514 C45 397 113 253 223 183 S388 117 520 -42" stroke-width=".75" opacity=".36"/>
+    <path d="M-112 455 C-5 542 67 579 170 617 S340 710 520 842" stroke-width="2.1" opacity=".66"/>
+    <path d="M-125 474 C-8 563 68 602 174 642 S348 736 527 866" stroke-width="1.05" opacity=".46"/>
+    <path d="M-140 493 C-16 586 73 626 184 668 S355 763 539 895" stroke-width=".65" opacity=".4"/>
+    <path d="M-98 437 C14 528 83 563 183 600 S345 689 501 807" stroke-width=".7" opacity=".32"/>
+  </g>
+  <g fill="none" stroke="#d8a573" stroke-opacity=".11">
+    <path d="M-30 562 C65 470 124 325 237 245 S398 175 474 85"/>
+    <path d="M-30 585 C67 493 132 348 246 267 S405 195 481 104"/>
+    <path d="M-38 430 C55 519 120 567 227 620 S385 738 474 807"/>
+    <path d="M-42 451 C50 543 120 593 229 647 S390 764 481 835"/>
+  </g>
+  <rect width="430" height="932" fill="url(#bg)" opacity=".12"/>
+  <radialGradient id="halo"><stop stop-color="#bd885d" stop-opacity=".14"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+  <ellipse cx="285" cy="270" rx="235" ry="300" fill="url(#halo)"/>
+</svg>

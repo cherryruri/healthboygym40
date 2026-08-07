@@ -240,3 +240,22 @@ html[data-home-device="mobile"] #brand #inc01 .list .review-slide .review-more{
     font-size:12.5px !important;
   }
 }
+
+
+/* Mobile bronze hero background */
+@media(max-width:768px){
+  .intro{
+    --hero-stage-bg:#030303;
+  }
+
+  .hero-expand-sticky,
+  .hero-expand-sticky::before{
+    background-color:#030303 !important;
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18)),
+      url('assets/mobile-intro-bronze-wave.svg') !important;
+    background-position:center top, center top !important;
+    background-size:cover, cover !important;
+    background-repeat:no-repeat !important;
+  }
+}

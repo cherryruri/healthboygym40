@@ -11154,6 +11154,7 @@ html.review-proof-divider-hidden .review-proof-divider{
     background-image:
       radial-gradient(ellipse 112% 88% at 50% 52%, transparent 0 38%, rgba(0,0,0,.36) 72%, rgba(0,0,0,.72) 100%),
       repeating-linear-gradient(90deg, rgba(255,255,255,.045) 0 3px, rgba(87,61,35,.025) 3px 8px, rgba(0,0,0,.18) 9px 16px, rgba(255,255,255,.018) 17px 24px),
+      linear-gradient(32deg, transparent 16%, rgba(109,65,25,.03) 28%, rgba(224,162,78,.13) 48%, rgba(178,109,41,.08) 64%, transparent 80%),
       radial-gradient(ellipse 84% 46% at 3% 92%, rgba(216,156,78,.38) 0%, rgba(148,89,34,.20) 40%, transparent 73%),
       radial-gradient(ellipse 86% 48% at 51% 54%, rgba(226,166,83,.32) 0%, rgba(161,97,35,.17) 42%, transparent 74%),
       radial-gradient(ellipse 78% 42% at 98% 8%, rgba(222,166,85,.30) 0%, rgba(137,82,31,.15) 42%, transparent 74%),
@@ -11167,7 +11168,8 @@ html.review-proof-divider-hidden .review-proof-divider{
     background:
       radial-gradient(ellipse 58% 20% at 10% 84%, rgba(246,193,113,.30) 0%, rgba(199,130,55,.16) 42%, transparent 76%),
       radial-gradient(ellipse 60% 24% at 50% 54%, rgba(242,187,103,.25) 0%, rgba(184,112,43,.13) 44%, transparent 76%),
-      radial-gradient(ellipse 55% 20% at 90% 17%, rgba(239,186,103,.23) 0%, rgba(170,101,38,.12) 44%, transparent 76%) !important;
+      radial-gradient(ellipse 55% 20% at 90% 17%, rgba(239,186,103,.23) 0%, rgba(170,101,38,.12) 44%, transparent 76%),
+      linear-gradient(32deg, transparent 18%, rgba(241,183,98,.05) 34%, rgba(237,176,90,.14) 50%, rgba(188,116,43,.07) 66%, transparent 82%) !important;
     filter:blur(24px) saturate(1.08);
     transform:scale(1.12);
     transform-origin:center;

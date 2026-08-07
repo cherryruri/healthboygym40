@@ -10620,3 +10620,402 @@ html.review-proof-divider-hidden .review-proof-divider{
   opacity:0 !important;
   box-shadow:none !important;
 }
+
+/* ================= Mobile drawer redesign (2026-08) ================= */
+@media(max-width:768px){
+  body.menu-open{
+    overflow:hidden !important;
+  }
+
+  .navbar .mobile-menu-overlay{
+    display:block !important;
+    position:fixed !important;
+    inset:0 !important;
+    z-index:2280 !important;
+    background:rgba(0,0,0,.60) !important;
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+    transition:opacity .32s ease, visibility .32s ease !important;
+  }
+
+  body.menu-open .navbar .mobile-menu-overlay{
+    opacity:1 !important;
+    visibility:visible !important;
+    pointer-events:auto !important;
+  }
+
+  .navbar .mobile-side-menu{
+    display:flex !important;
+    flex-direction:column !important;
+    position:fixed !important;
+    inset:0 0 0 auto !important;
+    width:min(76vw, 520px) !important;
+    max-width:calc(100vw - 54px) !important;
+    height:100dvh !important;
+    min-height:100vh !important;
+    padding:0 !important;
+    z-index:2300 !important;
+    overflow:hidden !important;
+    border:0 !important;
+    border-radius:30px 0 0 0 !important;
+    background:#fff !important;
+    box-shadow:-22px 0 64px rgba(0,0,0,.24) !important;
+    transform:translateX(105%) !important;
+    transition:transform .42s cubic-bezier(.22,1,.36,1) !important;
+  }
+
+  body.menu-open .navbar .mobile-side-menu{
+    transform:translateX(0) !important;
+  }
+
+  body.menu-open .mobile-menu-btn{
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+
+  .navbar .mobile-auth-panel{
+    position:relative !important;
+    flex:0 0 auto !important;
+    min-height:0 !important;
+    padding:72px 34px 38px !important;
+    border:0 !important;
+    border-radius:30px 0 0 0 !important;
+    background:#fff !important;
+    color:#111 !important;
+    text-align:left !important;
+  }
+
+  .navbar .mobile-close{
+    display:block !important;
+    position:absolute !important;
+    top:24px !important;
+    right:24px !important;
+    width:34px !important;
+    height:34px !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    cursor:pointer !important;
+    font-size:0 !important;
+    z-index:2 !important;
+  }
+
+  .navbar .mobile-close::before,
+  .navbar .mobile-close::after{
+    content:"" !important;
+    position:absolute !important;
+    left:3px !important;
+    top:16px !important;
+    width:29px !important;
+    height:2px !important;
+    border-radius:999px !important;
+    background:#111 !important;
+  }
+
+  .navbar .mobile-close::before{
+    transform:rotate(45deg) !important;
+  }
+
+  .navbar .mobile-close::after{
+    transform:rotate(-45deg) !important;
+  }
+
+  .navbar .mobile-auth-row{
+    display:flex !important;
+    align-items:center !important;
+    gap:24px !important;
+    min-width:0 !important;
+  }
+
+  .navbar .mobile-profile-upload{
+    position:relative !important;
+    display:flex !important;
+    flex:0 0 88px !important;
+    width:88px !important;
+    height:88px !important;
+    margin:0 !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .navbar .mobile-profile-upload input{
+    display:none !important;
+  }
+
+  .navbar .mobile-profile-avatar{
+    display:flex !important;
+    width:88px !important;
+    height:88px !important;
+    align-items:center !important;
+    justify-content:center !important;
+    overflow:hidden !important;
+    border-radius:50% !important;
+    background:linear-gradient(145deg,#181818,#020202) !important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.12) !important;
+  }
+
+  .navbar .mobile-profile-avatar img{
+    display:block !important;
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+  }
+
+  .navbar .mobile-profile-avatar img[hidden]{
+    display:none !important;
+  }
+
+  .navbar .mobile-profile-placeholder{
+    display:flex !important;
+    position:relative !important;
+    width:auto !important;
+    height:auto !important;
+    align-items:center !important;
+    justify-content:center !important;
+    color:#fff !important;
+    font-size:20px !important;
+    font-weight:950 !important;
+    font-style:italic !important;
+    letter-spacing:-1.5px !important;
+    line-height:1 !important;
+  }
+
+  .navbar .mobile-profile-placeholder::before,
+  .navbar .mobile-profile-placeholder::after{
+    content:none !important;
+    display:none !important;
+  }
+
+  .navbar .mobile-profile-camera{
+    display:none !important;
+  }
+
+  .navbar .mobile-auth-copy{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+  }
+
+  .navbar .mobile-auth-title{
+    display:inline-block !important;
+    padding:0 !important;
+    border:0 !important;
+    color:#111 !important;
+    font-size:19px !important;
+    font-weight:900 !important;
+    line-height:1.25 !important;
+    letter-spacing:-.03em !important;
+    text-decoration:none !important;
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .navbar .mobile-auth-sub{
+    margin:8px 0 0 !important;
+    color:#777 !important;
+    font-size:13px !important;
+    font-weight:600 !important;
+    line-height:1.45 !important;
+    word-break:keep-all !important;
+  }
+
+  .navbar .mobile-auth-links{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:8px !important;
+    margin-top:17px !important;
+    color:#111 !important;
+    font-size:13px !important;
+    font-weight:850 !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+  }
+
+  .navbar .mobile-auth-links[hidden]{
+    display:none !important;
+  }
+
+  .navbar .mobile-auth-links a,
+  .navbar .mobile-auth-links button{
+    display:inline-flex !important;
+    width:auto !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    color:#111 !important;
+    font:inherit !important;
+    line-height:1 !important;
+    text-decoration:none !important;
+    opacity:1 !important;
+    transform:none !important;
+  }
+
+  .navbar .mobile-profile-delete{
+    margin:12px 0 0 112px !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    color:#8b8b8b !important;
+    font-size:11px !important;
+    text-decoration:underline !important;
+  }
+
+  .navbar .mobile-menu-list{
+    display:block !important;
+    flex:1 1 auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 34px 44px !important;
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:#fff !important;
+    color:#111 !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    overscroll-behavior:contain !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+
+  .navbar .mobile-menu-section-title{
+    display:block !important;
+    margin:0 !important;
+    padding:17px 0 13px !important;
+    border:0 !important;
+    border-bottom:1px solid #dedede !important;
+    color:#777 !important;
+    font-size:13px !important;
+    font-weight:650 !important;
+    line-height:1.35 !important;
+    letter-spacing:-.02em !important;
+  }
+
+  .navbar .mobile-menu-section-title:not(:first-child){
+    margin-top:8px !important;
+  }
+
+  .navbar .mobile-menu-section-title.member{
+    margin-top:8px !important;
+    padding-top:17px !important;
+  }
+
+  .navbar .mobile-side-menu .mobile-menu-list a{
+    display:grid !important;
+    grid-template-columns:28px minmax(0,1fr) 20px !important;
+    align-items:center !important;
+    column-gap:18px !important;
+    min-height:62px !important;
+    padding:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    color:#111 !important;
+    font-size:17px !important;
+    font-weight:750 !important;
+    line-height:1.3 !important;
+    letter-spacing:-.025em !important;
+    text-decoration:none !important;
+    opacity:1 !important;
+    transform:none !important;
+    transition:background-color .18s ease, color .18s ease !important;
+  }
+
+  .navbar .mobile-side-menu .mobile-menu-list a:hover,
+  .navbar .mobile-side-menu .mobile-menu-list a:active{
+    color:#111 !important;
+    background:#f7f7f7 !important;
+  }
+
+  .navbar .mobile-side-menu .mobile-menu-list a[hidden]{
+    display:none !important;
+  }
+
+  .navbar .mobile-menu-list a > svg:first-child{
+    width:23px !important;
+    height:23px !important;
+    stroke:#111 !important;
+    stroke-width:1.75 !important;
+  }
+
+  .navbar .mobile-menu-list a > svg:last-child{
+    width:18px !important;
+    height:18px !important;
+    justify-self:end !important;
+    stroke:#aaa !important;
+    stroke-width:1.7 !important;
+  }
+}
+
+@media(max-width:430px){
+  .navbar .mobile-side-menu{
+    width:82vw !important;
+    max-width:calc(100vw - 44px) !important;
+  }
+
+  .navbar .mobile-auth-panel{
+    padding:66px 26px 32px !important;
+  }
+
+  .navbar .mobile-auth-row{
+    gap:18px !important;
+  }
+
+  .navbar .mobile-profile-upload,
+  .navbar .mobile-profile-avatar{
+    flex-basis:76px !important;
+    width:76px !important;
+    height:76px !important;
+  }
+
+  .navbar .mobile-auth-title{
+    font-size:17px !important;
+  }
+
+  .navbar .mobile-auth-sub{
+    font-size:12px !important;
+  }
+
+  .navbar .mobile-auth-links{
+    gap:6px !important;
+    margin-top:14px !important;
+    font-size:12px !important;
+  }
+
+  .navbar .mobile-menu-list{
+    padding-right:26px !important;
+    padding-left:26px !important;
+  }
+
+  .navbar .mobile-side-menu .mobile-menu-list a{
+    grid-template-columns:25px minmax(0,1fr) 18px !important;
+    column-gap:15px !important;
+    min-height:58px !important;
+    font-size:16px !important;
+  }
+}
+
+@media(max-width:350px){
+  .navbar .mobile-auth-panel{
+    padding-right:20px !important;
+    padding-left:20px !important;
+  }
+
+  .navbar .mobile-auth-row{
+    gap:14px !important;
+  }
+
+  .navbar .mobile-profile-upload,
+  .navbar .mobile-profile-avatar{
+    flex-basis:66px !important;
+    width:66px !important;
+    height:66px !important;
+  }
+
+  .navbar .mobile-menu-list{
+    padding-right:20px !important;
+    padding-left:20px !important;
+  }
+}
+

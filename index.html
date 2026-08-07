@@ -162,6 +162,30 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
+<style id="loading-logo-color-fix">
+.logo-screen.logo-visible .loader-logo{
+  mix-blend-mode:normal !important;
+}
+
+.logo-screen.is-wiping:not(.logo-on-white) .loader-logo{
+  color:#fff !important;
+  mix-blend-mode:normal !important;
+  animation:loaderLogoImageHold .72s ease forwards;
+}
+
+.logo-screen.logo-on-white .loader-logo,
+.logo-screen.dock-to-logo .loader-logo{
+  color:#000 !important;
+  mix-blend-mode:normal !important;
+  animation:none !important;
+  opacity:1 !important;
+}
+
+@keyframes loaderLogoImageHold{
+  0%, 74%{ opacity:1; }
+  100%{ opacity:0; }
+}
+</style>
 </head>
 <body>
 

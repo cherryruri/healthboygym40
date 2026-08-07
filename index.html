@@ -138,70 +138,13 @@
   }
 }
 </style>
-<style id="loading-tagline-typing">
-.loader-tagline::after{
-  content:"";
-  display:inline-block;
-  width:1px;
-  height:.9em;
-  margin-left:2px;
-  vertical-align:-.06em;
-  background:currentColor;
-  opacity:0;
-}
-
-.loader-tagline.is-typing::after{
-  opacity:.72;
-  animation:loaderCaretBlink .58s steps(1,end) infinite;
-}
-
-.logo-screen.logo-visible .loader-logo{
-  opacity:0 !important;
-}
-
-.logo-screen.logo-on-white .loader-logo{
-  opacity:1 !important;
-}
-
-@keyframes loaderCaretBlink{
-  0%, 48%{ opacity:.72; }
-  49%, 100%{ opacity:0; }
-}
-</style>
-<script id="loading-tagline-typing-script">
-document.addEventListener("DOMContentLoaded", function(){
-  var tagline = document.querySelector(".loader-tagline");
-  if(!tagline) return;
-
-  var characters = Array.from(tagline.getAttribute("data-loader-text") || "");
-  var index = 0;
-
-  tagline.textContent = "";
-
-  window.setTimeout(function typeLoaderTagline(){
-    if(index === 0){
-      tagline.classList.add("is-typing");
-    }
-
-    if(index < characters.length){
-      tagline.textContent += characters[index];
-      index += 1;
-      window.setTimeout(typeLoaderTagline, 54);
-      return;
-    }
-
-    tagline.classList.remove("is-typing");
-    tagline.classList.add("is-typed");
-  }, 300);
-});
-</script>
 </head>
 <body>
 
 
   
 <div class="logo-screen" aria-hidden="true">
-  <div class="loader-tagline" data-loader-text="대한민국 No.1 피트니스 브랜드" aria-label="대한민국 No.1 피트니스 브랜드"></div>
+  <div class="loader-tagline">대한민국 No.1 피트니스 브랜드</div>
   <div class="loader-logo" data-text="HEALTHBOYGYM">HEALTHBOYGYM</div>
 </div>
 

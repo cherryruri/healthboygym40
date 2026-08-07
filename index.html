@@ -90,12 +90,61 @@
   background-repeat:no-repeat !important;
 }
 </style>
+<style id="loading-tagline-swap">
+.loader-tagline{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:2;
+  display:block;
+  margin:0;
+  color:rgba(255,255,255,.86);
+  font-family:'Pretendard', Arial, sans-serif;
+  font-size:clamp(10px, 1.05vw, 13px);
+  font-weight:500;
+  line-height:1;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  text-shadow:0 1px 8px rgba(0,0,0,.42);
+  opacity:0;
+  transform:translate(-50%, calc(-50% + 4px));
+  transition:opacity .28s ease, transform .28s ease;
+  pointer-events:none;
+}
+
+.logo-screen.logo-visible:not(.is-wiping) .loader-tagline{
+  opacity:1;
+  transform:translate(-50%, -50%);
+}
+
+.logo-screen.logo-visible:not(.is-wiping) .loader-logo{
+  opacity:0 !important;
+}
+
+.logo-screen.is-wiping .loader-tagline,
+.logo-screen.logo-on-white .loader-tagline{
+  opacity:0;
+}
+
+.logo-screen.is-wiping .loader-logo,
+.logo-screen.logo-on-white .loader-logo{
+  opacity:1;
+}
+
+@media(max-width:768px){
+  .loader-tagline{
+    font-size:10px;
+    letter-spacing:.025em;
+  }
+}
+</style>
 </head>
 <body>
 
 
   
 <div class="logo-screen" aria-hidden="true">
+  <div class="loader-tagline">대한민국 No.1 피트니스 브랜드</div>
   <div class="loader-logo" data-text="HEALTHBOYGYM">HEALTHBOYGYM</div>
 </div>
 

@@ -90,59 +90,6 @@
   background-repeat:no-repeat !important;
 }
 </style>
-<style id="loading-tagline-swap">
-.loader-tagline{
-  position:absolute;
-  left:50%;
-  top:50%;
-  z-index:2;
-  display:block;
-  margin:0;
-  color:rgba(255,255,255,.86);
-  font-family:'Pretendard', Arial, sans-serif;
-  font-size:clamp(10px, 1.05vw, 13px);
-  font-weight:500;
-  line-height:1;
-  letter-spacing:.04em;
-  white-space:nowrap;
-  text-shadow:0 1px 8px rgba(0,0,0,.42);
-  opacity:0;
-  transform:translate(-50%, calc(-50% + 4px));
-  transition:opacity .28s ease, transform .28s ease;
-  pointer-events:none;
-}
-
-.logo-screen.logo-visible:not(.is-wiping) .loader-tagline{
-  opacity:1;
-  transform:translate(-50%, -50%);
-}
-
-.logo-screen.logo-visible:not(.is-wiping) .loader-logo{
-  opacity:0 !important;
-}
-
-.logo-screen.is-wiping .loader-tagline,
-.logo-screen.logo-on-white .loader-tagline{
-  opacity:0;
-}
-
-.logo-screen.is-wiping .loader-logo,
-.logo-screen.logo-on-white .loader-logo{
-  opacity:1;
-}
-
-@media(max-width:768px){
-  .loader-tagline{
-    font-size:10px;
-    letter-spacing:.025em;
-  }
-}
-</style>
-<style id="loading-logo-image-hold">
-.logo-screen::before{
-  transition-delay:.6s;
-}
-</style>
 <script id="logo-loader-replay">
 document.addEventListener("DOMContentLoaded", function(){
   var homeLogo = document.querySelector(".logo a");
@@ -162,41 +109,6 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
-<style id="loading-logo-color-fix">
-.logo-screen.logo-visible .loader-logo{
-  mix-blend-mode:normal !important;
-}
-
-.logo-screen.is-wiping:not(.logo-on-white) .loader-logo{
-  color:#fff;
-  mix-blend-mode:normal !important;
-  opacity:1 !important;
-  animation:loaderLogoSmoothContrast 1.38s linear forwards !important;
-  text-shadow:0 2px 12px rgba(0,0,0,.42);
-}
-
-.logo-screen.logo-on-white .loader-logo,
-.logo-screen.dock-to-logo .loader-logo{
-  color:#000 !important;
-  mix-blend-mode:normal !important;
-  opacity:1 !important;
-  animation:none !important;
-  text-shadow:none;
-}
-
-@keyframes loaderLogoSmoothContrast{
-  0%, 90%{
-    color:#fff;
-    opacity:1;
-    text-shadow:0 2px 12px rgba(0,0,0,.42);
-  }
-  100%{
-    color:#000;
-    opacity:1;
-    text-shadow:0 1px 2px rgba(255,255,255,.18);
-  }
-}
-</style>
 <style id="loading-tagline-pair">
 .loader-tagline{
   position:absolute;

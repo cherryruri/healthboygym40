@@ -178,6 +178,36 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 }
 </style>
+<script id="loading-pair-sync-script">
+document.addEventListener("DOMContentLoaded", function(){
+  var loader = document.querySelector(".logo-screen");
+  var tagline = document.querySelector(".loader-tagline");
+  var logo = document.querySelector(".loader-logo");
+
+  if(!loader || !tagline || !logo) return;
+
+  function syncLoadingPair(){
+    var active = loader.classList.contains("logo-visible") &&
+      !loader.classList.contains("release");
+
+    if(active){
+      tagline.style.setProperty("opacity", "1", "important");
+      logo.style.setProperty("opacity", "1", "important");
+      return;
+    }
+
+    tagline.style.removeProperty("opacity");
+    logo.style.removeProperty("opacity");
+  }
+
+  new MutationObserver(syncLoadingPair).observe(loader, {
+    attributes:true,
+    attributeFilter:["class"]
+  });
+
+  syncLoadingPair();
+});
+</script>
 </head>
 <body>
 

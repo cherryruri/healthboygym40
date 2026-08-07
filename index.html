@@ -197,6 +197,46 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 }
 </style>
+<style id="loading-tagline-pair">
+.loader-tagline{
+  position:absolute;
+  left:50%;
+  top:calc(50% - clamp(48px, 5.8vw, 76px));
+  z-index:2;
+  display:block;
+  margin:0;
+  color:rgba(255,255,255,.86);
+  font-family:'Pretendard', Arial, sans-serif;
+  font-size:clamp(10px, 1.05vw, 13px);
+  font-weight:500;
+  line-height:1;
+  letter-spacing:.04em;
+  white-space:nowrap;
+  text-shadow:0 1px 8px rgba(0,0,0,.42);
+  opacity:0;
+  transform:translateX(-50%);
+  transition:opacity .28s ease;
+  pointer-events:none;
+}
+
+.logo-screen.logo-visible .loader-tagline{
+  opacity:1;
+}
+
+.logo-screen.is-wiping .loader-tagline,
+.logo-screen.logo-on-white .loader-tagline,
+.logo-screen.dock-to-logo .loader-tagline{
+  opacity:0;
+}
+
+@media(max-width:768px){
+  .loader-tagline{
+    top:calc(50% - 42px);
+    font-size:10px;
+    letter-spacing:.025em;
+  }
+}
+</style>
 </head>
 <body>
 

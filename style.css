@@ -11149,7 +11149,7 @@ html.review-proof-divider-hidden .review-proof-divider{
     line-height:1;
   }
 
-  .hero-expand-sticky{
+  body .hero-expand-sticky{
     background-color:#080604 !important;
     background-image:
       radial-gradient(ellipse 112% 88% at 50% 52%, transparent 0 38%, rgba(0,0,0,.36) 72%, rgba(0,0,0,.72) 100%),
@@ -11163,7 +11163,7 @@ html.review-proof-divider-hidden .review-proof-divider{
     background-repeat:no-repeat !important;
   }
 
-  .hero-expand-sticky::before{
+  body .hero-expand-sticky::before{
     background:
       radial-gradient(ellipse 58% 20% at 10% 84%, rgba(246,193,113,.30) 0%, rgba(199,130,55,.16) 42%, transparent 76%),
       radial-gradient(ellipse 60% 24% at 50% 54%, rgba(242,187,103,.25) 0%, rgba(184,112,43,.13) 44%, transparent 76%),
@@ -11175,7 +11175,7 @@ html.review-proof-divider-hidden .review-proof-divider{
     opacity:var(--hero-title-opacity, 1);
   }
 
-  .hero-expand-sticky::after{
+  body .hero-expand-sticky::after{
     content:"";
     position:absolute;
     inset:-4%;

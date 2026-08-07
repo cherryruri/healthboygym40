@@ -2,43 +2,48 @@
   const MENU_HTML = `
     <div class="mobile-auth-panel">
       <button type="button" class="mobile-close" aria-label="메뉴 닫기"></button>
-      <label class="mobile-profile-upload" id="mobileProfileUploadLabel" aria-label="프로필 사진 변경">
-        <input type="file" id="mobileProfileInput" accept="image/*">
-        <span class="mobile-profile-avatar" id="mobileProfileAvatar">
-          <img id="mobileProfileImage" alt="" hidden>
-          <span class="mobile-profile-placeholder" id="mobileProfilePlaceholder"></span>
-        </span>
-        <span class="mobile-profile-camera" aria-hidden="true"></span>
-      </label>
+      <div class="mobile-auth-row">
+        <label class="mobile-profile-upload" id="mobileProfileUploadLabel" aria-label="프로필 사진 변경">
+          <input type="file" id="mobileProfileInput" accept="image/*">
+          <span class="mobile-profile-avatar" id="mobileProfileAvatar">
+            <img id="mobileProfileImage" alt="" hidden>
+            <span class="mobile-profile-placeholder" id="mobileProfilePlaceholder">HB</span>
+          </span>
+          <span class="mobile-profile-camera" aria-hidden="true"></span>
+        </label>
+        <div class="mobile-auth-copy">
+          <a href="login.html" class="mobile-auth-title" id="mobileProfileName">로그인 하기</a>
+          <p id="mobileProfileText" class="mobile-auth-sub">회원 전용 메뉴를 이용해보세요.</p>
+          <div class="mobile-auth-links" id="mobileGuestActions">
+            <a href="login.html">회원가입 하기</a>
+            <span>|</span>
+            <a href="change-password.html">P/W 변경</a>
+          </div>
+          <div class="mobile-auth-links" id="mobileUserActions" hidden>
+            <button type="button" id="mobileLogoutBtn">로그아웃 하기</button>
+            <span>|</span>
+            <a href="mypage.html">MY PAGE</a>
+          </div>
+        </div>
+      </div>
       <button type="button" class="mobile-profile-delete" id="mobileProfileDelete" hidden>사진 삭제</button>
-      <a href="login.html" class="mobile-auth-title" id="mobileProfileName">로그인 하기</a>
-      <p id="mobileProfileText" class="mobile-auth-sub">회원 전용 메뉴를 이용해보세요.</p>
-      <div class="mobile-auth-links" id="mobileGuestActions">
-        <a href="login.html">회원가입 하기</a>
-        <span>|</span>
-        <a href="change-password.html">P/W 변경</a>
-      </div>
-      <div class="mobile-auth-links" id="mobileUserActions" hidden>
-        <button type="button" id="mobileLogoutBtn">로그아웃 하기</button>
-        <span>|</span>
-        <a href="mypage.html">MY PAGE</a>
-      </div>
       <a href="login.html" id="mobileLoginLink" hidden>LOGIN</a>
     </div>
     <nav class="mobile-menu-list" aria-label="모바일 메뉴">
       <span class="mobile-menu-section-title">헬스보이짐 수내점 소개</span>
-      <a href="index.html#about">센터 소개</a>
-      <a href="index.html#facility">시설 투어</a>
-      <a href="index.html#trainer">트레이너 소개</a>
-      <a href="index.html#hours">운영시간</a>
-      <a href="index.html#location">오시는 길</a>
-      <a href="board.html">게시판</a>
-      <a href="board.html?board=noticeboard">공지문 / 뉴스</a>
-      <a href="board.html?board=infoboard" data-admin-only hidden>인포게시판</a>
-      <a href="index.html#newsHub">새 소식</a>
-      <a href="index.html#faq">자주 묻는 질문</a>
-      <span class="mobile-menu-section-title member">수내점 회원 전용</span>
-      <a href="board.html?board=free">자유게시판</a>
+      <a href="index.html#about"><i data-feather="home" aria-hidden="true"></i><span>센터 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#facility"><i data-feather="activity" aria-hidden="true"></i><span>시설 투어</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#trainer"><i data-feather="user" aria-hidden="true"></i><span>트레이너 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#hours"><i data-feather="clock" aria-hidden="true"></i><span>운영시간</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#location"><i data-feather="map-pin" aria-hidden="true"></i><span>오시는 길</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <span class="mobile-menu-section-title">커뮤니티</span>
+      <a href="board.html"><i data-feather="list" aria-hidden="true"></i><span>게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="board.html?board=noticeboard"><i data-feather="volume-2" aria-hidden="true"></i><span>공지문 / 뉴스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="board.html?board=infoboard" data-admin-only hidden><i data-feather="info" aria-hidden="true"></i><span>인포게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#newsHub"><i data-feather="file-text" aria-hidden="true"></i><span>새 소식</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="index.html#faq"><i data-feather="message-square" aria-hidden="true"></i><span>자주 묻는 질문</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <span class="mobile-menu-section-title member">회원 전용</span>
+      <a href="board.html?board=free"><i data-feather="lock" aria-hidden="true"></i><span>자유게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
     </nav>
   `;
 
@@ -78,6 +83,14 @@
     }
 
     side.innerHTML = MENU_HTML;
+
+    if(window.feather){
+      window.feather.replace({
+        width:22,
+        height:22,
+        "stroke-width":1.8
+      });
+    }
 
     const closeButton = side.querySelector(".mobile-close");
 

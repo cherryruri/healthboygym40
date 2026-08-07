@@ -170,20 +170,31 @@ document.addEventListener("DOMContentLoaded", function(){
 .logo-screen.is-wiping:not(.logo-on-white) .loader-logo{
   color:#fff !important;
   mix-blend-mode:normal !important;
-  animation:loaderLogoImageHold .72s ease forwards;
+  opacity:1 !important;
+  animation:loaderLogoSmoothContrast 1.38s linear forwards !important;
+  text-shadow:0 2px 12px rgba(0,0,0,.42);
 }
 
 .logo-screen.logo-on-white .loader-logo,
 .logo-screen.dock-to-logo .loader-logo{
   color:#000 !important;
   mix-blend-mode:normal !important;
-  animation:none !important;
   opacity:1 !important;
+  animation:none !important;
+  text-shadow:none;
 }
 
-@keyframes loaderLogoImageHold{
-  0%, 74%{ opacity:1; }
-  100%{ opacity:0; }
+@keyframes loaderLogoSmoothContrast{
+  0%, 76%{
+    color:#fff;
+    opacity:1;
+    text-shadow:0 2px 12px rgba(0,0,0,.42);
+  }
+  100%{
+    color:#000;
+    opacity:1;
+    text-shadow:0 1px 2px rgba(255,255,255,.18);
+  }
 }
 </style>
 </head>

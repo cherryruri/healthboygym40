@@ -11155,8 +11155,8 @@ html.review-proof-divider-hidden .review-proof-divider{
     background-image:
       linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,.18)),
       url('assets/mobile-intro-original.png') !important;
-    background-position:center top, center top !important;
-    background-size:cover, cover !important;
+    background-position:center center, center center !important;
+    background-size:cover, contain !important;
     background-repeat:no-repeat !important;
   }
 

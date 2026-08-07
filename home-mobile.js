@@ -131,7 +131,7 @@
 
     intro.style.setProperty(
       "--hero-stage-bg",
-      "#030303 url('assets/mobile-intro-original.png') center center / contain no-repeat",
+      "#030303 url('assets/mobile-intro-original.png') center center / cover no-repeat",
       "important"
     );
   }

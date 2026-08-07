@@ -139,12 +139,20 @@ document.addEventListener("DOMContentLoaded", function(){
   pointer-events:none;
 }
 
-.logo-screen.logo-visible .loader-tagline,
-.logo-screen.is-wiping .loader-tagline{
+.logo-screen .loader-logo{
+  transform:translate(-50%, -50%) skewX(var(--loader-logo-skew));
+}
+
+.logo-screen.logo-visible:not(.is-wiping) .loader-tagline{
   opacity:1;
 }
 
-.logo-screen.logo-visible:not(.release) .loader-tagline,
+.logo-screen.is-wiping .loader-tagline,
+.logo-screen.logo-on-white .loader-tagline,
+.logo-screen.dock-to-logo .loader-tagline{
+  opacity:0 !important;
+}
+
 .logo-screen.logo-visible:not(.release) .loader-logo{
   opacity:1 !important;
 }
@@ -191,8 +199,14 @@ document.addEventListener("DOMContentLoaded", function(){
       !loader.classList.contains("release");
 
     if(active){
-      tagline.style.setProperty("opacity", "1", "important");
       logo.style.setProperty("opacity", "1", "important");
+
+      if(loader.classList.contains("is-wiping")){
+        tagline.style.setProperty("opacity", "0", "important");
+      }else{
+        tagline.style.setProperty("opacity", "1", "important");
+      }
+
       return;
     }
 

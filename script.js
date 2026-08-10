@@ -41,6 +41,26 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
+  function initCinematicHeader(){
+
+    if(document.body.dataset.cinematicHeaderReady === "true") return;
+
+    document.body.dataset.cinematicHeaderReady =
+      "true";
+
+    const updateHeader =
+      ()=>{
+        document.body.classList.toggle(
+          "site-scrolled",
+          window.scrollY > 48
+        );
+      };
+
+    updateHeader();
+    window.addEventListener("scroll", updateHeader, {passive:true});
+
+  }
+
   function getHomeFlowConfig(){
 
     return window.HEALTHBOY_HOME_CONFIG || {};
@@ -68,11 +88,6 @@ document.addEventListener("DOMContentLoaded", function(){
     const heroSteps = [
       initMobileIntroVideo,
       placePassUnderAllPass,
-      placeReviewsAfterIntro,
-      prepareIntroStatementWords,
-      initHeroCaptionScrollGate,
-      initHeroExpand,
-      initReviewCoverPanel,
       fadeIn,
       observeCounter
     ];
@@ -2288,7 +2303,7 @@ document.addEventListener("DOMContentLoaded", function(){
       true;
 
     video.preload =
-      "none";
+      "auto";
 
     const playVideo =
       ()=>{
@@ -2370,7 +2385,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
     const shouldKeepImageOnly =
       videoConfig.loadHeroVideo === false ||
-      window.innerWidth <= 768 ||
       (
         window.matchMedia &&
         window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -2397,28 +2411,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
           };
 
-        const idleTimeout =
-          typeof videoConfig.idleTimeout === "number"
-            ? videoConfig.idleTimeout
-            : 2200;
-
-        const fallbackDelay =
-          typeof videoConfig.fallbackDelay === "number"
-            ? videoConfig.fallbackDelay
-            : 1400;
-
-        if("requestIdleCallback" in window){
-          window.requestIdleCallback(start, {timeout:idleTimeout});
-        }else{
-          window.setTimeout(start, fallbackDelay);
-        }
+        start();
 
       };
 
-    window.setTimeout(
-      scheduleDesktopVideo,
-      typeof videoConfig.sourceDelay === "number" ? videoConfig.sourceDelay : 900
-    );
+    scheduleDesktopVideo();
 
   }
 
@@ -3566,6 +3563,7 @@ document.addEventListener("DOMContentLoaded", function(){
   prepareIntroCaption();
 
   initLogoLoaderReplay();
+  initCinematicHeader();
   stageLoaderIntro();
 
   setTimeout(openMain, 2860);

@@ -1004,6 +1004,17 @@ body .hero-scroll-explore{
     transform .8s cubic-bezier(.16,1,.3,1);
 }
 
+body.hero-reveal-start .hero-scroll-explore{
+  opacity:0 !important;
+  transform:translate(-50%,12px) !important;
+  animation:none !important;
+}
+
+body.hero-reveal-start.hero-step-scroll .hero-scroll-explore{
+  opacity:1 !important;
+  transform:translate(-50%,0) !important;
+}
+
 body.hero-step-line .hero-brand-line::after{
   transform:scaleY(1);
 }
@@ -2161,7 +2172,7 @@ body.hero-sequence-complete .hero-booking-cta{
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-garden-sequence20"></script>
+<script src="script.js?v=20260811-garden-sequence21"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

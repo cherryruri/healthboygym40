@@ -48,6 +48,35 @@ document.addEventListener("DOMContentLoaded", function(){
     document.body.dataset.cinematicHeaderReady =
       "true";
 
+    const hero =
+      document.querySelector(".hero-expand-section");
+
+    const scrollKeys =
+      new Set(["ArrowDown", "PageDown", " ", "Spacebar", "End", "ArrowUp", "PageUp", "Home"]);
+
+    const isCinematicHeroActive =
+      ()=>hero && window.scrollY <= hero.offsetTop + hero.offsetHeight - 2;
+
+    const releaseLegacyWheelGate =
+      event=>{
+        if(isCinematicHeroActive()){
+          event.stopImmediatePropagation();
+        }
+      };
+
+    const releaseLegacyKeyGate =
+      event=>{
+        const target = event.target;
+
+        if(
+          !isCinematicHeroActive() ||
+          !scrollKeys.has(event.key) ||
+          (target && target.closest && target.closest("input, textarea, select, [contenteditable='true']"))
+        ) return;
+
+        event.stopImmediatePropagation();
+      };
+
     const updateHeader =
       ()=>{
         document.body.classList.toggle(
@@ -56,6 +85,9 @@ document.addEventListener("DOMContentLoaded", function(){
         );
       };
 
+    window.addEventListener("wheel", releaseLegacyWheelGate, {capture:true, passive:true});
+    window.addEventListener("touchmove", releaseLegacyWheelGate, {capture:true, passive:true});
+    window.addEventListener("keydown", releaseLegacyKeyGate, {capture:true});
     updateHeader();
     window.addEventListener("scroll", updateHeader, {passive:true});
 

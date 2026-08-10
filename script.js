@@ -3640,6 +3640,34 @@ document.addEventListener("DOMContentLoaded", function(){
 
   window.addEventListener("hashchange", scrollToHashTarget);
 
+  function startHeroRevealSequence(){
+    const body = document.body;
+    const revealClasses = [
+      "hero-sequence-complete",
+      "hero-reveal-start",
+      "hero-step-line",
+      "hero-step-kicker",
+      "hero-step-message",
+      "hero-step-button",
+      "hero-step-scroll"
+    ];
+
+    body.classList.remove(...revealClasses);
+    void body.offsetWidth;
+    body.classList.add("loaded", "hero-reveal-start");
+
+    [
+      ["hero-step-line", 80],
+      ["hero-step-kicker", 1120],
+      ["hero-step-message", 1840],
+      ["hero-step-button", 2660],
+      ["hero-step-scroll", 3460],
+      ["hero-sequence-complete", 4380]
+    ].forEach(([className, delay])=>{
+      setTimeout(()=>body.classList.add(className), delay);
+    });
+  }
+
   function openMain(){
 
     const loader =
@@ -3653,13 +3681,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     if(!loader){
-      document.body.classList.remove("hero-sequence-complete", "hero-reveal-start");
-      void document.body.offsetWidth;
-      document.body.classList.add("loaded", "hero-reveal-start");
-
-      setTimeout(()=>{
-        document.body.classList.add("hero-sequence-complete");
-      }, 4000);
+      startHeroRevealSequence();
       startSite();
       initHashNavigation();
       queueHashScroll();
@@ -3689,13 +3711,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     setTimeout(()=>{
 
-      document.body.classList.remove("hero-sequence-complete", "hero-reveal-start");
-      void document.body.offsetWidth;
-      document.body.classList.add("loaded", "hero-reveal-start");
-
-      setTimeout(()=>{
-        document.body.classList.add("hero-sequence-complete");
-      }, 4000);
+      startHeroRevealSequence();
       loader.classList.add("release");
       startSite();
       initHashNavigation();

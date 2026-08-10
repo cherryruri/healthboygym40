@@ -2472,6 +2472,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
       };
 
+    if(!applyHeroStartTime()){
+      video.addEventListener(
+        "loadedmetadata",
+        applyHeroStartTime,
+        {once:true}
+      );
+    }
+
     const videoConfig =
       getHomeFlowConfig().video || {};
 

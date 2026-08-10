@@ -1210,16 +1210,18 @@ body.hero-sequence-complete .hero-booking-cta{
 .pt-reasons-showcase{
   position:relative;
   z-index:1;
-  min-height:100vh;
-  min-height:100svh;
+  min-height:auto;
   overflow:hidden;
+  padding:150px 0;
   background:#000;
   color:#fff;
+  font-family:Pretendard,"Noto Sans KR",Dotum,Helvetica,AppleGothic,Gulim,Roboto,sans-serif;
+  letter-spacing:-.45px;
 }
 .pt-reasons-intro{
-  max-width:1180px;
-  margin:0 auto;
-  padding:clamp(96px,12vh,150px) 24px clamp(50px,7vh,82px);
+  width:100%;
+  margin:0;
+  padding:0;
   text-align:center;
   opacity:0;
   transform:translateY(34px);
@@ -1229,41 +1231,49 @@ body.hero-sequence-complete .hero-booking-cta{
   opacity:1;
   transform:translateY(0);
 }
-.pt-reasons-eyebrow{
-  margin:0 0 22px;
-  color:rgba(255,255,255,.52);
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.24em;
-}
 .pt-reasons-title{
-  margin:0;
+  width:100%;
+  margin:0 0 40px;
+  padding:0;
   color:#fff;
-  font-size:clamp(48px,5.25vw,82px);
-  font-weight:760;
-  line-height:1.08;
-  letter-spacing:-.055em;
+  font-size:72px;
+  font-weight:700;
+  line-height:1.3;
+  letter-spacing:-.45px;
+  text-align:center;
 }
 .pt-reasons-title span{
   display:block;
 }
 .pt-reasons-subtitle{
-  margin:34px auto 0;
-  color:rgba(255,255,255,.78);
-  font-size:clamp(15px,1.2vw,19px);
-  font-weight:500;
-  line-height:1.65;
-  letter-spacing:-.025em;
+  width:100%;
+  margin:0 0 100px;
+  padding:0 20px;
+  color:#fff;
+  font-size:22px;
+  font-weight:700;
+  line-height:1.5;
+  letter-spacing:-.45px;
+  text-align:center;
 }
 .pt-reasons-rail{
-  display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
-  gap:7px;
+  display:flex;
+  align-items:stretch;
+  gap:8px;
   width:100%;
+  margin:0 0 100px;
   padding:0;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  overscroll-behavior-x:contain;
+  scrollbar-width:none;
   opacity:0;
   clip-path:inset(0 0 100% 0);
   transition:opacity .9s ease .32s,clip-path 1.25s cubic-bezier(.2,.72,.2,1) .32s;
+}
+.pt-reasons-rail::-webkit-scrollbar{
+  display:none;
 }
 .pt-reasons-showcase.is-visible .pt-reasons-rail{
   opacity:1;
@@ -1271,11 +1281,11 @@ body.hero-sequence-complete .hero-booking-cta{
 }
 .pt-reason-card{
   position:relative;
+  flex:0 0 calc((100% - 32px)/5);
   min-width:0;
-  height:min(64vh,58vw);
-  min-height:470px;
-  max-height:720px;
+  aspect-ratio:400/580;
   overflow:hidden;
+  scroll-snap-align:start;
   background:#101010;
 }
 .pt-reason-card::after{
@@ -1283,7 +1293,7 @@ body.hero-sequence-complete .hero-booking-cta{
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,0) 52%,rgba(0,0,0,.24));
+  background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,0) 58%,rgba(0,0,0,.18));
   pointer-events:none;
 }
 .pt-reason-card video{
@@ -1292,61 +1302,52 @@ body.hero-sequence-complete .hero-booking-cta{
   height:100%;
   object-fit:cover;
   object-position:center center;
-  filter:brightness(.82) saturate(.86) contrast(1.04);
-  transform:scale(1.005);
+  filter:brightness(.84) saturate(.88) contrast(1.03);
+  transform:scale(1.002);
   transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter .8s ease;
 }
 @media (hover:hover){
   .pt-reason-card:hover video{
-    transform:scale(1.045);
-    filter:brightness(.96) saturate(.96) contrast(1.02);
+    transform:scale(1.035);
+    filter:brightness(.95) saturate(.96) contrast(1.02);
   }
 }
 @media(max-width:768px){
   .pt-reasons-showcase{
-    min-height:auto;
+    padding:88px 0 72px;
   }
   .pt-reasons-intro{
-    padding:88px 20px 46px;
-  }
-  .pt-reasons-eyebrow{
-    margin-bottom:18px;
-    font-size:10px;
+    padding:0 20px;
   }
   .pt-reasons-title{
-    font-size:clamp(35px,10vw,44px);
-    line-height:1.14;
-    letter-spacing:-.06em;
+    margin-bottom:28px;
+    font-size:clamp(36px,10.2vw,44px);
+    line-height:1.2;
+    letter-spacing:-.05em;
   }
   .pt-reasons-subtitle{
-    max-width:330px;
-    margin-top:25px;
-    font-size:14px;
-    line-height:1.62;
+    max-width:340px;
+    margin:0 auto 58px;
+    padding:0;
+    font-size:15px;
+    font-weight:650;
+    line-height:1.6;
+    word-break:keep-all;
   }
   .pt-reasons-rail{
-    display:flex;
     gap:8px;
-    overflow-x:auto;
-    padding:0 14px 48px;
-    scroll-snap-type:x mandatory;
-    overscroll-behavior-x:contain;
-    scrollbar-width:none;
+    margin-bottom:0;
+    padding:0 14px;
     clip-path:inset(0 0 0 0);
     transform:translateY(22px);
     transition:opacity .8s ease .28s,transform .9s cubic-bezier(.2,.7,.2,1) .28s;
-  }
-  .pt-reasons-rail::-webkit-scrollbar{
-    display:none;
   }
   .pt-reasons-showcase.is-visible .pt-reasons-rail{
     transform:translateY(0);
   }
   .pt-reason-card{
     flex:0 0 78vw;
-    height:58svh;
-    min-height:440px;
-    max-height:620px;
+    aspect-ratio:400/580;
     scroll-snap-align:center;
   }
 }
@@ -1544,12 +1545,11 @@ body.hero-sequence-complete .hero-booking-cta{
 
 <section id="ptReasons" class="pt-reasons-showcase" aria-labelledby="ptReasonsTitle">
   <div class="pt-reasons-intro">
-    <p class="pt-reasons-eyebrow">PERSONAL TRAINING · HEALTHBOYGYM SUNAE</p>
     <h2 id="ptReasonsTitle" class="pt-reasons-title">
       <span>수내점에서 1:1 PT를</span>
       <span>시작해야 하는 이유</span>
     </h2>
-    <p class="pt-reasons-subtitle">몸의 움직임을 정확히 읽는 전문 트레이너와 함께<br>더 빠르고 안전한 변화를 경험하세요.</p>
+    <p class="pt-reasons-subtitle">트레이너의 정확한 분석과 체계적인 코칭으로 운동의 기준을 바꿉니다.</p>
   </div>
 
   <div class="pt-reasons-rail" aria-label="헬스보이짐 수내점 퍼스널 트레이닝 영상">

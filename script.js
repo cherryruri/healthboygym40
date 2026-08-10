@@ -2445,7 +2445,11 @@ document.addEventListener("DOMContentLoaded", function(){
     const attachVideoSource =
       ()=>{
 
-        if(video.querySelector("source")) return true;
+        if(
+          video.currentSrc ||
+          video.getAttribute("src") ||
+          video.querySelector("source")
+        ) return true;
 
         const src =
           video.dataset.lazySrc;

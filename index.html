@@ -776,6 +776,32 @@ body.loaded .hero-scroll-explore{
     font-size:12px !important;
   }
 }
+
+/* Final-state safety: the copy must remain visible even if a browser pauses CSS animations. */
+body.hero-sequence-complete .hero-brand-wordmark{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+  animation:none !important;
+}
+
+body.hero-sequence-complete .hero-brand-line{
+  opacity:1 !important;
+  transform:scaleX(1) !important;
+  animation:none !important;
+}
+
+body.hero-sequence-complete .hero-brand-copy{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+  animation:none !important;
+}
+
+body.hero-sequence-complete .hero-scroll-explore{
+  opacity:1 !important;
+  transform:translate(-50%,0) !important;
+  animation:none !important;
+}
+
 </style>
 
 </head>
@@ -1845,7 +1871,7 @@ body.loaded .hero-scroll-explore{
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-garden-sequence9"></script>
+<script src="script.js?v=20260811-garden-sequence10"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

@@ -2484,11 +2484,7 @@ document.addEventListener("DOMContentLoaded", function(){
       getHomeFlowConfig().video || {};
 
     const shouldKeepImageOnly =
-      videoConfig.loadHeroVideo === false ||
-      (
-        window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      );
+      videoConfig.loadHeroVideo === false;
 
     if(shouldKeepImageOnly){
       return;

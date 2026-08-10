@@ -3,27 +3,42 @@ document.addEventListener("DOMContentLoaded", function(){
   /* 로더 */
   if("scrollRestoration" in window.history){
     window.history.scrollRestoration =
-      "auto";
+      "manual";
   }
+
+  window.scrollTo(0, 0);
 
   let siteStarted =
     false;
 
-  const loaderSessionKey =
-    "healthboygymLoaderSeen";
+  function initLogoLoaderReplay(){
 
-  function hasSeenLoader(){
-    try{
-      return window.sessionStorage.getItem(loaderSessionKey) === "1";
-    }catch(error){
-      return false;
-    }
-  }
+    const headerLogo =
+      document.querySelector(".logo a");
 
-  function markLoaderSeen(){
-    try{
-      window.sessionStorage.setItem(loaderSessionKey, "1");
-    }catch(error){}
+    if(!headerLogo || headerLogo.dataset.loaderReplayReady === "true") return;
+
+    headerLogo.dataset.loaderReplayReady =
+      "true";
+
+    headerLogo.addEventListener("click", event=>{
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      if(window.history && window.history.replaceState){
+        window.history.replaceState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}`
+        );
+      }
+
+      window.scrollTo(0, 0);
+      window.location.reload();
+
+    });
+
   }
 
   function getHomeFlowConfig(){
@@ -3493,15 +3508,6 @@ document.addEventListener("DOMContentLoaded", function(){
       mainContent.style.display = "block";
     }
 
-    if(hasSeenLoader()){
-      document.body.classList.add("loaded");
-      if(loader) loader.style.display = "none";
-      startSite();
-      initHashNavigation();
-      queueHashScroll();
-      return;
-    }
-
     if(!loader){
       document.body.classList.add("loaded");
       startSite();
@@ -3511,8 +3517,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     setLoaderTarget();
-    markLoaderSeen();
-
     const isMobileLoader =
       window.innerWidth <= 768;
 
@@ -3561,11 +3565,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
   prepareIntroCaption();
 
-  if(!hasSeenLoader()){
-    stageLoaderIntro();
-  }
+  initLogoLoaderReplay();
+  stageLoaderIntro();
 
-  setTimeout(openMain, hasSeenLoader() ? 0 : 2860);
+  setTimeout(openMain, 2860);
 
 
 

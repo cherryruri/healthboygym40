@@ -3598,7 +3598,9 @@ document.addEventListener("DOMContentLoaded", function(){
   initCinematicHeader();
   stageLoaderIntro();
 
-  setTimeout(openMain, 2860);
+  requestAnimationFrame(()=>{
+    setTimeout(openMain, 80);
+  });
 
 
 

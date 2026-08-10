@@ -3657,12 +3657,12 @@ document.addEventListener("DOMContentLoaded", function(){
     body.classList.add("loaded", "hero-reveal-start");
 
     [
-      ["hero-step-line", 80],
-      ["hero-step-kicker", 1120],
-      ["hero-step-message", 1840],
-      ["hero-step-button", 2660],
-      ["hero-step-scroll", 3460],
-      ["hero-sequence-complete", 4380]
+      ["hero-step-line", 100],
+      ["hero-step-kicker", 1500],
+      ["hero-step-message", 2480],
+      ["hero-step-button", 3540],
+      ["hero-step-scroll", 4580],
+      ["hero-sequence-complete", 5700]
     ].forEach(([className, delay])=>{
       setTimeout(()=>body.classList.add(className), delay);
     });

@@ -985,46 +985,40 @@ body .hero-booking-cta{
   }
 }
 
-@keyframes heroBrandVerticalLineDraw{
-  from{transform:scaleY(0)}
-  to{transform:scaleY(1)}
+body .hero-brand-line::after{
+  transition:transform 1.02s cubic-bezier(.76,0,.24,1);
 }
 
-@keyframes heroSequenceItemIn{
-  from{opacity:0;filter:blur(9px);transform:translateY(22px)}
-  to{opacity:1;filter:blur(0);transform:translateY(0)}
+body .hero-brand-kicker,
+body .hero-brand-copy .intro-main,
+body .hero-booking-cta{
+  transition:
+    opacity .92s cubic-bezier(.16,1,.3,1),
+    filter .92s cubic-bezier(.16,1,.3,1),
+    transform .92s cubic-bezier(.16,1,.3,1);
 }
 
-body.hero-reveal-start .hero-brand-copy{
-  animation:none !important;
+body .hero-scroll-explore{
+  transition:
+    opacity .8s cubic-bezier(.16,1,.3,1),
+    transform .8s cubic-bezier(.16,1,.3,1);
+}
+
+body.hero-step-line .hero-brand-line::after{
+  transform:scaleY(1);
+}
+
+body.hero-step-kicker .hero-brand-kicker,
+body.hero-step-message .hero-brand-copy .intro-main,
+body.hero-step-button .hero-booking-cta{
   opacity:1 !important;
-  transform:none !important;
+  filter:blur(0) !important;
+  transform:translateY(0) !important;
 }
 
-body.hero-reveal-start .hero-brand-line{
-  animation:none !important;
+body.hero-step-scroll .hero-scroll-explore{
   opacity:1 !important;
-  transform:none !important;
-}
-
-body.hero-reveal-start .hero-brand-line::after{
-  animation:heroBrandVerticalLineDraw 1.08s cubic-bezier(.76,0,.24,1) .08s forwards;
-}
-
-body.hero-reveal-start .hero-brand-kicker{
-  animation:heroSequenceItemIn .92s cubic-bezier(.16,1,.3,1) 1.02s forwards !important;
-}
-
-body.hero-reveal-start .hero-brand-copy .intro-main{
-  animation:heroSequenceItemIn 1.02s cubic-bezier(.16,1,.3,1) 1.55s forwards !important;
-}
-
-body.hero-reveal-start .hero-booking-cta{
-  animation:heroSequenceItemIn .92s cubic-bezier(.16,1,.3,1) 2.18s forwards !important;
-}
-
-body.hero-reveal-start .hero-scroll-explore{
-  animation:heroBrandScrollIn .82s cubic-bezier(.16,1,.3,1) 2.86s forwards !important;
+  transform:translate(-50%,0) !important;
 }
 
 body.hero-sequence-complete .hero-brand-line{
@@ -2167,7 +2161,7 @@ body.hero-sequence-complete .hero-booking-cta{
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-garden-sequence19"></script>
+<script src="script.js?v=20260811-garden-sequence20"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

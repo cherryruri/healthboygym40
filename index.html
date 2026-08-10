@@ -1205,6 +1205,163 @@ body.hero-sequence-complete .hero-booking-cta{
   }
 }
 </style>
+
+<style id="pt-reasons-showcase-style">
+.pt-reasons-showcase{
+  position:relative;
+  z-index:1;
+  min-height:100vh;
+  min-height:100svh;
+  overflow:hidden;
+  background:#000;
+  color:#fff;
+}
+.pt-reasons-intro{
+  max-width:1180px;
+  margin:0 auto;
+  padding:clamp(96px,12vh,150px) 24px clamp(50px,7vh,82px);
+  text-align:center;
+  opacity:0;
+  transform:translateY(34px);
+  transition:opacity 1.05s cubic-bezier(.2,.7,.2,1),transform 1.05s cubic-bezier(.2,.7,.2,1);
+}
+.pt-reasons-showcase.is-visible .pt-reasons-intro{
+  opacity:1;
+  transform:translateY(0);
+}
+.pt-reasons-eyebrow{
+  margin:0 0 22px;
+  color:rgba(255,255,255,.52);
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.24em;
+}
+.pt-reasons-title{
+  margin:0;
+  color:#fff;
+  font-size:clamp(48px,5.25vw,82px);
+  font-weight:760;
+  line-height:1.08;
+  letter-spacing:-.055em;
+}
+.pt-reasons-title span{
+  display:block;
+}
+.pt-reasons-subtitle{
+  margin:34px auto 0;
+  color:rgba(255,255,255,.78);
+  font-size:clamp(15px,1.2vw,19px);
+  font-weight:500;
+  line-height:1.65;
+  letter-spacing:-.025em;
+}
+.pt-reasons-rail{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:7px;
+  width:100%;
+  padding:0;
+  opacity:0;
+  clip-path:inset(0 0 100% 0);
+  transition:opacity .9s ease .32s,clip-path 1.25s cubic-bezier(.2,.72,.2,1) .32s;
+}
+.pt-reasons-showcase.is-visible .pt-reasons-rail{
+  opacity:1;
+  clip-path:inset(0 0 0 0);
+}
+.pt-reason-card{
+  position:relative;
+  min-width:0;
+  height:min(64vh,58vw);
+  min-height:470px;
+  max-height:720px;
+  overflow:hidden;
+  background:#101010;
+}
+.pt-reason-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,0) 52%,rgba(0,0,0,.24));
+  pointer-events:none;
+}
+.pt-reason-card video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  filter:brightness(.82) saturate(.86) contrast(1.04);
+  transform:scale(1.005);
+  transition:transform 1.1s cubic-bezier(.2,.7,.2,1),filter .8s ease;
+}
+@media (hover:hover){
+  .pt-reason-card:hover video{
+    transform:scale(1.045);
+    filter:brightness(.96) saturate(.96) contrast(1.02);
+  }
+}
+@media(max-width:768px){
+  .pt-reasons-showcase{
+    min-height:auto;
+  }
+  .pt-reasons-intro{
+    padding:88px 20px 46px;
+  }
+  .pt-reasons-eyebrow{
+    margin-bottom:18px;
+    font-size:10px;
+  }
+  .pt-reasons-title{
+    font-size:clamp(35px,10vw,44px);
+    line-height:1.14;
+    letter-spacing:-.06em;
+  }
+  .pt-reasons-subtitle{
+    max-width:330px;
+    margin-top:25px;
+    font-size:14px;
+    line-height:1.62;
+  }
+  .pt-reasons-rail{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:0 14px 48px;
+    scroll-snap-type:x mandatory;
+    overscroll-behavior-x:contain;
+    scrollbar-width:none;
+    clip-path:inset(0 0 0 0);
+    transform:translateY(22px);
+    transition:opacity .8s ease .28s,transform .9s cubic-bezier(.2,.7,.2,1) .28s;
+  }
+  .pt-reasons-rail::-webkit-scrollbar{
+    display:none;
+  }
+  .pt-reasons-showcase.is-visible .pt-reasons-rail{
+    transform:translateY(0);
+  }
+  .pt-reason-card{
+    flex:0 0 78vw;
+    height:58svh;
+    min-height:440px;
+    max-height:620px;
+    scroll-snap-align:center;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .pt-reasons-intro,
+  .pt-reasons-rail,
+  .pt-reason-card video{
+    opacity:1;
+    transform:none;
+    clip-path:none;
+    transition:none;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -1383,6 +1540,69 @@ body.hero-sequence-complete .hero-booking-cta{
 
   </div>
 </section>
+
+
+<section id="ptReasons" class="pt-reasons-showcase" aria-labelledby="ptReasonsTitle">
+  <div class="pt-reasons-intro">
+    <p class="pt-reasons-eyebrow">PERSONAL TRAINING · HEALTHBOYGYM SUNAE</p>
+    <h2 id="ptReasonsTitle" class="pt-reasons-title">
+      <span>수내점에서 1:1 PT를</span>
+      <span>시작해야 하는 이유</span>
+    </h2>
+    <p class="pt-reasons-subtitle">몸의 움직임을 정확히 읽는 전문 트레이너와 함께<br>더 빠르고 안전한 변화를 경험하세요.</p>
+  </div>
+
+  <div class="pt-reasons-rail" aria-label="헬스보이짐 수내점 퍼스널 트레이닝 영상">
+    <article class="pt-reason-card" aria-label="상원 팀장 퍼스널 트레이닝">
+      <video src="assets/pt/pt-sangwon.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+    <article class="pt-reason-card" aria-label="호준 트레이너 퍼스널 트레이닝">
+      <video src="assets/pt/pt-hojun.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+    <article class="pt-reason-card" aria-label="연주 트레이너 퍼스널 트레이닝">
+      <video src="assets/pt/pt-yeonju.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+    <article class="pt-reason-card" aria-label="인호 팀장 퍼스널 트레이닝">
+      <video src="assets/pt/pt-inho.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+    <article class="pt-reason-card" aria-label="용빈 트레이너 퍼스널 트레이닝">
+      <video src="assets/pt/pt-yongbin.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+    <article class="pt-reason-card" aria-label="도현 트레이너 퍼스널 트레이닝">
+      <video src="assets/pt/pt-dohyun.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
+    </article>
+  </div>
+</section>
+<script id="pt-reasons-showcase-script">
+(() => {
+  const section = document.getElementById("ptReasons");
+  if (!section) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const revealObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      section.classList.add("is-visible");
+      observer.disconnect();
+    });
+  }, { threshold: 0.16 });
+  revealObserver.observe(section);
+
+  const videoObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting && entry.intersectionRatio > 0.34 && !reduceMotion) {
+        const playPromise = video.play();
+        if (playPromise) playPromise.catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: [0, 0.34, 0.65] });
+
+  section.querySelectorAll("video").forEach((video) => videoObserver.observe(video));
+})();
+</script>
 
 <section id="brand" class="brand-co-section">
   <article id="inc01">

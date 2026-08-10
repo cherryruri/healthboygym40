@@ -3666,7 +3666,7 @@ document.addEventListener("DOMContentLoaded", function(){
   initCinematicHeader();
   stageLoaderIntro();
 
-  setTimeout(openMain, 80);
+  setTimeout(openMain, 2860);
 
 
 

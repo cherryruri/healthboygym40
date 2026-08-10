@@ -311,6 +311,262 @@ body.site-scrolled header{
     background:rgba(0,0,0,.66) !important;
   }
 }
+
+/* HEALTHBOYGYM hero brand composition */
+body .hero-brand-composition{
+  display:grid !important;
+  grid-template-columns:minmax(300px, .9fr) minmax(560px, 1.25fr);
+  grid-template-rows:1fr;
+  align-items:center !important;
+  justify-content:stretch !important;
+  gap:clamp(42px, 5vw, 92px);
+  padding:110px clamp(48px, 7vw, 112px) 92px !important;
+}
+
+body .hero-brand-symbol{
+  display:flex;
+  align-items:center;
+  width:100%;
+  min-width:0;
+  color:#fff;
+}
+
+body .hero-brand-ring{
+  position:relative;
+  flex:0 0 auto;
+  display:grid;
+  place-items:center;
+  width:clamp(138px, 13vw, 190px);
+  aspect-ratio:1;
+  border:2px solid rgba(255,255,255,.92);
+  border-radius:50%;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.12),
+    0 10px 40px rgba(0,0,0,.18);
+}
+
+body .hero-brand-ring::before,
+body .hero-brand-ring::after{
+  content:"";
+  position:absolute;
+  background:rgba(255,255,255,.88);
+}
+
+body .hero-brand-ring::before{
+  width:58%;
+  height:1px;
+}
+
+body .hero-brand-ring::after{
+  width:1px;
+  height:58%;
+}
+
+body .hero-brand-ring strong{
+  position:relative;
+  z-index:1;
+  font-size:clamp(42px, 4.4vw, 66px);
+  font-weight:950;
+  font-style:italic;
+  letter-spacing:-.11em;
+  transform:translateX(-.04em);
+  text-shadow:0 2px 18px rgba(0,0,0,.28);
+}
+
+body .hero-brand-ring small{
+  position:absolute;
+  z-index:2;
+  right:16%;
+  bottom:17%;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.2em;
+}
+
+body .hero-brand-line{
+  flex:1 1 auto;
+  height:1px;
+  margin-left:18px;
+  background:linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.22));
+}
+
+body .hero-brand-copy{
+  align-self:center;
+  min-width:0;
+  color:#fff;
+}
+
+body .hero-brand-eyebrow{
+  display:block;
+  margin-bottom:18px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.24em;
+  color:rgba(255,255,255,.72);
+}
+
+body .hero-brand-copy .intro-main{
+  max-width:760px;
+  font-size:clamp(52px, 5.5vw, 82px) !important;
+  font-weight:520 !important;
+  line-height:.98 !important;
+  letter-spacing:-.055em !important;
+}
+
+body .hero-brand-copy .intro-desc{
+  max-width:620px;
+  margin-top:28px !important;
+  font-size:clamp(15px, 1.2vw, 19px) !important;
+  font-weight:560 !important;
+  line-height:1.62 !important;
+}
+
+body .hero-scroll-explore{
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  color:#fff;
+  transform:translateX(-50%);
+  pointer-events:none;
+}
+
+body .hero-scroll-orbit{
+  position:relative;
+  display:block;
+  width:66px;
+  height:66px;
+  border:1px solid rgba(255,255,255,.66);
+  border-radius:50%;
+}
+
+body .hero-scroll-orbit::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:12px;
+  width:1px;
+  height:27px;
+  background:rgba(255,255,255,.8);
+  transform:translateX(-50%);
+}
+
+body .hero-scroll-orbit i{
+  position:absolute;
+  left:50%;
+  top:13px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+  transform:translateX(-50%);
+  animation:heroScrollPulse 1.9s ease-in-out infinite;
+}
+
+body .hero-scroll-label{
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:16px;
+  font-style:italic;
+  white-space:nowrap;
+  text-shadow:0 2px 12px rgba(0,0,0,.4);
+}
+
+@keyframes heroScrollPulse{
+  0%,100%{
+    opacity:1;
+    transform:translate(-50%, 0);
+  }
+  55%{
+    opacity:.3;
+    transform:translate(-50%, 22px);
+  }
+}
+
+@media(max-width:768px){
+  body .hero-brand-composition{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:flex-end !important;
+    gap:0 !important;
+    padding:92px 22px 118px !important;
+  }
+
+  body .hero-brand-symbol{
+    position:absolute;
+    left:22px;
+    right:22px;
+    top:24%;
+    width:auto;
+  }
+
+  body .hero-brand-ring{
+    width:92px;
+  }
+
+  body .hero-brand-ring strong{
+    font-size:32px;
+  }
+
+  body .hero-brand-ring small{
+    font-size:7px;
+  }
+
+  body .hero-brand-line{
+    margin-left:14px;
+  }
+
+  body .hero-brand-copy{
+    width:100%;
+  }
+
+  body .hero-brand-eyebrow{
+    margin-bottom:12px;
+    font-size:10px;
+  }
+
+  body .hero-brand-copy .intro-main{
+    max-width:350px;
+    font-size:clamp(36px, 11.5vw, 50px) !important;
+    line-height:1 !important;
+  }
+
+  body .hero-brand-copy .intro-desc{
+    max-width:340px;
+    margin-top:18px !important;
+    font-size:14px !important;
+    line-height:1.58 !important;
+  }
+
+  body .hero-scroll-explore{
+    bottom:22px;
+    gap:11px;
+  }
+
+  body .hero-scroll-orbit{
+    width:48px;
+    height:48px;
+  }
+
+  body .hero-scroll-orbit::before{
+    top:9px;
+    height:20px;
+  }
+
+  body .hero-scroll-orbit i{
+    top:10px;
+    width:6px;
+    height:6px;
+  }
+
+  body .hero-scroll-label{
+    font-size:13px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -447,19 +703,30 @@ body.site-scrolled header{
 
 <section class="intro hero-expand-section" style="--hero-stage-bg:#080604 !important;">
   <div class="hero-expand-sticky">
-    <div class="intro-inner">
-      <h1 class="intro-main" aria-label="대한민국 No.1 피트니스 브랜드">
-        <span class="intro-title-line">대한민국 No.1</span>
-        <span class="intro-title-line">피트니스 브랜드</span>
-      </h1>
-      <p class="intro-desc" data-caption-reveal aria-label="헬스 · PT · 6:1 그룹필라테스까지 한 공간에서 완성하는 프리미엄 피트니스">
-        <span class="intro-desc-line" data-text="헬스 · PT · 6:1 그룹필라테스까지">헬스 · PT · 6:1 그룹필라테스까지</span>
-        <span class="intro-desc-line" data-text="한 공간에서 완성하는 프리미엄 피트니스">한 공간에서 완성하는 프리미엄 피트니스</span>
-      </p>
+    <div class="intro-inner hero-brand-composition">
+      <div class="hero-brand-symbol" aria-hidden="true">
+        <span class="hero-brand-ring">
+          <strong>HB</strong>
+          <small>GYM</small>
+        </span>
+        <span class="hero-brand-line"></span>
+      </div>
 
-      <div class="intro-mobile-guide">
-        <a href="#brand">헬스보이짐 수내점 자세히 알아보기</a>
-        <span class="intro-mobile-scroll-bar" aria-hidden="true"><i></i></span>
+      <div class="hero-brand-copy">
+        <span class="hero-brand-eyebrow">HEALTHBOYGYM · SUNAE</span>
+        <h1 class="intro-main" aria-label="Train with purpose. Build your best.">
+          <span class="intro-title-line">TRAIN WITH PURPOSE.</span>
+          <span class="intro-title-line">BUILD YOUR BEST.</span>
+        </h1>
+        <p class="intro-desc">
+          <span class="intro-desc-line">당신에게 필요한 운동만, 정확하게.</span>
+          <span class="intro-desc-line">헬스보이짐의 기준으로 더 강한 일상을 완성하세요.</span>
+        </p>
+      </div>
+
+      <div class="hero-scroll-explore" aria-hidden="true">
+        <span class="hero-scroll-orbit"><i></i></span>
+        <span class="hero-scroll-label">Scroll to explore</span>
       </div>
     </div>
 

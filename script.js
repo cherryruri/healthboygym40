@@ -3653,11 +3653,13 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     if(!loader){
-      document.body.classList.add("loaded");
+      document.body.classList.remove("hero-sequence-complete", "hero-reveal-start");
+      void document.body.offsetWidth;
+      document.body.classList.add("loaded", "hero-reveal-start");
 
       setTimeout(()=>{
         document.body.classList.add("hero-sequence-complete");
-      }, 3400);
+      }, 4000);
       startSite();
       initHashNavigation();
       queueHashScroll();
@@ -3687,11 +3689,13 @@ document.addEventListener("DOMContentLoaded", function(){
 
     setTimeout(()=>{
 
-      document.body.classList.add("loaded");
+      document.body.classList.remove("hero-sequence-complete", "hero-reveal-start");
+      void document.body.offsetWidth;
+      document.body.classList.add("loaded", "hero-reveal-start");
 
       setTimeout(()=>{
         document.body.classList.add("hero-sequence-complete");
-      }, 3400);
+      }, 4000);
       loader.classList.add("release");
       startSite();
       initHashNavigation();

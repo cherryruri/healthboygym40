@@ -777,6 +777,47 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+/* Mobile cinematic framing: preserve the horizontal video and fade it into black. */
+@media (max-width:768px){
+  html[data-home-device="mobile"] body .intro.hero-expand-section,
+  html[data-home-device="mobile"] body .hero-expand-sticky{
+    background:#030303 !important;
+  }
+
+  html[data-home-device="mobile"] body .hero-video-frame{
+    inset:0 0 auto 0 !important;
+    top:0 !important;
+    right:0 !important;
+    bottom:auto !important;
+    left:0 !important;
+    width:100% !important;
+    height:clamp(235px,64vw,320px) !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    background:#030303 !important;
+  }
+
+  html[data-home-device="mobile"] body .intro-video{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center center !important;
+    filter:brightness(.82) contrast(1.03) saturate(.94) !important;
+  }
+
+  html[data-home-device="mobile"] body .hero-video-frame::after{
+    inset:0 0 -220px !important;
+    background:linear-gradient(
+      180deg,
+      rgba(0,0,0,.05) 0%,
+      rgba(0,0,0,.02) 42%,
+      rgba(3,3,3,.38) 58%,
+      rgba(3,3,3,.84) 78%,
+      #030303 100%
+    ) !important;
+  }
+}
+
 /* Final-state safety: the copy must remain visible even if a browser pauses CSS animations. */
 body.hero-sequence-complete .hero-brand-wordmark{
   opacity:1 !important;
@@ -1871,7 +1912,7 @@ body.hero-sequence-complete .hero-scroll-explore{
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-garden-sequence12"></script>
+<script src="script.js?v=20260811-garden-sequence13"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

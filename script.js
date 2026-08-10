@@ -35,8 +35,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
         if(document.body.classList.contains("loaded")) return;
 
-        video.pause();
-
         const duration =
           video.duration;
 
@@ -53,11 +51,6 @@ document.addEventListener("DOMContentLoaded", function(){
       "loadedmetadata",
       holdAtStart,
       {once:true}
-    );
-
-    video.addEventListener(
-      "play",
-      holdAtStart
     );
 
   }

@@ -847,14 +847,15 @@ body.hero-sequence-complete .hero-scroll-explore{
 
 
 <style id="hero-vertical-message">
-/* First-view message: vertical rule -> local proof -> greeting. */
+/* First-view sequence: vertical rule -> brand proof -> branch message -> booking -> scroll. */
 body .hero-brand-composition{
   display:flex !important;
   flex-direction:column !important;
-  align-items:flex-start !important;
+  align-items:center !important;
   justify-content:center !important;
-  gap:clamp(24px,3vh,34px) !important;
+  gap:clamp(22px,2.8vh,32px) !important;
   padding:112px clamp(56px,8vw,124px) 90px !important;
+  text-align:center !important;
 }
 
 body .hero-brand-symbol{
@@ -887,46 +888,82 @@ body .hero-brand-copy{
   position:static !important;
   left:auto !important;
   top:auto !important;
-  align-self:flex-start !important;
+  align-self:center !important;
   display:flex !important;
   flex:0 0 auto !important;
   flex-direction:column !important;
-  align-items:flex-start !important;
-  width:min(900px,80vw) !important;
+  align-items:center !important;
+  width:min(980px,86vw) !important;
   min-height:0 !important;
   padding:0 !important;
   color:#fff !important;
+  opacity:1 !important;
+  transform:none !important;
 }
 
-body .hero-brand-copy .intro-desc{
+body .hero-brand-kicker{
   position:static !important;
-  left:auto !important;
-  top:auto !important;
-  order:1;
   width:auto !important;
   max-width:none !important;
-  margin:0 0 24px !important;
+  margin:0 0 25px !important;
   font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
-  font-size:clamp(17px,1.25vw,20px) !important;
+  font-size:clamp(17px,1.3vw,21px) !important;
   font-weight:450 !important;
   line-height:1.4 !important;
   letter-spacing:-.035em !important;
+  color:#fff !important;
+  opacity:0;
+  transform:translateY(18px);
 }
 
 body .hero-brand-copy .intro-main{
-  order:2;
   width:100% !important;
-  max-width:900px !important;
+  max-width:980px !important;
   margin:0 !important;
   font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;
   font-size:clamp(48px,5vw,72px) !important;
   font-weight:760 !important;
   line-height:1.16 !important;
   letter-spacing:-.065em !important;
+  text-align:center !important;
+  opacity:0;
+  transform:translateY(22px);
 }
 
 body .hero-brand-copy .intro-title-line{
   display:block !important;
+}
+
+body .hero-booking-cta{
+  position:relative;
+  z-index:7;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:310px;
+  min-height:62px;
+  margin-top:34px;
+  padding:0 34px;
+  border:2px solid rgba(255,255,255,.58);
+  border-radius:999px;
+  color:#fff !important;
+  background:rgba(0,0,0,.16);
+  font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:18px;
+  font-weight:550;
+  letter-spacing:-.035em;
+  text-decoration:none !important;
+  opacity:0;
+  transform:translateY(18px);
+  pointer-events:auto;
+  transition:background .25s ease,border-color .25s ease,transform .25s ease;
+}
+
+@media(hover:hover){
+  body .hero-booking-cta:hover{
+    background:rgba(255,255,255,.14);
+    border-color:#fff;
+  }
 }
 
 @keyframes heroBrandVerticalLineDraw{
@@ -934,12 +971,35 @@ body .hero-brand-copy .intro-title-line{
   to{opacity:1;transform:scaleY(1)}
 }
 
-body.loaded .hero-brand-line{
-  animation:heroBrandVerticalLineDraw .9s cubic-bezier(.65,0,.2,1) .18s forwards !important;
+@keyframes heroSequenceItemIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 body.loaded .hero-brand-copy{
-  animation:heroBrandCopyIn .9s cubic-bezier(.19,1,.22,1) 1.02s forwards !important;
+  animation:none !important;
+  opacity:1 !important;
+  transform:none !important;
+}
+
+body.loaded .hero-brand-line{
+  animation:heroBrandVerticalLineDraw .82s cubic-bezier(.65,0,.2,1) .16s forwards !important;
+}
+
+body.loaded .hero-brand-kicker{
+  animation:heroSequenceItemIn .7s cubic-bezier(.19,1,.22,1) 1.02s forwards !important;
+}
+
+body.loaded .hero-brand-copy .intro-main{
+  animation:heroSequenceItemIn .82s cubic-bezier(.19,1,.22,1) 1.58s forwards !important;
+}
+
+body.loaded .hero-booking-cta{
+  animation:heroSequenceItemIn .72s cubic-bezier(.19,1,.22,1) 2.18s forwards !important;
+}
+
+body.loaded .hero-scroll-explore{
+  animation:heroBrandScrollIn .7s ease 2.82s forwards !important;
 }
 
 body.hero-sequence-complete .hero-brand-line{
@@ -948,38 +1008,62 @@ body.hero-sequence-complete .hero-brand-line{
   animation:none !important;
 }
 
+body.hero-sequence-complete .hero-brand-kicker,
+body.hero-sequence-complete .hero-brand-copy .intro-main,
+body.hero-sequence-complete .hero-booking-cta{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+  animation:none !important;
+}
+
 @media(max-width:768px){
   body .hero-brand-composition{
     justify-content:flex-start !important;
-    gap:24px !important;
-    padding:clamp(278px,35vh,316px) 22px 92px !important;
+    align-items:center !important;
+    gap:20px !important;
+    padding:clamp(274px,34.5vh,310px) 18px 88px !important;
+    text-align:center !important;
   }
 
   body .hero-brand-symbol{
     width:2px !important;
-    height:84px !important;
+    height:72px !important;
   }
 
   body .hero-brand-copy{
+    align-self:center !important;
     width:100% !important;
   }
 
-  body .hero-brand-copy .intro-desc{
-    margin:0 0 17px !important;
-    font-size:17px !important;
+  body .hero-brand-kicker{
+    margin:0 0 18px !important;
+    font-size:clamp(14px,4vw,16px) !important;
     line-height:1.35 !important;
+    white-space:nowrap !important;
   }
 
   body .hero-brand-copy .intro-main{
     width:100% !important;
-    font-size:clamp(31px,8.4vw,36px) !important;
+    font-size:clamp(27px,7.7vw,33px) !important;
     line-height:1.18 !important;
-    letter-spacing:-.065em !important;
+    letter-spacing:-.07em !important;
   }
 
-  body .hero-brand-copy .intro-title-line:last-child{
-    font-size:.9em !important;
+  body .hero-brand-copy .intro-title-line{
     white-space:nowrap !important;
+  }
+
+  body .hero-booking-cta{
+    width:min(292px,82vw) !important;
+    min-width:0 !important;
+    min-height:56px !important;
+    margin-top:27px !important;
+    padding:0 24px !important;
+    font-size:16px !important;
+  }
+
+  body .hero-scroll-explore{
+    bottom:18px !important;
   }
 }
 </style>
@@ -1124,13 +1208,17 @@ body.hero-sequence-complete .hero-brand-line{
       </div>
 
       <div class="hero-brand-copy">
-        <p class="intro-desc">
-          <span class="intro-desc-line">수내동 소개, 재등록률 1위</span>
-        </p>
-        <h1 class="intro-main" aria-label="안녕하세요. 헬스보이짐 수내점입니다.">
-          <span class="intro-title-line">안녕하세요</span>
+        <p class="hero-brand-kicker">전국 90개 지점 대한민국 No.1 피트니스 브랜드</p>
+        <h1 class="intro-main" aria-label="수내동 소개, 재등록 1위. 헬스보이짐 수내점입니다.">
+          <span class="intro-title-line">수내동 소개, 재등록 1위</span>
           <span class="intro-title-line">헬스보이짐 수내점입니다</span>
         </h1>
+        <a
+          class="hero-booking-cta"
+          href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;startDate=2026-08-11&amp;theme=place"
+          target="_blank"
+          rel="noopener noreferrer"
+        >예약 바로가기&nbsp;&gt;</a>
       </div>
 
       <div class="hero-scroll-explore" aria-hidden="true">
@@ -2048,7 +2136,7 @@ body.hero-sequence-complete .hero-brand-line{
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-garden-sequence16"></script>
+<script src="script.js?v=20260811-garden-sequence17"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

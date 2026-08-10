@@ -96,6 +96,222 @@
   }
 }
 </style>
+
+<style id="cinematic-static-hero">
+.main-content{
+  padding-top:0 !important;
+}
+
+.intro.hero-expand-section{
+  height:100vh !important;
+  height:100svh !important;
+  min-height:620px !important;
+  overflow:hidden !important;
+  background:#050505 !important;
+  color:#fff !important;
+}
+
+body .hero-expand-sticky{
+  position:relative !important;
+  top:0 !important;
+  height:100vh !important;
+  height:100svh !important;
+  min-height:620px !important;
+  overflow:hidden !important;
+  background:#050505 !important;
+  isolation:isolate;
+}
+
+body .hero-expand-sticky::before{
+  content:none !important;
+  display:none !important;
+  opacity:0 !important;
+}
+
+body .hero-video-frame{
+  position:absolute !important;
+  inset:0 !important;
+  left:0 !important;
+  bottom:auto !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:none !important;
+  border-radius:0 !important;
+  transform:none !important;
+  overflow:hidden !important;
+  background:#050505 url('센터전체사진1.jpg') center / cover no-repeat !important;
+}
+
+body .intro-video,
+html[data-home-device="mobile"] body .intro-video{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  object-position:center !important;
+  opacity:1 !important;
+  transform:none !important;
+  filter:brightness(.82) contrast(1.04) saturate(.92) !important;
+}
+
+body .hero-video-frame::after{
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  inset:0 !important;
+  z-index:1 !important;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.08) 38%, rgba(0,0,0,.52) 100%) !important;
+  pointer-events:none;
+}
+
+body .intro-inner{
+  position:absolute !important;
+  inset:0 !important;
+  z-index:2 !important;
+  min-height:100% !important;
+  padding:0 clamp(28px, 6vw, 96px) clamp(92px, 12vh, 132px) !important;
+  align-items:flex-start !important;
+  justify-content:flex-end !important;
+  text-align:left !important;
+  opacity:1 !important;
+  transform:none !important;
+}
+
+body .intro-main{
+  align-items:flex-start !important;
+  max-width:980px;
+  gap:2px !important;
+  color:#fff !important;
+  font-size:clamp(52px, 6vw, 88px) !important;
+  line-height:.98 !important;
+  letter-spacing:-.045em !important;
+  text-align:left !important;
+  text-shadow:0 3px 24px rgba(0,0,0,.3);
+}
+
+body .intro-title-line,
+body.loaded .intro-title-line{
+  color:#fff !important;
+  opacity:1 !important;
+  transform:none !important;
+  clip-path:none !important;
+  animation:none !important;
+}
+
+body .intro-desc{
+  margin-top:24px !important;
+  color:rgba(255,255,255,.9) !important;
+  font-size:clamp(16px, 1.4vw, 21px) !important;
+  line-height:1.55 !important;
+  text-align:left !important;
+  text-shadow:0 2px 16px rgba(0,0,0,.42);
+}
+
+body .intro-desc-line,
+body .intro-desc .desc-char,
+body.loaded .intro-desc .desc-char{
+  color:rgba(255,255,255,.9) !important;
+  opacity:1 !important;
+  animation:none !important;
+}
+
+body .intro-statement,
+body .review-proof-title{
+  display:none !important;
+}
+
+body header,
+body header .navbar{
+  background:transparent !important;
+}
+
+body header{
+  border-bottom:1px solid transparent !important;
+  box-shadow:none !important;
+  color:#fff !important;
+  transition:
+    background-color .34s ease,
+    backdrop-filter .34s ease,
+    border-color .34s ease,
+    transform .34s ease !important;
+}
+
+body header .logo a,
+body header .menu a,
+body header #loginLink,
+body header #logoutBtn,
+body header .mobile-menu-btn{
+  color:#fff !important;
+  text-shadow:0 2px 14px rgba(0,0,0,.34);
+}
+
+body header .download-btn{
+  color:#fff !important;
+  border-color:rgba(255,255,255,.72) !important;
+  background:rgba(0,0,0,.10) !important;
+  backdrop-filter:blur(8px);
+}
+
+body.site-scrolled header,
+body.site-scrolled header .navbar{
+  background:rgba(0,0,0,.48) !important;
+  backdrop-filter:blur(16px) saturate(125%) !important;
+  -webkit-backdrop-filter:blur(16px) saturate(125%) !important;
+}
+
+body.site-scrolled header{
+  border-bottom-color:rgba(255,255,255,.13) !important;
+}
+
+@media (hover:hover) and (min-width:769px){
+  body.site-scrolled header:hover,
+  body.site-scrolled header:hover .navbar{
+    background:rgba(0,0,0,.76) !important;
+  }
+}
+
+@media(max-width:768px){
+  .intro.hero-expand-section,
+  body .hero-expand-sticky{
+    min-height:100svh !important;
+  }
+
+  body .intro-inner{
+    padding:0 22px 96px !important;
+  }
+
+  body .intro-main{
+    max-width:340px;
+    font-size:clamp(38px, 12vw, 54px) !important;
+    line-height:1.02 !important;
+  }
+
+  body .intro-desc{
+    max-width:330px;
+    margin-top:18px !important;
+    font-size:15px !important;
+    line-height:1.52 !important;
+  }
+
+  body .intro-desc-line{
+    white-space:normal !important;
+  }
+
+  body .intro-mobile-guide{
+    color:#fff !important;
+  }
+
+  body .intro-mobile-guide a{
+    color:#fff !important;
+  }
+
+  body.site-scrolled header,
+  body.site-scrolled header .navbar{
+    background:rgba(0,0,0,.66) !important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -1156,7 +1372,7 @@
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
 <script src="site-menu.js?v=20260807-ribbed-glass3"></script>
-<script src="script.js?v=20260811-loader-replay1"></script>
+<script src="script.js?v=20260811-cinematic-hero1"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

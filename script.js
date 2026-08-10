@@ -3607,6 +3607,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     if(!loader){
       document.body.classList.add("loaded");
+
+      setTimeout(()=>{
+        document.body.classList.add("hero-sequence-complete");
+      }, 3400);
       startSite();
       initHashNavigation();
       queueHashScroll();
@@ -3637,6 +3641,10 @@ document.addEventListener("DOMContentLoaded", function(){
     setTimeout(()=>{
 
       document.body.classList.add("loaded");
+
+      setTimeout(()=>{
+        document.body.classList.add("hero-sequence-complete");
+      }, 3400);
       loader.classList.add("release");
       startSite();
       initHashNavigation();

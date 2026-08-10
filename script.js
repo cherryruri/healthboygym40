@@ -2337,8 +2337,68 @@ document.addEventListener("DOMContentLoaded", function(){
     video.preload =
       "auto";
 
+    const heroVideoStartTime =
+      4;
+
+    let heroStartApplied =
+      false;
+
+    let heroStartWaitQueued =
+      false;
+
+    const applyHeroStartTime =
+      ()=>{
+
+        if(heroStartApplied) return true;
+
+        const duration =
+          video.duration;
+
+        if(!Number.isFinite(duration) || duration <= 0) return false;
+
+        const safeStartTime =
+          Math.min(
+            heroVideoStartTime,
+            Math.max(0, duration - .25)
+          );
+
+        try{
+          video.currentTime =
+            safeStartTime;
+
+          heroStartApplied =
+            true;
+
+          return true;
+        }catch(error){
+          return false;
+        }
+
+      };
+
     const playVideo =
       ()=>{
+
+      if(!applyHeroStartTime()){
+
+        if(!heroStartWaitQueued){
+
+          heroStartWaitQueued =
+            true;
+
+          video.addEventListener(
+            "loadedmetadata",
+            ()=>{
+              heroStartWaitQueued = false;
+              playVideo();
+            },
+            {once:true}
+          );
+
+        }
+
+        return;
+      }
 
       const playPromise =
         video.play();

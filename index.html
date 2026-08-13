@@ -1405,6 +1405,7 @@ body.hero-sequence-complete .hero-booking-cta{
   body.hero-card-morph .intro.hero-expand-section,
   body.hero-card-morph .hero-expand-sticky{
     background:var(--hero-scene-bg,#050505) !important;
+    overflow:visible !important;
   }
   body.hero-card-morph .hero-video-frame{
     position:fixed !important;
@@ -1879,6 +1880,8 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const root = document.documentElement;
     const ptStage = ptSection.querySelector(".pt-reasons-stage");
+    const framePlaceholder = document.createComment("hero-video-frame-home");
+    heroFrame.parentNode.insertBefore(framePlaceholder, heroFrame);
     let ticking = false;
     let handoffComplete = false;
     let naturalStageOffset = 0;
@@ -1890,7 +1893,16 @@ body.hero-sequence-complete .hero-booking-cta{
     };
     const mix = (from, to, amount) => from + (to - from) * amount;
 
+    const portalFrame = (enabled) => {
+      if (enabled && heroFrame.parentNode !== document.body) {
+        document.body.appendChild(heroFrame);
+      } else if (!enabled && framePlaceholder.parentNode && heroFrame.parentNode === document.body) {
+        framePlaceholder.parentNode.insertBefore(heroFrame, framePlaceholder.nextSibling);
+      }
+    };
+
     const clearMorph = () => {
+      portalFrame(false);
       document.body.classList.remove("hero-card-morph", "hero-card-morphing");
       heroCopy.style.removeProperty("opacity");
       heroCopy.style.removeProperty("transform");
@@ -1910,6 +1922,7 @@ body.hero-sequence-complete .hero-booking-cta{
         return;
       }
 
+      portalFrame(true);
       document.body.classList.add("hero-card-morph");
       if (!naturalStageOffset && ptStage) naturalStageOffset = ptStage.offsetTop;
       const heroHeight = Math.max(1, hero.offsetHeight);
@@ -1922,13 +1935,12 @@ body.hero-sequence-complete .hero-booking-cta{
       const sourceHeight = Math.max(window.innerHeight, heroHeight);
       const centeredTop = (window.innerHeight - targetHeight) / 2;
       const naturalStageAbsoluteTop = hero.offsetTop + hero.offsetHeight + naturalStageOffset;
-      const naturalStageTop = naturalStageAbsoluteTop - window.scrollY;
-      const stageIn = smooth((progress - .28) / .34);
-      const stageLift = Math.min(0, centeredTop - naturalStageTop) * stageIn;
-      const handoff = smooth((progress - .84) / .16);
+      const handoffEnd = naturalStageAbsoluteTop - centeredTop;
+      const handoffStart = handoffEnd - Math.min(150, window.innerHeight * .2);
+      const handoff = smooth((window.scrollY - handoffStart) / Math.max(1, handoffEnd - handoffStart));
       const copyOut = 1 - smooth(progress / .48);
       const introIn = smooth((progress - .34) / .44);
-      const sideIn = smooth((progress - .46) / .36);
+      const sideIn = smooth((window.scrollY - heroHeight * .48) / Math.max(1, handoffEnd - heroHeight * .48));
       const backgroundIn = smooth((progress - .08) / .72);
       const backgroundValue = Math.round(mix(5, 255, backgroundIn));
 
@@ -1946,9 +1958,9 @@ body.hero-sequence-complete .hero-booking-cta{
       root.style.setProperty("--origin-card-opacity", String(handoff));
       root.style.setProperty("--side-card-opacity", String(sideIn));
       root.style.setProperty("--pt-intro-shift", `${mix(34, 0, introIn).toFixed(2)}px`);
-      root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
+      root.style.setProperty("--pt-stage-lift", "0px");
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
-      const isMorphing = progress < .985;
+      const isMorphing = window.scrollY < handoffEnd - 1;
       document.body.classList.toggle("hero-card-morphing", isMorphing);
       if (!isMorphing && !handoffComplete) {
         handoffComplete = true;

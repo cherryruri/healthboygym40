@@ -1792,6 +1792,8 @@ body.hero-sequence-complete .hero-booking-cta{
       startAutoplay();
     }
 
+    window.addEventListener("hero-card-handoff", restartAutoplay);
+
     section.addEventListener("click", (event) => {
       const card = event.target.closest(".pt-reason-card");
       if (!card || !section.contains(card)) return;
@@ -1866,6 +1868,7 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const root = document.documentElement;
     let ticking = false;
+    let handoffComplete = false;
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const smooth = (value) => {
@@ -1922,7 +1925,14 @@ body.hero-sequence-complete .hero-booking-cta{
       root.style.setProperty("--hero-copy-events", copyOut < .15 ? "none" : "auto");
       root.style.setProperty("--origin-card-opacity", String(handoff));
       root.style.setProperty("--pt-intro-shift", `${mix(34, 0, introIn).toFixed(2)}px`);
-      document.body.classList.toggle("hero-card-morphing", progress < .985);
+      const isMorphing = progress < .985;
+      document.body.classList.toggle("hero-card-morphing", isMorphing);
+      if (!isMorphing && !handoffComplete) {
+        handoffComplete = true;
+        window.dispatchEvent(new Event("hero-card-handoff"));
+      } else if (isMorphing) {
+        handoffComplete = false;
+      }
       heroCopy.style.setProperty("opacity", String(copyOut), "important");
       heroCopy.style.setProperty("transform", `translateY(${mix(0, -42, 1 - copyOut).toFixed(2)}px)`, "important");
 

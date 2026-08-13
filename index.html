@@ -1231,6 +1231,15 @@ body.hero-sequence-complete .hero-booking-cta{
   opacity:1;
   transform:translateY(0);
 }
+.pt-reasons-eyebrow{
+  margin:0 0 22px;
+  color:#0067a8;
+  font-size:18px;
+  font-weight:800;
+  line-height:1;
+  letter-spacing:-.02em;
+  text-align:center;
+}
 .pt-reasons-title{
   width:100%;
   margin:0 0 22px;
@@ -1244,6 +1253,12 @@ body.hero-sequence-complete .hero-booking-cta{
 }
 .pt-reasons-title span{
   display:block;
+}
+.pt-reasons-title .pt-char{
+  display:inline-block;
+  opacity:0;
+  transform:translateY(26px);
+  will-change:opacity,transform;
 }
 .pt-reasons-subtitle{
   width:100%;
@@ -1433,6 +1448,10 @@ body.hero-sequence-complete .hero-booking-cta{
     opacity:var(--hero-card-overlay,1) !important;
   }
   body.hero-card-morph .hero-brand-composition{
+    position:fixed !important;
+    inset:0 !important;
+    width:100% !important;
+    height:100vh !important;
     z-index:9 !important;
     opacity:var(--hero-copy-opacity,1) !important;
     transform:translateY(var(--hero-copy-shift,0px)) !important;
@@ -1650,6 +1669,7 @@ body.hero-sequence-complete .hero-booking-cta{
 
 <section id="ptReasons" class="pt-reasons-showcase" aria-labelledby="ptReasonsTitle">
   <div class="pt-reasons-intro">
+    <p class="pt-reasons-eyebrow">Personal Training</p>
     <h2 id="ptReasonsTitle" class="pt-reasons-title">
       <span>수내점에서 1:1 PT를</span>
       <span>시작해야 하는 이유</span>
@@ -1907,12 +1927,29 @@ body.hero-sequence-complete .hero-booking-cta{
     const root = document.documentElement;
     const ptStage = ptSection.querySelector(".pt-reasons-stage");
     const framePlaceholder = document.createComment("hero-video-frame-home");
+    const copyPlaceholder = document.createComment("hero-brand-copy-home");
     heroFrame.parentNode.insertBefore(framePlaceholder, heroFrame);
+    heroCopy.parentNode.insertBefore(copyPlaceholder, heroCopy);
     let ticking = false;
     let handoffComplete = false;
     let naturalStageOffset = 0;
     let originPrepared = false;
     let originReleased = false;
+    let wheelTransitioning = false;
+
+    const titleChars = Array.from(ptSection.querySelectorAll(".pt-reasons-title > span"))
+      .flatMap((line) => {
+        const chars = Array.from(line.textContent);
+        line.textContent = "";
+        return chars.map((char) => {
+          const span = document.createElement("i");
+          span.className = "pt-char";
+          span.style.fontStyle = "normal";
+          span.textContent = char === " " ? "\u00a0" : char;
+          line.appendChild(span);
+          return span;
+        });
+      });
 
     originVideo.addEventListener("loadedmetadata", () => {
       try { originVideo.currentTime = heroVideo.currentTime; } catch (error) {}
@@ -1930,16 +1967,18 @@ body.hero-sequence-complete .hero-booking-cta{
     };
     const mix = (from, to, amount) => from + (to - from) * amount;
 
-    const portalFrame = (enabled) => {
+    const portalScene = (enabled) => {
       if (enabled && heroFrame.parentNode !== document.body) {
         document.body.appendChild(heroFrame);
+        document.body.appendChild(heroCopy);
       } else if (!enabled && framePlaceholder.parentNode && heroFrame.parentNode === document.body) {
         framePlaceholder.parentNode.insertBefore(heroFrame, framePlaceholder.nextSibling);
+        copyPlaceholder.parentNode.insertBefore(heroCopy, copyPlaceholder.nextSibling);
       }
     };
 
     const clearMorph = () => {
-      portalFrame(false);
+      portalScene(false);
       document.body.classList.remove("hero-card-morph", "hero-card-morphing", "hero-card-intro-pinned");
       heroCopy.style.removeProperty("opacity");
       heroCopy.style.removeProperty("transform");
@@ -1960,7 +1999,7 @@ body.hero-sequence-complete .hero-booking-cta{
         return;
       }
 
-      portalFrame(true);
+      portalScene(true);
       document.body.classList.add("hero-card-morph");
       const stageAbsoluteTopNow = ptStage
         ? ptStage.getBoundingClientRect().top + window.scrollY
@@ -2034,6 +2073,12 @@ body.hero-sequence-complete .hero-booking-cta{
       const titlePinned = window.scrollY < handoffEnd + 170;
       root.style.setProperty("--pt-intro-opacity", String(Math.min(introIn, pinnedOut)));
       root.style.setProperty("--pt-intro-shift", `${mix(18, 0, introIn).toFixed(2)}px`);
+      titleChars.forEach((char, index) => {
+        const stagger = titleChars.length > 1 ? index / (titleChars.length - 1) : 0;
+        const reveal = smooth((introIn - stagger * .42) / .58);
+        char.style.opacity = String(reveal);
+        char.style.transform = `translateY(${mix(26, 0, reveal).toFixed(2)}px)`;
+      });
       root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
       document.body.classList.toggle("hero-card-morphing", isMorphing);
@@ -2069,6 +2114,23 @@ body.hero-sequence-complete .hero-booking-cta{
     };
 
     window.addEventListener("scroll", requestRender, {passive:true});
+    window.addEventListener("wheel", (event) => {
+      if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 80 || event.deltaY <= 0) return;
+      event.preventDefault();
+      wheelTransitioning = true;
+      const from = window.scrollY;
+      const to = Math.min(780, Math.max(620, window.innerHeight * 1.04));
+      const started = performance.now();
+      const duration = 980;
+      const animate = (now) => {
+        const t = clamp((now - started) / duration);
+        const eased = 1 - Math.pow(1 - t, 4);
+        window.scrollTo(0, mix(from, to, eased));
+        if (t < 1) requestAnimationFrame(animate);
+        else wheelTransitioning = false;
+      };
+      requestAnimationFrame(animate);
+    }, {passive:false});
     window.addEventListener("resize", requestRender, {passive:true});
     window.addEventListener("load", requestRender, {once:true});
     if (window.ResizeObserver) {

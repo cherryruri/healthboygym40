@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -1272,7 +1272,7 @@ body.hero-sequence-complete .hero-booking-cta{
 .pt-reasons-swiper{
   position:relative;
   width:100%;
-  height:clamp(430px,37.1vw,760px);
+  height:760px;
   overflow:visible;
   touch-action:pan-y;
   user-select:none;
@@ -1294,13 +1294,13 @@ body.hero-sequence-complete .hero-booking-cta{
   position:absolute;
   left:50%;
   top:0;
-  width:clamp(286px,24.7vw,506px);
-  height:clamp(430px,37.1vw,760px);
+  width:506px;
+  height:760px;
   aspect-ratio:506/760;
   overflow:hidden;
   background:#101010;
   border-radius:18px;
-  box-shadow:0 26px 70px rgba(0,0,0,.52);
+  box-shadow:0 20px 48px rgba(0,0,0,.34);
   cursor:grab;
   transform-style:preserve-3d;
   will-change:transform,opacity,filter;
@@ -1310,11 +1310,11 @@ body.hero-sequence-complete .hero-booking-cta{
   cursor:grabbing;
 }
 .pt-reason-card:not(.swiper-slide-active){
-  filter:brightness(.82) saturate(.86);
-  opacity:.9;
+  filter:none;
+  opacity:1;
 }
 .pt-reason-card.swiper-slide-active{
-  box-shadow:0 38px 90px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.14);
+  box-shadow:0 28px 64px rgba(0,0,0,.48),0 0 0 1px rgba(255,255,255,.12);
 }
 .pt-reason-card::after{
   content:"";
@@ -1336,48 +1336,6 @@ body.hero-sequence-complete .hero-booking-cta{
 }
 .pt-reason-card.swiper-slide-active video{
   filter:brightness(1) saturate(1) contrast(1.02);
-}
-.pt-video-toggle{
-  position:absolute;
-  left:50%;
-  top:50%;
-  z-index:3;
-  width:74px;
-  height:74px;
-  margin:0;
-  padding:0;
-  border:1px solid rgba(255,255,255,.72);
-  border-radius:50%;
-  background:rgba(255,255,255,.78);
-  box-shadow:0 10px 34px rgba(0,0,0,.24);
-  transform:translate(-50%,-50%);
-  transition:opacity .3s ease,transform .3s ease,background .3s ease;
-  cursor:pointer;
-  backdrop-filter:blur(9px);
-  -webkit-backdrop-filter:blur(9px);
-}
-.pt-video-toggle::before{
-  content:"";
-  position:absolute;
-  left:51%;
-  top:50%;
-  width:0;
-  height:0;
-  border-top:10px solid transparent;
-  border-bottom:10px solid transparent;
-  border-left:16px solid #151515;
-  transform:translate(-38%,-50%);
-}
-.pt-reason-card.is-playing .pt-video-toggle{
-  opacity:0;
-  transform:translate(-50%,-50%) scale(.86);
-  pointer-events:none;
-}
-.pt-reason-card.swiper-slide-active:hover .pt-video-toggle,
-.pt-reason-card.is-paused .pt-video-toggle{
-  opacity:1;
-  transform:translate(-50%,-50%) scale(1);
-  pointer-events:auto;
 }
 @media (hover:hover){
   .pt-reason-card:hover video{
@@ -1416,21 +1374,21 @@ body.hero-sequence-complete .hero-booking-cta{
     transform:translateY(0);
   }
   .pt-reasons-swiper{
-    height:min(111vw,510px);
+    height:451px;
   }
   .pt-reason-card{
-    width:min(76vw,340px);
-    height:min(114vw,510px);
+    width:300px;
+    height:451px;
     border-radius:14px;
-  }
-  .pt-video-toggle{
-    width:62px;
-    height:62px;
   }
 }
 @media(max-width:480px){
   .pt-reason-card{
-    width:74vw;
+    width:min(76vw,300px);
+    height:min(114.25vw,451px);
+  }
+  .pt-reasons-swiper{
+    height:min(114.25vw,451px);
   }
 }
 @media(prefers-reduced-motion:reduce){
@@ -1639,27 +1597,21 @@ body.hero-sequence-complete .hero-booking-cta{
       <div class="swiper-wrapper pt-reasons-rail" aria-label="헬스보이짐 수내점 퍼스널 트레이닝 영상">
     <article class="swiper-slide pt-reason-card" aria-label="상원 팀장 퍼스널 트레이닝">
       <video src="assets/pt/pt-sangwon.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="상원 팀장 영상 재생"></button>
     </article>
     <article class="swiper-slide pt-reason-card" aria-label="호준 트레이너 퍼스널 트레이닝">
       <video src="assets/pt/pt-hojun.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="호준 트레이너 영상 재생"></button>
     </article>
     <article class="swiper-slide pt-reason-card" aria-label="연주 트레이너 퍼스널 트레이닝">
       <video src="assets/pt/pt-yeonju.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="연주 트레이너 영상 재생"></button>
     </article>
     <article class="swiper-slide pt-reason-card" aria-label="인호 팀장 퍼스널 트레이닝">
       <video src="assets/pt/pt-inho.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="인호 팀장 영상 재생"></button>
     </article>
     <article class="swiper-slide pt-reason-card" aria-label="용빈 트레이너 퍼스널 트레이닝">
       <video src="assets/pt/pt-yongbin.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="용빈 트레이너 영상 재생"></button>
     </article>
     <article class="swiper-slide pt-reason-card" aria-label="도현 트레이너 퍼스널 트레이닝">
       <video src="assets/pt/pt-dohyun.mp4" muted loop playsinline webkit-playsinline preload="metadata"></video>
-      <button class="pt-video-toggle" type="button" aria-label="도현 트레이너 영상 재생"></button>
     </article>
       </div>
     </div>
@@ -1685,8 +1637,6 @@ body.hero-sequence-complete .hero-booking-cta{
       if (!card) return;
       card.classList.toggle("is-playing", playing);
       card.classList.toggle("is-paused", !playing);
-      const button = card.querySelector(".pt-video-toggle");
-      if (button) button.setAttribute("aria-label", `${card.getAttribute("aria-label")} ${playing ? "일시정지" : "재생"}`);
     };
 
     const pauseVideo = (video) => {
@@ -1730,17 +1680,18 @@ body.hero-sequence-complete .hero-booking-cta{
     };
 
     const renderCards = () => {
-      const cardWidth = cards[0]?.offsetWidth || 320;
-      const spacing = Math.min(cardWidth * .9, sliderElement.clientWidth * .29);
+      const cardWidth = cards[0]?.offsetWidth || 506;
+      /* Worket uses a 16px visual gap after perspective compression. */
+      const spacing = cardWidth + 32;
 
       cards.forEach((card, index) => {
         const offset = shortestOffset(index);
         const distance = Math.abs(offset);
         const x = offset * spacing;
-        const z = -Math.min(distance, 3) * (window.innerWidth <= 768 ? 120 : 190);
-        const rotation = offset * (window.innerWidth <= 768 ? -18 : -24);
-        const scale = Math.max(.78, 1 - distance * .065);
-        const opacity = distance > 3 ? 0 : Math.max(.55, 1 - distance * .12);
+        const z = -Math.min(distance, 3) * (window.innerWidth <= 768 ? 84 : 113.5);
+        const rotation = offset * (window.innerWidth <= 768 ? 4.5 : 5.7);
+        const scale = 1;
+        const opacity = distance > 3 ? 0 : 1;
 
         card.style.transform = `translateX(calc(-50% + ${x}px)) translateZ(${z}px) rotateY(${rotation}deg) scale(${scale})`;
         card.style.zIndex = String(20 - Math.round(distance));
@@ -1766,14 +1717,16 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const stopAutoplay = () => {
       if (!autoplayTimer) return;
-      window.clearInterval(autoplayTimer);
+      window.clearTimeout(autoplayTimer);
       autoplayTimer = 0;
     };
 
     const startAutoplay = () => {
       stopAutoplay();
-      if (reduceMotion || !sectionVisible) return;
-      autoplayTimer = window.setInterval(() => moveTo(activeIndex + 1), 4300);
+      autoplayTimer = window.setTimeout(() => {
+        if (sectionVisible) moveTo(activeIndex + 1);
+        startAutoplay();
+      }, 4300);
     };
 
     function restartAutoplay() {
@@ -1781,7 +1734,6 @@ body.hero-sequence-complete .hero-booking-cta{
     }
 
     section.addEventListener("click", (event) => {
-      const button = event.target.closest(".pt-video-toggle");
       const card = event.target.closest(".pt-reason-card");
       if (!card || !section.contains(card)) return;
       const cardIndex = cards.indexOf(card);
@@ -1791,13 +1743,6 @@ body.hero-sequence-complete .hero-booking-cta{
         return;
       }
 
-      if (!button) return;
-      event.preventDefault();
-      event.stopPropagation();
-      const video = card.querySelector("video");
-      if (!video) return;
-      if (video.paused) playVideo(video);
-      else pauseVideo(video);
     });
 
     sliderElement.addEventListener("pointerdown", (event) => {
@@ -1811,8 +1756,6 @@ body.hero-sequence-complete .hero-booking-cta{
       moveTo(activeIndex + (distance < 0 ? 1 : -1), true);
     });
     sliderElement.addEventListener("pointercancel", () => { pointerStartX = null; });
-    sliderElement.addEventListener("mouseenter", stopAutoplay);
-    sliderElement.addEventListener("mouseleave", startAutoplay);
     section.addEventListener("keydown", (event) => {
       if (event.key === "ArrowLeft") moveTo(activeIndex - 1, true);
       if (event.key === "ArrowRight") moveTo(activeIndex + 1, true);
@@ -1823,6 +1766,7 @@ body.hero-sequence-complete .hero-booking-cta{
     window.setTimeout(renderCards, 240);
     window.setTimeout(renderCards, 1600);
     if (window.ResizeObserver) new ResizeObserver(renderCards).observe(sliderElement);
+    startAutoplay();
 
     const revealObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
@@ -1839,8 +1783,6 @@ body.hero-sequence-complete .hero-booking-cta{
         sectionVisible = entry.isIntersecting && entry.intersectionRatio > 0.18;
         section.dataset.playbackVisible = String(sectionVisible);
         syncVideos();
-        if (sectionVisible) startAutoplay();
-        else stopAutoplay();
       });
     }, {threshold:[0,.18,.5]});
     playbackObserver.observe(section);

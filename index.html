@@ -1247,8 +1247,8 @@ body.hero-sequence-complete .hero-booking-cta{
   color:#111820;
   font-size:clamp(44px,4.6vw,62px);
   font-weight:700;
-  line-height:1.3;
-  letter-spacing:-.45px;
+  line-height:1.16;
+  letter-spacing:-.045em;
   text-align:center;
 }
 .pt-reasons-title span{
@@ -1257,8 +1257,10 @@ body.hero-sequence-complete .hero-booking-cta{
 .pt-reasons-title .pt-char{
   display:inline-block;
   opacity:0;
-  transform:translateY(26px);
-  will-change:opacity,transform;
+  transform:translateY(48px) rotateX(24deg);
+  transform-origin:50% 100%;
+  filter:blur(6px);
+  will-change:opacity,transform,filter;
 }
 .pt-reasons-subtitle{
   width:100%;
@@ -1462,6 +1464,8 @@ body.hero-sequence-complete .hero-booking-cta{
   }
   body.hero-card-morphing .pt-reason-card:not(.pt-origin-card){
     opacity:var(--side-card-opacity,0) !important;
+    top:var(--side-card-rise,180px) !important;
+    transition:top .82s cubic-bezier(.16,.8,.22,1),transform .68s cubic-bezier(.2,.72,.2,1),filter .45s ease,opacity .55s ease,box-shadow .45s ease;
   }
   body.hero-card-intro-pinned .pt-reasons-intro{
     position:fixed;
@@ -1473,7 +1477,7 @@ body.hero-sequence-complete .hero-booking-cta{
     pointer-events:none;
   }
   body.hero-card-intro-pinned .pt-reasons-subtitle{
-    margin-bottom:0;
+    display:none;
   }
   body.hero-card-intro-pinned .pt-reasons-stage{
     margin-top:var(--pt-intro-space,254px);
@@ -1986,7 +1990,7 @@ body.hero-sequence-complete .hero-booking-cta{
         "--hero-card-left", "--hero-card-top", "--hero-card-width", "--hero-card-height",
         "--hero-card-radius", "--hero-card-opacity", "--hero-card-overlay", "--hero-card-shadow",
         "--hero-copy-opacity", "--hero-copy-shift", "--hero-copy-events",
-        "--origin-card-opacity", "--side-card-opacity", "--pt-intro-shift", "--pt-intro-opacity", "--pt-intro-space",
+        "--origin-card-opacity", "--side-card-opacity", "--side-card-rise", "--pt-intro-shift", "--pt-intro-opacity", "--pt-intro-space",
         "--pt-intro-top", "--pt-card-width", "--pt-card-height",
         "--pt-stage-lift", "--hero-scene-bg"
       ].forEach((property) => root.style.removeProperty(property));
@@ -2046,7 +2050,7 @@ body.hero-sequence-complete .hero-booking-cta{
       const stageLift = Math.min(0, window.scrollY - handoffEnd) * stageApproach;
       const copyOut = 1 - smooth(progress / .48);
       const introIn = smooth((progress - .18) / .34);
-      const sideIn = smooth((window.scrollY - heroHeight * .7) / Math.max(1, heroHeight * .36));
+      const sideIn = smooth((progress - .2) / .72);
       const backgroundIn = smooth((progress - .08) / .72);
       const backgroundValue = Math.round(mix(5, 255, backgroundIn));
 
@@ -2069,6 +2073,7 @@ body.hero-sequence-complete .hero-booking-cta{
       root.style.setProperty("--hero-copy-events", copyOut < .15 ? "none" : "auto");
       root.style.setProperty("--origin-card-opacity", isMorphing ? "0" : "1");
       root.style.setProperty("--side-card-opacity", String(sideIn));
+      root.style.setProperty("--side-card-rise", `${mix(210, 0, sideIn).toFixed(2)}px`);
       const pinnedOut = 1 - smooth((window.scrollY - handoffEnd) / 160);
       const titlePinned = window.scrollY < handoffEnd + 170;
       root.style.setProperty("--pt-intro-opacity", String(Math.min(introIn, pinnedOut)));
@@ -2077,7 +2082,8 @@ body.hero-sequence-complete .hero-booking-cta{
         const stagger = titleChars.length > 1 ? index / (titleChars.length - 1) : 0;
         const reveal = smooth((introIn - stagger * .42) / .58);
         char.style.opacity = String(reveal);
-        char.style.transform = `translateY(${mix(26, 0, reveal).toFixed(2)}px)`;
+        char.style.transform = `translateY(${mix(48, 0, reveal).toFixed(2)}px) rotateX(${mix(24, 0, reveal).toFixed(2)}deg)`;
+        char.style.filter = `blur(${mix(6, 0, reveal).toFixed(2)}px)`;
       });
       root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
@@ -2113,13 +2119,12 @@ body.hero-sequence-complete .hero-booking-cta{
       requestAnimationFrame(render);
     };
 
-    window.addEventListener("scroll", requestRender, {passive:true});
-    window.addEventListener("wheel", (event) => {
-      if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 80 || event.deltaY <= 0) return;
-      event.preventDefault();
+    let lastScrollY = window.scrollY;
+    const startFastTransition = () => {
+      if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 140) return;
       wheelTransitioning = true;
       const from = window.scrollY;
-      const to = Math.min(780, Math.max(620, window.innerHeight * 1.04));
+      const to = Math.min(1180, Math.max(760, window.innerHeight * 1.08));
       const started = performance.now();
       const duration = 980;
       const animate = (now) => {
@@ -2130,7 +2135,19 @@ body.hero-sequence-complete .hero-booking-cta{
         else wheelTransitioning = false;
       };
       requestAnimationFrame(animate);
-    }, {passive:false});
+    };
+
+    window.addEventListener("scroll", () => {
+      const currentScrollY = window.scrollY;
+      requestRender();
+      if (currentScrollY > lastScrollY && currentScrollY > 0 && currentScrollY < 140) startFastTransition();
+      lastScrollY = currentScrollY;
+    }, {passive:true});
+    window.addEventListener("wheel", (event) => {
+      if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 80 || event.deltaY <= 0) return;
+      event.preventDefault();
+      startFastTransition();
+    }, {passive:false,capture:true});
     window.addEventListener("resize", requestRender, {passive:true});
     window.addEventListener("load", requestRender, {once:true});
     if (window.ResizeObserver) {

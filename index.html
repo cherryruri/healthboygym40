@@ -1213,8 +1213,8 @@ body.hero-sequence-complete .hero-booking-cta{
   min-height:auto;
   overflow:hidden;
   padding:88px 0 96px;
-  background:#000;
-  color:#fff;
+  background:#fff;
+  color:#111820;
   font-family:Pretendard,"Noto Sans KR",Dotum,Helvetica,AppleGothic,Gulim,Roboto,sans-serif;
   letter-spacing:-.45px;
 }
@@ -1235,7 +1235,7 @@ body.hero-sequence-complete .hero-booking-cta{
   width:100%;
   margin:0 0 22px;
   padding:0;
-  color:#fff;
+  color:#111820;
   font-size:clamp(44px,4.6vw,62px);
   font-weight:700;
   line-height:1.3;
@@ -1249,7 +1249,7 @@ body.hero-sequence-complete .hero-booking-cta{
   width:100%;
   margin:0 0 52px;
   padding:0 20px;
-  color:#fff;
+  color:#34404c;
   font-size:18px;
   font-weight:700;
   line-height:1.5;
@@ -1402,6 +1402,10 @@ body.hero-sequence-complete .hero-booking-cta{
   }
 }
 @media(min-width:769px){
+  body.hero-card-morph .intro.hero-expand-section,
+  body.hero-card-morph .hero-expand-sticky{
+    background:var(--hero-scene-bg,#050505) !important;
+  }
   body.hero-card-morph .hero-video-frame{
     position:fixed !important;
     inset:auto !important;
@@ -1427,6 +1431,12 @@ body.hero-sequence-complete .hero-booking-cta{
   }
   body.hero-card-morph .pt-origin-card{
     opacity:var(--origin-card-opacity,0) !important;
+  }
+  body.hero-card-morphing .pt-reason-card:not(.pt-origin-card){
+    opacity:var(--side-card-opacity,0) !important;
+  }
+  body.hero-card-morph .pt-reasons-stage{
+    top:var(--pt-stage-lift,0px);
   }
   body.hero-card-morph .pt-reasons-intro{
     transform:translateY(var(--pt-intro-shift,34px));
@@ -1793,6 +1803,7 @@ body.hero-sequence-complete .hero-booking-cta{
     }
 
     window.addEventListener("hero-card-handoff", restartAutoplay);
+    window.addEventListener("hero-card-return", () => moveTo(cards.indexOf(cards.find((card) => card.classList.contains("pt-origin-card"))), false));
 
     section.addEventListener("click", (event) => {
       const card = event.target.closest(".pt-reason-card");
@@ -1867,8 +1878,10 @@ body.hero-sequence-complete .hero-booking-cta{
     if (!hero || !heroFrame || !heroVideo || !heroCopy || !ptSection || !originCard || !originVideo) return;
 
     const root = document.documentElement;
+    const ptStage = ptSection.querySelector(".pt-reasons-stage");
     let ticking = false;
     let handoffComplete = false;
+    let naturalStageOffset = 0;
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const smooth = (value) => {
@@ -1885,7 +1898,8 @@ body.hero-sequence-complete .hero-booking-cta{
         "--hero-card-left", "--hero-card-top", "--hero-card-width", "--hero-card-height",
         "--hero-card-radius", "--hero-card-opacity", "--hero-card-overlay", "--hero-card-shadow",
         "--hero-copy-opacity", "--hero-copy-shift", "--hero-copy-events",
-        "--origin-card-opacity", "--pt-intro-shift"
+        "--origin-card-opacity", "--side-card-opacity", "--pt-intro-shift",
+        "--pt-stage-lift", "--hero-scene-bg"
       ].forEach((property) => root.style.removeProperty(property));
     };
 
@@ -1897,25 +1911,31 @@ body.hero-sequence-complete .hero-booking-cta{
       }
 
       document.body.classList.add("hero-card-morph");
+      if (!naturalStageOffset && ptStage) naturalStageOffset = ptStage.offsetTop;
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
-      const targetRect = originCard.getBoundingClientRect();
-      const targetAbsoluteTop = targetRect.top + window.scrollY;
-      const targetTopAtHandoff = targetAbsoluteTop - heroHeight;
-      const targetLeft = targetRect.left;
+      const targetWidth = originCard.offsetWidth || 506;
+      const targetHeight = originCard.offsetHeight || 760;
+      const targetLeft = (window.innerWidth - targetWidth) / 2;
       const sourceWidth = window.innerWidth;
       const sourceHeight = Math.max(window.innerHeight, heroHeight);
+      const centeredTop = (window.innerHeight - targetHeight) / 2;
+      const naturalStageAbsoluteTop = hero.offsetTop + hero.offsetHeight + naturalStageOffset;
+      const naturalStageTop = naturalStageAbsoluteTop - window.scrollY;
+      const stageIn = smooth((progress - .28) / .34);
+      const stageLift = Math.min(0, centeredTop - naturalStageTop) * stageIn;
       const handoff = smooth((progress - .84) / .16);
       const copyOut = 1 - smooth(progress / .48);
       const introIn = smooth((progress - .34) / .44);
-      const travellingTop = mix(0, targetTopAtHandoff, motion);
-      const alignedTop = mix(travellingTop, targetRect.top, handoff);
+      const sideIn = smooth((progress - .46) / .36);
+      const backgroundIn = smooth((progress - .08) / .72);
+      const backgroundValue = Math.round(mix(5, 255, backgroundIn));
 
       root.style.setProperty("--hero-card-left", `${mix(0, targetLeft, motion).toFixed(2)}px`);
-      root.style.setProperty("--hero-card-top", `${alignedTop.toFixed(2)}px`);
-      root.style.setProperty("--hero-card-width", `${mix(sourceWidth, targetRect.width, motion).toFixed(2)}px`);
-      root.style.setProperty("--hero-card-height", `${mix(sourceHeight, targetRect.height, motion).toFixed(2)}px`);
+      root.style.setProperty("--hero-card-top", `${mix(0, centeredTop, motion).toFixed(2)}px`);
+      root.style.setProperty("--hero-card-width", `${mix(sourceWidth, targetWidth, motion).toFixed(2)}px`);
+      root.style.setProperty("--hero-card-height", `${mix(sourceHeight, targetHeight, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-radius", `${mix(0, 18, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-opacity", String(1 - handoff));
       root.style.setProperty("--hero-card-overlay", String(mix(1, 0, smooth(progress / .72))));
@@ -1924,14 +1944,18 @@ body.hero-sequence-complete .hero-booking-cta{
       root.style.setProperty("--hero-copy-shift", `${mix(0, -42, 1 - copyOut).toFixed(2)}px`);
       root.style.setProperty("--hero-copy-events", copyOut < .15 ? "none" : "auto");
       root.style.setProperty("--origin-card-opacity", String(handoff));
+      root.style.setProperty("--side-card-opacity", String(sideIn));
       root.style.setProperty("--pt-intro-shift", `${mix(34, 0, introIn).toFixed(2)}px`);
+      root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
+      root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
       const isMorphing = progress < .985;
       document.body.classList.toggle("hero-card-morphing", isMorphing);
       if (!isMorphing && !handoffComplete) {
         handoffComplete = true;
         window.dispatchEvent(new Event("hero-card-handoff"));
-      } else if (isMorphing) {
+      } else if (isMorphing && handoffComplete) {
         handoffComplete = false;
+        window.dispatchEvent(new Event("hero-card-return"));
       }
       heroCopy.style.setProperty("opacity", String(copyOut), "important");
       heroCopy.style.setProperty("transform", `translateY(${mix(0, -42, 1 - copyOut).toFixed(2)}px)`, "important");

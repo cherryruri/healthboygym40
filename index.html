@@ -1239,6 +1239,8 @@ body.hero-sequence-complete .hero-booking-cta{
   line-height:1;
   letter-spacing:-.02em;
   text-align:center;
+  opacity:0;
+  transform:translateY(20px);
 }
 .pt-reasons-title{
   width:100%;
@@ -1261,6 +1263,22 @@ body.hero-sequence-complete .hero-booking-cta{
   transform-origin:50% 100%;
   filter:blur(6px);
   will-change:opacity,transform,filter;
+}
+body.pt-title-revealing .pt-reasons-eyebrow{
+  animation:ptEyebrowReveal .62s cubic-bezier(.16,.8,.22,1) .06s both;
+}
+body.pt-title-revealing .pt-reasons-title .pt-char{
+  animation:ptTitleCharReveal .78s cubic-bezier(.16,.8,.22,1) both;
+  animation-delay:calc(.14s + var(--char-index,0) * 24ms);
+}
+@keyframes ptEyebrowReveal{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes ptTitleCharReveal{
+  0%{opacity:0;transform:translateY(52px) rotateX(54deg);filter:blur(8px)}
+  55%{opacity:1;filter:blur(1px)}
+  100%{opacity:1;transform:translateY(0) rotateX(0);filter:blur(0)}
 }
 .pt-reasons-subtitle{
   width:100%;
@@ -1321,7 +1339,7 @@ body.hero-sequence-complete .hero-booking-cta{
   cursor:grab;
   transform-style:preserve-3d;
   will-change:transform,opacity,filter;
-  transition:transform .68s cubic-bezier(.2,.72,.2,1),filter .45s ease,opacity .45s ease,box-shadow .45s ease;
+  transition:transform .52s cubic-bezier(.2,.72,.2,1),filter .36s ease,opacity .4s ease,box-shadow .4s ease;
 }
 .pt-reason-card:active{
   cursor:grabbing;
@@ -1475,7 +1493,7 @@ body.hero-sequence-complete .hero-booking-cta{
   body.hero-card-morphing .pt-reason-card:not(.pt-origin-card){
     opacity:var(--side-card-opacity,0) !important;
     top:var(--side-card-rise,180px) !important;
-    transition:top .82s cubic-bezier(.16,.8,.22,1),transform .68s cubic-bezier(.2,.72,.2,1),filter .45s ease,opacity .55s ease,box-shadow .45s ease;
+    transition:top .72s cubic-bezier(.16,.8,.22,1),transform .52s cubic-bezier(.2,.72,.2,1),filter .36s ease,opacity .45s ease,box-shadow .4s ease;
   }
   body.hero-card-intro-pinned .pt-reasons-intro{
     position:fixed;
@@ -1853,7 +1871,7 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const startAutoplay = () => {
       stopAutoplay();
-      const delay = activeIndex === originCardIndex ? 2200 : 4300;
+      const delay = activeIndex === originCardIndex ? 1400 : 2800;
       autoplayTimer = window.setTimeout(() => {
         if (sectionVisible && !document.body.classList.contains("hero-card-morphing")) moveTo(activeIndex + 1);
         startAutoplay();
@@ -1952,6 +1970,7 @@ body.hero-sequence-complete .hero-booking-cta{
     let originReleased = false;
     let wheelTransitioning = false;
     let latestHandoffEnd = Math.max(760, window.innerHeight);
+    let titleRevealStarted = false;
 
     const titleChars = Array.from(ptSection.querySelectorAll(".pt-reasons-title > span"))
       .flatMap((line) => {
@@ -1966,6 +1985,13 @@ body.hero-sequence-complete .hero-booking-cta{
           return span;
         });
       });
+    titleChars.forEach((char, index) => char.style.setProperty("--char-index", String(index)));
+
+    const startTitleReveal = () => {
+      if (titleRevealStarted) return;
+      titleRevealStarted = true;
+      document.body.classList.add("pt-title-revealing");
+    };
 
     originVideo.addEventListener("loadedmetadata", () => {
       try { originVideo.currentTime = heroVideo.currentTime; } catch (error) {}
@@ -2067,6 +2093,12 @@ body.hero-sequence-complete .hero-booking-cta{
       const backgroundIn = smooth((progress - .08) / .72);
       const backgroundValue = Math.round(mix(5, 255, backgroundIn));
 
+      if (progress > .08) startTitleReveal();
+      if (window.scrollY < 12 && titleRevealStarted) {
+        titleRevealStarted = false;
+        document.body.classList.remove("pt-title-revealing");
+      }
+
       if (progress > .5 && !originPrepared) {
         originPrepared = true;
         try { originVideo.load(); } catch (error) {}
@@ -2090,13 +2122,6 @@ body.hero-sequence-complete .hero-booking-cta{
       const titlePinned = window.scrollY < handoffEnd + 260;
       root.style.setProperty("--pt-intro-opacity", String(introIn));
       root.style.setProperty("--pt-intro-shift", `${mix(18, 0, introIn).toFixed(2)}px`);
-      titleChars.forEach((char, index) => {
-        const stagger = titleChars.length > 1 ? index / (titleChars.length - 1) : 0;
-        const reveal = smooth((introIn - stagger * .42) / .58);
-        char.style.opacity = String(reveal);
-        char.style.transform = `translateY(${mix(48, 0, reveal).toFixed(2)}px) rotateX(${mix(24, 0, reveal).toFixed(2)}deg)`;
-        char.style.filter = `blur(${mix(6, 0, reveal).toFixed(2)}px)`;
-      });
       root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
       document.body.classList.toggle("hero-card-morphing", isMorphing);
@@ -2134,6 +2159,7 @@ body.hero-sequence-complete .hero-booking-cta{
     let lastScrollY = window.scrollY;
     const startFastTransition = () => {
       if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 140) return;
+      startTitleReveal();
       wheelTransitioning = true;
       const from = window.scrollY;
       const to = Math.min(document.documentElement.scrollHeight - window.innerHeight, latestHandoffEnd + 8);

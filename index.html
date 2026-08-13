@@ -1853,10 +1853,11 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const startAutoplay = () => {
       stopAutoplay();
+      const delay = activeIndex === originCardIndex ? 2200 : 4300;
       autoplayTimer = window.setTimeout(() => {
         if (sectionVisible && !document.body.classList.contains("hero-card-morphing")) moveTo(activeIndex + 1);
         startAutoplay();
-      }, 4300);
+      }, delay);
     };
 
     function restartAutoplay() {
@@ -1950,6 +1951,7 @@ body.hero-sequence-complete .hero-booking-cta{
     let originPrepared = false;
     let originReleased = false;
     let wheelTransitioning = false;
+    let latestHandoffEnd = Math.max(760, window.innerHeight);
 
     const titleChars = Array.from(ptSection.querySelectorAll(".pt-reasons-title > span"))
       .flatMap((line) => {
@@ -2054,6 +2056,7 @@ body.hero-sequence-complete .hero-booking-cta{
         ? ptSection.getBoundingClientRect().top + window.scrollY + naturalStageOffset
         : hero.offsetTop + hero.offsetHeight;
       const handoffEnd = naturalStageAbsoluteTop - centeredTop;
+      latestHandoffEnd = handoffEnd;
       const handoffStart = handoffEnd - Math.min(150, window.innerHeight * .2);
       const handoff = smooth((window.scrollY - handoffStart) / Math.max(1, handoffEnd - handoffStart));
       const stageApproach = smooth((window.scrollY - heroHeight * .4) / Math.max(1, heroHeight * .6));
@@ -2084,9 +2087,8 @@ body.hero-sequence-complete .hero-booking-cta{
       root.style.setProperty("--origin-card-opacity", isMorphing ? "0" : "1");
       root.style.setProperty("--side-card-opacity", String(sideIn));
       root.style.setProperty("--side-card-rise", `${mix(210, 0, sideIn).toFixed(2)}px`);
-      const pinnedOut = 1 - smooth((window.scrollY - handoffEnd) / 160);
-      const titlePinned = window.scrollY < handoffEnd + 170;
-      root.style.setProperty("--pt-intro-opacity", String(Math.min(introIn, pinnedOut)));
+      const titlePinned = window.scrollY < handoffEnd + 260;
+      root.style.setProperty("--pt-intro-opacity", String(introIn));
       root.style.setProperty("--pt-intro-shift", `${mix(18, 0, introIn).toFixed(2)}px`);
       titleChars.forEach((char, index) => {
         const stagger = titleChars.length > 1 ? index / (titleChars.length - 1) : 0;
@@ -2134,7 +2136,7 @@ body.hero-sequence-complete .hero-booking-cta{
       if (window.innerWidth <= 768 || wheelTransitioning || window.scrollY > 140) return;
       wheelTransitioning = true;
       const from = window.scrollY;
-      const to = Math.min(1180, Math.max(760, window.innerHeight * 1.08));
+      const to = Math.min(document.documentElement.scrollHeight - window.innerHeight, latestHandoffEnd + 8);
       const started = performance.now();
       const duration = 980;
       const animate = (now) => {

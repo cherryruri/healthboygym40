@@ -1884,7 +1884,6 @@ body.hero-sequence-complete .hero-booking-cta{
     heroFrame.parentNode.insertBefore(framePlaceholder, heroFrame);
     let ticking = false;
     let handoffComplete = false;
-    let naturalStageOffset = 0;
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const smooth = (value) => {
@@ -1924,7 +1923,6 @@ body.hero-sequence-complete .hero-booking-cta{
 
       portalFrame(true);
       document.body.classList.add("hero-card-morph");
-      if (!naturalStageOffset && ptStage) naturalStageOffset = ptStage.offsetTop;
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
@@ -1934,7 +1932,9 @@ body.hero-sequence-complete .hero-booking-cta{
       const sourceWidth = window.innerWidth;
       const sourceHeight = Math.max(window.innerHeight, heroHeight);
       const centeredTop = (window.innerHeight - targetHeight) / 2;
-      const naturalStageAbsoluteTop = hero.offsetTop + hero.offsetHeight + naturalStageOffset;
+      const naturalStageAbsoluteTop = ptStage
+        ? ptSection.getBoundingClientRect().top + window.scrollY + ptStage.offsetTop
+        : hero.offsetTop + hero.offsetHeight;
       const handoffEnd = naturalStageAbsoluteTop - centeredTop;
       const handoffStart = handoffEnd - Math.min(150, window.innerHeight * .2);
       const handoff = smooth((window.scrollY - handoffStart) / Math.max(1, handoffEnd - handoffStart));

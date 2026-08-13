@@ -1437,6 +1437,30 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   }
 }
 @media(min-width:769px){
+  body.pt-header-light header,
+  body.pt-header-light header .navbar,
+  body.pt-header-light.site-scrolled header,
+  body.pt-header-light.site-scrolled header .navbar{
+    background:#fff !important;
+    color:#111820 !important;
+    border-bottom-color:rgba(17,24,32,.1) !important;
+    box-shadow:0 1px 0 rgba(17,24,32,.04) !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  body.pt-header-light header .logo a,
+  body.pt-header-light header .menu a,
+  body.pt-header-light header #loginLink,
+  body.pt-header-light header #logoutBtn{
+    color:#111820 !important;
+    text-shadow:none !important;
+  }
+  body.pt-header-light header .download-btn{
+    color:#111820 !important;
+    border-color:rgba(17,24,32,.5) !important;
+    background:#fff !important;
+    backdrop-filter:none !important;
+  }
   .pt-reasons-swiper{
     height:var(--pt-card-height,min(760px,68vh));
   }
@@ -1806,8 +1830,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       const distance = Math.abs(offset);
       /* Keep all seven cards present: the third card on each side stays as
          a deliberate edge peek instead of being removed from the scene. */
-      const edgeLimit = window.innerWidth / 2 + cardWidth * .34;
-      const x = Math.sign(offset) * Math.min(distance * spacing, edgeLimit);
+      const x = offset * spacing;
       const z = -Math.min(distance, 3) * (window.innerWidth <= 768 ? 82 : 135);
       const rotation = Math.sign(offset) * Math.min(distance * (window.innerWidth <= 768 ? 5.5 : 9), 24);
       const opacity = distance === 3 ? .76 : 1;
@@ -2024,7 +2047,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
     const clearMorph = () => {
       portalScene(false);
-      document.body.classList.remove("hero-card-morph", "hero-card-morphing", "hero-card-intro-pinned");
+      document.body.classList.remove("hero-card-morph", "hero-card-morphing", "hero-card-intro-pinned", "pt-header-light");
       heroCopy.style.removeProperty("opacity");
       heroCopy.style.removeProperty("transform");
       [
@@ -2068,8 +2091,12 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
-      const targetTop = Math.max(300, window.innerHeight * .35);
-      const targetHeight = Math.min(760, Math.max(360, window.innerHeight - targetTop));
+      const targetTop = Math.max(298, window.innerHeight * .33);
+      const targetHeight = Math.max(280, Math.min(
+        760,
+        window.innerHeight - targetTop,
+        window.innerWidth * .278
+      ));
       const targetWidth = targetHeight * (506 / 760);
       root.style.setProperty("--pt-card-width", `${targetWidth.toFixed(2)}px`);
       root.style.setProperty("--pt-card-height", `${targetHeight.toFixed(2)}px`);
@@ -2129,6 +2156,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
       document.body.classList.toggle("hero-card-morphing", isMorphing);
       document.body.classList.toggle("hero-card-intro-pinned", titlePinned);
+      document.body.classList.toggle("pt-header-light", progress > .08 && window.scrollY < handoffEnd + 300);
       if (!isMorphing && !handoffComplete) {
         handoffComplete = true;
         try {

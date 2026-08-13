@@ -1212,7 +1212,7 @@ body.hero-sequence-complete .hero-booking-cta{
   z-index:1;
   min-height:auto;
   overflow:hidden;
-  padding:88px 0 96px;
+  padding:88px 0 180px;
   background:#fff;
   color:#111820;
   font-family:Pretendard,"Noto Sans KR",Dotum,Helvetica,AppleGothic,Gulim,Roboto,sans-serif;
@@ -1380,7 +1380,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 }
 @media(max-width:768px){
   .pt-reasons-showcase{
-    padding:88px 0 72px;
+    min-height:100svh;
+    padding:104px 0 110px;
   }
   .pt-reasons-intro{
     padding:0 20px;
@@ -1409,11 +1410,11 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     transform:translateY(0);
   }
   .pt-reasons-swiper{
-    height:451px;
+    height:min(52svh,451px);
   }
   .pt-reason-card{
-    width:300px;
-    height:451px;
+    width:min(74vw,300px);
+    height:min(52svh,451px);
     border-radius:14px;
   }
 }
@@ -1423,7 +1424,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     height:min(114.25vw,451px);
   }
   .pt-reasons-swiper{
-    height:min(114.25vw,451px);
+    height:min(52svh,114.25vw,451px);
   }
 }
 @media(prefers-reduced-motion:reduce){
@@ -1443,8 +1444,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   body.pt-header-light.site-scrolled header .navbar{
     background:#fff !important;
     color:#111820 !important;
-    border-bottom-color:rgba(17,24,32,.1) !important;
-    box-shadow:0 1px 0 rgba(17,24,32,.04) !important;
+    border-bottom:0 !important;
+    box-shadow:none !important;
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
   }
@@ -1539,6 +1540,66 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   }
   body.hero-card-morph .pt-reasons-intro{
     transform:translateY(var(--pt-intro-shift,34px));
+  }
+}
+
+@media(max-width:768px){
+  body.pt-header-light header,
+  body.pt-header-light header .navbar,
+  body.pt-header-light.site-scrolled header,
+  body.pt-header-light.site-scrolled header .navbar{
+    background:#fff !important;
+    color:#111820 !important;
+    border-bottom:0 !important;
+    box-shadow:none !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+  body.pt-header-light header .logo a,
+  body.pt-header-light header .menu a,
+  body.pt-header-light header #loginLink,
+  body.pt-header-light header #logoutBtn,
+  body.pt-header-light header .mobile-menu-btn{
+    color:#111820 !important;
+    text-shadow:none !important;
+  }
+  body.pt-header-light header .mobile-menu-btn::before,
+  body.pt-header-light header .mobile-menu-btn::after{
+    background:#111820 !important;
+    box-shadow:none !important;
+  }
+}
+
+.pt-to-facility-transition{
+  position:relative;
+  z-index:1;
+  height:clamp(360px,62vh,680px);
+  overflow:hidden;
+  background:linear-gradient(180deg,
+    #fff 0%,
+    #fff9dc 14%,
+    #f7d66a 42%,
+    #d99b32 68%,
+    #8a5226 86%,
+    #3f281d 100%);
+}
+.pt-to-facility-transition::after{
+  content:"";
+  position:absolute;
+  left:-8%;
+  bottom:18%;
+  width:116%;
+  height:36%;
+  border-top:1px solid rgba(255,255,255,.72);
+  border-radius:50% 50% 0 0 / 100% 100% 0 0;
+  transform:rotate(-1.5deg);
+  opacity:.82;
+}
+@media(max-width:768px){
+  .pt-to-facility-transition{
+    height:52svh;
+    min-height:320px;
+    background:linear-gradient(180deg,#fff 0%,#fff7cc 16%,#f5cf58 46%,#c9852e 72%,#4a2d1d 100%);
   }
 }
 </style>
@@ -2064,6 +2125,15 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       ticking = false;
       if (window.innerWidth <= 768) {
         clearMorph();
+        const mobileSectionRect = ptSection.getBoundingClientRect();
+        const mobileSceneActive = mobileSectionRect.top < window.innerHeight * .62
+          && mobileSectionRect.bottom > window.innerHeight * .18;
+        document.body.classList.toggle("pt-header-light", mobileSceneActive);
+        if (mobileSceneActive) startTitleReveal();
+        if (mobileSectionRect.top > window.innerHeight * .82 && titleRevealStarted) {
+          titleRevealStarted = false;
+          document.body.classList.remove("pt-title-revealing");
+        }
         return;
       }
 
@@ -2091,7 +2161,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
-      const targetTop = Math.max(298, window.innerHeight * .33);
+      const targetTop = Math.max(298, window.innerHeight * .305);
       const targetHeight = Math.max(280, Math.min(
         760,
         window.innerHeight - targetTop,
@@ -2101,7 +2171,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       root.style.setProperty("--pt-card-width", `${targetWidth.toFixed(2)}px`);
       root.style.setProperty("--pt-card-height", `${targetHeight.toFixed(2)}px`);
       const headerHeight = document.querySelector("header")?.getBoundingClientRect().height || 80;
-      root.style.setProperty("--pt-intro-top", `${Math.round(headerHeight + 15)}px`);
+      const introHeaderGap = 15 + Math.max(0, Math.min(22, (window.innerHeight - 720) * .05));
+      root.style.setProperty("--pt-intro-top", `${Math.round(headerHeight + introHeaderGap)}px`);
       const targetLeft = (window.innerWidth - targetWidth) / 2;
       const sourceWidth = window.innerWidth;
       const sourceHeight = Math.max(window.innerHeight, heroHeight);
@@ -2256,6 +2327,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   else initHeroCardMorph();
 })();
 </script>
+
+<div class="pt-to-facility-transition" aria-hidden="true"></div>
 
 <section id="brand" class="brand-co-section">
   <article id="inc01">

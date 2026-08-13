@@ -1259,7 +1259,8 @@ body.hero-sequence-complete .hero-booking-cta{
 .pt-reasons-stage{
   position:relative;
   width:100%;
-  perspective:1800px;
+  perspective:1250px;
+  perspective-origin:50% 46%;
   opacity:0;
   clip-path:inset(0 0 100% 0);
   transition:opacity .9s ease .32s,clip-path 1.25s cubic-bezier(.2,.72,.2,1) .32s;
@@ -1299,7 +1300,7 @@ body.hero-sequence-complete .hero-booking-cta{
   overflow:hidden;
   background:#101010;
   border-radius:18px;
-  box-shadow:0 24px 60px rgba(0,0,0,.46);
+  box-shadow:0 26px 70px rgba(0,0,0,.52);
   cursor:grab;
   transform-style:preserve-3d;
   will-change:transform,opacity,filter;
@@ -1309,11 +1310,11 @@ body.hero-sequence-complete .hero-booking-cta{
   cursor:grabbing;
 }
 .pt-reason-card:not(.swiper-slide-active){
-  filter:brightness(.68) saturate(.75);
-  opacity:.78;
+  filter:brightness(.82) saturate(.86);
+  opacity:.9;
 }
 .pt-reason-card.swiper-slide-active{
-  box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.12);
+  box-shadow:0 38px 90px rgba(0,0,0,.72),0 0 0 1px rgba(255,255,255,.14);
 }
 .pt-reason-card::after{
   content:"";
@@ -1378,45 +1379,6 @@ body.hero-sequence-complete .hero-booking-cta{
   transform:translate(-50%,-50%) scale(1);
   pointer-events:auto;
 }
-.pt-reasons-nav{
-  position:absolute;
-  top:50%;
-  z-index:40;
-  width:58px;
-  height:58px;
-  padding:0;
-  border:0;
-  border-radius:50%;
-  background:rgba(255,255,255,.9);
-  box-shadow:0 12px 34px rgba(0,0,0,.28);
-  transform:translateY(-50%);
-  cursor:pointer;
-  transition:transform .25s ease,background .25s ease,opacity .25s ease;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-}
-.pt-reasons-nav:hover{
-  background:#fff;
-  transform:translateY(-50%) scale(1.06);
-}
-.pt-reasons-nav::before{
-  content:"";
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:11px;
-  height:11px;
-  border-top:2px solid #111;
-  border-right:2px solid #111;
-}
-.pt-reasons-prev{left:24px;}
-.pt-reasons-next{right:24px;}
-.pt-reasons-prev::before{transform:translate(-35%,-50%) rotate(-135deg);}
-.pt-reasons-next::before{transform:translate(-65%,-50%) rotate(45deg);}
-.pt-reasons-nav.swiper-button-disabled{
-  opacity:.28;
-  pointer-events:none;
-}
 @media (hover:hover){
   .pt-reason-card:hover video{
     transform:scale(1.035);
@@ -1465,14 +1427,6 @@ body.hero-sequence-complete .hero-booking-cta{
     width:62px;
     height:62px;
   }
-  .pt-reasons-nav{
-    top:auto;
-    bottom:-10px;
-    width:46px;
-    height:46px;
-  }
-  .pt-reasons-prev{left:calc(50% - 58px);}
-  .pt-reasons-next{right:calc(50% - 58px);}
 }
 @media(max-width:480px){
   .pt-reason-card{
@@ -1709,8 +1663,6 @@ body.hero-sequence-complete .hero-booking-cta{
     </article>
       </div>
     </div>
-    <button class="pt-reasons-nav pt-reasons-prev" type="button" aria-label="이전 PT 영상"></button>
-    <button class="pt-reasons-nav pt-reasons-next" type="button" aria-label="다음 PT 영상"></button>
   </div>
 </section>
 <script id="pt-reasons-showcase-script">
@@ -1723,8 +1675,6 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cards = Array.from(section.querySelectorAll(".pt-reason-card"));
-    const previousButton = section.querySelector(".pt-reasons-prev");
-    const nextButton = section.querySelector(".pt-reasons-next");
     let activeIndex = Math.min(2, cards.length - 1);
     let sectionVisible = false;
     let autoplayTimer = 0;
@@ -1781,16 +1731,16 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const renderCards = () => {
       const cardWidth = cards[0]?.offsetWidth || 320;
-      const spacing = Math.min(cardWidth * .84, sliderElement.clientWidth * .255);
+      const spacing = Math.min(cardWidth * .9, sliderElement.clientWidth * .29);
 
       cards.forEach((card, index) => {
         const offset = shortestOffset(index);
         const distance = Math.abs(offset);
         const x = offset * spacing;
-        const z = -Math.min(distance, 3) * (window.innerWidth <= 768 ? 135 : 225);
-        const rotation = offset * (window.innerWidth <= 768 ? -24 : -32);
-        const scale = Math.max(.76, 1 - distance * .075);
-        const opacity = distance > 3 ? 0 : Math.max(.42, 1 - distance * .17);
+        const z = -Math.min(distance, 3) * (window.innerWidth <= 768 ? 120 : 190);
+        const rotation = offset * (window.innerWidth <= 768 ? -18 : -24);
+        const scale = Math.max(.78, 1 - distance * .065);
+        const opacity = distance > 3 ? 0 : Math.max(.55, 1 - distance * .12);
 
         card.style.transform = `translateX(calc(-50% + ${x}px)) translateZ(${z}px) rotateY(${rotation}deg) scale(${scale})`;
         card.style.zIndex = String(20 - Math.round(distance));
@@ -1823,7 +1773,7 @@ body.hero-sequence-complete .hero-booking-cta{
     const startAutoplay = () => {
       stopAutoplay();
       if (reduceMotion || !sectionVisible) return;
-      autoplayTimer = window.setInterval(() => moveTo(activeIndex + 1), 5200);
+      autoplayTimer = window.setInterval(() => moveTo(activeIndex + 1), 4300);
     };
 
     function restartAutoplay() {
@@ -1849,9 +1799,6 @@ body.hero-sequence-complete .hero-booking-cta{
       if (video.paused) playVideo(video);
       else pauseVideo(video);
     });
-
-    previousButton?.addEventListener("click", () => moveTo(activeIndex - 1, true));
-    nextButton?.addEventListener("click", () => moveTo(activeIndex + 1, true));
 
     sliderElement.addEventListener("pointerdown", (event) => {
       pointerStartX = event.clientX;

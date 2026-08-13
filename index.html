@@ -1418,6 +1418,7 @@ body.hero-sequence-complete .hero-booking-cta{
     border-radius:var(--hero-card-radius,0px) !important;
     opacity:var(--hero-card-opacity,1) !important;
     box-shadow:var(--hero-card-shadow,none) !important;
+    transition:opacity .45s ease !important;
     will-change:left,top,width,height,border-radius,opacity;
     pointer-events:none !important;
   }
@@ -1435,6 +1436,9 @@ body.hero-sequence-complete .hero-booking-cta{
   }
   body.hero-card-morphing .pt-reason-card:not(.pt-origin-card){
     opacity:var(--side-card-opacity,0) !important;
+  }
+  body.hero-card-morphing .pt-reasons-intro{
+    opacity:0 !important;
   }
   body.hero-card-morph .pt-reasons-stage{
     top:var(--pt-stage-lift,0px);
@@ -1672,7 +1676,8 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cards = Array.from(section.querySelectorAll(".pt-reason-card"));
-    let activeIndex = Math.max(0, cards.findIndex((card) => card.classList.contains("pt-origin-card")));
+    const originCardIndex = Math.max(0, cards.findIndex((card) => card.classList.contains("pt-origin-card")));
+    let activeIndex = originCardIndex;
     let sectionVisible = false;
     let autoplayTimer = 0;
     let pointerStartX = null;
@@ -1778,10 +1783,12 @@ body.hero-sequence-complete .hero-booking-cta{
 
     const moveTo = (index, userInitiated = false) => {
       const previousOffsets = cards.map((_, cardIndex) => shortestOffset(cardIndex));
+      const leavingOrigin = activeIndex === originCardIndex;
       activeIndex = (index + cards.length) % cards.length;
       const sectionRect = section.getBoundingClientRect();
       sectionVisible = sectionRect.bottom > window.innerHeight * .18 && sectionRect.top < window.innerHeight * .82;
       renderCards(previousOffsets);
+      if (leavingOrigin && activeIndex !== originCardIndex) window.dispatchEvent(new Event("hero-origin-release"));
       if (userInitiated) restartAutoplay();
     };
 
@@ -1884,6 +1891,18 @@ body.hero-sequence-complete .hero-booking-cta{
     heroFrame.parentNode.insertBefore(framePlaceholder, heroFrame);
     let ticking = false;
     let handoffComplete = false;
+    let naturalStageOffset = 0;
+    let originPrepared = false;
+    let originReleased = false;
+
+    originVideo.addEventListener("loadedmetadata", () => {
+      try { originVideo.currentTime = heroVideo.currentTime; } catch (error) {}
+    });
+
+    window.addEventListener("hero-origin-release", () => {
+      originReleased = true;
+      requestRender();
+    });
 
     const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
     const smooth = (value) => {
@@ -1923,6 +1942,12 @@ body.hero-sequence-complete .hero-booking-cta{
 
       portalFrame(true);
       document.body.classList.add("hero-card-morph");
+      if (!naturalStageOffset && ptStage) {
+        const savedLift = root.style.getPropertyValue("--pt-stage-lift");
+        root.style.removeProperty("--pt-stage-lift");
+        naturalStageOffset = Math.max(0, ptStage.offsetTop);
+        if (savedLift) root.style.setProperty("--pt-stage-lift", savedLift);
+      }
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
@@ -1933,48 +1958,59 @@ body.hero-sequence-complete .hero-booking-cta{
       const sourceHeight = Math.max(window.innerHeight, heroHeight);
       const centeredTop = (window.innerHeight - targetHeight) / 2;
       const naturalStageAbsoluteTop = ptStage
-        ? ptSection.getBoundingClientRect().top + window.scrollY + ptStage.offsetTop
+        ? ptSection.getBoundingClientRect().top + window.scrollY + naturalStageOffset
         : hero.offsetTop + hero.offsetHeight;
-      const handoffEnd = naturalStageAbsoluteTop - centeredTop;
+      const handoffEnd = naturalStageAbsoluteTop - centeredTop - 32;
       const handoffStart = handoffEnd - Math.min(150, window.innerHeight * .2);
       const handoff = smooth((window.scrollY - handoffStart) / Math.max(1, handoffEnd - handoffStart));
+      const stageApproach = smooth((window.scrollY - heroHeight * .4) / Math.max(1, heroHeight * .6));
+      const stageLift = Math.min(0, window.scrollY - handoffEnd) * stageApproach;
       const copyOut = 1 - smooth(progress / .48);
       const introIn = smooth((progress - .34) / .44);
-      const sideIn = smooth((window.scrollY - heroHeight * .48) / Math.max(1, handoffEnd - heroHeight * .48));
+      const sideIn = smooth((window.scrollY - heroHeight * .7) / Math.max(1, heroHeight * .36));
       const backgroundIn = smooth((progress - .08) / .72);
       const backgroundValue = Math.round(mix(5, 255, backgroundIn));
+
+      if (progress > .5 && !originPrepared) {
+        originPrepared = true;
+        try { originVideo.load(); } catch (error) {}
+      }
 
       root.style.setProperty("--hero-card-left", `${mix(0, targetLeft, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-top", `${mix(0, centeredTop, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-width", `${mix(sourceWidth, targetWidth, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-height", `${mix(sourceHeight, targetHeight, motion).toFixed(2)}px`);
       root.style.setProperty("--hero-card-radius", `${mix(0, 18, motion).toFixed(2)}px`);
-      root.style.setProperty("--hero-card-opacity", String(1 - handoff));
+      root.style.setProperty("--hero-card-opacity", originReleased ? "0" : "1");
       root.style.setProperty("--hero-card-overlay", String(mix(1, 0, smooth(progress / .72))));
       root.style.setProperty("--hero-card-shadow", `0 ${Math.round(mix(0, 30, motion))}px ${Math.round(mix(0, 72, motion))}px rgba(0,0,0,${mix(0,.62,motion).toFixed(3)})`);
       root.style.setProperty("--hero-copy-opacity", String(copyOut));
       root.style.setProperty("--hero-copy-shift", `${mix(0, -42, 1 - copyOut).toFixed(2)}px`);
       root.style.setProperty("--hero-copy-events", copyOut < .15 ? "none" : "auto");
-      root.style.setProperty("--origin-card-opacity", String(handoff));
+      root.style.setProperty("--origin-card-opacity", originReleased ? "1" : "0");
       root.style.setProperty("--side-card-opacity", String(sideIn));
       root.style.setProperty("--pt-intro-shift", `${mix(34, 0, introIn).toFixed(2)}px`);
-      root.style.setProperty("--pt-stage-lift", "0px");
+      root.style.setProperty("--pt-stage-lift", `${stageLift.toFixed(2)}px`);
       root.style.setProperty("--hero-scene-bg", `rgb(${backgroundValue},${backgroundValue},${backgroundValue})`);
       const isMorphing = window.scrollY < handoffEnd - 1;
       document.body.classList.toggle("hero-card-morphing", isMorphing);
       if (!isMorphing && !handoffComplete) {
         handoffComplete = true;
         window.dispatchEvent(new Event("hero-card-handoff"));
-      } else if (isMorphing && handoffComplete) {
+      } else if (isMorphing) {
         handoffComplete = false;
-        window.dispatchEvent(new Event("hero-card-return"));
+        const wasReleased = originReleased;
+        if (wasReleased) window.dispatchEvent(new Event("hero-card-return"));
+        originReleased = false;
+        if (wasReleased) requestAnimationFrame(requestRender);
       }
       heroCopy.style.setProperty("opacity", String(copyOut), "important");
       heroCopy.style.setProperty("transform", `translateY(${mix(0, -42, 1 - copyOut).toFixed(2)}px)`, "important");
 
       if (progress > .7 && Number.isFinite(heroVideo.currentTime)) {
         try {
-          if (Math.abs(originVideo.currentTime - heroVideo.currentTime) > .16) originVideo.currentTime = heroVideo.currentTime;
+          const syncTolerance = handoff > 0 ? .035 : .1;
+          if (Math.abs(originVideo.currentTime - heroVideo.currentTime) > syncTolerance) originVideo.currentTime = heroVideo.currentTime;
         } catch (error) {}
       }
     };

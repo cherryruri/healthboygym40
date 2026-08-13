@@ -1259,8 +1259,6 @@ body.hero-sequence-complete .hero-booking-cta{
 .pt-reasons-stage{
   position:relative;
   width:100%;
-  perspective:1000px;
-  perspective-origin:50% 50%;
   opacity:0;
   clip-path:inset(0 0 100% 0);
   transition:opacity .9s ease .32s,clip-path 1.25s cubic-bezier(.2,.72,.2,1) .32s;
@@ -1283,6 +1281,8 @@ body.hero-sequence-complete .hero-booking-cta{
   display:block;
   width:100%;
   height:100%;
+  perspective:1000px;
+  perspective-origin:50% 50%;
   transform-style:preserve-3d;
   opacity:0;
   transition:opacity .45s ease .12s;

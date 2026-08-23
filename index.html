@@ -3997,3 +3997,31 @@ body.facility-gallery-open{overflow:hidden!important}
   addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});draw();
 })();
 </script>
+
+          
+<!-- Make terrace-to-freeweight use the same class transition as every facility slide -->
+<style id="facility-first-native-transition-style">
+  #facility .facility-bg.terrace,#facility .facility-bg.freeweight{transition:opacity .45s ease,transform .7s cubic-bezier(.165,.84,.44,1)!important}
+</style>
+<script id="facility-first-native-transition-script">
+(function(){
+  var facility=document.getElementById("facility");
+  var terrace=facility&&facility.querySelector(".facility-bg.terrace");
+  var freeweight=facility&&facility.querySelector(".facility-bg.freeweight");
+  if(!facility||!terrace||!freeweight||facility.dataset.firstNativeTransition) return;
+  facility.dataset.firstNativeTransition="true";
+  var raf=0;
+  function draw(){
+    raf=0;
+    var local=-facility.getBoundingClientRect().top/Math.max(1,innerHeight);
+    if(local<-.15||local>1.42) return;
+    terrace.style.removeProperty("opacity");terrace.style.removeProperty("transform");
+    freeweight.style.removeProperty("opacity");freeweight.style.removeProperty("transform");
+    var next=local>=.72;
+    terrace.classList.toggle("on",!next);
+    freeweight.classList.toggle("on",next);
+  }
+  function update(){if(!raf)raf=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});draw();
+})();
+</script>

@@ -3647,3 +3647,11 @@ body.facility-gallery-open{overflow:hidden!important}
 })();
 </script>
 
+
+          
+<!-- Hide the mobile intro logo layer after the hero has docked -->
+<style id="mobile-logo-residue-fix">
+@media(max-width:768px){
+body.site-scrolled .logo-screen,body.pt-title-revealing .logo-screen{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .2s ease!important}
+}
+</style>

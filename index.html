@@ -2116,20 +2116,6 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
     const render = () => {
       ticking = false;
-      if (window.innerWidth <= 768) {
-        clearMorph();
-        const mobileSectionRect = ptSection.getBoundingClientRect();
-        const mobileSceneActive = mobileSectionRect.top < window.innerHeight * .62
-          && mobileSectionRect.bottom > window.innerHeight * .18;
-        document.body.classList.toggle("pt-header-light", mobileSceneActive);
-        if (mobileSceneActive) startTitleReveal();
-        if (mobileSectionRect.top > window.innerHeight * .82 && titleRevealStarted) {
-          titleRevealStarted = false;
-          document.body.classList.remove("pt-title-revealing");
-        }
-        return;
-      }
-
       portalScene(true);
       document.body.classList.add("hero-card-morph");
       const stageAbsoluteTopNow = ptStage
@@ -2154,12 +2140,13 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       const heroHeight = Math.max(1, hero.offsetHeight);
       const progress = clamp(window.scrollY / heroHeight);
       const motion = smooth(progress);
-      const targetTop = Math.max(298, window.innerHeight * .305);
-      const targetHeight = Math.max(280, Math.min(
-        760,
-        window.innerHeight - targetTop,
-        window.innerWidth * .278
-      ));
+      const mobileMorph = window.innerWidth <= 768;
+      const targetTop = mobileMorph
+        ? Math.max(330, window.innerHeight * .42)
+        : Math.max(298, window.innerHeight * .305);
+      const targetHeight = mobileMorph
+        ? Math.min(446, window.innerHeight * .53, window.innerWidth * 1.14)
+        : Math.max(280, Math.min(760, window.innerHeight - targetTop, window.innerWidth * .278));
       const targetWidth = targetHeight * (506 / 760);
       root.style.setProperty("--pt-card-width", `${targetWidth.toFixed(2)}px`);
       root.style.setProperty("--pt-card-height", `${targetHeight.toFixed(2)}px`);
@@ -3625,41 +3612,21 @@ body.facility-gallery-open{overflow:hidden!important}
   addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});draw();
 })();
 </script>
-<script id="unified-mobile-hero-dock-script">
-(function(){
-  var frame=document.querySelector(".hero-video-frame"),reasons=document.getElementById("ptReasons");
-  if(!frame||!reasons||document.body.dataset.unifiedMobileDock) return;
-  document.body.dataset.unifiedMobileDock="true";var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}function ease(v){return v*v*(3-2*v)}
-  function reset(){document.body.classList.remove("mobile-hero-docking","mobile-hero-docked");["left","top","width","height","border-radius","opacity","visibility"].forEach(function(k){frame.style.removeProperty(k)})}
-  function draw(){
-    raf=0;if(innerWidth>768){reset();return}
-    var target=reasons.querySelector(".pt-reason-card.swiper-slide-active")||reasons.querySelector(".pt-reason-card");if(!target)return;
-    var tr=target.getBoundingClientRect(),end=Math.max(520,reasons.offsetTop-innerHeight*.42),p=ease(clamp(scrollY/end));
-    document.body.classList.add("mobile-hero-docking");document.body.classList.toggle("mobile-hero-docked",p>=.995);
-    frame.style.setProperty("left",(tr.left*p)+"px","important");frame.style.setProperty("top",(tr.top*p)+"px","important");
-    frame.style.setProperty("width",(innerWidth+(tr.width-innerWidth)*p)+"px","important");frame.style.setProperty("height",(innerHeight+(tr.height-innerHeight)*p)+"px","important");
-    frame.style.setProperty("border-radius",(18*p)+"px","important");frame.style.setProperty("opacity",String(p>.9?1-(p-.9)*10:1),"important");
-    frame.style.setProperty("visibility",p>=.995?"hidden":"visible","important");
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});update();
-})();
-</script>
 
-
-          
-<!-- Hide the mobile intro logo layer after the hero has docked -->
-<style id="mobile-logo-residue-fix">
+<!-- Use the original PC hero-to-card morph on mobile too -->
+<style id="native-mobile-hero-morph-style">
 @media(max-width:768px){
-body.site-scrolled .logo-screen,body.pt-title-revealing .logo-screen{opacity:0!important;visibility:hidden!important;pointer-events:none!important;transition:opacity .2s ease!important}
-}
-</style>
-
-          
-<!-- Remove empty black intro background after mobile video docking -->
-<style id="mobile-docked-intro-background-fix">
-@media(max-width:768px){
-body.mobile-hero-docked .hero-expand-section,body.mobile-hero-docked .hero-expand-sticky{background:#fff!important}
+  body.hero-card-morph .intro.hero-expand-section,body.hero-card-morph .hero-expand-sticky{background:var(--hero-scene-bg,#050505)!important;overflow:visible!important}
+  body.hero-card-morph .hero-video-frame{position:fixed!important;inset:auto!important;left:var(--hero-card-left,0)!important;top:var(--hero-card-top,0)!important;width:var(--hero-card-width,100vw)!important;height:var(--hero-card-height,100svh)!important;z-index:8!important;border-radius:var(--hero-card-radius,0)!important;opacity:var(--hero-card-opacity,1)!important;box-shadow:var(--hero-card-shadow,none)!important;transition:opacity .12s linear!important;will-change:left,top,width,height,border-radius,opacity;pointer-events:none!important}
+  body.hero-card-morph .hero-video-frame::after{opacity:var(--hero-card-overlay,1)!important}
+  body.hero-card-morph .hero-brand-composition{position:fixed!important;inset:0!important;width:100%!important;height:100svh!important;z-index:9!important;opacity:var(--hero-copy-opacity,1)!important;transform:translateY(var(--hero-copy-shift,0))!important;pointer-events:var(--hero-copy-events,auto)!important}
+  body.hero-card-morph .hero-brand-kicker,body.hero-card-morph .intro-main,body.hero-card-morph .intro-title-line,body.hero-card-morph .hero-booking-cta{opacity:1!important;visibility:visible!important}
+  body.hero-card-morph .intro-title-line{transform:none!important}
+  body.hero-card-morph .pt-origin-card{opacity:var(--origin-card-opacity,0)!important}
+  body.hero-card-morphing .pt-reason-card:not(.pt-origin-card){opacity:var(--side-card-opacity,0)!important;top:var(--side-card-rise,180px)!important}
+  body.hero-card-intro-pinned .pt-reasons-intro{position:fixed!important;top:var(--pt-intro-top,86px)!important;left:0!important;z-index:9!important;opacity:var(--pt-intro-opacity,0)!important;transform:translateY(var(--pt-intro-shift,18px))!important;pointer-events:none!important}
+  body.hero-card-intro-pinned .pt-reasons-subtitle{display:none!important}
+  body.hero-card-intro-pinned .pt-reasons-stage{margin-top:var(--pt-intro-space,230px)!important}
+  body.hero-card-morph .pt-reasons-stage{top:var(--pt-stage-lift,0)!important}
 }
 </style>

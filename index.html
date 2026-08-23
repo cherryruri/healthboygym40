@@ -3550,3 +3550,11 @@ body.facility-gallery-open{overflow:hidden!important}
 .facility-photo-modal{z-index:2147483000!important}
 .facility-photo-modal .facility-modal-close{z-index:2147483647!important}
 </style>
+
+  
+<script id="facility-gallery-body-layer">
+(function(){
+ var modal=document.querySelector('.facility-photo-modal');
+ if(modal&&modal.parentElement!==document.body)document.body.appendChild(modal);
+})();
+</script>

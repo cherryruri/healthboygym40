@@ -4041,3 +4041,21 @@ body.facility-handoff-active #facility-title-scroll .facility-title-sticky {
   requestAnimationFrame(renderTrainerSequence);
 })();
 </script>
+
+<style id="trainer-sequence-polish-20260824">
+.trainer-medical-copy h1,.trainer-medical-copy p{color:#fff!important;opacity:1!important;text-shadow:0 2px 18px rgba(0,0,0,.55)!important}
+body.trainer-proof-header header,body.trainer-proof-header header .navbar{background:#fff!important}
+body.trainer-proof-header header .logo a,body.trainer-proof-header header #logo-text,body.trainer-proof-header header .menu a{color:#111!important;text-shadow:none!important}
+</style>
+<script id="trainer-sequence-header-polish-20260824">
+(function(){
+ function syncTrainerHeader(){
+  var s=document.querySelector(".trainer-proof-scene"); if(!s)return;
+  var r=s.getBoundingClientRect();
+  document.body.classList.toggle("trainer-proof-header",r.top<=80&&r.bottom>80);
+ }
+ addEventListener("scroll",syncTrainerHeader,{passive:true});
+ addEventListener("resize",syncTrainerHeader);
+ requestAnimationFrame(syncTrainerHeader);
+})();
+</script>

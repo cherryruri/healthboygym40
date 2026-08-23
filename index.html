@@ -3613,3 +3613,47 @@ body.facility-gallery-open{overflow:hidden!important}
   render();
 })();
 </script>
+
+          
+<!-- Facility title transition v2: full-screen Goldman-style choreography -->
+<style id="facility-title-scroll-v2-style">
+  #facility-title-scroll{height:210vh!important;min-height:1450px!important;margin:0!important;background:#fff!important}
+  #facility-title-scroll .facility-title-sticky{height:100vh!important;height:100svh!important;background:#fff!important}
+  #facility-title-scroll .facility-title-copy{top:50%!important;font-size:clamp(150px,22vw,420px)!important;font-weight:700!important;line-height:.82!important;letter-spacing:-.085em!important;color:#050505!important;max-width:none!important}
+  @media(max-width:768px){
+    #facility-title-scroll{height:185svh!important;min-height:1120px!important}
+    #facility-title-scroll .facility-title-copy{font-size:clamp(96px,31vw,180px)!important}
+  }
+</style>
+<script id="facility-title-scroll-v2-script">
+(function(){
+  var scene=document.getElementById("facility-title-scroll");
+  if(!scene||scene.dataset.motionV2) return;
+  scene.dataset.motionV2="true";
+  var copy=scene.querySelector(".facility-title-copy");
+  var frame=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}
+  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
+  function draw(){
+    frame=0;
+    var r=scene.getBoundingClientRect();
+    var travel=Math.max(1,scene.offsetHeight-window.innerHeight);
+    var p=clamp(-r.top/travel);
+    var settle=smooth(clamp(p/.58));
+    var exit=smooth(clamp((p-.68)/.27));
+    var mobile=innerWidth<=768;
+    var fromScale=mobile?1.48:1.62;
+    var toScale=mobile?.27:.36;
+    var scale=fromScale+(toScale-fromScale)*settle;
+    var fromY=mobile?43:48;
+    var y=fromY*(1-settle)-exit*8;
+    copy.style.setProperty("transform","translate3d(-50%,calc(-50% + "+y+"vh),0) scale("+scale+")","important");
+    copy.style.setProperty("opacity",String(1-exit),"important");
+    copy.style.setProperty("filter","blur("+(exit*24)+"px)","important");
+  }
+  function update(){if(!frame)frame=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});
+  addEventListener("resize",update,{passive:true});
+  draw();
+})();
+</script>

@@ -3630,3 +3630,12 @@ body.facility-gallery-open{overflow:hidden!important}
   body.hero-card-morph .pt-reasons-stage{top:var(--pt-stage-lift,0)!important}
 }
 </style>
+
+          
+<!-- Let native morph variables override the old mobile full-width frame rule -->
+<style id="native-mobile-hero-morph-specificity-fix">
+@media(max-width:768px){
+html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame{position:fixed!important;inset:auto!important;right:auto!important;bottom:auto!important;left:var(--hero-card-left,0px)!important;top:var(--hero-card-top,0px)!important;width:var(--hero-card-width,100vw)!important;height:var(--hero-card-height,100svh)!important;min-height:0!important;border-radius:var(--hero-card-radius,0px)!important;opacity:var(--hero-card-opacity,1)!important;overflow:hidden!important;background:#050505!important;box-shadow:var(--hero-card-shadow,none)!important}
+html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{opacity:var(--hero-card-overlay,1)!important}
+}
+</style>

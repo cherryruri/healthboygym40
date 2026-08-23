@@ -3751,3 +3751,45 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
   }
 }
 </style>
+
+<style id="facility-fullscreen-handoff-20260824">
+/* During the terrace-to-tour handoff, both image stages occupy one viewport. */
+body.facility-handoff-active #facility-title-scroll .facility-title-sticky {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100svh !important;
+}
+#facility.facility-handoff-active #facilityTour .img_inner {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100svh !important;
+}
+#facility.facility-handoff-active #facilityTour .txt_box {
+  visibility: hidden !important;
+}
+</style>
+<script id="facility-fullscreen-handoff-script-20260824">
+(() => {
+  const facility = document.querySelector('#facility');
+  if (!facility) return;
+  let ticking = false;
+  const sync = () => {
+    ticking = false;
+    const top = facility.getBoundingClientRect().top;
+    const active = top > 0 && top < window.innerHeight;
+    facility.classList.toggle('facility-handoff-active', active);
+    document.body.classList.toggle('facility-handoff-active', active);
+  };
+  const requestSync = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(sync);
+  };
+  addEventListener('scroll', requestSync, { passive: true });
+  addEventListener('resize', requestSync);
+  addEventListener('pageshow', requestSync);
+  requestSync();
+})();
+</script>

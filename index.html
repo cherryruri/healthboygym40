@@ -3388,3 +3388,94 @@ body.facility-gallery-open{overflow:hidden!important}
  },true);
 })();
 </script>
+
+  
+<script id="facility-gallery-final-controller">
+(function(){
+ var groups=[
+  {title:'수내동 유일 야외 테라스존',images:['테라스존사진1.jpg','테라스존사진2.jpg']},
+  {title:'프리웨이트존',images:['프리웨이트존사진1.jpg','프리웨이트존사진2.jpg','프리웨이트존사진3.jpg','프리웨이트존사진4.jpg']},
+  {title:'기구존',images:['기구존사진1.jpg','기구존사진2.jpg','기구존사진3.jpg','기구존사진4.jpg','기구존사진5.jpg','기구존사진6.jpg','기구존사진7.jpg','기구존사진8.jpg','기구존사진9.jpg']},
+  {title:'유산소존',images:['유산소존사진1.jpg','유산소존사진2.jpg','유산소존사진3.jpg','유산소존사진4.jpg']},
+  {title:'필라테스 & 컨디셔닝존',images:['리포머사진1.jpg','바렐체어사진1.jpg','바렐체어사진2.jpg']},
+  {title:'편의공간',images:['탈의실사진.jpg','공용락커사진.jpg','샤워실사진.jpg','상담실사진.jpg','스트레칭존사진.jpg','안마의자.png']}
+ ];
+ var modal=document.querySelector('.facility-photo-modal');
+ if(!modal)return;
+ var main=modal.querySelector('.facility-gallery-main img');
+ var caption=modal.querySelector('.facility-gallery-caption');
+ var count=modal.querySelector('.facility-gallery-count');
+ var side=modal.querySelector('.facility-gallery-side');
+ var groupIndex=0,imageIndex=0,lastFocus=null;
+ function close(){
+  modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('facility-gallery-open');
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+ }
+ function render(){
+  var group=groups[groupIndex];
+  main.src=group.images[imageIndex];main.alt=group.title+' '+(imageIndex+1);
+  caption.textContent=group.title;count.textContent=(imageIndex+1)+' / '+group.images.length;
+  side.innerHTML='';
+  group.images.forEach(function(src,index){
+   var thumb=document.createElement('button');thumb.type='button';
+   thumb.className='facility-gallery-thumb'+(index===imageIndex?' is-active':'');
+   thumb.setAttribute('aria-label',group.title+' 사진 '+(index+1));
+   thumb.innerHTML='<img src="'+src+'" alt="">';
+   thumb.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();imageIndex=index;render();},true);
+   side.appendChild(thumb);
+  });
+ }
+ function open(index,focus){
+  groupIndex=index;imageIndex=0;lastFocus=focus||document.activeElement;render();
+  modal.classList.add('is-open');modal.setAttribute('aria-hidden','false');
+  document.body.classList.add('facility-gallery-open');
+  var closeButton=modal.querySelector('.facility-modal-close');if(closeButton)closeButton.focus();
+ }
+ function move(step){
+  var length=groups[groupIndex].images.length;
+  imageIndex=(imageIndex+step+length)%length;render();
+ }
+ document.querySelectorAll('.facility-gallery-hit').forEach(function(oldHit,index){
+  var hit=oldHit.cloneNode(true);oldHit.replaceWith(hit);
+  hit.addEventListener('click',function(event){event.preventDefault();event.stopImmediatePropagation();open(index,hit);},true);
+ });
+ document.addEventListener('click',function(event){
+  var closeButton=event.target&&event.target.closest?event.target.closest('.facility-photo-modal .facility-modal-close'):null;
+  var prev=event.target&&event.target.closest?event.target.closest('.facility-photo-modal .facility-modal-nav.prev'):null;
+  var next=event.target&&event.target.closest?event.target.closest('.facility-photo-modal .facility-modal-nav.next'):null;
+  if(closeButton){event.preventDefault();event.stopImmediatePropagation();close();return;}
+  if(prev||next){event.preventDefault();event.stopImmediatePropagation();move(prev?-1:1);}
+ },true);
+ document.addEventListener('keydown',function(event){
+  if(!modal.classList.contains('is-open'))return;
+  if(event.key==='Escape'){event.preventDefault();event.stopImmediatePropagation();close();}
+  else if(event.key==='ArrowLeft'){event.preventDefault();event.stopImmediatePropagation();move(-1);}
+  else if(event.key==='ArrowRight'){event.preventDefault();event.stopImmediatePropagation();move(1);}
+ },true);
+})();
+</script>
+
+<style id="facility-gallery-studio505-layout">
+@media(min-width:769px){
+ .facility-modal-dialog.facility-gallery-505{padding:0 clamp(26px,3vw,54px) 0 0!important;grid-template-columns:minmax(0,64vw) minmax(300px,1fr)!important;gap:clamp(34px,4.3vw,82px)!important;background:#050505!important}
+ .facility-gallery-main{height:100dvh!important;align-self:stretch!important;background:#050505!important}
+ .facility-gallery-main img{width:100%!important;height:100%!important;object-fit:cover!important;border-radius:0!important}
+ .facility-gallery-side{height:100dvh!important;padding:clamp(18px,2.2vh,30px) 0!important;gap:clamp(34px,6vh,74px)!important;justify-content:flex-start!important;overflow-y:auto!important}
+ .facility-gallery-thumb{flex:0 0 calc((100dvh - clamp(36px,4.4vh,60px) - clamp(34px,6vh,74px))/2)!important;min-height:300px!important;border-radius:12px!important;background:#111!important}
+ .facility-gallery-thumb img{object-fit:cover!important;border-radius:12px!important}
+ .facility-modal-nav{opacity:0;transition:opacity .2s ease}
+ .facility-gallery-main:hover .facility-modal-nav{opacity:1}
+ .facility-gallery-caption{left:22px!important;bottom:24px!important;font-size:clamp(34px,3.2vw,58px)!important}
+ .facility-gallery-count{right:20px!important;bottom:18px!important}
+}
+@media(max-width:768px){
+ .facility-modal-dialog.facility-gallery-505{padding:max(52px,calc(env(safe-area-inset-top) + 44px)) 0 max(10px,env(safe-area-inset-bottom))!important;background:#050505!important}
+ .facility-gallery-main{flex:1 1 68dvh!important;min-height:58dvh!important}
+ .facility-gallery-main img{width:100%!important;height:100%!important;object-fit:cover!important}
+ .facility-gallery-side{flex:0 0 29dvh!important;height:29dvh!important;padding:0 12px 10px!important;gap:12px!important}
+ .facility-gallery-thumb{flex:0 0 76vw!important;height:100%!important;min-height:0!important;border-radius:10px!important}
+ .facility-gallery-thumb img{border-radius:10px!important}
+ .facility-gallery-caption{bottom:16px!important;font-size:clamp(28px,9vw,40px)!important}
+}
+</style>

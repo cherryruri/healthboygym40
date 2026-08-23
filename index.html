@@ -3911,3 +3911,45 @@ body.facility-gallery-open{overflow:hidden!important}
   #ptReasons .pt-reason-card video{width:100%!important;height:100%!important;object-fit:cover!important}
 }
 </style>
+
+          
+<!-- Desktop facility centering + mobile trainer 3D/aspect fixes -->
+<style id="desktop-facility-mobile-video-fix-v2">
+  #facility .img_box .facility-bg{inset:auto!important;top:50%!important;left:50%!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;min-height:calc(100vh + 4px)!important;transform-origin:center center!important}
+  #facility .img_box .facility-bg span{inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;background-size:cover!important;background-position:center center!important}
+  @media(max-width:768px){
+    #ptReasons .pt-reason-card{aspect-ratio:2/3!important;height:auto!important;transform-style:preserve-3d!important;backface-visibility:hidden!important}
+    #ptReasons .pt-reason-card video{display:block!important;width:100%!important;height:100%!important;aspect-ratio:2/3!important;object-fit:cover!important;transform-style:preserve-3d!important;transition:transform .55s cubic-bezier(.22,.61,.36,1),filter .55s ease!important}
+    #ptReasons .pt-reason-card.swiper-slide-active{width:min(79vw,308px)!important;height:auto!important;aspect-ratio:2/3!important}
+    #ptReasons .pt-reason-card.swiper-slide-active video{transform:perspective(900px) rotateY(0deg) scale(1)!important;filter:brightness(1)!important}
+    #ptReasons .pt-reason-card.swiper-slide-prev video{transform:perspective(620px) rotateY(24deg) scale(.94)!important;transform-origin:100% 50%!important;filter:brightness(.72) saturate(.88)!important}
+    #ptReasons .pt-reason-card.swiper-slide-next video{transform:perspective(620px) rotateY(-24deg) scale(.94)!important;transform-origin:0 50%!important;filter:brightness(.72) saturate(.88)!important}
+    #ptReasons .pt-reason-card:not(.swiper-slide-active):not(.swiper-slide-prev):not(.swiper-slide-next) video{filter:brightness(.52) saturate(.72)!important}
+  }
+</style>
+<script id="mobile-trainer-aspect-guard">
+(function(){
+  var stage=document.querySelector("#ptReasons");
+  if(!stage||stage.dataset.mobileAspectGuard) return;
+  stage.dataset.mobileAspectGuard="true";
+  function lock(){
+    if(innerWidth>768) return;
+    stage.querySelectorAll(".pt-reason-card").forEach(function(card){
+      card.style.setProperty("aspect-ratio","2 / 3","important");
+      card.style.setProperty("height","auto","important");
+      var video=card.querySelector("video");
+      if(video){
+        video.style.setProperty("aspect-ratio","2 / 3","important");
+        video.style.setProperty("height","100%","important");
+        video.style.setProperty("object-fit","cover","important");
+      }
+    });
+  }
+  var timer=0;
+  function schedule(){clearTimeout(timer);timer=setTimeout(lock,30)}
+  new MutationObserver(schedule).observe(stage,{attributes:true,subtree:true,attributeFilter:["class"]});
+  addEventListener("resize",schedule,{passive:true});
+  addEventListener("scroll",schedule,{passive:true});
+  lock();
+})();
+</script>

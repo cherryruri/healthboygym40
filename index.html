@@ -3683,3 +3683,71 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
   }
 }
 </style>
+
+<style id="facility-terrace-caption-restore-20260824">
+/* Restore the terrace caption and match the real facility-slide UI exactly. */
+#facility-title-scroll .facility-photo-copy {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  left: 50% !important;
+  top: 0 !important;
+  width: 50% !important;
+  height: 100svh !important;
+  padding: 0 7vw 0 0 !important;
+  transform: none !important;
+  box-sizing: border-box !important;
+}
+#facility-title-scroll .facility-photo-copy h2 {
+  margin: 0 !important;
+  font-size: var(--type-section) !important;
+  font-weight: var(--weight-title) !important;
+  line-height: var(--leading-heading) !important;
+  letter-spacing: 0 !important;
+}
+#facility-title-scroll .facility-photo-copy .pl {
+  margin: 14px 0 20px !important;
+  font-size: var(--type-body) !important;
+  font-weight: var(--weight-copy) !important;
+  line-height: var(--leading-copy) !important;
+  letter-spacing: 0 !important;
+}
+#facility-title-scroll .facility-photo-copy .facility-view-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 150px !important;
+  height: 46px !important;
+  border: 1px solid rgba(255,255,255,.75) !important;
+  border-radius: 999px !important;
+  background: rgba(0,0,0,.22) !important;
+  color: #fff !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+@media (max-width:768px) {
+  #facility-title-scroll .facility-photo-copy {
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100svh !important;
+    padding: 0 22px calc(72px + env(safe-area-inset-bottom)) !important;
+    align-items: center !important;
+    text-align: center !important;
+    transform: none !important;
+  }
+  #facility-title-scroll .facility-photo-copy h2 {
+    font-size: clamp(24px,7vw,34px) !important;
+    line-height: 1.16 !important;
+  }
+  #facility-title-scroll .facility-photo-copy .pl {
+    margin: 12px auto 18px !important;
+    font-size: clamp(14px,4vw,17px) !important;
+    line-height: 1.58 !important;
+  }
+  #facility-title-scroll .facility-photo-copy .facility-view-btn {
+    width: 142px !important;
+    height: 42px !important;
+    font-size: 14px !important;
+  }
+}
+</style>

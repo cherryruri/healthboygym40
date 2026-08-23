@@ -3793,3 +3793,54 @@ body.facility-handoff-active #facility-title-scroll .facility-title-sticky {
   requestSync();
 })();
 </script>
+
+<style id="facility-scroll-crossfade-20260824">
+#facilityTour .img_box > li.facility-bg,
+#facilityTour .img_box > li.facility-bg.on {
+  opacity: var(--facility-crossfade-opacity, 0) !important;
+  transition: opacity .12s linear !important;
+}
+</style>
+<script id="facility-scroll-crossfade-script-20260824">
+(() => {
+  const tour = document.querySelector('#facilityTour');
+  if (!tour) return;
+  const slides = Array.from(tour.querySelectorAll('.img_box > li.facility-bg'));
+  const texts = Array.from(tour.querySelectorAll('.txt_box > li'));
+  if (!slides.length || !texts.length) return;
+
+  let ticking = false;
+  const smoothstep = value => value * value * (3 - 2 * value);
+
+  const render = () => {
+    ticking = false;
+    const vh = Math.max(window.innerHeight, 1);
+    const raw = Math.max(0, Math.min(slides.length - 1, -texts[0].getBoundingClientRect().top / vh));
+    const from = Math.min(Math.floor(raw), slides.length - 1);
+    const to = Math.min(from + 1, slides.length - 1);
+    const local = raw - from;
+    const blend = smoothstep(Math.max(0, Math.min(1, (local - .18) / .64)));
+
+    slides.forEach((slide, index) => {
+      let opacity = 0;
+      if (from === to && index === from) opacity = 1;
+      else if (index === from) opacity = 1 - blend;
+      else if (index === to) opacity = blend;
+      slide.style.setProperty('--facility-crossfade-opacity', opacity.toFixed(4));
+    });
+  };
+
+  const requestRender = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(render);
+  };
+
+  addEventListener('scroll', requestRender, { passive: true });
+  addEventListener('resize', requestRender, { passive: true });
+  addEventListener('pageshow', requestRender);
+  requestRender();
+  setTimeout(requestRender, 300);
+  setTimeout(requestRender, 900);
+})();
+</script>

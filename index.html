@@ -3979,3 +3979,65 @@ body.facility-handoff-active #facility-title-scroll .facility-title-sticky {
   setTimeout(requestRender, 900);
 })();
 </script>
+
+<style id="trainer-sequence-correction-20260824">
+
+/* GOLDMAN trainer sequence correction */
+.trainer-medical-hero{position:relative!important;min-height:calc(100svh - 80px)!important;overflow:hidden!important;background:#080808!important}
+.trainer-hero-collage{position:absolute!important;inset:0!important;display:block!important;overflow:hidden!important;background:#080808!important}
+.trainer-hero-collage img{position:absolute!important;top:0!important;width:58%!important;height:100%!important;object-fit:cover!important;object-position:50% 18%!important;border:0!important;filter:saturate(.72) contrast(1.06)!important}
+.trainer-hero-collage img:nth-child(1){left:-5%!important;z-index:1!important;-webkit-mask-image:linear-gradient(90deg,#000 62%,transparent 100%)!important}
+.trainer-hero-collage img:nth-child(2){left:25%!important;z-index:2!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 20%,#000 78%,transparent 100%)!important}
+.trainer-hero-collage img:nth-child(3){right:-4%!important;z-index:1!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%)!important}
+.trainer-medical-hero:after{content:""!important;position:absolute!important;inset:0!important;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.34) 46%,rgba(0,0,0,.18)),linear-gradient(0deg,rgba(0,0,0,.48),transparent 55%)!important;z-index:3!important;pointer-events:none!important}
+.trainer-medical-copy{z-index:4!important}
+.trainer-proof-scene{height:250svh!important;background:#050505!important}
+.trainer-proof-sticky{height:100svh!important;overflow:hidden!important}
+.trainer-proof-portraits .tp{opacity:var(--tp-opacity,0)!important;transform:translate3d(var(--tp-x,0),var(--tp-y,0),0) scale(var(--tp-scale,.84))!important;transition:none!important}
+.trainer-proof-sticky>h2{display:block!important;position:absolute!important;inset:50% auto auto 50%!important;transform:translate(-50%,-50%) scale(var(--ghost-scale,1.08))!important;width:90vw!important;margin:0!important;color:rgba(255,255,255,var(--ghost-opacity,.1))!important;font-size:clamp(3rem,7vw,7rem)!important;line-height:1.12!important;text-align:center!important;z-index:2!important}
+.trainer-proof-final{opacity:var(--final-opacity,0)!important;transform:translate(-50%,-50%) scale(var(--final-scale,.92))!important;z-index:5!important}
+@media(max-width:768px){
+ .trainer-medical-hero{min-height:calc(100svh - 64px)!important}
+ .trainer-hero-collage img{width:82%!important;object-position:50% 14%!important}
+ .trainer-hero-collage img:nth-child(1){left:-30%!important}
+ .trainer-hero-collage img:nth-child(2){left:10%!important}
+ .trainer-hero-collage img:nth-child(3){right:-30%!important}
+ .trainer-medical-copy{left:20px!important;right:18px!important;bottom:10vh!important}
+ .trainer-medical-copy h1{font-size:clamp(3.7rem,17vw,5.6rem)!important;line-height:.88!important}
+ .trainer-proof-sticky>h2{font-size:clamp(2.25rem,10vw,4rem)!important;width:62vw!important}
+}
+
+</style>
+<script id="trainer-sequence-correction-script-20260824">
+(function(){
+  if(window.__trainerSequenceCorrection) return;
+  window.__trainerSequenceCorrection=true;
+  var clamp=function(x){return Math.max(0,Math.min(1,x));};
+  var ease=function(x){return 1-Math.pow(1-x,3);};
+  function renderTrainerSequence(){
+    var scene=document.querySelector(".trainer-proof-scene");
+    var sticky=document.querySelector(".trainer-proof-sticky");
+    if(!scene||!sticky) return;
+    var max=Math.max(1,scene.offsetHeight-window.innerHeight);
+    var p=clamp(-scene.getBoundingClientRect().top/max);
+    var cards=document.querySelectorAll(".trainer-proof-portraits .tp");
+    cards.forEach(function(el,i){
+      var q=ease(clamp((p-.06-i*.035)/.34));
+      var side=i<3?-1:1;
+      el.style.setProperty("--tp-opacity",q*.9);
+      el.style.setProperty("--tp-x",(side*(1-q)*115)+"%");
+      el.style.setProperty("--tp-y",((1-q)*(i%3-1)*12)+"vh");
+      el.style.setProperty("--tp-scale",.84+.16*q);
+    });
+    var f=clamp((p-.46)/.18);
+    var g=1-clamp((p-.22)/.22);
+    sticky.style.setProperty("--final-opacity",f);
+    sticky.style.setProperty("--final-scale",.92+.08*f);
+    sticky.style.setProperty("--ghost-opacity",.1*g);
+    sticky.style.setProperty("--ghost-scale",1.08-.08*(1-g));
+  }
+  addEventListener("scroll",renderTrainerSequence,{passive:true});
+  addEventListener("resize",renderTrainerSequence);
+  requestAnimationFrame(renderTrainerSequence);
+})();
+</script>

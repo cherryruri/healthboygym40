@@ -2958,6 +2958,29 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 </section>
 
 <section id="trainer" class="trainer-section">
+<div class="trainer-story-intro" aria-label="헬스보이짐 수내점 전문 트레이너">
+  <section class="trainer-medical-hero">
+    <div class="trainer-hero-collage" aria-hidden="true">
+      <img src="정위영.jpg" alt=""><img src="백인호.jpg" alt=""><img src="이상원.jpg" alt="">
+    </div>
+    <div class="trainer-hero-shade"></div>
+    <div class="trainer-hero-copy">
+      <h2>TRAINER STAFF</h2>
+      <p>검증된 전문성과 확고한 책임감으로 회원 맞춤 최적의 변화를 완성하는 헬스보이짐 수내점 트레이너 팀입니다.</p>
+    </div>
+  </section>
+  <section class="trainer-proof-scene">
+    <div class="trainer-proof-sticky">
+      <h2>검증된 전문성과 책임감으로<br>회원의 변화를 향한 바른 길을 걸어갑니다.</h2>
+      <div class="trainer-proof-portraits" aria-hidden="true">
+        <img class="tp tp1" src="정위영.jpg" alt=""><img class="tp tp2" src="백인호.jpg" alt=""><img class="tp tp3" src="이상원.jpg" alt="">
+        <img class="tp tp4" src="이루리.jpg" alt=""><img class="tp tp5" src="최호준.jpg" alt=""><img class="tp tp6" src="이연주.jpg" alt="">
+      </div>
+      <div class="trainer-proof-final">국내외에서 인정받은 실력으로<br>신뢰를 향한 바른 길을 걸어갑니다.</div>
+    </div>
+  </section>
+</div>
+
   <h2 class="trainer-title fade">TRAINERS</h2>
   <p class="trainer-sub fade">헬스보이짐 수내점의 전문 트레이너를 소개합니다.</p>
 
@@ -3210,6 +3233,57 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   data-auth-src="firebase-index.js?v=20260728-mobile-info1"
 ></script>
 
+
+<style id="trainer-goldman-showcase-20260824">
+#trainer{padding-top:0!important;overflow:visible!important}
+#trainer .trainer-story-intro{width:100vw;margin-left:calc(50% - 50vw);background:#050505;color:#fff}
+.trainer-medical-hero{position:relative;height:calc(100svh - 80px);min-height:650px;overflow:hidden;background:#050505}
+.trainer-hero-collage{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.trainer-hero-collage img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(.18) brightness(.62)}
+.trainer-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.62))}
+.trainer-hero-copy{position:absolute;z-index:2;left:2vw;right:2vw;top:50%;transform:translateY(-50%)}
+.trainer-hero-copy h2{margin:0;font-size:clamp(88px,12vw,190px);line-height:.86;letter-spacing:-.065em;font-weight:800}
+.trainer-hero-copy p{max-width:900px;margin:34px 0 0;font-size:clamp(17px,1.6vw,26px);line-height:1.55;font-weight:600}
+.trainer-proof-scene{height:280svh;background:#050505}
+.trainer-proof-sticky{position:sticky;top:80px;height:calc(100svh - 80px);overflow:hidden;background:#050505}
+.trainer-proof-sticky>h2{position:absolute;z-index:1;left:50%;top:15%;width:90%;margin:0;transform:translateX(-50%);color:#151515;text-align:center;font-size:clamp(48px,6vw,94px);line-height:1.25;letter-spacing:-.06em}
+.trainer-proof-portraits .tp{position:absolute;width:min(17vw,250px);height:min(34vh,360px);object-fit:cover;object-position:center top;border-radius:3px;opacity:0;filter:grayscale(.12) brightness(.84);will-change:transform,opacity}
+.tp1{left:2%;top:14%}.tp2{left:20%;bottom:5%}.tp3{left:38%;top:4%}.tp4{right:38%;bottom:4%}.tp5{right:20%;top:7%}.tp6{right:2%;bottom:8%}
+.trainer-proof-final{position:absolute;z-index:4;left:50%;top:50%;width:92%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(46px,5.6vw,88px);line-height:1.25;letter-spacing:-.06em;font-weight:800;opacity:0}
+#trainer>.trainer-title{padding-top:130px!important}
+@media(max-width:768px){
+.trainer-medical-hero{height:calc(100svh - 66px);min-height:620px}.trainer-hero-collage{grid-template-columns:repeat(3,58vw);left:-38vw;width:auto}.trainer-hero-copy{left:20px;right:20px}.trainer-hero-copy h2{font-size:clamp(58px,18vw,82px);line-height:.9}.trainer-hero-copy p{font-size:15px;line-height:1.55}
+.trainer-proof-scene{height:250svh}.trainer-proof-sticky{top:66px;height:calc(100svh - 66px)}.trainer-proof-sticky>h2{top:12%;font-size:clamp(34px,10vw,50px)}
+.trainer-proof-portraits .tp{width:31vw;height:26vh}.tp1{left:-5%;top:21%}.tp2{left:8%;bottom:4%}.tp3{left:34%;top:5%}.tp4{right:35%;bottom:5%}.tp5{right:7%;top:18%}.tp6{right:-7%;bottom:7%}
+.trainer-proof-final{font-size:clamp(32px,10vw,48px);line-height:1.28}
+#trainer>.trainer-title{padding-top:90px!important}
+}
+</style>
+<script id="trainer-goldman-showcase-script-20260824">
+(()=>{
+ const scene=document.querySelector('.trainer-proof-scene'); if(!scene)return;
+ const portraits=[...scene.querySelectorAll('.tp')],heading=scene.querySelector('.trainer-proof-sticky>h2'),final=scene.querySelector('.trainer-proof-final');
+ const clamp=v=>Math.max(0,Math.min(1,v)); let ticking=false;
+ const render=()=>{ticking=false;const r=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-r.top/range);
+ heading.style.opacity=String(clamp(1-(p-.18)/.26));
+ portraits.forEach((img,i)=>{const local=clamp((p-.08-i*.035)/.42),e=local*local*(3-2*local),dir=i<3?-1:1;img.style.opacity=String(e*(1-clamp((p-.63)/.2)));img.style.transform='translate3d('+(dir*(1-e)*42)+'vw,'+((1-e)*42)+'vh,0) scale('+(0.8+e*.2)+')'});
+ const fp=clamp((p-.58)/.22);final.style.opacity=String(fp);final.style.transform='translate(-50%,calc(-50% + '+((1-fp)*55)+'px))'};
+ const req=()=>{if(ticking)return;ticking=true;requestAnimationFrame(render)};addEventListener('scroll',req,{passive:true});addEventListener('resize',req);render();
+})();
+</script>
+<style id="facility-mobile-clean-entry-20260824">
+@media(max-width:768px){
+ #facility-title-scroll{height:100svh!important;min-height:100svh!important}
+ #facility-title-scroll .facility-photo-takeover,
+ #facility-title-scroll .facility-photo-copy{display:none!important}
+ #facility{margin-top:0!important}
+ body.facility-handoff-active #facility-title-scroll .facility-title-sticky{position:sticky!important;inset:auto!important}
+ #facility.facility-handoff-active #facilityTour .img_inner{position:sticky!important;inset:auto!important;top:0!important;width:100%!important;height:100svh!important}
+ #facility.facility-handoff-active #facilityTour .txt_box{visibility:visible!important}
+}
+#facilityTour .img_box>li.facility-bg,
+#facilityTour .img_box>li.facility-bg.on{top:0!important;left:0!important;transform:none!important}
+</style>
 </body>
 </html>
 

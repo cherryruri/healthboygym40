@@ -3343,3 +3343,17 @@ body.facility-gallery-open{overflow:hidden!important}
  },true);
 })();
 </script>
+
+
+<script id="facility-gallery-505-close-fix">
+(function(){
+ document.addEventListener('click',function(event){
+  var target=event.target;
+  var closeButton=target&&target.closest?target.closest('.facility-photo-modal .facility-modal-close'):null;
+  if(!closeButton)return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true,cancelable:true}));
+ },true);
+})();
+</script>

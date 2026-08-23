@@ -3559,496 +3559,91 @@ body.facility-gallery-open{overflow:hidden!important}
 })();
 </script>
 
-          
-<!-- Facility title scroll transition: 2026-08-24 -->
-<style id="facility-title-scroll-style">
-  #facility-title-scroll{position:relative;z-index:7;height:175vh;min-height:1100px;background:#fff;color:#080808;overflow:clip}
-  #facility-title-scroll .facility-title-sticky{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;background:#fff}
-  #facility-title-scroll .facility-title-copy{position:absolute;left:50%;top:50%;margin:0;white-space:nowrap;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;font-size:clamp(128px,18vw,340px);font-weight:800;line-height:.9;letter-spacing:-.075em;color:#080808;transform-origin:50% 50%;will-change:transform,opacity,filter;backface-visibility:hidden}
-  @media (max-width:768px){
-    #facility-title-scroll{height:155svh;min-height:820px}
-    #facility-title-scroll .facility-title-copy{font-size:clamp(88px,25vw,150px);letter-spacing:-.08em}
-  }
-  @media (prefers-reduced-motion:reduce){
-    #facility-title-scroll{height:100svh;min-height:620px}
-    #facility-title-scroll .facility-title-copy{font-size:clamp(48px,9vw,150px)!important;transform:translate3d(-50%,-50%,0)!important;opacity:1!important;filter:none!important}
+<!-- Unified facility transition and mobile video behavior: 2026-08-24 -->
+<style id="unified-facility-transition-style">
+  .pt-to-facility-transition{display:none!important;height:0!important;margin:0!important;background:none!important}
+  #facility-title-scroll{position:relative;z-index:7;height:220vh;min-height:1500px;margin:0;background:#fff;color:#080808;overflow:clip}
+  #facility-title-scroll .facility-title-sticky{position:sticky;top:0;height:100svh;overflow:hidden;background:#fff;isolation:isolate}
+  #facility-title-scroll .facility-photo-takeover{position:absolute;z-index:1;left:50%;top:50%;width:100vw;height:100svh;background:#111 url("테라스존사진1.jpg") center/cover no-repeat;transform-origin:center;will-change:transform,opacity,border-radius;box-shadow:0 28px 90px rgba(0,0,0,.18)}
+  #facility-title-scroll .facility-title-copy{position:absolute;z-index:3;left:50%;top:50%;margin:0;white-space:nowrap;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;font-size:clamp(150px,22vw,420px);font-weight:700;line-height:.82;letter-spacing:-.085em;color:#050505;transform-origin:center;will-change:transform,opacity,filter}
+  #facility-title-scroll .facility-photo-copy{position:absolute;z-index:4;left:50%;top:50%;width:50%;padding-right:7vw;box-sizing:border-box;color:#fff;opacity:0;filter:blur(12px);text-shadow:0 2px 20px rgba(0,0,0,.28);pointer-events:none}
+  #facility-title-scroll .facility-photo-copy h2{margin:0;font-size:42px;line-height:1.14;font-weight:800;letter-spacing:-.055em;color:#fff}
+  #facility-title-scroll .facility-photo-copy .pl{margin:14px 0 20px;font-size:16px;line-height:1.64;font-weight:600;letter-spacing:-.025em;color:#fff}
+  #facility-title-scroll .facility-photo-copy .facility-view-btn{pointer-events:auto}
+  #facility{position:relative!important;z-index:6!important;margin-top:-100svh!important}
+  @media(max-width:768px){
+    #facility-title-scroll{height:190svh;min-height:1180px}
+    #facility-title-scroll .facility-title-copy{font-size:clamp(88px,25vw,145px)}
+    #facility-title-scroll .facility-photo-copy{left:22px;right:22px;top:auto;bottom:11svh;width:auto;padding:0}
+    #facility-title-scroll .facility-photo-copy h2{font-size:clamp(28px,8vw,40px)}
+    #facility-title-scroll .facility-photo-copy .pl{margin-top:12px;font-size:15px;line-height:1.62}
+    #ptReasons .pt-reason-card,#ptReasons .pt-reason-card video{aspect-ratio:2/3!important}
+    #ptReasons .pt-reason-card video{width:100%!important;height:100%!important;object-fit:cover!important;transition:transform .5s ease,filter .5s ease!important}
+    #ptReasons .pt-reason-card.swiper-slide-prev video{transform:perspective(650px) rotateY(20deg) scale(.95)!important;transform-origin:100% 50%!important;filter:brightness(.74)!important}
+    #ptReasons .pt-reason-card.swiper-slide-next video{transform:perspective(650px) rotateY(-20deg) scale(.95)!important;transform-origin:0 50%!important;filter:brightness(.74)!important}
+    #ptReasons .pt-reason-card.swiper-slide-active video{transform:none!important;filter:none!important}
+    body.mobile-hero-docking .hero-video-frame{position:fixed!important;z-index:18!important;margin:0!important;overflow:hidden!important;box-shadow:0 18px 44px rgba(0,0,0,.16)!important;will-change:left,top,width,height,border-radius,opacity!important}
+    body.mobile-hero-docked .hero-video-frame{visibility:hidden!important;pointer-events:none!important}
+    body.mobile-hero-docking .hero-video-frame video{width:100%!important;height:100%!important;object-fit:cover!important}
   }
 </style>
-<script id="facility-title-scroll-script">
+<script id="unified-facility-transition-script">
 (function(){
-  if(document.getElementById("facility-title-scroll")) return;
-  var anchor=document.querySelector(".pt-to-facility-transition")||document.querySelector("#facility")||document.querySelector(".facility-section");
-  if(!anchor) return;
+  var anchor=document.querySelector(".pt-to-facility-transition")||document.getElementById("facility");
+  var facility=document.getElementById("facility");
+  if(!anchor||!facility||document.getElementById("facility-title-scroll")) return;
   var scene=document.createElement("section");
   scene.id="facility-title-scroll";
   scene.setAttribute("aria-label","센터 시설 소개");
-  scene.innerHTML='<div class="facility-title-sticky"><h2 class="facility-title-copy">시설, 얼마나 좋길래?</h2></div>';
+  scene.innerHTML='<div class="facility-title-sticky"><div class="facility-photo-takeover" aria-hidden="true"></div><h2 class="facility-title-copy">시설, 얼마나 좋길래?</h2><div class="facility-photo-copy"></div></div>';
   anchor.parentNode.insertBefore(scene,anchor);
-  var copy=scene.querySelector(".facility-title-copy");
-  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)");
-  var ticking=false;
-  function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
-  function ease(v){return 1-Math.pow(1-v,3)}
-  function render(){
-    ticking=false;
-    if(reduce.matches) return;
-    var rect=scene.getBoundingClientRect();
-    var distance=Math.max(1,scene.offsetHeight-window.innerHeight);
-    var p=clamp(-rect.top/distance,0,1);
-    var move=ease(clamp(p/.66,0,1));
-    var fade=clamp((p-.70)/.25,0,1);
-    var mobile=window.innerWidth<=768;
-    var startScale=mobile?1.34:1.42;
-    var endScale=mobile?.38:.47;
-    var scale=startScale+(endScale-startScale)*move;
-    var y=(mobile?34:38)*(1-move)-fade*5;
-    copy.style.transform='translate3d(-50%,calc(-50% + '+y+'vh),0) scale('+scale+')';
-    copy.style.opacity=String(1-fade);
-    copy.style.filter='blur('+(fade*18)+'px)';
+  var title=scene.querySelector(".facility-title-copy"),photo=scene.querySelector(".facility-photo-takeover"),copy=scene.querySelector(".facility-photo-copy");
+  var firstText=facility.querySelector(".txt_box>li");
+  if(firstText){
+    var h=firstText.querySelector("h2"),pl=firstText.querySelector(".pl"),btn=firstText.querySelector(".facility-view-btn");
+    copy.innerHTML=(h?h.outerHTML:"")+(pl?pl.outerHTML:"")+(btn?btn.outerHTML:"");
+    var cloneBtn=copy.querySelector(".facility-view-btn");
+    if(cloneBtn&&btn) cloneBtn.addEventListener("click",function(){btn.click()});
   }
-  function requestRender(){if(!ticking){ticking=true;requestAnimationFrame(render)}}
-  addEventListener("scroll",requestRender,{passive:true});
-  addEventListener("resize",requestRender,{passive:true});
-  reduce.addEventListener&&reduce.addEventListener("change",requestRender);
-  render();
-})();
-</script>
-
-          
-<!-- Facility title transition v2: full-screen Goldman-style choreography -->
-<style id="facility-title-scroll-v2-style">
-  #facility-title-scroll{height:210vh!important;min-height:1450px!important;margin:0!important;background:#fff!important}
-  #facility-title-scroll .facility-title-sticky{height:100vh!important;height:100svh!important;background:#fff!important}
-  #facility-title-scroll .facility-title-copy{top:50%!important;font-size:clamp(150px,22vw,420px)!important;font-weight:700!important;line-height:.82!important;letter-spacing:-.085em!important;color:#050505!important;max-width:none!important}
-  @media(max-width:768px){
-    #facility-title-scroll{height:185svh!important;min-height:1120px!important}
-    #facility-title-scroll .facility-title-copy{font-size:clamp(96px,31vw,180px)!important}
-  }
-</style>
-<script id="facility-title-scroll-v2-script">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  if(!scene||scene.dataset.motionV2) return;
-  scene.dataset.motionV2="true";
-  var copy=scene.querySelector(".facility-title-copy");
-  var frame=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
-  function draw(){
-    frame=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-window.innerHeight);
-    var p=clamp(-r.top/travel);
-    var settle=smooth(clamp(p/.58));
-    var exit=smooth(clamp((p-.68)/.27));
-    var mobile=innerWidth<=768;
-    var fromScale=mobile?1.48:1.62;
-    var toScale=mobile?.27:.36;
-    var scale=fromScale+(toScale-fromScale)*settle;
-    var fromY=mobile?43:48;
-    var y=fromY*(1-settle)-exit*8;
-    copy.style.setProperty("transform","translate3d(-50%,calc(-50% + "+y+"vh),0) scale("+scale+")","important");
-    copy.style.setProperty("opacity",String(1-exit),"important");
-    copy.style.setProperty("filter","blur("+(exit*24)+"px)","important");
-  }
-  function update(){if(!frame)frame=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Facility photo takeover: 2026-08-24 -->
-<style id="facility-photo-takeover-style">
-  .pt-to-facility-transition{display:none!important;height:0!important;margin:0!important;background:none!important}
-  #facility-title-scroll .facility-title-sticky{isolation:isolate}
-  #facility-title-scroll .facility-title-copy{z-index:2}
-  #facility-title-scroll .facility-photo-takeover{position:absolute;z-index:1;left:50%;top:50%;width:100vw;height:100svh;background:#111 url("테라스존사진1.jpg") center center/cover no-repeat;transform-origin:center center;will-change:transform,border-radius,opacity;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.16);pointer-events:none}
-  @media(max-width:768px){
-    #facility-title-scroll .facility-photo-takeover{background-position:center center}
-  }
-</style>
-<script id="facility-photo-takeover-script">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  var sticky=scene&&scene.querySelector(".facility-title-sticky");
-  if(!scene||!sticky||scene.dataset.photoTakeover) return;
-  scene.dataset.photoTakeover="true";
-  var photo=document.createElement("div");
-  photo.className="facility-photo-takeover";
-  photo.setAttribute("aria-hidden","true");
-  sticky.insertBefore(photo,sticky.firstChild);
   var raf=0;
   function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
+  function smooth(v){return v*v*v*(v*(v*6-15)+10)}
   function draw(){
     raf=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-innerHeight);
-    var p=clamp(-r.top/travel);
-    var reveal=smooth(clamp((p-.43)/.57));
-    var mobile=innerWidth<=768;
-    var startScale=mobile?.62:.42;
-    var scale=startScale+(1-startScale)*reveal;
-    var startY=mobile?54:58;
-    var y=startY*(1-reveal);
-    var radius=(mobile?24:32)*(1-reveal);
-    photo.style.transform="translate3d(-50%,calc(-50% + "+y+"vh),0) scale("+scale+")";
-    photo.style.borderRadius=radius+"px";
-    photo.style.opacity=String(clamp((p-.38)/.1));
-    photo.style.boxShadow="0 "+(24*(1-reveal))+"px "+(80*(1-reveal))+"px rgba(0,0,0,"+(.16*(1-reveal))+")";
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Facility transition timing v4: photo rises while title fades -->
-<script id="facility-transition-timing-v4">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  var title=scene&&scene.querySelector(".facility-title-copy");
-  var photo=scene&&scene.querySelector(".facility-photo-takeover");
-  if(!scene||!title||!photo||scene.dataset.timingV4) return;
-  scene.dataset.timingV4="true";
-  var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
-  function draw(){
-    raf=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-innerHeight);
-    var p=clamp(-r.top/travel);
-    var mobile=innerWidth<=768;
-
-    var settle=smooth(clamp(p/.48));
-    var overlap=smooth(clamp((p-.43)/.39));
-    var fromScale=mobile?1.48:1.62;
-    var toScale=mobile?.27:.36;
-    var titleScale=fromScale+(toScale-fromScale)*settle;
-    var titleY=(mobile?43:48)*(1-settle)-overlap*7;
-    title.style.setProperty("transform","translate3d(-50%,calc(-50% + "+titleY+"vh),0) scale("+titleScale+")","important");
-    title.style.setProperty("opacity",String(1-overlap),"important");
-    title.style.setProperty("filter","blur("+(overlap*24)+"px)","important");
-
-    var reveal=overlap;
-    var photoStart=mobile?.62:.42;
-    var photoScale=photoStart+(1-photoStart)*reveal;
-    var photoY=(mobile?54:58)*(1-reveal);
-    var radius=(mobile?24:32)*(1-reveal);
-    photo.style.setProperty("transform","translate3d(-50%,calc(-50% + "+photoY+"vh),0) scale("+photoScale+")","important");
-    photo.style.setProperty("border-radius",radius+"px","important");
-    photo.style.setProperty("opacity",String(smooth(clamp((p-.39)/.18))),"important");
-    photo.style.setProperty("box-shadow","0 "+(24*(1-reveal))+"px "+(80*(1-reveal))+"px rgba(0,0,0,"+(.16*(1-reveal))+")","important");
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Facility transition timing v5: fade begins at first photo appearance -->
-<script id="facility-transition-timing-v5">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  var title=scene&&scene.querySelector(".facility-title-copy");
-  var photo=scene&&scene.querySelector(".facility-photo-takeover");
-  if(!scene||!title||!photo||scene.dataset.timingV5) return;
-  scene.dataset.timingV5="true";
-  var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
-  function draw(){
-    raf=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-innerHeight);
-    var p=clamp(-r.top/travel);
-    var mobile=innerWidth<=768;
-    var settle=smooth(clamp(p/.48));
-    var transition=smooth(clamp((p-.39)/.43));
-    var fromScale=mobile?1.48:1.62;
-    var toScale=mobile?.27:.36;
-    var titleScale=fromScale+(toScale-fromScale)*settle;
-    var titleY=(mobile?43:48)*(1-settle)-transition*7;
-    title.style.setProperty("transform","translate3d(-50%,calc(-50% + "+titleY+"vh),0) scale("+titleScale+")","important");
-    title.style.setProperty("opacity",String(1-transition),"important");
-    title.style.setProperty("filter","blur("+(transition*24)+"px)","important");
-
-    var photoStart=mobile?.62:.42;
-    var photoScale=photoStart+(1-photoStart)*transition;
-    var photoY=(mobile?54:58)*(1-transition);
-    var radius=(mobile?24:32)*(1-transition);
-    photo.style.setProperty("transform","translate3d(-50%,calc(-50% + "+photoY+"vh),0) scale("+photoScale+")","important");
-    photo.style.setProperty("border-radius",radius+"px","important");
-    photo.style.setProperty("opacity",String(transition),"important");
-    photo.style.setProperty("box-shadow","0 "+(24*(1-transition))+"px "+(80*(1-transition))+"px rgba(0,0,0,"+(.16*(1-transition))+")","important");
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Merge photo takeover into the first facility story -->
-<style id="facility-takeover-merge-style">
-  #facility{position:relative!important;z-index:8!important;margin-top:-100vh!important;margin-top:-100svh!important}
-  #facility .pt-to-facility-transition{display:none!important}
-  @media(max-width:768px){#facility{margin-top:-100svh!important}}
-</style>
-
-          
-<!-- Facility takeover merge v2: keep duplicate slide behind and carry its copy forward -->
-<style id="facility-takeover-merge-v2-style">
-  #facility{z-index:6!important}
-  #facility-title-scroll{z-index:7!important}
-  #facility-title-scroll .facility-photo-copy{position:absolute;z-index:3;right:7vw;top:50%;width:min(560px,43vw);color:#fff;transform:translate3d(0,-40%,0);opacity:0;filter:blur(12px);will-change:transform,opacity,filter;pointer-events:none;text-shadow:0 2px 20px rgba(0,0,0,.28)}
-  #facility-title-scroll .facility-photo-copy h2{margin:0 0 18px;font-size:clamp(34px,3.3vw,62px);line-height:1.12;letter-spacing:-.055em;color:#fff}
-  #facility-title-scroll .facility-photo-copy p{margin:0;font-size:clamp(16px,1.25vw,21px);line-height:1.75;letter-spacing:-.025em;color:rgba(255,255,255,.92);word-break:keep-all}
-  @media(max-width:768px){
-    #facility-title-scroll .facility-photo-copy{left:24px;right:24px;top:auto;bottom:11svh;width:auto;transform:translate3d(0,24px,0)}
-    #facility-title-scroll .facility-photo-copy h2{margin-bottom:12px;font-size:clamp(28px,8vw,40px)}
-    #facility-title-scroll .facility-photo-copy p{font-size:15px;line-height:1.62}
-  }
-</style>
-<script id="facility-takeover-merge-v2-script">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  var sticky=scene&&scene.querySelector(".facility-title-sticky");
-  if(!scene||!sticky||scene.dataset.mergeV2) return;
-  scene.dataset.mergeV2="true";
-  var copy=document.createElement("div");
-  copy.className="facility-photo-copy";
-  copy.innerHTML='<h2>수내동 유일 야외 테라스존</h2><p>운동 후 숨을 고르고 회복하는 시간까지 생각한 헬스보이짐 수내점만의 특별한 공간입니다.<br>답답한 실내를 벗어나 쾌적하게 머물 수 있는 테라스가 운동 경험의 완성도를 높입니다.</p>';
-  sticky.appendChild(copy);
-  var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
-  function draw(){
-    raf=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-innerHeight);
-    var p=clamp(-r.top/travel);
-    var show=smooth(clamp((p-.72)/.18));
-    var mobile=innerWidth<=768;
-    copy.style.opacity=String(show);
-    copy.style.filter="blur("+((1-show)*12)+"px)";
-    copy.style.transform=mobile?"translate3d(0,"+((1-show)*24)+"px,0)":"translate3d(0,calc(-40% + "+((1-show)*38)+"px),0)";
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Facility transition timing v6: smaller, slower photo entrance -->
-<style id="facility-photo-seamless-style">
-  #facility .img_inner,#facility .img_box{background:#111!important;border:0!important;outline:0!important}
-  #facility .img_box .facility-bg{inset:-2px!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;border:0!important;outline:0!important;box-shadow:none!important;transition:opacity 1.15s ease,transform 1.2s cubic-bezier(.22,.61,.36,1)!important}
-  #facility .img_box .facility-bg span{inset:-2px!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;border:0!important;outline:0!important;transition:opacity 1.05s ease!important}
-</style>
-<script id="facility-transition-timing-v6">
-(function(){
-  var scene=document.getElementById("facility-title-scroll");
-  var title=scene&&scene.querySelector(".facility-title-copy");
-  var photo=scene&&scene.querySelector(".facility-photo-takeover");
-  if(!scene||!title||!photo||scene.dataset.timingV6) return;
-  scene.dataset.timingV6="true";
-  var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smoother(v){return v*v*v*(v*(v*6-15)+10)}
-  function draw(){
-    raf=0;
-    var r=scene.getBoundingClientRect();
-    var travel=Math.max(1,scene.offsetHeight-innerHeight);
-    var p=clamp(-r.top/travel);
-    var mobile=innerWidth<=768;
-    var settle=smoother(clamp(p/.46));
-    var transition=smoother(clamp((p-.34)/.58));
-    var fromScale=mobile?1.48:1.62;
-    var toScale=mobile?.27:.36;
-    var titleScale=fromScale+(toScale-fromScale)*settle;
-    var titleY=(mobile?43:48)*(1-settle)-transition*7;
-    title.style.setProperty("transform","translate3d(-50%,calc(-50% + "+titleY+"vh),0) scale("+titleScale+")","important");
-    title.style.setProperty("opacity",String(1-transition),"important");
-    title.style.setProperty("filter","blur("+(transition*24)+"px)","important");
-    var photoStart=mobile?.34:.24;
-    var photoScale=photoStart+(1-photoStart)*transition;
-    var photoY=(mobile?70:68)*(1-transition);
-    var radius=(mobile?22:28)*(1-transition);
-    photo.style.setProperty("transform","translate3d(-50%,calc(-50% + "+photoY+"vh),0) scale("+photoScale+")","important");
-    photo.style.setProperty("border-radius",radius+"px","important");
-    photo.style.setProperty("opacity",String(smoother(clamp((p-.33)/.17))),"important");
-    photo.style.setProperty("box-shadow","0 "+(28*(1-transition))+"px "+(90*(1-transition))+"px rgba(0,0,0,"+(.18*(1-transition))+")","important");
-  }
-  function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});
-  addEventListener("resize",update,{passive:true});
-  draw();
-})();
-</script>
-
-          
-<!-- Mobile facility and trainer-video corrections -->
-<style id="mobile-facility-video-fix">
-@media(max-width:768px){
-  #facility .img_box .facility-bg{inset:auto!important;top:50%!important;left:50%!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;min-height:calc(100svh + 4px)!important;border:0!important;transform-origin:center!important}
-  #facility .img_box .facility-bg span{inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;background-size:cover!important;background-position:center center!important}
-  #facility .img_inner,#facility .img_box{width:100%!important;height:100svh!important;min-height:100svh!important}
-  #ptReasons{overflow:hidden!important;padding-bottom:22px!important}
-  #ptReasons .pt-reasons-stage,#ptReasons .pt-reasons-swiper,#ptReasons .pt-reasons-rail{height:min(54svh,456px)!important;min-height:420px!important}
-  #ptReasons .pt-reason-card{border-radius:18px!important;box-shadow:0 18px 42px rgba(0,0,0,.14)!important}
-  #ptReasons .pt-reason-card.swiper-slide-active{width:min(79vw,308px)!important;height:min(52svh,438px)!important}
-  #ptReasons .pt-reason-card video{width:100%!important;height:100%!important;object-fit:cover!important}
-}
-</style>
-
-          
-<!-- Desktop facility centering + mobile trainer 3D/aspect fixes -->
-<style id="desktop-facility-mobile-video-fix-v2">
-  #facility .img_box .facility-bg{inset:auto!important;top:50%!important;left:50%!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;min-height:calc(100vh + 4px)!important;transform-origin:center center!important}
-  #facility .img_box .facility-bg span{inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;background-size:cover!important;background-position:center center!important}
-  @media(max-width:768px){
-    #ptReasons .pt-reason-card{aspect-ratio:2/3!important;height:auto!important;transform-style:preserve-3d!important;backface-visibility:hidden!important}
-    #ptReasons .pt-reason-card video{display:block!important;width:100%!important;height:100%!important;aspect-ratio:2/3!important;object-fit:cover!important;transform-style:preserve-3d!important;transition:transform .55s cubic-bezier(.22,.61,.36,1),filter .55s ease!important}
-    #ptReasons .pt-reason-card.swiper-slide-active{width:min(79vw,308px)!important;height:auto!important;aspect-ratio:2/3!important}
-    #ptReasons .pt-reason-card.swiper-slide-active video{transform:perspective(900px) rotateY(0deg) scale(1)!important;filter:brightness(1)!important}
-    #ptReasons .pt-reason-card.swiper-slide-prev video{transform:perspective(620px) rotateY(24deg) scale(.94)!important;transform-origin:100% 50%!important;filter:brightness(.72) saturate(.88)!important}
-    #ptReasons .pt-reason-card.swiper-slide-next video{transform:perspective(620px) rotateY(-24deg) scale(.94)!important;transform-origin:0 50%!important;filter:brightness(.72) saturate(.88)!important}
-    #ptReasons .pt-reason-card:not(.swiper-slide-active):not(.swiper-slide-prev):not(.swiper-slide-next) video{filter:brightness(.52) saturate(.72)!important}
-  }
-</style>
-<script id="mobile-trainer-aspect-guard">
-(function(){
-  var stage=document.querySelector("#ptReasons");
-  if(!stage||stage.dataset.mobileAspectGuard) return;
-  stage.dataset.mobileAspectGuard="true";
-  function lock(){
-    if(innerWidth>768) return;
-    stage.querySelectorAll(".pt-reason-card").forEach(function(card){
-      card.style.setProperty("aspect-ratio","2 / 3","important");
-      card.style.setProperty("height","auto","important");
-      var video=card.querySelector("video");
-      if(video){
-        video.style.setProperty("aspect-ratio","2 / 3","important");
-        video.style.setProperty("height","100%","important");
-        video.style.setProperty("object-fit","cover","important");
-      }
-    });
-  }
-  var timer=0;
-  function schedule(){clearTimeout(timer);timer=setTimeout(lock,30)}
-  new MutationObserver(schedule).observe(stage,{attributes:true,subtree:true,attributeFilter:["class"]});
-  addEventListener("resize",schedule,{passive:true});
-  addEventListener("scroll",schedule,{passive:true});
-  lock();
-})();
-</script>
-
-          
-<!-- Seamless first facility crossfade + unified facility copy -->
-<style id="facility-first-crossfade-copy-style">
-  #facility .img_box{background:#111!important}
-  #facility .facility-bg.terrace,#facility .facility-bg.freeweight{will-change:opacity,transform!important;transition:none!important}
-  #facility-title-scroll .facility-photo-copy{left:50%!important;right:auto!important;top:50%!important;bottom:auto!important;width:50%!important;padding:0 7vw 0 0!important;box-sizing:border-box!important;transform:translate3d(0,-50%,0);text-align:left!important}
-  #facility-title-scroll .facility-photo-copy h2{margin:0!important;font-size:42px!important;line-height:1.14!important;font-weight:800!important;letter-spacing:-.055em!important}
-  #facility-title-scroll .facility-photo-copy p{margin:14px 0 20px!important;font-size:16px!important;line-height:1.64!important;font-weight:600!important;letter-spacing:-.025em!important}
-  @media(max-width:768px){
-    #facility-title-scroll .facility-photo-copy{left:22px!important;right:22px!important;top:auto!important;bottom:11svh!important;width:auto!important;padding:0!important;transform:translate3d(0,24px,0)}
-    #facility-title-scroll .facility-photo-copy h2{font-size:clamp(28px,8vw,40px)!important;line-height:1.14!important}
-    #facility-title-scroll .facility-photo-copy p{margin:12px 0 0!important;font-size:15px!important;line-height:1.62!important}
-  }
-</style>
-<script id="facility-first-crossfade-v2-script">
-(function(){
-  var facility=document.getElementById("facility");
-  var terrace=facility&&facility.querySelector(".facility-bg.terrace");
-  var freeweight=facility&&facility.querySelector(".facility-bg.freeweight");
-  if(!facility||!terrace||!freeweight||facility.dataset.firstCrossfadeV2) return;
-  facility.dataset.firstCrossfadeV2="true";
-  var raf=0;
-  function clamp(v){return Math.max(0,Math.min(1,v))}
-  function smooth(v){return v*v*(3-2*v)}
-  function draw(){
-    raf=0;
-    var local=-facility.getBoundingClientRect().top/Math.max(1,innerHeight);
-    if(local<-.15){terrace.style.removeProperty("opacity");freeweight.style.removeProperty("opacity");return}
-    if(local<=1.22){
-      var mix=smooth(clamp((local-.48)/.62));
-      terrace.style.setProperty("opacity",String(1-mix),"important");
-      freeweight.style.setProperty("opacity",String(mix),"important");
-      terrace.style.setProperty("transform","translate(-50%,-50%) scale("+(1+.025*mix)+")","important");
-      freeweight.style.setProperty("transform","translate(-50%,-50%) scale("+(1.06-.06*mix)+")","important");
-    }else{
-      terrace.style.removeProperty("opacity");freeweight.style.removeProperty("opacity");
-      terrace.style.removeProperty("transform");freeweight.style.removeProperty("transform");
-    }
+    var r=scene.getBoundingClientRect(),travel=Math.max(1,scene.offsetHeight-innerHeight),p=clamp(-r.top/travel),mobile=innerWidth<=768;
+    var settle=smooth(clamp(p/.36)),reveal=smooth(clamp((p-.34)/.58)),desc=smooth(clamp((p-.78)/.14));
+    var t0=mobile?1.28:1.58,t1=mobile?.32:.36,ts=t0+(t1-t0)*settle,ty=(mobile?40:48)*(1-settle)-reveal*7;
+    title.style.transform="translate3d(-50%,calc(-50% + "+ty+"vh),0) scale("+ts+")";
+    title.style.opacity=String(1-reveal);title.style.filter="blur("+(reveal*24)+"px)";
+    var ps0=mobile?.30:.22,ps=ps0+(1-ps0)*reveal,py=(mobile?70:68)*(1-reveal);
+    photo.style.transform="translate3d(-50%,calc(-50% + "+py+"vh),0) scale("+ps+")";
+    photo.style.opacity=String(smooth(clamp((p-.33)/.15)));photo.style.borderRadius=((mobile?22:28)*(1-reveal))+"px";
+    copy.style.opacity=String(desc);copy.style.filter="blur("+((1-desc)*12)+"px)";
+    copy.style.transform=mobile?"translate3d(0,"+((1-desc)*24)+"px,0)":"translate3d(0,calc(-50% + "+((1-desc)*38)+"px),0)";
   }
   function update(){if(!raf)raf=requestAnimationFrame(draw)}
   addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});draw();
 })();
 </script>
-
-          
-<!-- Make terrace-to-freeweight use the same class transition as every facility slide -->
-<style id="facility-first-native-transition-style">
-  #facility .facility-bg.terrace,#facility .facility-bg.freeweight{transition:opacity .45s ease,transform .7s cubic-bezier(.165,.84,.44,1)!important}
-</style>
-<script id="facility-first-native-transition-script">
+<script id="unified-mobile-hero-dock-script">
 (function(){
-  var facility=document.getElementById("facility");
-  var terrace=facility&&facility.querySelector(".facility-bg.terrace");
-  var freeweight=facility&&facility.querySelector(".facility-bg.freeweight");
-  if(!facility||!terrace||!freeweight||facility.dataset.firstNativeTransition) return;
-  facility.dataset.firstNativeTransition="true";
-  var raf=0;
+  var frame=document.querySelector(".hero-video-frame"),reasons=document.getElementById("ptReasons");
+  if(!frame||!reasons||document.body.dataset.unifiedMobileDock) return;
+  document.body.dataset.unifiedMobileDock="true";var raf=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}function ease(v){return v*v*(3-2*v)}
+  function reset(){document.body.classList.remove("mobile-hero-docking","mobile-hero-docked");["left","top","width","height","border-radius","opacity","visibility"].forEach(function(k){frame.style.removeProperty(k)})}
   function draw(){
-    raf=0;
-    var local=-facility.getBoundingClientRect().top/Math.max(1,innerHeight);
-    if(local<-.15||local>1.42) return;
-    terrace.style.removeProperty("opacity");terrace.style.removeProperty("transform");
-    freeweight.style.removeProperty("opacity");freeweight.style.removeProperty("transform");
-    var next=local>=.72;
-    terrace.classList.toggle("on",!next);
-    freeweight.classList.toggle("on",next);
+    raf=0;if(innerWidth>768){reset();return}
+    var target=reasons.querySelector(".pt-reason-card.swiper-slide-active")||reasons.querySelector(".pt-reason-card");if(!target)return;
+    var tr=target.getBoundingClientRect(),end=Math.max(520,reasons.offsetTop-innerHeight*.42),p=ease(clamp(scrollY/end));
+    document.body.classList.add("mobile-hero-docking");document.body.classList.toggle("mobile-hero-docked",p>=.995);
+    frame.style.setProperty("left",(tr.left*p)+"px","important");frame.style.setProperty("top",(tr.top*p)+"px","important");
+    frame.style.setProperty("width",(innerWidth+(tr.width-innerWidth)*p)+"px","important");frame.style.setProperty("height",(innerHeight+(tr.height-innerHeight)*p)+"px","important");
+    frame.style.setProperty("border-radius",(18*p)+"px","important");frame.style.setProperty("opacity",String(p>.9?1-(p-.9)*10:1),"important");
+    frame.style.setProperty("visibility",p>=.995?"hidden":"visible","important");
   }
   function update(){if(!raf)raf=requestAnimationFrame(draw)}
-  addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});draw();
+  addEventListener("scroll",update,{passive:true});addEventListener("resize",update,{passive:true});update();
 })();
 </script>
 
-          
-<!-- Native first facility sync + mobile hero-to-center-video morph -->
-<style id="mobile-hero-dock-facility-sync-style">
-#facility .facility-bg.terrace,#facility .facility-bg.freeweight{transition:opacity .45s ease,transform .7s cubic-bezier(.165,.84,.44,1)!important}
-@media(max-width:768px){
-body.mobile-hero-docking .hero-video-frame{position:fixed!important;z-index:18!important;margin:0!important;overflow:hidden!important;will-change:left,top,width,height,border-radius,opacity!important;box-shadow:0 18px 44px rgba(0,0,0,.16)!important}
-body.mobile-hero-docked .hero-video-frame{visibility:hidden!important;pointer-events:none!important}
-body.mobile-hero-docking .hero-video-frame video{width:100%!important;height:100%!important;object-fit:cover!important}
-}
-</style>
-<script id="native-facility-sync-mobile-hero-dock-script">
-(function(){
-var facility=document.getElementById("facility"),terrace=facility&&facility.querySelector(".facility-bg.terrace"),freeweight=facility&&facility.querySelector(".facility-bg.freeweight"),texts=facility&&facility.querySelectorAll(".txt_box>li"),first=texts&&texts[0],second=texts&&texts[1];
-if(facility&&terrace&&freeweight&&first&&second&&!facility.dataset.firstStateSyncV2){
-facility.dataset.firstStateSyncV2="true";var facilityRaf=0;
-function facilitySync(){facilityRaf=0;terrace.style.removeProperty("opacity");terrace.style.removeProperty("transform");freeweight.style.removeProperty("opacity");freeweight.style.removeProperty("transform");if(first.classList.contains("on")){terrace.classList.add("on");freeweight.classList.remove("on")}else if(second.classList.contains("on")){terrace.classList.remove("on");freeweight.classList.add("on")}}
-function requestFacility(){if(!facilityRaf)facilityRaf=requestAnimationFrame(facilitySync)}
-new MutationObserver(requestFacility).observe(first.parentElement,{subtree:true,attributes:true,attributeFilter:["class"]});addEventListener("scroll",requestFacility,{passive:true});facilitySync()}
-var frame=document.querySelector(".hero-video-frame"),reasons=document.getElementById("ptReasons");
-if(!frame||!reasons||document.body.dataset.mobileHeroDock)return;document.body.dataset.mobileHeroDock="true";var dockRaf=0;
-function clamp(v){return Math.max(0,Math.min(1,v))}function ease(v){return v*v*(3-2*v)}
-function resetDock(){document.body.classList.remove("mobile-hero-docking","mobile-hero-docked");["left","top","width","height","border-radius","opacity","visibility"].forEach(function(k){frame.style.removeProperty(k)})}
-function dock(){dockRaf=0;if(innerWidth>768){resetDock();return}var target=reasons.querySelector(".pt-reason-card.swiper-slide-active")||reasons.querySelector(".pt-reason-card");if(!target)return;var tr=target.getBoundingClientRect(),end=Math.max(520,reasons.offsetTop-innerHeight*.42),p=ease(clamp(scrollY/end));document.body.classList.add("mobile-hero-docking");document.body.classList.toggle("mobile-hero-docked",p>=.995);var left=tr.left*p,top=tr.top*p,width=innerWidth+(tr.width-innerWidth)*p,height=innerHeight+(tr.height-innerHeight)*p;frame.style.setProperty("left",left+"px","important");frame.style.setProperty("top",top+"px","important");frame.style.setProperty("width",width+"px","important");frame.style.setProperty("height",height+"px","important");frame.style.setProperty("border-radius",(18*p)+"px","important");frame.style.setProperty("opacity",String(p>.9?1-(p-.9)*10:1),"important");frame.style.setProperty("visibility",p>=.995?"hidden":"visible","important")}
-function requestDock(){if(!dockRaf)dockRaf=requestAnimationFrame(dock)}addEventListener("scroll",requestDock,{passive:true});addEventListener("resize",requestDock,{passive:true});requestDock()
-})();
-</script>

@@ -2965,7 +2965,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     </div>
     <div class="trainer-hero-shade"></div>
     <div class="trainer-hero-copy">
-      <h2>TRAINER STAFF</h2>
+      <h2>Trainer Staff</h2>
       <p>검증된 전문성과 확고한 책임감으로 회원 맞춤 최적의 변화를 완성하는 헬스보이짐 수내점 트레이너 팀입니다.</p>
     </div>
   </section>
@@ -3313,6 +3313,36 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
  .trainer-proof-final{width:68vw!important;font-size:clamp(25px,7.8vw,36px)!important;line-height:1.32!important;padding:0 8px!important}
 }
 </style>
+
+<style id="trainer-goldman-header-flow-20260824">
+.trainer-hero-copy{left:46px!important;right:46px!important;top:39%!important;transform:translateY(-50%)!important}
+.trainer-hero-copy h2{font-size:clamp(92px,10vw,150px)!important;line-height:.9!important;letter-spacing:-.06em!important;text-transform:none!important}
+.trainer-hero-copy p{margin-top:26px!important}
+body.show-trainer-section:not(.trainer-proof-header) header .navbar{
+ background:rgba(5,5,5,.42)!important;backdrop-filter:blur(14px)!important;
+ border-bottom:1px solid rgba(255,255,255,.12)!important
+}
+body.trainer-proof-header header .navbar{background:#fff!important;border-bottom:1px solid #e6e6e6!important}
+body.trainer-proof-header header .logo a,
+body.trainer-proof-header header .menu a,
+body.trainer-proof-header header #loginLink{color:#111!important}
+body.trainer-proof-header header .download-btn{color:#111!important;border-color:rgba(0,0,0,.6)!important}
+body.trainer-proof-header header .mobile-menu-btn{color:#111!important}
+@media(max-width:768px){
+ .trainer-hero-copy{left:20px!important;right:20px!important;top:38%!important}
+ .trainer-hero-copy h2{font-size:clamp(56px,17vw,74px)!important;line-height:.92!important}
+ .trainer-hero-copy p{font-size:14px!important;line-height:1.55!important}
+}
+</style>
+<script id="trainer-goldman-header-flow-script-20260824">
+(()=>{
+ const proof=document.querySelector('.trainer-proof-scene'); if(!proof)return;
+ let ticking=false;
+ const sync=()=>{ticking=false;const r=proof.getBoundingClientRect();document.body.classList.toggle('trainer-proof-header',r.top<=80&&r.bottom>80)};
+ const req=()=>{if(ticking)return;ticking=true;requestAnimationFrame(sync)};
+ addEventListener('scroll',req,{passive:true});addEventListener('resize',req);addEventListener('pageshow',req);req();
+})();
+</script>
 </body>
 </html>
 

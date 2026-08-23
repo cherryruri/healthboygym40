@@ -3527,3 +3527,20 @@ body.facility-gallery-open{overflow:hidden!important}
  },true);
 })();
 </script>
+
+    
+<script id="facility-gallery-direct-close">
+(function(){
+ var modal=document.querySelector('.facility-photo-modal');
+ var oldButton=modal&&modal.querySelector('.facility-modal-close');
+ if(!modal||!oldButton)return;
+ var button=oldButton.cloneNode(true);oldButton.replaceWith(button);
+ function closeNow(event){
+  if(event){event.preventDefault();event.stopImmediatePropagation();}
+  modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('facility-gallery-open');
+ }
+ button.addEventListener('pointerdown',closeNow,true);
+ button.addEventListener('click',closeNow,true);
+})();
+</script>

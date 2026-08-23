@@ -3558,3 +3558,58 @@ body.facility-gallery-open{overflow:hidden!important}
  if(modal&&modal.parentElement!==document.body)document.body.appendChild(modal);
 })();
 </script>
+
+          
+<!-- Facility title scroll transition: 2026-08-24 -->
+<style id="facility-title-scroll-style">
+  #facility-title-scroll{position:relative;z-index:7;height:175vh;min-height:1100px;background:#fff;color:#080808;overflow:clip}
+  #facility-title-scroll .facility-title-sticky{position:sticky;top:0;height:100svh;overflow:hidden;display:grid;place-items:center;background:#fff}
+  #facility-title-scroll .facility-title-copy{position:absolute;left:50%;top:50%;margin:0;white-space:nowrap;font-family:Pretendard,"Noto Sans KR",Arial,sans-serif;font-size:clamp(128px,18vw,340px);font-weight:800;line-height:.9;letter-spacing:-.075em;color:#080808;transform-origin:50% 50%;will-change:transform,opacity,filter;backface-visibility:hidden}
+  @media (max-width:768px){
+    #facility-title-scroll{height:155svh;min-height:820px}
+    #facility-title-scroll .facility-title-copy{font-size:clamp(88px,25vw,150px);letter-spacing:-.08em}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #facility-title-scroll{height:100svh;min-height:620px}
+    #facility-title-scroll .facility-title-copy{font-size:clamp(48px,9vw,150px)!important;transform:translate3d(-50%,-50%,0)!important;opacity:1!important;filter:none!important}
+  }
+</style>
+<script id="facility-title-scroll-script">
+(function(){
+  if(document.getElementById("facility-title-scroll")) return;
+  var anchor=document.querySelector(".pt-to-facility-transition")||document.querySelector("#facility")||document.querySelector(".facility-section");
+  if(!anchor) return;
+  var scene=document.createElement("section");
+  scene.id="facility-title-scroll";
+  scene.setAttribute("aria-label","센터 시설 소개");
+  scene.innerHTML='<div class="facility-title-sticky"><h2 class="facility-title-copy">시설, 얼마나 좋길래?</h2></div>';
+  anchor.parentNode.insertBefore(scene,anchor);
+  var copy=scene.querySelector(".facility-title-copy");
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)");
+  var ticking=false;
+  function clamp(v,a,b){return Math.min(b,Math.max(a,v))}
+  function ease(v){return 1-Math.pow(1-v,3)}
+  function render(){
+    ticking=false;
+    if(reduce.matches) return;
+    var rect=scene.getBoundingClientRect();
+    var distance=Math.max(1,scene.offsetHeight-window.innerHeight);
+    var p=clamp(-rect.top/distance,0,1);
+    var move=ease(clamp(p/.66,0,1));
+    var fade=clamp((p-.70)/.25,0,1);
+    var mobile=window.innerWidth<=768;
+    var startScale=mobile?1.34:1.42;
+    var endScale=mobile?.38:.47;
+    var scale=startScale+(endScale-startScale)*move;
+    var y=(mobile?34:38)*(1-move)-fade*5;
+    copy.style.transform='translate3d(-50%,calc(-50% + '+y+'vh),0) scale('+scale+')';
+    copy.style.opacity=String(1-fade);
+    copy.style.filter='blur('+(fade*18)+'px)';
+  }
+  function requestRender(){if(!ticking){ticking=true;requestAnimationFrame(render)}}
+  addEventListener("scroll",requestRender,{passive:true});
+  addEventListener("resize",requestRender,{passive:true});
+  reduce.addEventListener&&reduce.addEventListener("change",requestRender);
+  render();
+})();
+</script>

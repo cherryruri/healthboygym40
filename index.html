@@ -3705,3 +3705,49 @@ body.facility-gallery-open{overflow:hidden!important}
   draw();
 })();
 </script>
+
+          
+<!-- Facility transition timing v4: photo rises while title fades -->
+<script id="facility-transition-timing-v4">
+(function(){
+  var scene=document.getElementById("facility-title-scroll");
+  var title=scene&&scene.querySelector(".facility-title-copy");
+  var photo=scene&&scene.querySelector(".facility-photo-takeover");
+  if(!scene||!title||!photo||scene.dataset.timingV4) return;
+  scene.dataset.timingV4="true";
+  var raf=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}
+  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
+  function draw(){
+    raf=0;
+    var r=scene.getBoundingClientRect();
+    var travel=Math.max(1,scene.offsetHeight-innerHeight);
+    var p=clamp(-r.top/travel);
+    var mobile=innerWidth<=768;
+
+    var settle=smooth(clamp(p/.48));
+    var overlap=smooth(clamp((p-.43)/.39));
+    var fromScale=mobile?1.48:1.62;
+    var toScale=mobile?.27:.36;
+    var titleScale=fromScale+(toScale-fromScale)*settle;
+    var titleY=(mobile?43:48)*(1-settle)-overlap*7;
+    title.style.setProperty("transform","translate3d(-50%,calc(-50% + "+titleY+"vh),0) scale("+titleScale+")","important");
+    title.style.setProperty("opacity",String(1-overlap),"important");
+    title.style.setProperty("filter","blur("+(overlap*24)+"px)","important");
+
+    var reveal=overlap;
+    var photoStart=mobile?.62:.42;
+    var photoScale=photoStart+(1-photoStart)*reveal;
+    var photoY=(mobile?54:58)*(1-reveal);
+    var radius=(mobile?24:32)*(1-reveal);
+    photo.style.setProperty("transform","translate3d(-50%,calc(-50% + "+photoY+"vh),0) scale("+photoScale+")","important");
+    photo.style.setProperty("border-radius",radius+"px","important");
+    photo.style.setProperty("opacity",String(smooth(clamp((p-.39)/.18))),"important");
+    photo.style.setProperty("box-shadow","0 "+(24*(1-reveal))+"px "+(80*(1-reveal))+"px rgba(0,0,0,"+(.16*(1-reveal))+")","important");
+  }
+  function update(){if(!raf)raf=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});
+  addEventListener("resize",update,{passive:true});
+  draw();
+})();
+</script>

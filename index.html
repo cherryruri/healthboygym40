@@ -3896,3 +3896,18 @@ body.facility-gallery-open{overflow:hidden!important}
   draw();
 })();
 </script>
+
+          
+<!-- Mobile facility and trainer-video corrections -->
+<style id="mobile-facility-video-fix">
+@media(max-width:768px){
+  #facility .img_box .facility-bg{inset:auto!important;top:50%!important;left:50%!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;min-height:calc(100svh + 4px)!important;border:0!important;transform-origin:center!important}
+  #facility .img_box .facility-bg span{inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;background-size:cover!important;background-position:center center!important}
+  #facility .img_inner,#facility .img_box{width:100%!important;height:100svh!important;min-height:100svh!important}
+  #ptReasons{overflow:hidden!important;padding-bottom:22px!important}
+  #ptReasons .pt-reasons-stage,#ptReasons .pt-reasons-swiper,#ptReasons .pt-reasons-rail{height:min(54svh,456px)!important;min-height:420px!important}
+  #ptReasons .pt-reason-card{border-radius:18px!important;box-shadow:0 18px 42px rgba(0,0,0,.14)!important}
+  #ptReasons .pt-reason-card.swiper-slide-active{width:min(79vw,308px)!important;height:min(52svh,438px)!important}
+  #ptReasons .pt-reason-card video{width:100%!important;height:100%!important;object-fit:cover!important}
+}
+</style>

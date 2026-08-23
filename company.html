@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>회사소개 | 헬스보이짐</title>
+<meta name="description" content="대한민국 대표 피트니스 브랜드 헬스보이짐의 철학과 연혁을 소개합니다.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
+:root{--blue:#078fc0;--ink:#111;--muted:#666;--header:76px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:#fff;font-family:Inter,'Noto Sans KR',sans-serif;word-break:keep-all}a{color:inherit;text-decoration:none}button{font:inherit}
+.company-header{position:fixed;z-index:100;top:0;left:0;width:100%;height:var(--header);background:rgba(255,255,255,.96);border-bottom:1px solid #e8e8e8;backdrop-filter:blur(14px)}
+.company-nav{height:100%;max-width:1400px;margin:auto;padding:0 34px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.company-logo{font-size:28px;font-weight:900;font-style:italic;letter-spacing:-1.5px}.company-menu{display:flex;align-items:center;gap:38px;font-size:14px;font-weight:800}.company-menu a{position:relative;padding:28px 0}.company-menu a.active{color:var(--blue)}.company-menu a.active:after{content:'';position:absolute;left:0;right:0;bottom:17px;height:2px;background:var(--blue)}
+.reserve{padding:12px 20px;border:1px solid #222;font-size:13px;font-weight:800}.mobile-toggle,.mobile-panel{display:none}
+main{padding-top:var(--header)}
+.about-hero{min-height:110vh;padding:92px max(28px,7vw) 0;overflow:hidden}.about-kicker{margin:0 0 24px;font-size:19px;font-weight:700}.about-hero h1{max-width:1100px;margin:0;font-size:clamp(48px,6.1vw,104px);line-height:1.04;letter-spacing:-.065em;font-weight:800}.about-copy{max-width:940px;margin:34px 0 56px;color:#555;font-size:clamp(18px,1.65vw,29px);line-height:1.55;font-weight:500}.about-copy strong{color:#111;font-weight:800}.hero-photo{width:min(1180px,88vw);height:min(62vw,690px);margin:0 auto;overflow:hidden;border-radius:2px}.hero-photo img{width:100%;height:100%;display:block;object-fit:cover}
+.promise{padding:180px max(28px,8vw);background:#fff}.promise h2{max-width:1250px;margin:0;font-size:clamp(38px,5vw,82px);line-height:1.22;letter-spacing:-.055em;font-weight:800}.promise-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:120px;background:#ddd;border:1px solid #ddd}.promise-card{min-height:390px;padding:48px 38px;background:#fff}.promise-card span{color:var(--blue);font-size:14px;font-weight:800}.promise-card h3{margin:70px 0 22px;font-size:30px;line-height:1.25}.promise-card p{margin:0;color:#666;font-size:16px;line-height:1.8}
+.special{position:relative;height:430vh;background:var(--blue);color:#fff}.special-sticky{position:sticky;top:0;height:100vh;overflow:hidden}.special-title{position:absolute;z-index:10;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}.special-title h2{margin:0;font-size:clamp(48px,6vw,98px);line-height:1.05;letter-spacing:-.055em}.special-title p{margin:30px 0 0;color:rgba(255,255,255,.78);font-size:clamp(15px,1.25vw,20px)}
+.float-card{position:absolute;overflow:hidden;border-radius:36px;opacity:0;will-change:transform,opacity}.float-card img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.82) brightness(.76)}.float-card:after{content:'';position:absolute;inset:0;background:rgba(7,143,192,.18)}.card-a{width:min(34vw,520px);height:min(58vh,650px);left:9%;top:24%}.card-b{width:min(28vw,430px);height:min(28vh,280px);right:8%;top:7%}.card-c{width:min(32vw,480px);height:min(48vh,520px);right:13%;bottom:6%}.card-d{width:min(24vw,340px);height:min(30vh,300px);left:4%;top:4%}
+.special-label{position:absolute;z-index:12;left:50%;top:51%;width:min(720px,80vw);transform:translate(-50%,-50%);text-align:center;opacity:0}.special-label strong{display:block;font-size:clamp(46px,5vw,82px);letter-spacing:-.04em}.special-label p{font-size:18px;line-height:1.7;color:rgba(255,255,255,.82)}
+.history{padding:170px max(28px,8vw) 190px;background:#fff}.history-head{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;padding-bottom:60px;border-bottom:2px solid #111}.history-head p{margin:0;color:var(--blue);font-size:16px;font-weight:800}.history-head h2{margin:12px 0 0;font-size:clamp(48px,6vw,90px);letter-spacing:-.06em}.history-head .summary{max-width:520px;color:#666;font-size:17px;line-height:1.75}
+.timeline{margin:0;padding:0;list-style:none}.timeline li{display:grid;grid-template-columns:220px 1fr;gap:56px;padding:56px 0;border-bottom:1px solid #ddd}.timeline time{color:var(--blue);font-size:clamp(38px,4vw,62px);font-weight:800;letter-spacing:-.04em}.timeline strong{display:block;font-size:clamp(20px,2vw,30px);line-height:1.55;letter-spacing:-.03em}
+.company-footer{padding:50px max(28px,7vw);background:#111;color:#aaa;display:flex;justify-content:space-between;gap:30px}.company-footer strong{color:#fff;font-size:22px}
+@media(max-width:900px){:root{--header:66px}.company-nav{padding:0 20px}.company-logo{font-size:22px}.company-menu,.reserve{display:none}.mobile-toggle{display:block;border:0;background:none;font-size:27px}.mobile-panel{position:fixed;z-index:110;inset:66px 0 auto;background:#fff;padding:22px;box-shadow:0 16px 40px rgba(0,0,0,.14)}.mobile-panel.open{display:grid}.mobile-panel a{padding:15px 4px;border-bottom:1px solid #eee;font-weight:700}.about-hero{min-height:auto;padding:70px 22px 0}.about-hero h1{font-size:clamp(42px,13vw,68px)}.about-copy{font-size:17px;margin:26px 0 38px}.hero-photo{width:100%;height:62vh}.promise{padding:110px 22px}.promise-grid{grid-template-columns:1fr;margin-top:70px}.promise-card{min-height:280px}.promise-card h3{margin-top:42px}.special{height:380vh}.float-card{border-radius:22px}.card-a{width:64vw;height:48vh;left:5%;top:27%}.card-b{width:48vw;height:20vh;right:-4%;top:8%}.card-c{width:58vw;height:40vh;right:3%;bottom:5%}.card-d{width:42vw;height:20vh;left:-5%;top:3%}.special-label{width:88vw}.special-label p{font-size:14px}.history{padding:110px 22px}.history-head{display:block}.history-head .summary{margin-top:24px}.timeline li{grid-template-columns:1fr;gap:18px;padding:40px 0}.company-footer{display:block}.company-footer p{line-height:1.7}}
+</style>
+</head>
+<body>
+<header class="company-header">
+  <nav class="company-nav">
+    <a class="company-logo" href="index.html">HEALTHBOYGYM</a>
+    <div class="company-menu">
+      <a class="active" href="company.html">회사소개</a><a href="index.html#about">센터 소개</a><a href="index.html#facility">시설 투어</a><a href="index.html#trainer">트레이너 소개</a><a href="index.html#hours">운영 시간</a><a href="index.html#location">오시는 길</a>
+    </div>
+    <a class="reserve" href="https://map.naver.com" target="_blank" rel="noopener">네이버 문의 및 예약</a>
+    <button class="mobile-toggle" type="button" aria-label="메뉴 열기">☰</button>
+  </nav>
+  <div class="mobile-panel">
+    <a href="company.html">회사소개</a><a href="index.html#about">센터 소개</a><a href="index.html#facility">시설 투어</a><a href="index.html#trainer">트레이너 소개</a><a href="index.html#hours">운영 시간</a><a href="index.html#location">오시는 길</a>
+  </div>
+</header>
+<main>
+<section class="about-hero">
+  <p class="about-kicker">About HEALTHBOYGYM</p>
+  <h1>대한민국의 운동 문화를<br>새롭게 만드는 헬스보이짐</h1>
+  <p class="about-copy">헬스보이짐은 운동 공간을 넘어 사람의 일상과 가능성을 바꾸는 피트니스 브랜드입니다.<br><strong>더 좋은 시설, 더 전문적인 코칭, 더 오래 지속되는 운동 경험</strong>을 전국의 회원에게 제공합니다.</p>
+  <figure class="hero-photo"><img src="센터전체사진1.jpg" alt="헬스보이짐 센터 전경"></figure>
+</section>
+<section class="promise">
+  <h2>운동이 필요한 모든 순간,<br>가장 신뢰할 수 있는 공간을 만듭니다.</h2>
+  <div class="promise-grid">
+    <article class="promise-card"><span>MISSION</span><h3>건강한 변화를<br>일상의 기준으로</h3><p>누구나 꾸준히 운동할 수 있는 환경과 전문적인 서비스를 연결합니다.</p></article>
+    <article class="promise-card"><span>VISION</span><h3>대한민국 No.1<br>피트니스 네트워크</h3><p>지역과 지점의 경계를 넘어 한결같은 운동 경험을 제공합니다.</p></article>
+    <article class="promise-card"><span>CORE VALUE</span><h3>전문성 · 연결 · 성장</h3><p>사람을 이해하는 전문성과 끊임없는 도전으로 피트니스의 다음 기준을 만듭니다.</p></article>
+  </div>
+</section>
+<section class="special" aria-label="헬스보이짐의 차별화된 특별함">
+  <div class="special-sticky">
+    <div class="special-title"><h2>헬스보이짐만의<br>차별화된 특별함</h2><p>전국 90개 지점의 경험과 통합 시스템으로 더 나은 운동 환경을 완성합니다.</p></div>
+    <figure class="float-card card-a"><img src="프리웨이트존사진1.jpg" alt="헬스보이짐 프리웨이트존"></figure>
+    <figure class="float-card card-b"><img src="테라스존사진1.jpg" alt="헬스보이짐 테라스존"></figure>
+    <figure class="float-card card-c"><img src="기구존사진1.jpg" alt="헬스보이짐 기구존"></figure>
+    <figure class="float-card card-d"><img src="유산소존사진1.jpg" alt="헬스보이짐 유산소존"></figure>
+    <div class="special-label"><strong>90 BRANCH NETWORK</strong><p>하나의 멤버십으로 연결되는 전국 피트니스 네트워크와<br>등급별 맞춤 서비스로 운동의 가능성을 넓힙니다.</p></div>
+  </div>
+</section>
+<section class="history" id="history">
+  <div class="history-head"><div><p>OUR HISTORY</p><h2>헬스보이짐 연혁</h2></div><p class="summary">성장을 멈추지 않는 헬스보이짐은 더 많은 지역에서 더 좋은 운동 경험을 만들고 있습니다.</p></div>
+  <ol class="timeline">
+    <li><time>2015</time><strong>전국 20개 지점 돌파 ㅣ 전국 지점 통합 서비스 론칭</strong></li>
+    <li><time>2019</time><strong>전국 30개 지점 돌파 ㅣ 필라테스 전문관 통합 운영 시작 (헬스보이짐 × 필라걸)</strong></li>
+    <li><time>2020</time><strong>전국 40개 지점 돌파 ㅣ 스마트 출입 · 앱 기반 예약 시스템 도입</strong></li>
+    <li><time>2021</time><strong>(주)헬스보이짐컴퍼니 법인 설립 ㅣ 전국 50개 지점 돌파 ㅣ 5단계 등급 시스템 (블랙, 골드, 프리미엄, S프리미엄)</strong></li>
+    <li><time>2024</time><strong>전국 80개 지점 돌파 ㅣ 매출액 최고 · 업계 성장률 1위 ㅣ 한국소비자만족도평가 피트니스 부문 선정</strong></li>
+    <li><time>2026</time><strong>전국 90개 지점 돌파 · 신규 지점 지속 확장 중 ㅣ 복합 피트니스 모델 전국 확대 ㅣ 헬보올패스 5단계 등급 시스템 고도화</strong></li>
+  </ol>
+</section>
+</main>
+<footer class="company-footer"><strong>HEALTHBOYGYM</strong><p>대한민국 No.1 피트니스 브랜드 · 전국 90개 지점</p></footer>
+<script>
+const menuButton=document.querySelector('.mobile-toggle');
+const mobilePanel=document.querySelector('.mobile-panel');
+menuButton.addEventListener('click',()=>mobilePanel.classList.toggle('open'));
+mobilePanel.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>mobilePanel.classList.remove('open')));
+const scene=document.querySelector('.special');
+const title=document.querySelector('.special-title');
+const label=document.querySelector('.special-label');
+const cards=[...document.querySelectorAll('.float-card')];
+let ticking=false;
+const clamp=v=>Math.max(0,Math.min(1,v));
+function render(){
+  ticking=false;
+  const rect=scene.getBoundingClientRect();
+  const range=Math.max(scene.offsetHeight-innerHeight,1);
+  const p=clamp(-rect.top/range);
+  title.style.opacity=String(clamp(1-(p-.13)/.22));
+  title.style.transform='translateY('+(-p*90)+'px) scale('+(1-p*.07)+')';
+  const entry=clamp((p-.16)/.42);
+  const reveal=entry*entry*(3-2*entry);
+  cards.forEach((card,index)=>{
+    const direction=index%2===0?1:-1;
+    const delay=index*.055;
+    const local=clamp((p-.16-delay)/.38);
+    const eased=local*local*(3-2*local);
+    card.style.opacity=String(eased*.94);
+    card.style.transform='translate3d('+(direction*(1-eased)*34)+'vw,'+((1-eased)*65)+'vh,0) scale('+(0.78+eased*.22)+')';
+  });
+  const lp=clamp((p-.48)/.22);
+  label.style.opacity=String(lp);
+  label.style.transform='translate(-50%,calc(-50% + '+((1-lp)*55)+'px))';
+}
+function requestRender(){if(ticking)return;ticking=true;requestAnimationFrame(render)}
+addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestRender);render();
+</script>
+</body>
+</html>

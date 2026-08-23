@@ -3803,3 +3803,48 @@ body.facility-gallery-open{overflow:hidden!important}
   #facility .pt-to-facility-transition{display:none!important}
   @media(max-width:768px){#facility{margin-top:-100svh!important}}
 </style>
+
+          
+<!-- Facility takeover merge v2: keep duplicate slide behind and carry its copy forward -->
+<style id="facility-takeover-merge-v2-style">
+  #facility{z-index:6!important}
+  #facility-title-scroll{z-index:7!important}
+  #facility-title-scroll .facility-photo-copy{position:absolute;z-index:3;right:7vw;top:50%;width:min(560px,43vw);color:#fff;transform:translate3d(0,-40%,0);opacity:0;filter:blur(12px);will-change:transform,opacity,filter;pointer-events:none;text-shadow:0 2px 20px rgba(0,0,0,.28)}
+  #facility-title-scroll .facility-photo-copy h2{margin:0 0 18px;font-size:clamp(34px,3.3vw,62px);line-height:1.12;letter-spacing:-.055em;color:#fff}
+  #facility-title-scroll .facility-photo-copy p{margin:0;font-size:clamp(16px,1.25vw,21px);line-height:1.75;letter-spacing:-.025em;color:rgba(255,255,255,.92);word-break:keep-all}
+  @media(max-width:768px){
+    #facility-title-scroll .facility-photo-copy{left:24px;right:24px;top:auto;bottom:11svh;width:auto;transform:translate3d(0,24px,0)}
+    #facility-title-scroll .facility-photo-copy h2{margin-bottom:12px;font-size:clamp(28px,8vw,40px)}
+    #facility-title-scroll .facility-photo-copy p{font-size:15px;line-height:1.62}
+  }
+</style>
+<script id="facility-takeover-merge-v2-script">
+(function(){
+  var scene=document.getElementById("facility-title-scroll");
+  var sticky=scene&&scene.querySelector(".facility-title-sticky");
+  if(!scene||!sticky||scene.dataset.mergeV2) return;
+  scene.dataset.mergeV2="true";
+  var copy=document.createElement("div");
+  copy.className="facility-photo-copy";
+  copy.innerHTML='<h2>수내동 유일 야외 테라스존</h2><p>운동 후 숨을 고르고 회복하는 시간까지 생각한 헬스보이짐 수내점만의 특별한 공간입니다.<br>답답한 실내를 벗어나 쾌적하게 머물 수 있는 테라스가 운동 경험의 완성도를 높입니다.</p>';
+  sticky.appendChild(copy);
+  var raf=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}
+  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
+  function draw(){
+    raf=0;
+    var r=scene.getBoundingClientRect();
+    var travel=Math.max(1,scene.offsetHeight-innerHeight);
+    var p=clamp(-r.top/travel);
+    var show=smooth(clamp((p-.72)/.18));
+    var mobile=innerWidth<=768;
+    copy.style.opacity=String(show);
+    copy.style.filter="blur("+((1-show)*12)+"px)";
+    copy.style.transform=mobile?"translate3d(0,"+((1-show)*24)+"px,0)":"translate3d(0,calc(-40% + "+((1-show)*38)+"px),0)";
+  }
+  function update(){if(!raf)raf=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});
+  addEventListener("resize",update,{passive:true});
+  draw();
+})();
+</script>

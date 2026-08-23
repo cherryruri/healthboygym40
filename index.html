@@ -3329,3 +3329,17 @@ body.facility-gallery-open{overflow:hidden!important}
  });
 })();
 </script>
+
+  
+<script id="facility-gallery-505-click-fix">
+(function(){
+ document.addEventListener('click',function(event){
+  var target=event.target;
+  var card=target&&target.closest?target.closest('#facilityTour .txt_box>li'):null;
+  if(!card)return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  card.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',bubbles:false,cancelable:true}));
+ },true);
+})();
+</script>

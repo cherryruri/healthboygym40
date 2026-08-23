@@ -3657,3 +3657,51 @@ body.facility-gallery-open{overflow:hidden!important}
   draw();
 })();
 </script>
+
+          
+<!-- Facility photo takeover: 2026-08-24 -->
+<style id="facility-photo-takeover-style">
+  .pt-to-facility-transition{display:none!important;height:0!important;margin:0!important;background:none!important}
+  #facility-title-scroll .facility-title-sticky{isolation:isolate}
+  #facility-title-scroll .facility-title-copy{z-index:2}
+  #facility-title-scroll .facility-photo-takeover{position:absolute;z-index:1;left:50%;top:50%;width:100vw;height:100svh;background:#111 url("테라스존사진1.jpg") center center/cover no-repeat;transform-origin:center center;will-change:transform,border-radius,opacity;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.16);pointer-events:none}
+  @media(max-width:768px){
+    #facility-title-scroll .facility-photo-takeover{background-position:center center}
+  }
+</style>
+<script id="facility-photo-takeover-script">
+(function(){
+  var scene=document.getElementById("facility-title-scroll");
+  var sticky=scene&&scene.querySelector(".facility-title-sticky");
+  if(!scene||!sticky||scene.dataset.photoTakeover) return;
+  scene.dataset.photoTakeover="true";
+  var photo=document.createElement("div");
+  photo.className="facility-photo-takeover";
+  photo.setAttribute("aria-hidden","true");
+  sticky.insertBefore(photo,sticky.firstChild);
+  var raf=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}
+  function smooth(v){return v<.5?4*v*v*v:1-Math.pow(-2*v+2,3)/2}
+  function draw(){
+    raf=0;
+    var r=scene.getBoundingClientRect();
+    var travel=Math.max(1,scene.offsetHeight-innerHeight);
+    var p=clamp(-r.top/travel);
+    var reveal=smooth(clamp((p-.43)/.57));
+    var mobile=innerWidth<=768;
+    var startScale=mobile?.62:.42;
+    var scale=startScale+(1-startScale)*reveal;
+    var startY=mobile?54:58;
+    var y=startY*(1-reveal);
+    var radius=(mobile?24:32)*(1-reveal);
+    photo.style.transform="translate3d(-50%,calc(-50% + "+y+"vh),0) scale("+scale+")";
+    photo.style.borderRadius=radius+"px";
+    photo.style.opacity=String(clamp((p-.38)/.1));
+    photo.style.boxShadow="0 "+(24*(1-reveal))+"px "+(80*(1-reveal))+"px rgba(0,0,0,"+(.16*(1-reveal))+")";
+  }
+  function update(){if(!raf)raf=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});
+  addEventListener("resize",update,{passive:true});
+  draw();
+})();
+</script>

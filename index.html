@@ -3357,3 +3357,34 @@ body.facility-gallery-open{overflow:hidden!important}
  },true);
 })();
 </script>
+
+  
+<style id="facility-gallery-505-hit-style">
+#facilityTour .txt_box>li{position:relative!important}
+.facility-gallery-hit{position:absolute;inset:0;z-index:80;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer}
+</style>
+<script id="facility-gallery-505-robust-fix">
+(function(){
+ var cards=[].slice.call(document.querySelectorAll('#facilityTour .txt_box>li'));
+ cards.forEach(function(card,index){
+  if(card.querySelector('.facility-gallery-hit'))return;
+  var hit=document.createElement('button');
+  hit.type='button';hit.className='facility-gallery-hit';
+  hit.setAttribute('aria-label',(card.querySelector('h2')?card.querySelector('h2').textContent:'시설')+' 사진 갤러리 열기');
+  hit.addEventListener('click',function(event){
+   event.preventDefault();event.stopImmediatePropagation();
+   card.focus();
+   card.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',code:'Enter',bubbles:false,cancelable:true}));
+  },true);
+  card.appendChild(hit);
+ });
+ document.addEventListener('click',function(event){
+  var close=event.target&&event.target.closest?event.target.closest('.facility-photo-modal .facility-modal-close'):null;
+  if(!close)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  var modal=document.querySelector('.facility-photo-modal');
+  if(modal){modal.classList.remove('is-open');modal.setAttribute('aria-hidden','true');}
+  document.body.classList.remove('facility-gallery-open');
+ },true);
+})();
+</script>

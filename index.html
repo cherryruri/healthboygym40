@@ -3335,7 +3335,7 @@ body.facility-gallery-open{overflow:hidden!important}
 (function(){
  document.addEventListener('click',function(event){
   var target=event.target;
-  var card=target&&target.closest?target.closest('#facilityTour .txt_box>li'):null;
+  var card=target&&target.closest?target.closest('#facilityTour .txt_box>li.__legacy-disabled'):null;
   if(!card)return;
   event.preventDefault();
   event.stopImmediatePropagation();
@@ -3349,7 +3349,7 @@ body.facility-gallery-open{overflow:hidden!important}
 (function(){
  document.addEventListener('click',function(event){
   var target=event.target;
-  var closeButton=target&&target.closest?target.closest('.facility-photo-modal .facility-modal-close'):null;
+  var closeButton=target&&target.closest?target.closest('.facility-photo-modal .facility-modal-close.__legacy-disabled'):null;
   if(!closeButton)return;
   event.preventDefault();
   event.stopImmediatePropagation();

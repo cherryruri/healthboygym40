@@ -3640,3 +3640,30 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame{position:
 html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{opacity:var(--hero-card-overlay,1)!important}
 }
 </style>
+
+<style id="facility-transition-stability-20260824">
+/* Every facility zone crossfades on one fixed canvas: no zoom or vertical travel. */
+#facilityTour .img_box > li.facility-bg,
+#facilityTour .img_box > li.facility-bg.on {
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100svh !important;
+  min-height: 100svh !important;
+  transform: none !important;
+  transform-origin: center center !important;
+  transition: opacity .78s cubic-bezier(.22,.61,.36,1) !important;
+}
+#facilityTour .img_box > li.facility-bg { opacity: 0 !important; }
+#facilityTour .img_box > li.facility-bg.on { opacity: 1 !important; }
+@media (max-width:768px) {
+  /* Keep the title takeover and the terrace/freeweight slides sequential. */
+  #facility { margin-top: 0 !important; }
+  #facilityTour .img_box > li.facility-bg,
+  #facilityTour .img_box > li.facility-bg.on {
+    height: 100svh !important;
+    min-height: 100svh !important;
+    transform: none !important;
+  }
+}
+</style>

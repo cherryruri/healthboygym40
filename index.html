@@ -3848,3 +3848,51 @@ body.facility-gallery-open{overflow:hidden!important}
   draw();
 })();
 </script>
+
+          
+<!-- Facility transition timing v6: smaller, slower photo entrance -->
+<style id="facility-photo-seamless-style">
+  #facility .img_inner,#facility .img_box{background:#111!important;border:0!important;outline:0!important}
+  #facility .img_box .facility-bg{inset:-2px!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;border:0!important;outline:0!important;box-shadow:none!important;transition:opacity 1.15s ease,transform 1.2s cubic-bezier(.22,.61,.36,1)!important}
+  #facility .img_box .facility-bg span{inset:-2px!important;width:calc(100% + 4px)!important;height:calc(100% + 4px)!important;border:0!important;outline:0!important;transition:opacity 1.05s ease!important}
+</style>
+<script id="facility-transition-timing-v6">
+(function(){
+  var scene=document.getElementById("facility-title-scroll");
+  var title=scene&&scene.querySelector(".facility-title-copy");
+  var photo=scene&&scene.querySelector(".facility-photo-takeover");
+  if(!scene||!title||!photo||scene.dataset.timingV6) return;
+  scene.dataset.timingV6="true";
+  var raf=0;
+  function clamp(v){return Math.max(0,Math.min(1,v))}
+  function smoother(v){return v*v*v*(v*(v*6-15)+10)}
+  function draw(){
+    raf=0;
+    var r=scene.getBoundingClientRect();
+    var travel=Math.max(1,scene.offsetHeight-innerHeight);
+    var p=clamp(-r.top/travel);
+    var mobile=innerWidth<=768;
+    var settle=smoother(clamp(p/.46));
+    var transition=smoother(clamp((p-.34)/.58));
+    var fromScale=mobile?1.48:1.62;
+    var toScale=mobile?.27:.36;
+    var titleScale=fromScale+(toScale-fromScale)*settle;
+    var titleY=(mobile?43:48)*(1-settle)-transition*7;
+    title.style.setProperty("transform","translate3d(-50%,calc(-50% + "+titleY+"vh),0) scale("+titleScale+")","important");
+    title.style.setProperty("opacity",String(1-transition),"important");
+    title.style.setProperty("filter","blur("+(transition*24)+"px)","important");
+    var photoStart=mobile?.34:.24;
+    var photoScale=photoStart+(1-photoStart)*transition;
+    var photoY=(mobile?70:68)*(1-transition);
+    var radius=(mobile?22:28)*(1-transition);
+    photo.style.setProperty("transform","translate3d(-50%,calc(-50% + "+photoY+"vh),0) scale("+photoScale+")","important");
+    photo.style.setProperty("border-radius",radius+"px","important");
+    photo.style.setProperty("opacity",String(smoother(clamp((p-.33)/.17))),"important");
+    photo.style.setProperty("box-shadow","0 "+(28*(1-transition))+"px "+(90*(1-transition))+"px rgba(0,0,0,"+(.18*(1-transition))+")","important");
+  }
+  function update(){if(!raf)raf=requestAnimationFrame(draw)}
+  addEventListener("scroll",update,{passive:true});
+  addEventListener("resize",update,{passive:true});
+  draw();
+})();
+</script>

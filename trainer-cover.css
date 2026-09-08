@@ -8,7 +8,7 @@ html.trainer-only-view body:not(.trainer-proof-header) header .navbar { backgrou
 .trainer-pt-story {
   position: relative;
   overflow: hidden;
-  padding: 180px 0 200px;
+  padding: clamp(240px, 34svh, 360px) 0 260px;
   background: #000;
   color: #fff;
 }
@@ -27,8 +27,8 @@ html.trainer-only-view body:not(.trainer-proof-header) header .navbar { backgrou
 }
 .trainer-pt-track {
   position: relative;
-  height: 1536px;
-  margin-top: 64px;
+  height: 2000px;
+  margin-top: 100px;
 }
 .trainer-pt-line {
   position: absolute;
@@ -58,14 +58,14 @@ html.trainer-only-view body:not(.trainer-proof-header) header .navbar { backgrou
 .trainer-pt-concern:nth-child(3) { top: 70.05%; }
 .trainer-pt-concern p { margin: 0 0 4px; color: #555; font: inherit; }
 .trainer-pt-concern strong { display: block; color: #fff; font: inherit; }
-.trainer-pt-answer { margin-top: 64px; }
+.trainer-pt-answer { margin-top: 100px; }
 @media (max-width: 768px) {
   html.trainer-only-view #trainer { padding-top: 66px !important; }
-  .trainer-pt-story { padding: 110px 0 120px; }
+  .trainer-pt-story { padding: clamp(160px, 25svh, 230px) 0 180px; }
   .trainer-pt-question { font-size: clamp(28px, 7vw, 44px); line-height: 1.5; }
-  .trainer-pt-track { height: 1120px; margin-top: 48px; }
+  .trainer-pt-track { height: 1460px; margin-top: 76px; }
   .trainer-pt-line { width: 160px; }
   .trainer-pt-concern { width: calc(50% - 20px); font-size: clamp(17px, 3.8vw, 26px); line-height: 1.65; }
   .trainer-pt-concern p { margin-bottom: 8px; }
-  .trainer-pt-answer { margin-top: 48px; font-size: clamp(25px, 6.6vw, 42px); line-height: 1.5; }
+  .trainer-pt-answer { margin-top: 76px; font-size: clamp(25px, 6.6vw, 42px); line-height: 1.5; }
 }

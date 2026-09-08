@@ -3233,6 +3233,21 @@ body.trainer-proof-header header .mobile-menu-btn{color:#111!important}
  addEventListener('scroll',req,{passive:true});addEventListener('resize',req);addEventListener('pageshow',req);req();
 })();
 </script>
+<script>
+(() => {
+ if (new URLSearchParams(location.search).get('allpass') !== 'branches') return;
+ const trigger = document.querySelector('[data-pass-reveal-trigger]');
+ if (!trigger) return;
+ const open = () => requestAnimationFrame(() => requestAnimationFrame(() => trigger.click()));
+ if (trigger.dataset.revealReady === 'true') open();
+ else {
+  const observer = new MutationObserver(() => {
+   if (trigger.dataset.revealReady === 'true') { observer.disconnect(); open(); }
+  });
+  observer.observe(trigger, { attributes:true, attributeFilter:['data-reveal-ready'] });
+ }
+})();
+</script>
 </body>
 </html>
 

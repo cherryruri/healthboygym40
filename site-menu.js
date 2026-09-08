@@ -103,7 +103,16 @@
     });
     side.querySelector('.mobile-menu-section-title').textContent = 'EXPLORE';
     const reserve = side.querySelector('.mobile-side-reserve');
-    reserve.innerHTML = '<span lang="en">BOOK A VISIT <span aria-hidden="true">↗</span></span><small>상담 · 예약</small>';
+    reserve.remove();
+    const community = document.createElement('div');
+    community.className = 'mobile-community-links';
+    side.querySelectorAll('.mobile-menu-list > a:not(.mobile-primary-link)').forEach(link => community.appendChild(link));
+    side.querySelector('.mobile-menu-list').appendChild(community);
+    const mypage = document.createElement('a');
+    mypage.href = 'mypage.html';
+    mypage.className = 'mobile-mypage-link';
+    mypage.innerHTML = '<span lang="en">MY PAGE</span><span>마이페이지</span>';
+    side.querySelector('.mobile-menu-list').appendChild(mypage);
     side.appendChild(side.querySelector('.mobile-auth-panel'));
 
 

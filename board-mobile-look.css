@@ -55,3 +55,10 @@ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-loo
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look #boardCategoryBar button{flex-shrink:0!important;white-space:nowrap!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look #pagination button:disabled{display:none!important}
 }
+/* Match the site's existing font on mobile, including notice/news cards. */
+@media(max-width:768px){
+ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .board-page,
+ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .board-page *{
+  font-family:'Pretendard',Arial,sans-serif!important;
+ }
+}

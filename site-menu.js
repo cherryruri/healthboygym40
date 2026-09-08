@@ -32,7 +32,7 @@
     <nav class="mobile-menu-list" aria-label="모바일 메뉴">
       <span class="mobile-menu-section-title">헬스보이짐 수내점 소개</span>
       <a href="company.html"><i data-feather="briefcase" aria-hidden="true"></i><span>회사소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
-      <a href="allpass.html"><i data-feather="credit-card" aria-hidden="true"></i><span>올패스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="allpass.html?v=20260909-soft-scene"><i data-feather="credit-card" aria-hidden="true"></i><span>올패스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#about"><i data-feather="home" aria-hidden="true"></i><span>센터 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#facility"><i data-feather="activity" aria-hidden="true"></i><span>시설 투어</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#trainer"><i data-feather="user" aria-hidden="true"></i><span>트레이너 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
@@ -90,7 +90,7 @@
     side.innerHTML = MENU_HTML;
     side.querySelector('a[href="index.html#about"]')?.remove();
     const primaryLabels = {
-      'company.html':['ABOUT','회사소개'], 'allpass.html':['ALL PASS','올패스'],
+      'company.html':['ABOUT','회사소개'], 'allpass.html?v=20260909-soft-scene':['ALL PASS','올패스'],
       'index.html#about':['OUR GYM','센터 소개'], 'index.html#facility':['SPACE','시설 투어'],
       'index.html#trainer':['TRAINERS','트레이너 소개'], 'index.html#hours':['HOURS','운영 시간'],
       'index.html#location':['LOCATION','오시는 길']
@@ -100,7 +100,7 @@
       if (!pair) return;
       link.classList.add('mobile-primary-link');
       link.innerHTML = '<span class="mobile-nav-en" lang="en">'+pair[0]+'</span><span class="mobile-nav-ko">'+pair[1]+'</span>';
-      if (link.getAttribute('href') === 'allpass.html') link.classList.add('mobile-allpass-link');
+      if (link.getAttribute('href') === 'allpass.html?v=20260909-soft-scene') link.classList.add('mobile-allpass-link');
     });
     side.querySelector('.mobile-menu-section-title').textContent = 'EXPLORE';
     const reserve = side.querySelector('.mobile-side-reserve');

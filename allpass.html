@@ -61,13 +61,15 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 @keyframes allpass-copy-rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
 @media(prefers-reduced-motion:reduce){.special-title h1,.special-title p{animation-name:allpass-copy-fade;transform:none}@keyframes allpass-copy-fade{from{opacity:0}to{opacity:1}}}
 </style>
-</head><body>
+<style id="allpass-soft-photo-edges">
+.special-sticky .float-card{border:0;border-radius:0;box-shadow:none;-webkit-mask-image:radial-gradient(ellipse at center,#000 35%,rgba(0,0,0,.85) 53%,transparent 74%);mask-image:radial-gradient(ellipse at center,#000 35%,rgba(0,0,0,.85) 53%,transparent 74%)}
+</style></head><body>
 <header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
     <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
     <ul class="menu">
       <li><a href="company.html">회사소개</a></li>
-      <li><a href="allpass.html">올패스</a></li>
+      <li><a href="allpass.html?v=20260909-soft-scene">올패스</a></li>
       <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#trainer">트레이너 소개</a></li>
       <li><a href="index.html#hours">운영 시간</a></li>
@@ -111,7 +113,7 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 
 const scene=document.querySelector('.special'),title=document.querySelector('.special-title'),label=document.querySelector('.special-label'),cards=[...document.querySelectorAll('.float-card')];let ticking=false;const clamp=v=>Math.max(0,Math.min(1,v));function render(){ticking=false;const rect=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-rect.top/range);scene.style.setProperty('--scene-darkness',String(clamp((p-.74)/.20)));scene.style.setProperty('--intro-film-opacity',String(1-clamp((p-.12)/.16)));title.style.opacity=String(clamp(1-(p-.12)/.16));title.style.transform='translateY('+(-p*90)+'px) scale('+(1-p*.07)+')';cards.forEach((card,i)=>{const dir=i%2===0?1:-1,local=clamp((p-.32-i*.035)/.30),e=local*local*(3-2*local);card.style.opacity=String(e*.52);card.style.transform='translate3d('+(dir*(1-e)*36)+'vw,'+((1-e)*66)+'vh,0) scale('+(0.76+e*.24)+')'});const lp=clamp((p-.48)/.22);label.style.opacity=String(lp);label.style.transform='translate(-50%,calc(-50% + '+((1-lp)*55)+'px))'}function requestRender(){if(ticking)return;ticking=true;requestAnimationFrame(render)}addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestRender);render();
 </script><script src="js/feather.min.js"></script>
-<script src="site-menu.js?v=20260909-single-board"></script>
+<script src="site-menu.js?v=20260909-soft-scene"></script>
 <script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
 
 <script>

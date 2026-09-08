@@ -5,7 +5,12 @@
     const trainerOnly = hash === '#trainer';
     const changed = document.documentElement.classList.contains('trainer-only-view') !== trainerOnly;
     document.documentElement.classList.toggle('trainer-only-view', trainerOnly);
-    if (trainerOnly) document.body.classList.add('show-trainer-section');
+    if (trainerOnly) {
+      document.body.classList.add('show-trainer-section');
+      const question=document.querySelector('.trainer-pt-question');
+      if(question&&!question.querySelector('.trainer-question-copy')){const copy=document.createElement('span');copy.className='trainer-question-copy';while(question.firstChild)copy.append(question.firstChild);question.append(copy);}
+      if(question){question.classList.remove('trainer-question-enter');requestAnimationFrame(()=>requestAnimationFrame(()=>question.classList.add('trainer-question-enter')));}
+    }
     if (changed) {
       document.body.classList.remove('trainer-proof-header');
       requestAnimationFrame(() => window.ScrollTrigger?.refresh());

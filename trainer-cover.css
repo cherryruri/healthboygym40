@@ -69,3 +69,11 @@ html.trainer-only-view body:not(.trainer-proof-header) header .navbar { backgrou
   .trainer-pt-concern p { margin-bottom: 8px; }
   .trainer-pt-answer { margin-top: 48px; font-size: clamp(25px, 6.6vw, 42px); line-height: 1.5; }
 }
+
+/* Give the opening question a complete viewport before the story starts. */
+html.trainer-only-view .trainer-pt-story{padding-top:0!important}
+html.trainer-only-view .trainer-pt-question{min-height:calc(100svh - var(--site-header-height,80px));display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:40px 0;margin:0 auto}
+.trainer-question-copy{display:block}
+.trainer-question-enter .trainer-question-copy{animation:trainer-question-rise 1.3s cubic-bezier(.22,1,.36,1) .15s both}
+@keyframes trainer-question-rise{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.trainer-question-enter .trainer-question-copy{animation-name:trainer-question-fade}@keyframes trainer-question-fade{from{opacity:0}to{opacity:1}}}

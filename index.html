@@ -2086,7 +2086,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       const introIn = mobileMorph
         ? smooth((mix(0, targetTop, motion) - mobileIntroTop - mobileIntroHeight) / 32)
         : smooth((progress - .18) / .34);
-      const sideIn = smooth((progress - .2) / .72);
+      const sideIn = window.scrollY >= handoffEnd - 1 ? 1 : 0;
       const backgroundIn = smooth((progress - .08) / .72);
       const backgroundValue = Math.round(mix(5, 255, backgroundIn));
 
@@ -3097,8 +3097,12 @@ body.trainer-proof-header header .mobile-menu-btn{color:#111!important}
  html body.hero-card-morph .intro.hero-expand-section,
  html body.hero-card-morph .hero-expand-sticky{background:#fff!important;background-image:none!important}
  html body.hero-card-morph .hero-expand-sticky::before{display:none!important}
- html body #ptReasons{padding-bottom:48px!important}
+ html body #ptReasons{padding-bottom:16px!important}
 }
+</style>
+<style id="opening-once-and-card-arrival">
+html.opening-scroll-locked,html.opening-scroll-locked body{overflow:hidden!important;overscroll-behavior:none!important}
+html body.hero-card-morph .pt-reason-card:not(.pt-origin-card){opacity:var(--side-card-opacity,0)!important;top:0!important;transition:opacity .55s ease,transform .52s cubic-bezier(.2,.72,.2,1)!important}
 </style>
 </body>
 </html>
@@ -3212,7 +3216,7 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
 </style>
 
 <link rel="stylesheet" href="facility-tour.css?v=20260909-reading-hold">
-<script src="facility-tour.js?v=20260909-reading-hold"></script>
+<script src="facility-tour.js?v=20260909-arrival"></script>
 <script src="facility-gallery.js?v=20260909"></script>
 
 <style id="trainer-sequence-correction-20260824">
@@ -3302,7 +3306,18 @@ html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-br
  const body=document.body,loader=document.querySelector('.logo-screen'),stats=document.querySelector('.hero-opening-stats'),copy=document.querySelector('.hero-brand-copy');
  const numbers=[...stats.querySelectorAll('[data-opening-count]')];
  body.classList.add('home-title-fade','hero-stats-sequence');
- let started=false,timer=0,frame=0;
+ let started=false,timer=0,frame=0,completed=false;
+ const root=document.documentElement,seenKey='healthboy-opening-seen';
+ let seen=false;try{seen=sessionStorage.getItem(seenKey)==='1';}catch(e){}
+ const shouldLock=!seen&&!location.hash&&scrollY<12;
+ let locked=shouldLock;
+ if(locked)root.classList.add('opening-scroll-locked');
+ const block=e=>{if(locked){e.preventDefault();e.stopImmediatePropagation();}};
+ const blockKey=e=>{if(locked&&['ArrowDown','ArrowUp','PageDown','PageUp','Home','End',' '].includes(e.key))block(e);};
+ addEventListener('wheel',block,{passive:false,capture:true});
+ addEventListener('touchmove',block,{passive:false,capture:true});
+ addEventListener('keydown',blockKey,true);
+ const finish=()=>{completed=true;locked=false;root.classList.remove('opening-scroll-locked');try{sessionStorage.setItem(seenKey,'1');}catch(e){};removeEventListener('wheel',block,true);removeEventListener('touchmove',block,true);removeEventListener('keydown',blockKey,true);};
  const reset=()=>{clearTimeout(timer);cancelAnimationFrame(frame);started=false;body.classList.remove('hero-stats-visible','hero-stats-finished','hero-title-fade-ready');numbers.forEach(n=>n.textContent=(Number(n.dataset.openingCount)===1?1:Math.floor(Number(n.dataset.openingCount)/2)).toLocaleString('en-US'));stats.setAttribute('aria-hidden','true');copy.setAttribute('aria-hidden','true');};
  const count=()=>{
   body.classList.add('hero-stats-visible');stats.removeAttribute('aria-hidden');
@@ -3315,14 +3330,18 @@ html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-br
    timer=setTimeout(()=>{
     body.classList.add('hero-stats-finished','hero-title-fade-ready');
     stats.setAttribute('aria-hidden','true');copy.removeAttribute('aria-hidden');
+    timer=setTimeout(finish,2200);
    },1500);
   };
   frame=requestAnimationFrame(tick);
  };
  const begin=()=>{
+  if(completed)return;
   const loading=loader&&getComputedStyle(loader).display!=='none'&&getComputedStyle(loader).visibility!=='hidden';
   if(!body.classList.contains('loaded')||loading){if(started)reset();return;}
-  if(started)return;started=true;timer=setTimeout(count,200);
+  if(started)return;started=true;
+  if(seen){body.classList.add('hero-stats-finished','hero-title-fade-ready');stats.setAttribute('aria-hidden','true');copy.removeAttribute('aria-hidden');finish();return;}
+  timer=setTimeout(count,200);
  };
  stats.setAttribute('aria-hidden','true');copy.setAttribute('aria-hidden','true');
  const observer=new MutationObserver(begin);observer.observe(body,{attributes:true,attributeFilter:['class']});

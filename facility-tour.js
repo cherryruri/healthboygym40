@@ -28,7 +28,7 @@
     const set = (name, value) => tour.style.setProperty('--facility-' + name, String(value));
     set('title-opacity', 1 - reveal);
     set('title-scale', (mobile ? 1.28 : 1.58) + (fittedScale - (mobile ? 1.28 : 1.58)) * settle);
-    set('title-y', ((mobile ? 40 : 48) * (1 - settle) - reveal * 7) + 'vh');
+    set('title-y', ((mobile ? 20 : 36) * (1 - settle) - reveal * 7) + 'vh');
     set('title-blur', (reduceMotion.matches ? 0 : reveal * 24) + 'px');
     set('image-scale', reduceMotion.matches ? 1 : (mobile ? .3 : .22) + (mobile ? .7 : .78) * reveal);
     set('image-y', (reduceMotion.matches ? 0 : (mobile ? 70 : 68) * (1 - reveal)) + '%');

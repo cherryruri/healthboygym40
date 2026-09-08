@@ -8,39 +8,30 @@
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
 <link rel="stylesheet" href="editor.css?v=20260721-admin-notice1">
 
+<link rel="stylesheet" href="site-header.css?v=20260909">
+<script src="site-header.js?v=20260909" defer></script>
 </head>
 
 <body class="loaded">
 
-<header>
-  <nav class="navbar">
-
-    <div class="logo">
-      <a href="index.html">HEALTHBOYGYM</a>
-    </div>
-
+<header id="site-header">
+  <nav class="navbar" aria-label="주 메뉴">
+    <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
     <ul class="menu">
+      <li><a href="company.html">회사소개</a></li>
       <li><a href="index.html#about">센터 소개</a></li>
-      <li><a href="index.html#brand">브랜드 소개</a></li>
-      <li><a href="index.html#pass">올패스 안내</a></li>
       <li><a href="index.html#facility">시설 투어</a></li>
       <li><a href="index.html#trainer">트레이너 소개</a></li>
       <li><a href="index.html#hours">운영 시간</a></li>
       <li><a href="index.html#location">오시는 길</a></li>
       <li><a href="board.html">게시판</a></li>
       <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
-      <li><a href="index.html#faq">자주 묻는 질문</a></li>
-
-      <li id="userMenu">
-        <a href="login.html" id="loginLink">LOGIN</a>
-        <button id="logoutBtn" style="display:none;">LOGOUT</button>
-      </li>
+      <li class="login-menu" id="userMenu"><a href="login.html" id="loginLink">LOGIN</a><button id="logoutBtn" style="display:none;">LOGOUT</button></li>
     </ul>
-
-    <a href="https://map.naver.com/p/search/%ED%97%AC%EC%8A%A4%EB%B3%B4%EC%9D%B4%EC%A7%90%20%EC%88%98%EB%82%B4%EC%A0%90" target="_blank" class="download-btn">
-      네이버 문의 및 예약 바로가기
-    </a>
-
+    <a class="download-btn" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer">네이버 문의 및 예약 바로가기</a>
+    <button class="mobile-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false"></button>
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-side-menu"></div>
   </nav>
 </header>
 
@@ -149,7 +140,8 @@
 
 </main>
 
-<script src="site-menu.js?v=20260909-mobile-fixes"></script>
+<script src="js/feather.min.js"></script>
+<script src="site-menu.js?v=20260909-unified-header"></script>
 <script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
 <script type="module" src="editor.js?v=20260727-info-deploy1"></script>
 

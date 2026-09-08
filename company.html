@@ -13,8 +13,29 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 .history{padding:170px max(28px,8vw) 210px;background:#fff}.history-intro{min-height:62vh;display:flex;align-items:flex-start;justify-content:center;text-align:center}.history-intro h2{margin:0;font-size:clamp(48px,5.4vw,88px);line-height:1.25;letter-spacing:-.055em}.history-layout{position:relative;display:grid;grid-template-columns:38% 62%;max-width:1500px;margin:auto}.history-period{position:sticky;top:150px;align-self:start;padding:50px 40px 0 2vw;font-size:clamp(48px,5vw,80px);font-weight:800;letter-spacing:-.05em}.history-stream{position:relative;padding-left:105px;border-left:1px solid var(--line)}.history-stream:before{content:'⌄';position:absolute;top:0;left:-23px;width:46px;height:46px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:22px}.history-item{position:relative;display:grid;grid-template-columns:72px 1fr;gap:28px;padding:28px 0 105px}.history-item time{padding-top:5px;font-size:18px;font-weight:800}.history-card{max-width:620px}.history-card img{width:100%;max-height:390px;display:block;object-fit:cover;margin-bottom:26px}.history-card strong{display:block;font-size:22px;line-height:1.6;letter-spacing:-.025em}.history-card p{margin:12px 0 0;color:#666;font-size:16px;line-height:1.8}.company-footer{padding:52px max(28px,7vw);background:#111;color:#aaa;display:flex;justify-content:space-between;gap:30px}.company-footer strong{color:#fff;font-size:22px}
 @media(max-width:900px){:root{--header:66px}.company-header,.company-nav{height:66px}.company-nav{padding:0 20px}.company-logo{font-size:22px}.company-menu,.reserve{display:none}.mobile-toggle{display:block;border:0;background:none;color:#fff;font-size:27px}.mobile-panel{position:fixed;z-index:110;inset:66px 0 auto;background:#fff;padding:22px;box-shadow:0 16px 40px rgba(0,0,0,.14)}.mobile-panel.open{display:grid}.mobile-panel a{padding:15px 4px;border-bottom:1px solid #eee;font-weight:700}.special{height:380vh}.special-sticky{top:var(--header);height:calc(100svh - var(--header))}.special-title{padding:22px}.special-title h1{font-size:38px;line-height:1.1}.special-label strong{font-size:38px;line-height:1.1}.float-card{border-radius:19px}.card-a{width:66vw;height:45vh;left:4%;top:27%}.card-b{width:52vw;height:20vh;right:-5%;top:7%}.card-c{width:62vw;height:38vh;right:2%;bottom:4%}.card-d{width:45vw;height:20vh;left:-7%;top:3%}.special-label{width:90vw}.special-label p{font-size:14px}.history{padding:100px 22px 130px}.history-intro{min-height:48vh;align-items:center}.history-layout{display:block}.history-period{position:relative;top:auto;padding:0 0 48px;font-size:46px}.history-stream{padding-left:42px}.history-stream:before{left:-18px;width:36px;height:36px}.history-item{grid-template-columns:1fr;gap:16px;padding:16px 0 72px}.history-item time{font-size:18px}.history-card strong{font-size:19px}.history-card img{margin-bottom:20px}.company-footer{display:block}.company-footer p{line-height:1.7}}
 </style>
+<link rel="stylesheet" href="site-header.css?v=20260909">
+<script src="site-header.js?v=20260909" defer></script>
 </head><body>
-<header class="company-header"><nav class="company-nav"><a class="company-logo" href="index.html">HEALTHBOYGYM</a><div class="company-menu"><a class="active" href="company.html">회사소개</a><a href="index.html#about">센터 소개</a><a href="index.html#facility">시설 투어</a><a href="index.html#trainer">트레이너 소개</a><a href="index.html#hours">운영 시간</a><a href="index.html#location">오시는 길</a></div><a class="reserve" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener">네이버 문의 및 예약</a><button class="mobile-toggle" type="button" aria-label="메뉴 열기">☰</button></nav><div class="mobile-panel"><a href="company.html">회사소개</a><a href="index.html#about">센터 소개</a><a href="index.html#facility">시설 투어</a><a href="index.html#trainer">트레이너 소개</a><a href="index.html#hours">운영 시간</a><a href="index.html#location">오시는 길</a></div></header>
+<header id="site-header">
+  <nav class="navbar" aria-label="주 메뉴">
+    <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
+    <ul class="menu">
+      <li><a href="company.html">회사소개</a></li>
+      <li><a href="index.html#about">센터 소개</a></li>
+      <li><a href="index.html#facility">시설 투어</a></li>
+      <li><a href="index.html#trainer">트레이너 소개</a></li>
+      <li><a href="index.html#hours">운영 시간</a></li>
+      <li><a href="index.html#location">오시는 길</a></li>
+      <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
+      <li class="login-menu" id="userMenu"><a href="login.html" id="loginLink">LOGIN</a><button id="logoutBtn" style="display:none;">LOGOUT</button></li>
+    </ul>
+    <a class="download-btn" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer">네이버 문의 및 예약 바로가기</a>
+    <button class="mobile-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false"></button>
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-side-menu"></div>
+  </nav>
+</header>
 <main>
 <section class="special" aria-label="헬스보이짐만의 차별화된 특별함"><div class="special-sticky">
 <div class="special-title"><h1>헬스보이짐만의<br>차별화된 특별함</h1><p>전국 90개 지점의 경험과 통합 시스템으로 더 나은 운동 환경을 완성합니다.</p></div>
@@ -36,6 +57,9 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 </div></div></section>
 </main><footer class="company-footer"><strong>HEALTHBOYGYM</strong><p>대한민국 No.1 피트니스 브랜드 · 전국 90개 지점</p></footer>
 <script>
-const menuButton=document.querySelector('.mobile-toggle'),mobilePanel=document.querySelector('.mobile-panel');menuButton.addEventListener('click',()=>mobilePanel.classList.toggle('open'));mobilePanel.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mobilePanel.classList.remove('open')));
+
 const scene=document.querySelector('.special'),title=document.querySelector('.special-title'),label=document.querySelector('.special-label'),cards=[...document.querySelectorAll('.float-card')];let ticking=false;const clamp=v=>Math.max(0,Math.min(1,v));function render(){ticking=false;const rect=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-rect.top/range);title.style.opacity=String(clamp(1-(p-.12)/.22));title.style.transform='translateY('+(-p*90)+'px) scale('+(1-p*.07)+')';cards.forEach((card,i)=>{const dir=i%2===0?1:-1,local=clamp((p-.15-i*.05)/.4),e=local*local*(3-2*local);card.style.opacity=String(e*.52);card.style.transform='translate3d('+(dir*(1-e)*36)+'vw,'+((1-e)*66)+'vh,0) scale('+(0.76+e*.24)+')'});const lp=clamp((p-.48)/.22);label.style.opacity=String(lp);label.style.transform='translate(-50%,calc(-50% + '+((1-lp)*55)+'px))'}function requestRender(){if(ticking)return;ticking=true;requestAnimationFrame(render)}addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestRender);render();
-</script></body></html>
+</script><script src="js/feather.min.js"></script>
+<script src="site-menu.js?v=20260909-unified-header"></script>
+<script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
+</body></html>

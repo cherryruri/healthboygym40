@@ -1600,6 +1600,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 }
 </style>
 
+<link rel="stylesheet" href="site-header.css?v=20260909">
+<script src="site-header.js?v=20260909" defer></script>
 </head>
 <body>
 
@@ -1611,126 +1613,25 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
 <div class="main-content">
 
-<header>
-
-
-
-
-  <nav class="navbar">
-
-  <div class="logo">
-    <a href="#">HEALTHBOYGYM</a>
-  </div>
-
-
-
-  <ul class="menu">
-    <li><a href="company.html">회사소개</a></li>
-    <li><a href="#about">센터 소개</a></li>
-    <li><a href="#facility">시설 투어</a></li>
-    <li><a href="#trainer">트레이너 소개</a></li>
-    <li><a href="#hours">운영 시간</a></li>
-    <li><a href="#location">오시는 길</a></li>
-    <li><a href="board.html">게시판</a></li>
-    <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
-
-
-<li class="login-menu" id="userMenu">
-
-  <a href="login.html" id="loginLink">
-    LOGIN
-  </a>
-
-  <button id="logoutBtn" style="display:none;">
-    LOGOUT
-  </button>
-
-</li>
-  </ul>
-
-
-
-
-
-
-
-  <a href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" class="download-btn">
-    네이버 문의 및 예약 바로가기
-  </a>
-
-<button class="mobile-menu-btn">
-  ☰
-</button>
-
-<div class="mobile-menu-overlay"></div>
-
-<div class="mobile-side-menu">
-
-  
-
-
-
-  <div class="mobile-side-top">
-
-  <button class="mobile-close">
-    ×
-  </button>
-
-</div>
-
-
-<a href="login.html" class="mobile-profile-card" id="mobileProfileCard">
-  <div class="mobile-profile-avatar">
-    <span>👤</span>
-  </div>
-
-  <div class="mobile-profile-info">
-    <strong id="mobileProfileName">LOGIN</strong>
-    <p id="mobileProfileText">로그인 후 마이페이지를 이용해보세요.</p>
-  </div>
-</a>
-
-
-
-
-
-
-
-
-
-  <a href="company.html">회사소개</a>
-  <a href="#about">센터 소개</a>
-  <a href="#facility">시설 투어</a>
-  <a href="#trainer">트레이너 소개</a>
-  <a href="#hours">운영 시간</a>
-  <a href="#location">오시는 길</a>
-  <a href="#newsHub">새 소식</a>
-
- 
-
-<a href="./login.html" id="mobileLoginLink" onclick="location.href='./login.html';">
-  LOGIN
-</a>
-<button id="mobileLogoutBtn" style="display:none;">LOGOUT</button>
-
-
-
-  <a
-    class="mobile-side-reserve"
-    href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place"
-    target="_blank"
-  >
-    네이버 문의 및 예약 바로가기
-  </a>
-
-</div>
-
-
-
-
-
-
-</nav>
+<header id="site-header">
+  <nav class="navbar" aria-label="주 메뉴">
+    <div class="logo"><a href="#">HEALTHBOYGYM</a></div>
+    <ul class="menu">
+      <li><a href="company.html">회사소개</a></li>
+      <li><a href="#about">센터 소개</a></li>
+      <li><a href="#facility">시설 투어</a></li>
+      <li><a href="#trainer">트레이너 소개</a></li>
+      <li><a href="#hours">운영 시간</a></li>
+      <li><a href="#location">오시는 길</a></li>
+      <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
+      <li class="login-menu" id="userMenu"><a href="login.html" id="loginLink">LOGIN</a><button id="logoutBtn" style="display:none;">LOGOUT</button></li>
+    </ul>
+    <a class="download-btn" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer">네이버 문의 및 예약 바로가기</a>
+    <button class="mobile-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false"></button>
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-side-menu"></div>
+  </nav>
 </header>
 
 <main>
@@ -3242,7 +3143,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <script src="js/ScrollTrigger.min.js"></script>
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
-<script src="site-menu.js?v=20260909-mobile-fixes"></script>
+<script src="site-menu.js?v=20260909-unified-header"></script>
 <script src="script.js?v=20260909-20260811-garden-sequence25"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"

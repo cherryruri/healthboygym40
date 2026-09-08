@@ -31,6 +31,7 @@
     </div>
     <nav class="mobile-menu-list" aria-label="모바일 메뉴">
       <span class="mobile-menu-section-title">헬스보이짐 수내점 소개</span>
+      <a href="company.html"><i data-feather="briefcase" aria-hidden="true"></i><span>회사소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#about"><i data-feather="home" aria-hidden="true"></i><span>센터 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#facility"><i data-feather="activity" aria-hidden="true"></i><span>시설 투어</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#trainer"><i data-feather="user" aria-hidden="true"></i><span>트레이너 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
@@ -43,6 +44,7 @@
       <a href="index.html#newsHub"><i data-feather="file-text" aria-hidden="true"></i><span>새 소식</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <span class="mobile-menu-section-title member">회원 전용</span>
       <a href="board.html?board=free"><i data-feather="lock" aria-hidden="true"></i><span>자유게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a class="mobile-side-reserve" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer">네이버 문의 및 예약 바로가기</a>
     </nav>
   `;
 
@@ -64,6 +66,7 @@
       event.stopImmediatePropagation();
       const isOpen = document.body.classList.toggle("menu-open");
       button.setAttribute("aria-expanded", String(isOpen));
+      button.setAttribute("aria-label", isOpen ? "메뉴 닫기" : "메뉴 열기");
     };
 
     button.onclick = toggleMenu;
@@ -168,7 +171,10 @@
     document.body.classList.remove("menu-open");
     document
       .querySelectorAll(".mobile-menu-btn")
-      .forEach(button=>button.setAttribute("aria-expanded", "false"));
+      .forEach(button=>{
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-label", "메뉴 열기");
+      });
   }
 
   const OPTIONAL_HOME_SECTIONS = {

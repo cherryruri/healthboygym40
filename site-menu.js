@@ -32,6 +32,7 @@
     <nav class="mobile-menu-list" aria-label="모바일 메뉴">
       <span class="mobile-menu-section-title">헬스보이짐 수내점 소개</span>
       <a href="company.html"><i data-feather="briefcase" aria-hidden="true"></i><span>회사소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="allpass.html"><i data-feather="credit-card" aria-hidden="true"></i><span>올패스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#about"><i data-feather="home" aria-hidden="true"></i><span>센터 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#facility"><i data-feather="activity" aria-hidden="true"></i><span>시설 투어</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#trainer"><i data-feather="user" aria-hidden="true"></i><span>트레이너 소개</span><i data-feather="chevron-right" aria-hidden="true"></i></a>

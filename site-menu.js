@@ -111,7 +111,7 @@
       ['mypage.html','MY PAGE','마이페이지'],
       ['board.html','BOARD','게시판'],
       ['board.html?board=noticeboard','NOTICE / NEWS','공지문 / 뉴스'],
-      ['board.html?board=free','COMMUNITY','자유게시판']
+
     ];
     extraLinks.forEach(([href,en,ko])=>{
       const link=document.createElement('a');link.href=href;link.className='mobile-primary-link';

@@ -176,3 +176,62 @@ body.shared-header-login { overflow-y: auto; }
  #site-header .mobile-side-menu .mobile-menu-list a.mobile-mypage-link{grid-column:1/-1;display:flex!important;justify-content:flex-end!important;gap:10px!important;min-height:48px;margin-top:12px;border-top:1px solid #ffffff24!important;padding:16px 0!important}
  #site-header .mobile-mypage-link span:first-child{font-size:18px;font-weight:300;letter-spacing:.08em;color:#eee}#site-header .mobile-mypage-link span:last-child{font-size:11px;color:#aaa}
 }
+
+/* Mobile navigation: a soft curtain reveal and text-only touch feedback. */
+@media(max-width:1100px){
+ #site-header .mobile-menu-btn{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+ #site-header .mobile-menu-btn::before,#site-header .mobile-menu-btn::after{transition:top .3s ease,transform .45s cubic-bezier(.22,1,.36,1)!important}
+ #site-header .mobile-side-menu{
+  background:linear-gradient(125deg,rgba(10,11,12,.87),rgba(5,5,5,.96))!important;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  clip-path:inset(0 0 100% 0);transform:none!important;opacity:0!important;
+  visibility:hidden!important;pointer-events:none;
+  transition:clip-path .58s cubic-bezier(.76,0,.24,1),opacity .35s ease,visibility 0s .58s!important;
+ }
+ body.menu-open #site-header .mobile-side-menu{
+  clip-path:inset(0);opacity:1!important;visibility:visible!important;pointer-events:auto;
+  transition:clip-path .72s cubic-bezier(.22,1,.36,1),opacity .25s ease,visibility 0s!important;
+ }
+ #site-header .mobile-side-menu .mobile-menu-list a.mobile-primary-link{
+  background:transparent!important;border-radius:0!important;box-shadow:none!important;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  opacity:0!important;transform:translate3d(0,22px,0)!important;
+  transition:opacity .2s ease,transform .3s ease!important;
+ }
+ body.menu-open #site-header .mobile-side-menu .mobile-menu-list a.mobile-primary-link{
+  opacity:1!important;transform:translate3d(0,0,0)!important;
+  transition:opacity .48s ease var(--menu-delay,.12s),transform .65s cubic-bezier(.22,1,.36,1) var(--menu-delay,.12s)!important;
+ }
+ #site-header .mobile-primary-link:nth-of-type(1){--menu-delay:.10s}
+ #site-header .mobile-primary-link:nth-of-type(2){--menu-delay:.14s}
+ #site-header .mobile-primary-link:nth-of-type(3){--menu-delay:.18s}
+ #site-header .mobile-primary-link:nth-of-type(4){--menu-delay:.22s}
+ #site-header .mobile-primary-link:nth-of-type(5){--menu-delay:.26s}
+ #site-header .mobile-primary-link:nth-of-type(6){--menu-delay:.30s}
+ #site-header .mobile-primary-link:nth-of-type(7){--menu-delay:.34s}
+ #site-header .mobile-primary-link:nth-of-type(8){--menu-delay:.38s}
+ #site-header .mobile-primary-link:nth-of-type(9){--menu-delay:.42s}
+ #site-header .mobile-primary-link:nth-of-type(10){--menu-delay:.46s}
+ #site-header .mobile-side-menu .mobile-menu-list a:hover,
+ #site-header .mobile-side-menu .mobile-menu-list a:active,
+ #site-header .mobile-side-menu .mobile-menu-list a:focus{background:transparent!important;box-shadow:none!important}
+ #site-header .mobile-primary-link .mobile-nav-en,
+ #site-header .mobile-primary-link .mobile-nav-ko{transition:transform .28s cubic-bezier(.22,1,.36,1),color .22s ease!important}
+ #site-header .mobile-primary-link:active .mobile-nav-en{transform:translateX(-9px);color:#e5d5ae!important}
+ #site-header .mobile-primary-link:active .mobile-nav-ko{transform:translateX(-5px);color:#e5d5ae!important}
+ #site-header .mobile-primary-link:focus-visible{outline:0}
+ #site-header .mobile-primary-link:focus-visible .mobile-nav-en{text-decoration:underline;text-underline-offset:7px;text-decoration-thickness:1px;color:#e5d5ae!important}
+}
+@media(max-width:1100px) and (hover:hover){
+ #site-header .mobile-primary-link:hover .mobile-nav-en{transform:translateX(-9px);color:#e5d5ae!important}
+ #site-header .mobile-primary-link:hover .mobile-nav-ko{transform:translateX(-5px);color:#d1c4a7!important}
+}
+@media(max-width:1100px) and (prefers-reduced-motion:reduce){
+ #site-header .mobile-side-menu,body.menu-open #site-header .mobile-side-menu,
+ #site-header .mobile-side-menu .mobile-menu-list a.mobile-primary-link,
+ body.menu-open #site-header .mobile-side-menu .mobile-menu-list a.mobile-primary-link,
+ #site-header .mobile-menu-btn::before,#site-header .mobile-menu-btn::after,
+ #site-header .mobile-primary-link .mobile-nav-en,#site-header .mobile-primary-link .mobile-nav-ko{transition:none!important}
+ #site-header .mobile-primary-link:active .mobile-nav-en,#site-header .mobile-primary-link:active .mobile-nav-ko{transform:none}
+}
+

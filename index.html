@@ -1652,7 +1652,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <div><strong><b data-opening-count="1000">0</b></strong><p>헬스보이짐 수내점 네이버 리뷰</p><span>평균 4.9점 유지</span></div>
 <div><strong><b data-opening-count="1200">0</b></strong><p>헬스보이짐 수내점 블로그 포스팅</p><span>실제 회원님들의 생생한 후기</span></div>
 <div><strong><b data-opening-count="5000">0</b></strong><p>헬스보이짐 수내점 누적 회원 등록</p><span>수내역 근처 압도적 센터</span></div>
-<div><strong><b data-opening-count="1">0</b><small>위</small></strong><p>고객만족도</p><span>분당 헬스장 부문<br>부동의 1위</span></div>
+<div><strong><b data-opening-count="1">1</b><small>위</small></strong><p>고객만족도</p><span>분당 헬스장 부문<br>부동의 1위</span></div>
 </section>
 
       <div class="hero-brand-copy">
@@ -3292,13 +3292,13 @@ html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-br
  const numbers=[...stats.querySelectorAll('[data-opening-count]')];
  body.classList.add('home-title-fade','hero-stats-sequence');
  let started=false,timer=0,frame=0;
- const reset=()=>{clearTimeout(timer);cancelAnimationFrame(frame);started=false;body.classList.remove('hero-stats-visible','hero-stats-finished','hero-title-fade-ready');numbers.forEach(n=>n.textContent='0');stats.setAttribute('aria-hidden','true');copy.setAttribute('aria-hidden','true');};
+ const reset=()=>{clearTimeout(timer);cancelAnimationFrame(frame);started=false;body.classList.remove('hero-stats-visible','hero-stats-finished','hero-title-fade-ready');numbers.forEach(n=>n.textContent=n.dataset.openingCount==='1'?'1':'0');stats.setAttribute('aria-hidden','true');copy.setAttribute('aria-hidden','true');};
  const count=()=>{
   body.classList.add('hero-stats-visible');stats.removeAttribute('aria-hidden');
   const start=performance.now(),duration=2100;
   const tick=now=>{
    const progress=Math.min(1,(now-start)/duration),eased=1-Math.pow(1-progress,2);
-   numbers.forEach(n=>n.textContent=Math.floor(Number(n.dataset.openingCount)*eased).toLocaleString('en-US'));
+   numbers.forEach(n=>n.textContent=(Number(n.dataset.openingCount)===1?1:Math.floor(Number(n.dataset.openingCount)*eased)).toLocaleString('en-US'));
    if(progress<1){frame=requestAnimationFrame(tick);return;}
    // Begin the title transition on the same frame as the final counter values.
    body.classList.add('hero-stats-finished','hero-title-fade-ready');

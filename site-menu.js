@@ -88,6 +88,24 @@
     }
 
     side.innerHTML = MENU_HTML;
+    const primaryLabels = {
+      'company.html':['ABOUT','회사소개'], 'allpass.html':['ALL PASS','올패스'],
+      'index.html#about':['OUR GYM','센터 소개'], 'index.html#facility':['SPACE','시설 투어'],
+      'index.html#trainer':['TRAINERS','트레이너 소개'], 'index.html#hours':['HOURS','운영 시간'],
+      'index.html#location':['LOCATION','오시는 길']
+    };
+    side.querySelectorAll('.mobile-menu-list a').forEach(link => {
+      const pair = primaryLabels[link.getAttribute('href')];
+      if (!pair) return;
+      link.classList.add('mobile-primary-link');
+      link.innerHTML = '<span class="mobile-nav-en" lang="en">'+pair[0]+'</span><span class="mobile-nav-ko">'+pair[1]+'</span>';
+      if (link.getAttribute('href') === 'allpass.html') link.classList.add('mobile-allpass-link');
+    });
+    side.querySelector('.mobile-menu-section-title').textContent = 'EXPLORE';
+    const reserve = side.querySelector('.mobile-side-reserve');
+    reserve.innerHTML = '<span lang="en">BOOK A VISIT <span aria-hidden="true">↗</span></span><small>상담 · 예약</small>';
+    side.appendChild(side.querySelector('.mobile-auth-panel'));
+
 
     if(window.feather){
       window.feather.replace({

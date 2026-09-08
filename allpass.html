@@ -18,7 +18,7 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 .pass-marquee span{animation:pass-drift 32s linear infinite}
 @keyframes pass-drift{to{transform:translateX(-100%)}}
 .pass-flip{width:360px;height:490px;perspective:1400px;outline-offset:20px;cursor:pointer}
-.pass-flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateZ(-16deg);transition:transform .8s cubic-bezier(.22,.7,.2,1)}
+.pass-flip-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:rotateZ(-16deg);transition:transform 1.1s cubic-bezier(.25,.8,.25,1);will-change:transform}
 .pass-flip.is-flipped .pass-flip-inner{transform:rotateZ(0) rotateY(180deg)}
 .pass-face{position:absolute;inset:0;border-radius:22px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 10px 32px #003e5540}
 .pass-face>img{width:100%;height:100%;object-fit:cover;display:block}
@@ -29,7 +29,7 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 .pass-card-copy>span{font-size:12px;letter-spacing:.16em}.pass-card-copy h2{font-size:36px;line-height:1.25;margin:25px 0 20px;letter-spacing:-.05em}.pass-card-copy p{font-size:15px;line-height:1.8;margin:0}.pass-card-copy a{display:block;border:1px solid #fff;border-radius:40px;padding:15px 12px;font-size:14px;font-weight:700;margin-top:30px;color:#fff}.pass-card-copy a:hover{background:#fff;color:#073b48}
 .pass-arrow{position:absolute;top:50%;border:0;background:none;color:white;font-size:42px;width:64px;height:64px;cursor:pointer}.pass-prev{left:32px}.pass-next{right:32px}.pass-card-hint{position:absolute;bottom:35px;font-size:13px;letter-spacing:.02em}.pass-flip:focus-visible,.pass-arrow:focus-visible{outline:2px solid white}
 @media(max-width:700px){.pass-showcase{min-height:650px}.pass-flip{width:min(72vw,320px);height:420px}.pass-card-copy{padding:24px 18px}.pass-card-copy h2{font-size:30px}.pass-card-copy p{font-size:13px}.pass-card-copy a{font-size:12px}.pass-arrow{top:auto;bottom:17px;font-size:32px}.pass-prev{left:12px}.pass-next{right:12px}.pass-card-hint{bottom:30px;font-size:11px}}
-@media(prefers-reduced-motion:reduce){.pass-marquee span{animation:none}.pass-flip-inner{transition:none}}
+@media(prefers-reduced-motion:reduce){.pass-marquee span{animation:pass-drift 48s linear infinite}.pass-flip-inner{transition:transform 1.1s cubic-bezier(.25,.8,.25,1)}}
 </style>
 <link rel="stylesheet" href="site-header.css?v=20260909-alpha45">
 <script src="site-header.js?v=20260909" defer></script>

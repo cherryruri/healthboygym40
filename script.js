@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function(){
       "true";
 
     headerLogo.addEventListener("click", event=>{
+      try{sessionStorage.setItem("hb-replay-loader","1");}catch(_){}
 
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -3680,8 +3681,9 @@ document.addEventListener("DOMContentLoaded", function(){
       mainContent.style.display = "block";
     }
 
-    if(!loader){
-      startHeroRevealSequence();
+    if(!loader || document.documentElement.classList.contains('skip-site-loader')){
+      if(loader)loader.style.display='none';
+      document.body.classList.add('loaded','hero-reveal-start','hero-step-line','hero-step-kicker','hero-step-message','hero-step-button','hero-step-scroll','hero-sequence-complete');
       startSite();
       initHashNavigation();
       queueHashScroll();
@@ -3741,9 +3743,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
   initLogoLoaderReplay();
   initCinematicHeader();
-  stageLoaderIntro();
-
-  setTimeout(openMain, 2860);
+  if(document.documentElement.classList.contains('skip-site-loader')) setTimeout(openMain,0);
+  else { stageLoaderIntro(); setTimeout(openMain, 2860); }
 
 
 

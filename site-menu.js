@@ -88,6 +88,7 @@
     }
 
     side.innerHTML = MENU_HTML;
+    side.querySelector('a[href="index.html#about"]')?.remove();
     const primaryLabels = {
       'company.html':['ABOUT','회사소개'], 'allpass.html':['ALL PASS','올패스'],
       'index.html#about':['OUR GYM','센터 소개'], 'index.html#facility':['SPACE','시설 투어'],
@@ -110,9 +111,9 @@
     side.querySelector('.mobile-menu-list').appendChild(community);
     const mypage = document.createElement('a');
     mypage.href = 'mypage.html';
-    mypage.className = 'mobile-mypage-link';
-    mypage.innerHTML = '<span lang="en">MY PAGE</span><span>마이페이지</span>';
-    side.querySelector('.mobile-menu-list').appendChild(mypage);
+    mypage.className = 'mobile-primary-link';
+    mypage.innerHTML = '<span class="mobile-nav-en" lang="en">MY PAGE</span><span class="mobile-nav-ko">마이페이지</span>';
+    community.before(mypage);
     side.appendChild(side.querySelector('.mobile-auth-panel'));
 
 

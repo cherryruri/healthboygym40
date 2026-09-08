@@ -40,3 +40,13 @@
     if (document.body.classList.contains('menu-open')) show();
   }).observe(document.body, {attributes:true, attributeFilter:['class']});
 })();
+
+// Remember deliberate navigation before another page loads.
+document.addEventListener('click', event => {
+ const link=event.target.closest('a[href]');if(!link)return;
+ const url=new URL(link.href,location.href);if(url.origin!==location.origin)return;
+ try{
+  if(link.closest('#site-header .logo'))sessionStorage.setItem('hb-replay-loader','1');
+  else sessionStorage.setItem('hb-internal-navigation','1');
+ }catch(_){}
+},{capture:true});

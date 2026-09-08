@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
+<script>
+(() => {
+ let replay=false,seen=false,internal=false;
+ try{replay=sessionStorage.getItem('hb-replay-loader')==='1';seen=sessionStorage.getItem('hb-loader-seen')==='1';internal=sessionStorage.getItem('hb-internal-navigation')==='1';sessionStorage.removeItem('hb-replay-loader');sessionStorage.removeItem('hb-internal-navigation');sessionStorage.setItem('hb-loader-seen','1');}catch(_){}
+ const fromSite=!!document.referrer&&new URL(document.referrer).origin===location.origin;
+ if(!replay&&(seen||internal||fromSite||location.hash))document.documentElement.classList.add('skip-site-loader');
+})();
+</script>
+<style>html.skip-site-loader .logo-screen{display:none!important}</style>
 <link rel="stylesheet" href="style.css?v=20260909-mobile-fixes">
 <link rel="stylesheet" href="trainer-cover.css?v=20260909-pt-story">
 <link rel="stylesheet" href="css/swiper.min.css">
@@ -87,7 +96,7 @@
 <style id="loading-texture-background">
 .logo-screen{
   background-color:#050607 !important;
-  background-image:url('assets/loading-background.png?v=20260807-loader-texture1') !important;
+  background-image:none !important;
   background-position:center center !important;
   background-size:cover !important;
   background-repeat:no-repeat !important;
@@ -1601,7 +1610,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 </style>
 
 <link rel="stylesheet" href="site-header.css?v=20260909-menu-links">
-<script src="site-header.js?v=20260909" defer></script>
+<script src="site-header.js?v=20260909-nav-final" defer></script>
 </head>
 <body>
 
@@ -1619,7 +1628,6 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     <ul class="menu">
       <li><a href="company.html">회사소개</a></li>
       <li><a href="allpass.html">올패스</a></li>
-      <li><a href="#about">센터 소개</a></li>
       <li><a href="#facility">시설 투어</a></li>
       <li><a href="#trainer">트레이너 소개</a></li>
       <li><a href="#hours">운영 시간</a></li>
@@ -3144,8 +3152,8 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <script src="js/ScrollTrigger.min.js"></script>
 <script src="js/feather.min.js"></script>
 <script src="js/pass-branches.js?v=20260618-stats-proof-hold2"></script>
-<script src="site-menu.js?v=20260909-menu-links"></script>
-<script src="script.js?v=20260909-20260811-garden-sequence25"></script>
+<script src="site-menu.js?v=20260909-nav-final"></script>
+<script src="script.js?v=20260909-loader-navigation"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
   data-news-src="home-news.js?v=20260705-review-flow18"

@@ -3440,22 +3440,31 @@ html body .hero-brand-symbol,html body .hero-brand-line,html body .hero-booking-
 </style>
 
 <style id="home-title-fade-20260909">
-html body.home-title-fade .hero-brand-composition .hero-brand-copy{opacity:0!important;transform:translateY(10px)!important;transition:opacity 1.25s cubic-bezier(.22,1,.36,1),transform 1.5s cubic-bezier(.22,1,.36,1)!important}
+html body.home-title-fade .hero-brand-composition .hero-brand-copy{opacity:0!important;transform:translateY(10px)!important;transition:opacity 1.4s ease,transform 1.5s cubic-bezier(.22,1,.36,1)!important}
 html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-brand-copy{opacity:1!important;transform:translateY(0)!important}
-@media(prefers-reduced-motion:reduce){html body.home-title-fade .hero-brand-composition .hero-brand-copy{transition:opacity .3s ease!important;transform:none!important}}
+@media(prefers-reduced-motion:reduce){html body.home-title-fade .hero-brand-composition .hero-brand-copy{transition:opacity 1.4s ease!important;transform:none!important}}
 </style>
 <script id="home-title-fade-script">
 (()=>{
- const body=document.body;
+ const body=document.body,loader=document.querySelector('.logo-screen');
  body.classList.add('home-title-fade');
- let started=false;
+ let pending=false,completed=false;
  const begin=()=>{
-  if(started||!body.classList.contains('loaded'))return;
-  started=true;observer.disconnect();
-  requestAnimationFrame(()=>requestAnimationFrame(()=>body.classList.add('hero-title-fade-ready')));
+  const visibleLoader=loader&&getComputedStyle(loader).display!=='none'&&getComputedStyle(loader).visibility!=='hidden';
+  if(!body.classList.contains('loaded')||visibleLoader){
+   if(body.classList.contains('hero-title-fade-ready'))body.classList.remove('hero-title-fade-ready');completed=false;return;
+  }
+  if(pending||completed)return;
+  pending=true;
+  setTimeout(()=>{
+   pending=false;
+   if(loader&&getComputedStyle(loader).display!=='none'&&getComputedStyle(loader).visibility!=='hidden')return;
+   completed=true;body.classList.add('hero-title-fade-ready');
+  },250);
  };
  const observer=new MutationObserver(begin);
  observer.observe(body,{attributes:true,attributeFilter:['class']});
+ if(loader)observer.observe(loader,{attributes:true,attributeFilter:['class','style']});
  begin();
 })();
 </script>

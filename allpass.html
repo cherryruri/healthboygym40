@@ -33,6 +33,15 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 
 .special-sticky::after{content:'';position:absolute;inset:0;z-index:30;background:#050505;opacity:var(--scene-darkness,0);pointer-events:none}
 .pass-showcase .pass-flip{opacity:var(--card-arrival,1);transform:translateY(calc((1 - var(--card-arrival,1))*70px))}
+
+.pass-showcase .pass-flip{position:relative;isolation:isolate;opacity:0;transform:translateY(100px);transition:opacity 1s ease,transform 1s cubic-bezier(.22,1,.36,1)}
+.pass-showcase.card-settling .pass-flip{opacity:1;transform:translateY(0)}
+.pass-showcase .pass-marquee{opacity:0;transition:opacity 1.5s ease}
+.pass-showcase .pass-marquee span{animation-play-state:paused}
+.pass-showcase.text-flowing .pass-marquee{opacity:.5}
+.pass-showcase.text-flowing .pass-marquee span{animation-play-state:running}
+.pass-flip::before{content:'';position:absolute;inset:-45px;z-index:-1;pointer-events:none;background:radial-gradient(ellipse,rgba(255,217,75,.32),rgba(255,205,45,.12) 45%,transparent 72%);filter:blur(24px);opacity:0;transform:scale(.9);transition:opacity .8s ease,transform 1s ease}
+.pass-flip.is-flipped::before{opacity:1;transform:scale(1.1)}
 </style>
 <link rel="stylesheet" href="site-header.css?v=20260909-touch-layer">
 <script src="site-header.js?v=20260909" defer></script>
@@ -83,7 +92,7 @@ main{padding-top:var(--header)}.special{position:relative;height:420vh;backgroun
 </main><footer class="company-footer"><strong>HEALTHBOYGYM</strong><p>대한민국 No.1 피트니스 브랜드 · 전국 90개 지점</p></footer>
 <script>
 
-const scene=document.querySelector('.special'),title=document.querySelector('.special-title'),label=document.querySelector('.special-label'),cards=[...document.querySelectorAll('.float-card')];let ticking=false;const clamp=v=>Math.max(0,Math.min(1,v));function render(){ticking=false;const rect=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-rect.top/range);scene.style.setProperty('--scene-darkness',String(clamp((p-.74)/.20)));const showcase=document.querySelector('.pass-showcase');if(showcase){const arrival=clamp((innerHeight-showcase.getBoundingClientRect().top)/(innerHeight*.6));showcase.style.setProperty('--card-arrival',String(arrival*arrival*(3-2*arrival)))}title.style.opacity=String(clamp(1-(p-.12)/.22));title.style.transform='translateY('+(-p*90)+'px) scale('+(1-p*.07)+')';cards.forEach((card,i)=>{const dir=i%2===0?1:-1,local=clamp((p-.15-i*.05)/.4),e=local*local*(3-2*local);card.style.opacity=String(e*.52);card.style.transform='translate3d('+(dir*(1-e)*36)+'vw,'+((1-e)*66)+'vh,0) scale('+(0.76+e*.24)+')'});const lp=clamp((p-.48)/.22);label.style.opacity=String(lp);label.style.transform='translate(-50%,calc(-50% + '+((1-lp)*55)+'px))'}function requestRender(){if(ticking)return;ticking=true;requestAnimationFrame(render)}addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestRender);render();
+const scene=document.querySelector('.special'),title=document.querySelector('.special-title'),label=document.querySelector('.special-label'),cards=[...document.querySelectorAll('.float-card')];let ticking=false;const clamp=v=>Math.max(0,Math.min(1,v));function render(){ticking=false;const rect=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-rect.top/range);scene.style.setProperty('--scene-darkness',String(clamp((p-.74)/.20)));title.style.opacity=String(clamp(1-(p-.12)/.22));title.style.transform='translateY('+(-p*90)+'px) scale('+(1-p*.07)+')';cards.forEach((card,i)=>{const dir=i%2===0?1:-1,local=clamp((p-.15-i*.05)/.4),e=local*local*(3-2*local);card.style.opacity=String(e*.52);card.style.transform='translate3d('+(dir*(1-e)*36)+'vw,'+((1-e)*66)+'vh,0) scale('+(0.76+e*.24)+')'});const lp=clamp((p-.48)/.22);label.style.opacity=String(lp);label.style.transform='translate(-50%,calc(-50% + '+((1-lp)*55)+'px))'}function requestRender(){if(ticking)return;ticking=true;requestAnimationFrame(render)}addEventListener('scroll',requestRender,{passive:true});addEventListener('resize',requestRender);render();
 </script><script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20260909-allpass"></script>
 <script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
@@ -104,6 +113,21 @@ const scene=document.querySelector('.special'),title=document.querySelector('.sp
  const photos=['센터전체사진1.jpg','프리웨이트존사진1.jpg','테라스존사진1.jpg'];let current=0;
  const move=delta=>{set(false);current=(current+delta+photos.length)%photos.length;card.querySelectorAll('.pass-face>img').forEach(img=>img.src=photos[current]);};
  document.querySelector('.pass-prev').addEventListener('click',()=>move(-1));document.querySelector('.pass-next').addEventListener('click',()=>move(1));
+})();
+</script>
+<script>
+(() => {
+ const section=document.querySelector('.pass-showcase');let timer;
+ new IntersectionObserver(entries=>{
+  const entry=entries[0];
+  if(entry.isIntersecting){
+   if(section.classList.contains('card-settling'))return;
+   section.classList.add('card-settling');
+   timer=setTimeout(()=>section.classList.add('text-flowing'),1100);
+  }else{
+   clearTimeout(timer);section.classList.remove('card-settling','text-flowing');
+  }
+ },{threshold:.35}).observe(section);
 })();
 </script>
 </body></html>

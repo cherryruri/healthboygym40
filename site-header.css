@@ -4,8 +4,8 @@
 #site-header {
   position: fixed !important; inset: 0 0 auto !important;
   width: 100% !important; height: var(--site-header-height) !important;
-  z-index: 99999 !important; background: #050505 !important;
-  border: 0 !important; border-bottom: 1px solid #282828 !important;
+  z-index: 99999 !important; background: rgba(5, 5, 5, .55) !important;
+  border: 0 !important; border-bottom: 1px solid rgba(255, 255, 255, .12) !important;
   box-shadow: none !important; opacity: 1 !important; visibility: visible !important;
   backdrop-filter: none !important; transform: none;
   transition: transform .25s ease !important;
@@ -19,7 +19,7 @@ html:has(#site-header):has(body.menu-open) { overflow: hidden !important; }
   gap: 24px !important; padding: 0 28px !important; margin: 0 !important;
   width: 100% !important; height: var(--site-header-height) !important;
   min-height: var(--site-header-height) !important;
-  background: #050505 !important; border: 0 !important; backdrop-filter: none !important;
+  background: transparent !important; border: 0 !important; backdrop-filter: none !important;
 }
 #site-header .logo { flex: 0 0 auto; margin: 0 !important; }
 #site-header .logo a {

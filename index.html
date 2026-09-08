@@ -3428,13 +3428,34 @@ body.trainer-proof-header header .logo a,body.trainer-proof-header header #logo-
 html body .hero-brand-composition{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:0!important;padding:0 28px!important}
 html body .hero-brand-composition .hero-brand-copy{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;position:static!important;width:min(1160px,100%)!important;max-width:none!important;margin:0!important;padding:0!important;gap:0!important;transform:none!important;text-align:center!important}
 html body .hero-brand-composition .hero-brand-kicker{font-family:Pretendard,Arial,sans-serif!important;font-size:clamp(14px,1.4vw,20px)!important;font-weight:500!important;line-height:1.65!important;letter-spacing:-.025em!important;margin:0 0 22px!important;color:#fff!important}
-html body .hero-brand-composition .intro-main{display:block!important;width:100%!important;max-width:none!important;font-family:Pretendard,Arial,sans-serif!important;font-size:clamp(38px,4.3vw,64px)!important;font-weight:700!important;line-height:1.5!important;letter-spacing:-.035em!important;margin:0!important;color:#fff!important;text-align:center!important}
+html body .hero-brand-composition .intro-main{display:block!important;width:100%!important;max-width:none!important;font-family:Pretendard,Arial,sans-serif!important;font-size:clamp(44px,5.1vw,76px)!important;font-weight:700!important;line-height:1.5!important;letter-spacing:-.035em!important;margin:0!important;color:#fff!important;text-align:center!important}
 html body .hero-brand-composition .intro-title-line{display:block!important;font:inherit!important;letter-spacing:inherit!important;line-height:inherit!important;color:#fff!important;white-space:normal!important;word-break:keep-all!important;overflow-wrap:normal!important;text-align:center!important}
 html body .hero-brand-composition .hero-brand-kicker,html body .hero-brand-composition .intro-main,html body .hero-brand-composition .intro-title-line{opacity:1!important;visibility:visible!important;filter:none!important;text-shadow:none!important;transform:none!important;animation:none!important;transition:none!important}
 html body .hero-brand-symbol,html body .hero-brand-line,html body .hero-booking-cta,html body .hero-scroll-explore{display:none!important}
 @media(max-width:768px){
  html body .hero-brand-composition{padding:0 20px!important}
  html body .hero-brand-composition .hero-brand-kicker{font-size:12px!important;line-height:1.7!important;margin-bottom:18px!important}
- html body .hero-brand-composition .intro-main{font-size:clamp(23px,5.9vw,42px)!important;line-height:1.6!important;letter-spacing:-.04em!important}
+ html body .hero-brand-composition .intro-main{font-size:clamp(26px,7vw,46px)!important;line-height:1.6!important;letter-spacing:-.04em!important}
 }
 </style>
+
+<style id="home-title-fade-20260909">
+html body.home-title-fade .hero-brand-composition .hero-brand-copy{opacity:0!important;transform:translateY(10px)!important;transition:opacity 1.25s cubic-bezier(.22,1,.36,1),transform 1.5s cubic-bezier(.22,1,.36,1)!important}
+html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-brand-copy{opacity:1!important;transform:translateY(0)!important}
+@media(prefers-reduced-motion:reduce){html body.home-title-fade .hero-brand-composition .hero-brand-copy{transition:opacity .3s ease!important;transform:none!important}}
+</style>
+<script id="home-title-fade-script">
+(()=>{
+ const body=document.body;
+ body.classList.add('home-title-fade');
+ let started=false;
+ const begin=()=>{
+  if(started||!body.classList.contains('loaded'))return;
+  started=true;observer.disconnect();
+  requestAnimationFrame(()=>requestAnimationFrame(()=>body.classList.add('hero-title-fade-ready')));
+ };
+ const observer=new MutationObserver(begin);
+ observer.observe(body,{attributes:true,attributeFilter:['class']});
+ begin();
+})();
+</script>

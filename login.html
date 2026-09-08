@@ -6,7 +6,7 @@
 <title>HEALTHBOYGYM LOGIN</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"/>
-<link rel="stylesheet" href="login.css?v=20260618-type-scale"/>
+<link rel="stylesheet" href="login.css?v=20260909-signup-navigation"/>
 </head>
 
 <body>
@@ -81,8 +81,8 @@
 
         <div class="signup-pages">
 
-          <button type="button" class="signup-arrow prev" onclick="showLogin()">‹</button>
-          <button type="button" class="signup-arrow next" onclick="nextSignupPage()">›</button>
+          <button type="button" class="signup-arrow prev" aria-label="이전 단계" onclick="prevSignupPage()">이전</button>
+          <button type="button" class="signup-arrow next" aria-label="다음 단계" onclick="nextSignupPage()">다음</button>
 
           <div class="signup-page active" data-page="1">
 
@@ -304,7 +304,7 @@
 
 
 
-<script src="login.js?v=101"></script>
+<script src="login.js?v=20260909-signup-navigation"></script>
 <script type="module" src="./firebase-auth.js?v=102"></script>
 
 

@@ -41,7 +41,6 @@
       <a href="board.html?board=noticeboard"><i data-feather="volume-2" aria-hidden="true"></i><span>공지문 / 뉴스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="board.html?board=infoboard" data-admin-only hidden><i data-feather="info" aria-hidden="true"></i><span>인포게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#newsHub"><i data-feather="file-text" aria-hidden="true"></i><span>새 소식</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
-      <a href="index.html#faq"><i data-feather="message-square" aria-hidden="true"></i><span>자주 묻는 질문</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <span class="mobile-menu-section-title member">회원 전용</span>
       <a href="board.html?board=free"><i data-feather="lock" aria-hidden="true"></i><span>자유게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
     </nav>
@@ -58,6 +57,8 @@
     }
 
     button.textContent = "";
+    button.setAttribute("aria-label", "메뉴 열기");
+    button.setAttribute("aria-expanded", "false");
     const toggleMenu = event=>{
       event.preventDefault();
       event.stopImmediatePropagation();

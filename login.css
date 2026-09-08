@@ -798,8 +798,24 @@ body{
   }
 
   .signup-arrow{
-    display:none;
+    display:inline-flex;
+    position:static;
+    order:1;
+    align-items:center;
+    justify-content:center;
+    flex:1 1 calc(50% - 8px);
+    height:48px;
+    margin-top:24px;
+    transform:none;
+    background:rgba(0,0,0,.55);
+    border:1px solid rgba(255,255,255,.45);
+    border-radius:8px;
+    color:#fff;
   }
+
+  .signup-arrow::before{display:none;}
+  .signup-pages{display:flex;flex-wrap:wrap;gap:12px;}
+  .signup-page{flex:0 0 100%;}
 
   .mobile-bottom-nav{
     position:fixed;
@@ -1455,6 +1471,8 @@ body{
   line-height:1.2 !important;
   letter-spacing:0 !important;
 }
+
+#signupBox[data-page="6"] .signup-arrow.next{display:none;}
 
 @media(max-width:768px){
   .auth-box h1,

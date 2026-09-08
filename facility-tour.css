@@ -1,0 +1,90 @@
+/* One sticky image stage serves the introduction and every facility zone. */
+#facility { margin-top: 0 !important; }
+#facilityTour {
+  --facility-viewport: 100svh;
+  --facility-intro-travel: max(780px, 120svh);
+}
+#facilityTour .cont {
+  min-height: 0 !important;
+  background: #fff !important;
+  transition: none;
+}
+#facilityTour .img_inner {
+  position: sticky !important;
+  top: 0 !important;
+  height: var(--facility-viewport) !important;
+  min-height: 0 !important;
+  background: #fff !important;
+  isolation: isolate;
+}
+#facilityTour .img_box {
+  height: 100% !important;
+  transform: translateY(var(--facility-image-y, 68%)) scale(var(--facility-image-scale, .22));
+  transform-origin: center;
+  opacity: var(--facility-image-opacity, 0);
+  border-radius: var(--facility-image-radius, 28px);
+  background: #111;
+  will-change: transform, opacity;
+}
+#facilityTour .img_box > li.facility-bg,
+#facilityTour .img_box > li.facility-bg.on {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  width: 100% !important;
+  transform: none !important;
+  opacity: var(--facility-crossfade-opacity, 0) !important;
+  z-index: var(--facility-layer, 0) !important;
+  transition: none !important;
+}
+#facilityTour .facility-title-copy {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  margin: 0;
+  white-space: nowrap;
+  color: #050505;
+  font-size: clamp(150px, 22vw, 420px);
+  font-weight: 700;
+  line-height: .82;
+  letter-spacing: -.085em;
+  opacity: var(--facility-title-opacity, 1);
+  transform: translate(-50%, calc(-50% + var(--facility-title-y, 48vh))) scale(var(--facility-title-scale, 1.58));
+  filter: blur(var(--facility-title-blur, 0px));
+  pointer-events: none;
+}
+#facilityTour .txt_box {
+  margin-top: calc(-1 * var(--facility-viewport)) !important;
+  padding-top: var(--facility-intro-travel);
+  pointer-events: none;
+}
+#facilityTour .txt_box > li {
+  height: var(--facility-viewport) !important;
+  min-height: 0 !important;
+  pointer-events: none !important;
+}
+#facilityTour .txt_box > li:first-child {
+  opacity: var(--facility-caption-opacity, 0);
+}
+#facilityTour .txt_box > li > * { pointer-events: auto; }
+#facilityTour .txt_box > li { cursor: default; }
+.facility-photo-modal { overscroll-behavior: contain; }
+html.facility-gallery-open { overflow: hidden !important; }
+.facility-modal-dialog.facility-gallery-505 { width: 100% !important; }
+.facility-gallery-caption { max-width: calc(100% - 40px); line-height: 1.2 !important; }
+@media (max-width: 768px) {
+  .facility-modal-dialog.facility-gallery-505 { box-sizing: border-box; }
+  .facility-gallery-main { flex: 1 1 0 !important; min-height: 0 !important; }
+  .facility-gallery-side { flex: 0 0 24% !important; height: auto !important; }
+  .facility-gallery-main img { object-fit: contain !important; }
+  .facility-gallery-caption { bottom: 42px !important; font-size: clamp(22px, 6vw, 30px) !important; }
+}
+@media (max-width: 768px) {
+  #facilityTour { --facility-intro-travel: max(540px, 90svh); }
+  #facilityTour .facility-title-copy { font-size: clamp(88px, 25vw, 145px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #facilityTour .img_box span { transition: none; }
+}

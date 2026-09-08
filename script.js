@@ -5099,6 +5099,8 @@ document.addEventListener("DOMContentLoaded", function(){
     const modal =
       document.querySelector(".facility-photo-modal");
 
+    if(modal?.dataset.controller === "unified") return;
+
     const modalImg =
       modal && modal.querySelector("img");
 

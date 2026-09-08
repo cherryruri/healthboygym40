@@ -143,6 +143,8 @@ window.prevSignupPage = function(){
   if(signupPageIndex > 1){
     signupPageIndex--;
     updateSignupPage();
+  }else{
+    showLogin();
   }
 
 }

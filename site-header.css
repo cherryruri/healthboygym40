@@ -4,7 +4,7 @@
 #site-header {
   position: fixed !important; inset: 0 0 auto !important;
   width: 100% !important; height: var(--site-header-height) !important;
-  z-index: 99999 !important; background: rgba(5, 5, 5, .55) !important;
+  z-index: 99999 !important; background: rgba(5, 5, 5, .35) !important;
   border: 0 !important; border-bottom: 1px solid rgba(255, 255, 255, .12) !important;
   box-shadow: none !important; opacity: 1 !important; visibility: visible !important;
   backdrop-filter: none !important; transform: none;

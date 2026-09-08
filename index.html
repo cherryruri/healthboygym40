@@ -1727,6 +1727,9 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     </div>
   </div>
 </section>
+<section class="mobile-coaching-hold" aria-label="퍼스널 트레이닝 코칭">
+  <div class="mobile-coaching-sticky"><p>트레이너의 정확한 분석과 체계적인 코칭으로 운동의 기준을 바꿉니다.</p></div>
+</section>
 <script id="pt-reasons-showcase-script">
 (() => {
   const initPtReasons = () => {
@@ -3093,6 +3096,18 @@ body.trainer-proof-header header .mobile-menu-btn{color:#111!important}
  }
 })();
 </script>
+<style id="mobile-scroll-reading-holds">
+.mobile-coaching-hold{display:none}
+@media(max-width:768px){
+ html body.hero-card-morph .intro.hero-expand-section,
+ html body.hero-card-morph .hero-expand-sticky{background:#fff!important;background-image:none!important}
+ html body.hero-card-morph .hero-expand-sticky::before{display:none!important}
+ html body #ptReasons .pt-reasons-subtitle{display:none!important}
+ .mobile-coaching-hold{display:block;position:relative;height:170svh;background:#fff;color:#34404c}
+ .mobile-coaching-sticky{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;padding:0 25px;box-sizing:border-box}
+ .mobile-coaching-sticky p{width:100%;max-width:340px;margin:0;text-align:center;font-size:15px;font-weight:650;line-height:1.6;letter-spacing:-.45px;word-break:keep-all}
+}
+</style>
 </body>
 </html>
 
@@ -3204,8 +3219,8 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
 }
 </style>
 
-<link rel="stylesheet" href="facility-tour.css?v=20260909">
-<script src="facility-tour.js?v=20260909-copy2"></script>
+<link rel="stylesheet" href="facility-tour.css?v=20260909-reading-hold">
+<script src="facility-tour.js?v=20260909-reading-hold"></script>
 <script src="facility-gallery.js?v=20260909"></script>
 
 <style id="trainer-sequence-correction-20260824">

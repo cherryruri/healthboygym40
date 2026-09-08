@@ -22,18 +22,19 @@
     const travel = Math.max(1, firstTop - sceneTop);
     const p = clamp(-sceneTop / travel);
     const mobile = innerWidth <= 768;
-    const settle = smooth(p / .36);
-    const reveal = smooth((p - .34) / .58);
+    const settle = smooth(p / .28);
+    const fittedScale = Math.min(mobile ? .32 : .36, (innerWidth - (mobile ? 40 : 96)) / Math.max(title.offsetWidth, 1));
+    const reveal = smooth((p - .66) / .32);
     const set = (name, value) => tour.style.setProperty('--facility-' + name, String(value));
     set('title-opacity', 1 - reveal);
-    set('title-scale', (mobile ? 1.28 : 1.58) + ((mobile ? .32 : .36) - (mobile ? 1.28 : 1.58)) * settle);
+    set('title-scale', (mobile ? 1.28 : 1.58) + (fittedScale - (mobile ? 1.28 : 1.58)) * settle);
     set('title-y', ((mobile ? 40 : 48) * (1 - settle) - reveal * 7) + 'vh');
     set('title-blur', (reduceMotion.matches ? 0 : reveal * 24) + 'px');
     set('image-scale', reduceMotion.matches ? 1 : (mobile ? .3 : .22) + (mobile ? .7 : .78) * reveal);
     set('image-y', (reduceMotion.matches ? 0 : (mobile ? 70 : 68) * (1 - reveal)) + '%');
-    set('image-opacity', smooth((p - .33) / .15));
+    set('image-opacity', smooth((p - .72) / .20));
     set('image-radius', ((mobile ? 22 : 28) * (1 - reveal)) + 'px');
-    set('caption-opacity', smooth((p - .78) / .14));
+    set('caption-opacity', smooth((p - .94) / .06));
 
     // Measure the real caption spacing; mobile browser bars can change innerHeight.
     let from = 0;

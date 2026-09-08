@@ -1,4 +1,15 @@
 /* Still frames from the center's own PT videos (00:03). */
+html.trainer-only-view main > :not(#trainer),
+html.trainer-only-view body > .hero-video-frame,
+html.trainer-only-view body > .hero-brand-composition {
+  display: none !important;
+}
+html.trainer-only-view #trainer { padding-top: 80px !important; }
+html.trainer-only-view body:not(.trainer-proof-header) header .navbar { background: #050505 !important; }
+@media (max-width: 768px) {
+  html.trainer-only-view #trainer { padding-top: 66px !important; }
+}
+
 .trainer-cover-hero {
   position: relative;
   isolation: isolate;

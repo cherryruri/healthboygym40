@@ -1,0 +1,82 @@
+/* Still frames from the center's own PT videos (00:03). */
+.trainer-cover-hero {
+  position: relative;
+  isolation: isolate;
+  height: calc(100svh - 80px);
+  min-height: 580px;
+  max-height: 980px;
+  overflow: hidden;
+  background: #080909;
+  color: #fff;
+}
+.trainer-cover-photos {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.trainer-cover-photos img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: cover;
+  object-position: 50% 30%;
+  filter: saturate(.72);
+}
+.trainer-cover-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(5,5,5,.08) 12%, rgba(5,5,5,.18) 36%, rgba(5,5,5,.76) 70%, #050505 100%);
+  pointer-events: none;
+}
+.trainer-cover-copy {
+  position: absolute;
+  inset: auto clamp(24px, 4vw, 80px) clamp(44px, 7vh, 84px);
+  z-index: 1;
+  text-align: left;
+}
+.trainer-cover-copy h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(76px, 10.4vw, 156px);
+  font-weight: 800;
+  line-height: .98;
+  letter-spacing: -.055em;
+  word-spacing: .06em;
+  text-transform: none;
+}
+.trainer-cover-copy p {
+  max-width: 760px;
+  margin: 24px 0 0;
+  color: #f4f4f1;
+  font-size: clamp(17px, 1.5vw, 22px);
+  font-weight: 500;
+  line-height: 1.75;
+  word-break: keep-all;
+  text-wrap: balance;
+}
+@media (max-width: 768px) {
+  .trainer-cover-hero {
+    height: calc(100svh - 66px);
+    min-height: 500px;
+    max-height: 850px;
+  }
+  .trainer-cover-photos { bottom: 20%; }
+  .trainer-cover-photos img:nth-child(1) { object-position: 58% 20%; }
+  .trainer-cover-photos img:nth-child(2) { object-position: 20% 20%; }
+  .trainer-cover-photos img:nth-child(3) { object-position: 72% 20%; }
+  .trainer-cover-shade {
+    background: linear-gradient(180deg, rgba(5,5,5,.08) 10%, rgba(5,5,5,.16) 30%, rgba(5,5,5,.7) 54%, #050505 79%);
+  }
+  .trainer-cover-copy { inset: auto 24px 44px; }
+  .trainer-cover-copy h2 { font-size: clamp(54px, 15vw, 88px); line-height: 1; }
+  .trainer-cover-copy p { max-width: 36em; margin-top: 20px; font-size: 15px; line-height: 1.8; }
+}
+@media (max-width: 768px) and (max-height: 500px) and (orientation: landscape) {
+  .trainer-cover-hero { min-height: 440px; }
+  .trainer-cover-photos { bottom: 0; }
+  .trainer-cover-copy { bottom: 32px; }
+  .trainer-cover-copy h2 { font-size: 64px; }
+}

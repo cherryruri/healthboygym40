@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
 <link rel="stylesheet" href="style.css?v=20260909-mobile-fixes">
+<link rel="stylesheet" href="trainer-cover.css?v=20260909">
 <link rel="stylesheet" href="css/swiper.min.css">
 <script
   src="home-device-loader.js?v=20260705-device-flow4"
@@ -2959,13 +2960,15 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
 <section id="trainer" class="trainer-section">
 <div class="trainer-story-intro" aria-label="헬스보이짐 수내점 전문 트레이너">
-  <section class="trainer-medical-hero">
-    <div class="trainer-hero-collage" aria-hidden="true">
-      <img src="정위영.jpg" alt=""><img src="백인호.jpg" alt=""><img src="이상원.jpg" alt="">
+  <section class="trainer-cover-hero" aria-labelledby="trainer-cover-title">
+    <div class="trainer-cover-photos" aria-hidden="true">
+      <img src="trainer-cover-hojun.jpg" width="720" height="1280" alt="" decoding="async">
+      <img src="trainer-cover-yeonju.jpg" width="720" height="1280" alt="" decoding="async">
+      <img src="trainer-cover-inho.jpg" width="720" height="1280" alt="" decoding="async">
     </div>
-    <div class="trainer-hero-shade"></div>
-    <div class="trainer-hero-copy">
-      <h2>Trainer Staff</h2>
+    <div class="trainer-cover-shade" aria-hidden="true"></div>
+    <div class="trainer-cover-copy">
+      <h2 id="trainer-cover-title">Trainer Staff</h2>
       <p>검증된 전문성과 확고한 책임감으로 회원 맞춤 최적의 변화를 완성하는 헬스보이짐 수내점 트레이너 팀입니다.</p>
     </div>
   </section>
@@ -3236,14 +3239,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
 <style id="trainer-goldman-showcase-20260824">
 #trainer{padding-top:0!important;overflow:visible!important}
-#trainer .trainer-story-intro{width:100vw;margin-left:calc(50% - 50vw);background:#050505;color:#fff}
-.trainer-medical-hero{position:relative;height:calc(100svh - 80px);min-height:650px;overflow:hidden;background:#050505}
-.trainer-hero-collage{position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.trainer-hero-collage img{width:100%;height:100%;object-fit:cover;object-position:center top;filter:grayscale(.18) brightness(.62)}
-.trainer-hero-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.22),rgba(0,0,0,.62))}
-.trainer-hero-copy{position:absolute;z-index:2;left:2vw;right:2vw;top:50%;transform:translateY(-50%)}
-.trainer-hero-copy h2{margin:0;font-size:clamp(88px,12vw,190px);line-height:.86;letter-spacing:-.065em;font-weight:800}
-.trainer-hero-copy p{max-width:900px;margin:34px 0 0;font-size:clamp(17px,1.6vw,26px);line-height:1.55;font-weight:600}
+#trainer .trainer-story-intro{width:100%;margin-left:0;background:#050505;color:#fff}
 .trainer-proof-scene{height:280svh;background:#050505}
 .trainer-proof-sticky{position:sticky;top:80px;height:calc(100svh - 80px);overflow:hidden;background:#050505}
 .trainer-proof-sticky>h2{position:absolute;z-index:1;left:50%;top:15%;width:90%;margin:0;transform:translateX(-50%);color:#151515;text-align:center;font-size:clamp(48px,6vw,94px);line-height:1.25;letter-spacing:-.06em}
@@ -3252,7 +3248,6 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 .trainer-proof-final{position:absolute;z-index:4;left:50%;top:50%;width:92%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(46px,5.6vw,88px);line-height:1.25;letter-spacing:-.06em;font-weight:800;opacity:0}
 #trainer>.trainer-title{padding-top:130px!important}
 @media(max-width:768px){
-.trainer-medical-hero{height:calc(100svh - 66px);min-height:620px}.trainer-hero-collage{grid-template-columns:repeat(3,58vw);left:-38vw;width:auto}.trainer-hero-copy{left:20px;right:20px}.trainer-hero-copy h2{font-size:clamp(58px,18vw,82px);line-height:.9}.trainer-hero-copy p{font-size:15px;line-height:1.55}
 .trainer-proof-scene{height:250svh}.trainer-proof-sticky{top:66px;height:calc(100svh - 66px)}.trainer-proof-sticky>h2{top:12%;font-size:clamp(34px,10vw,50px)}
 .trainer-proof-portraits .tp{width:31vw;height:26vh}.tp1{left:-5%;top:21%}.tp2{left:8%;bottom:4%}.tp3{left:34%;top:5%}.tp4{right:35%;bottom:5%}.tp5{right:7%;top:18%}.tp6{right:-7%;bottom:7%}
 .trainer-proof-final{font-size:clamp(32px,10vw,48px);line-height:1.28}
@@ -3301,9 +3296,6 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 </style>
 
 <style id="trainer-goldman-header-flow-20260824">
-.trainer-hero-copy{left:46px!important;right:46px!important;top:39%!important;transform:translateY(-50%)!important}
-.trainer-hero-copy h2{font-size:clamp(92px,10vw,150px)!important;line-height:.9!important;letter-spacing:-.06em!important;text-transform:none!important}
-.trainer-hero-copy p{margin-top:26px!important}
 body.show-trainer-section:not(.trainer-proof-header) header .navbar{
  background:rgba(5,5,5,.42)!important;backdrop-filter:blur(14px)!important;
  border-bottom:1px solid rgba(255,255,255,.12)!important
@@ -3314,11 +3306,7 @@ body.trainer-proof-header header .menu a,
 body.trainer-proof-header header #loginLink{color:#111!important}
 body.trainer-proof-header header .download-btn{color:#111!important;border-color:rgba(0,0,0,.6)!important}
 body.trainer-proof-header header .mobile-menu-btn{color:#111!important}
-@media(max-width:768px){
- .trainer-hero-copy{left:20px!important;right:20px!important;top:38%!important}
- .trainer-hero-copy h2{font-size:clamp(56px,17vw,74px)!important;line-height:.92!important}
- .trainer-hero-copy p{font-size:14px!important;line-height:1.55!important}
-}
+
 </style>
 <script id="trainer-goldman-header-flow-script-20260824">
 (()=>{
@@ -3445,32 +3433,15 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
 <script src="facility-gallery.js?v=20260909"></script>
 
 <style id="trainer-sequence-correction-20260824">
-
 /* GOLDMAN trainer sequence correction */
-.trainer-medical-hero{position:relative!important;min-height:calc(100svh - 80px)!important;overflow:hidden!important;background:#080808!important}
-.trainer-hero-collage{position:absolute!important;inset:0!important;display:block!important;overflow:hidden!important;background:#080808!important}
-.trainer-hero-collage img{position:absolute!important;top:0!important;width:58%!important;height:100%!important;object-fit:cover!important;object-position:50% 18%!important;border:0!important;filter:saturate(.72) contrast(1.06)!important}
-.trainer-hero-collage img:nth-child(1){left:-5%!important;z-index:1!important;-webkit-mask-image:linear-gradient(90deg,#000 62%,transparent 100%)!important}
-.trainer-hero-collage img:nth-child(2){left:25%!important;z-index:2!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 20%,#000 78%,transparent 100%)!important}
-.trainer-hero-collage img:nth-child(3){right:-4%!important;z-index:1!important;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 38%)!important}
-.trainer-medical-hero:after{content:""!important;position:absolute!important;inset:0!important;background:linear-gradient(90deg,rgba(0,0,0,.18),rgba(0,0,0,.34) 46%,rgba(0,0,0,.18)),linear-gradient(0deg,rgba(0,0,0,.48),transparent 55%)!important;z-index:3!important;pointer-events:none!important}
-.trainer-medical-copy{z-index:4!important}
 .trainer-proof-scene{height:250svh!important;background:#050505!important}
 .trainer-proof-sticky{height:100svh!important;overflow:hidden!important}
 .trainer-proof-portraits .tp{opacity:var(--tp-opacity,0)!important;transform:translate3d(var(--tp-x,0),var(--tp-y,0),0) scale(var(--tp-scale,.84))!important;transition:none!important}
 .trainer-proof-sticky>h2{display:block!important;position:absolute!important;inset:50% auto auto 50%!important;transform:translate(-50%,-50%) scale(var(--ghost-scale,1.08))!important;width:90vw!important;margin:0!important;color:rgba(255,255,255,var(--ghost-opacity,.1))!important;font-size:clamp(3rem,7vw,7rem)!important;line-height:1.12!important;text-align:center!important;z-index:2!important}
 .trainer-proof-final{opacity:var(--final-opacity,0)!important;transform:translate(-50%,-50%) scale(var(--final-scale,.92))!important;z-index:5!important}
 @media(max-width:768px){
- .trainer-medical-hero{min-height:calc(100svh - 64px)!important}
- .trainer-hero-collage img{width:82%!important;object-position:50% 14%!important}
- .trainer-hero-collage img:nth-child(1){left:-30%!important}
- .trainer-hero-collage img:nth-child(2){left:10%!important}
- .trainer-hero-collage img:nth-child(3){right:-30%!important}
- .trainer-medical-copy{left:20px!important;right:18px!important;bottom:10vh!important}
- .trainer-medical-copy h1{font-size:clamp(3.7rem,17vw,5.6rem)!important;line-height:.88!important}
  .trainer-proof-sticky>h2{font-size:clamp(2.25rem,10vw,4rem)!important;width:62vw!important}
 }
-
 </style>
 <script id="trainer-sequence-correction-script-20260824">
 (function(){
@@ -3507,7 +3478,6 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
 </script>
 
 <style id="trainer-sequence-polish-20260824">
-.trainer-medical-copy h1,.trainer-medical-copy p{color:#fff!important;opacity:1!important;text-shadow:0 2px 18px rgba(0,0,0,.55)!important}
 body.trainer-proof-header header,body.trainer-proof-header header .navbar{background:#fff!important}
 body.trainer-proof-header header .logo a,body.trainer-proof-header header #logo-text,body.trainer-proof-header header .menu a{color:#111!important;text-shadow:none!important}
 </style>

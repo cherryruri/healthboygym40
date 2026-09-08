@@ -73,7 +73,7 @@ body.shared-header-login { overflow-y: auto; }
     display: block !important; position: relative !important; inset: auto !important;
     flex: 0 0 44px; width: 44px !important; height: 44px !important; margin: 0 0 0 auto !important;
     padding: 0 !important; border: 0 !important; border-radius: 0 !important; background: transparent !important;
-    color: #fff !important; z-index: 3; cursor: pointer; transform: none !important;
+    color: #fff !important; z-index: 3 !important; cursor: pointer; transform: none !important;
   }
   #site-header .mobile-menu-btn::before, #site-header .mobile-menu-btn::after {
     content: ''; position: absolute; left: 9px !important; right: auto !important;
@@ -83,7 +83,7 @@ body.shared-header-login { overflow-y: auto; }
   #site-header .mobile-menu-btn::after { top: 27px !important; }
   #site-header .mobile-menu-overlay {
     display: block !important; position: fixed !important; inset: var(--site-header-height) 0 0 !important;
-    background: rgba(0,0,0,.55) !important; opacity: 0; visibility: hidden; pointer-events: none; z-index: 1;
+    background: rgba(0,0,0,.55) !important; opacity: 0; visibility: hidden; pointer-events: none; z-index: 1 !important;
   }
   #site-header .mobile-side-menu {
     display: block !important; position: fixed !important; top: var(--site-header-height) !important; right: 0 !important;

@@ -553,7 +553,7 @@
 
   function shouldBypassScrollHijack(event){
     if(!isMobile() || !event.target || !event.target.closest) return false;
-    if(event.target.closest(".hero-expand-section")) return false;
+    if(event.target.closest(".hero-expand-section, .hb-home")) return false;
     if(isMobileException(event.target)) return false;
     if(isAllPassTypingActive() && root.classList.contains("allpass-scroll-locked")) return false;
     return lockClasses.some(className=>root.classList.contains(className)) || isInAllPassScene();

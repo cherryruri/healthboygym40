@@ -58,3 +58,15 @@ html.hb-page-moving{scroll-behavior:auto!important}
 .hb-pt.is-revealed .hb-pt-copy{transform:translateY(0)}
 .hb-pt-intro{transition:opacity .55s ease}.hb-pt-shade,.hb-video-toggle{transition:opacity .9s ease .6s}
 
+
+/* The heading overlaps the circular film before expanding with it. */
+.hb-pt-media{clip-path:circle(18vmin at 50% 50%)}.hb-pt.is-revealed .hb-pt-media{clip-path:circle(100vmax at 50% 50%)}
+.hb-pt-copy{inset:22% 9% 13% 8%;opacity:1!important;transform:none!important;mix-blend-mode:difference;transition:none}
+.hb-pt-copy>p{display:none}.hb-home .hb-pt-copy h2{font-size:clamp(64px,7.5vw,110px);line-height:1.12;margin:0;letter-spacing:-.055em;transition:transform 1.25s cubic-bezier(.22,.61,.36,1)}
+.hb-pt-copy>div{opacity:0;transform:translateY(20px);transition:opacity .85s ease .65s,transform 1s ease .65s}
+.hb-pt.is-revealed .hb-pt-copy{mix-blend-mode:normal}.hb-pt.is-revealed .hb-pt-copy>div{opacity:1;transform:none}
+@media(max-width:768px){.hb-pt-copy{inset:27% 35px 12% 25px}.hb-home .hb-pt-copy h2{font-size:60px;line-height:1.12}}
+
+@media(min-width:769px){.hb-pt-copy{right:18%;transition:right 1.5s cubic-bezier(.22,.61,.36,1)}.hb-pt.is-revealed .hb-pt-copy{right:9%}}
+.hb-pt.is-revealed .hb-pt-copy{mix-blend-mode:difference}
+

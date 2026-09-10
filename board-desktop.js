@@ -17,7 +17,7 @@
  hero.querySelector('.mall-prev').addEventListener('click',()=>showSlide(active-1));hero.querySelector('.mall-next').addEventListener('click',()=>showSlide(active+1));hero.querySelectorAll('[data-slide]').forEach(b=>b.addEventListener('click',()=>showSlide(Number(b.dataset.slide))));
  hero.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();showSlide(active+(e.key==='ArrowRight'?1:-1));}});showSlide(0);
  const stories=document.createElement('section');stories.className='mall-stories';stories.setAttribute('aria-label','지금 헬스보이짐');
- const cards=[['센터전체사진1.jpg','센터의 새로운 소식','더 좋은 변화를 위한 소식들을 만나보세요.','news'],['상담실사진.jpg','이달의 트레이너','회원의 목표를 함께하는 전문가들','trainer'],['프리웨이트존사진1.jpg','회원들의 운동 이야기','오늘도 한 걸음 더, 함께 나누는 이야기','free'],['기구존사진1.jpg','함께한 변화의 기록','회원들의 소중한 변화를 확인해 보세요.','before_after']];
+ const cards=[['community-news-v1.jpg','센터의 새로운 소식','더 좋은 변화를 위한 소식들을 만나보세요.','news'],['community-trainer-v1.jpg','이달의 트레이너','회원의 목표를 함께하는 전문가들','trainer'],['community-members-v1.jpg','회원들의 운동 이야기','오늘도 한 걸음 더, 함께 나누는 이야기','free'],['기구존사진1.jpg','칭찬합니다','고마운 마음과 따뜻한 칭찬을 나눠보세요.','praise']];
  stories.innerHTML='<div class="mall-section-heading"><h2>지금, 헬스보이짐</h2><a href="board.html?view=list">더보기 →</a></div><div class="mall-story-grid">'+cards.map(c=>`<a class="mall-story" href="board.html?board=free&category=${c[3]}&view=list"><img src="${c[0]}" alt="" loading="lazy"><span><strong>${c[1]}</strong><small>${c[2]}</small></span></a>`).join('')+'</div>';
  shell.before(stories);
  const main=document.createElement('div');main.className='mall-board-main';while(shell.firstChild)main.appendChild(shell.firstChild);shell.appendChild(main);

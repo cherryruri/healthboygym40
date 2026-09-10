@@ -1,4 +1,7 @@
 (() => {
+  const requestedBoard = new URLSearchParams(location.search).get('board');
+  const requestedCategory = new URLSearchParams(location.search).get('category');
+  if (!['infoboard','request','teen'].includes(requestedBoard) && requestedCategory !== 'request') return;
   const desktop = window.matchMedia('(min-width: 769px)');
 
   const body = document.body;

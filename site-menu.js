@@ -109,8 +109,7 @@
     list.querySelectorAll('a:not(.mobile-primary-link), .mobile-menu-section-title:not(:first-child)').forEach(node=>node.remove());
     const extraLinks = [
       ['mypage.html','MY PAGE','마이페이지'],
-      ['board.html','BOARD','게시판'],
-      ['board.html?board=noticeboard','NOTICE / NEWS','공지문 / 뉴스'],
+      ['board.html','COMMUNITY','공지문/자유게시판'],
 
     ];
     extraLinks.forEach(([href,en,ko])=>{
@@ -194,11 +193,15 @@
       }
     }
 
-    if(hasBoard) return;
+    menu.querySelectorAll('a[href="board.html?board=noticeboard"]').forEach(link=>link.closest('li')?.remove());
+    if(hasBoard){
+      menu.querySelector('a[href="board.html"]').textContent='공지문/자유게시판';
+      return;
+    }
 
     const item = document.createElement("li");
     item.className = "board-menu-link";
-    item.innerHTML = `<a href="board.html">게시판</a>`;
+    item.innerHTML = `<a href="board.html">공지문/자유게시판</a>`;
 
     menu.insertBefore(item, loginItem || null);
   }

@@ -73,7 +73,7 @@ let currentCategory =
           : "all";
 let allPosts = [];
 
-const postsPerPage = 20;
+function getPostsPerPage(){ return matchMedia("(min-width:769px)").matches ? 12 : 20; }
 const postList = document.getElementById("postList");
 const noticeList = document.getElementById("noticeList");
 const paginationContainer = document.getElementById("pagination");
@@ -124,11 +124,14 @@ const communityCategoryGroupMap = {
 
 const boardMeta = {
   free: {
-    title: "자유게시판",
-    desc: "수내점 회원님들의 자유로운 이야기와 칭찬, PT 후기를 확인하는 공간입니다.",
+    title: "공지문/자유게시판",
+    desc: "센터의 새로운 소식부터 회원들의 운동 이야기까지, 한곳에서 만나보세요.",
     mode: "consult",
     categories: [
       ["all", "전체"],
+      ["notice", "공지문"],
+      ["news", "센터 소식"],
+      ["trainer", "이달의 트레이너"],
       ["free", "자유게시판"],
       ["praise", "칭찬합니다"],
       ["diet", "운동&식단 인증"],
@@ -298,16 +301,20 @@ function getRequestStatusText(post){
   return hasRequestAnswer(post) ? "답변이 완료되었습니다" : "답변대기중";
 }
 
+function isOfficialWriteContext(){
+  return officialBoards.has(currentBoard) || (currentBoard === "free" && ["notice","news","trainer"].includes(currentCategory));
+}
+
 function canWriteCurrentBoard(){
   if(isAdminOnlyBoard()) return isAdmin();
-  if(officialBoards.has(currentBoard)) return isAdmin();
+  if(isOfficialWriteContext()) return isAdmin();
   return true;
 }
 
 function updateWriteButton(){
   if(!writeBtn) return;
 
-  const official = officialBoards.has(currentBoard);
+  const official = isOfficialWriteContext();
   const adminOnly = isAdminOnlyBoard();
   const canWrite = canWriteCurrentBoard();
 
@@ -329,6 +336,7 @@ function ensureCategoryBar(){
 }
 
 function updateCategoryBar(){
+  updateWriteButton();
   const meta = getMeta();
   const bar = ensureCategoryBar();
 
@@ -559,7 +567,7 @@ if(writeBtn){
       return;
     }
 
-    if(officialBoards.has(currentBoard) && !isAdmin()){
+    if(isOfficialWriteContext() && !isAdmin()){
       alert("관리자만 공지와 뉴스를 작성할 수 있습니다.");
       return;
     }
@@ -577,6 +585,9 @@ if(writeBtn){
 updateBoardInfo();
 
 function getWriteQueryString(){
+  if(currentBoard === "free" && ["notice","news","trainer"].includes(currentCategory)){
+    return `board=${currentCategory === "news" ? "news" : "noticeboard"}&category=${currentCategory}`;
+  }
   if(currentBoard === "infoboard"){
     const category = currentCategory === "all" ? "info_fc" : currentCategory;
     return `board=infoboard&category=${category}`;
@@ -622,6 +633,8 @@ function getWriteQueryString(){
 }
 
 function getBoardForCategory(category){
+  // Keep all public categories inside the unified board URL.
+  if (["notice","news","trainer"].includes(category)) return "free";
   if(category === "request") return "request";
   if(category === "praise") return "praise";
   if(category === "pt" || category === "before_after" || category === "challenge") return "review";
@@ -630,7 +643,7 @@ function getBoardForCategory(category){
 
 function getQueryBoards(){
   if(currentBoard === "request") return ["free"];
-  if(currentBoard === "free") return communityBoards;
+  if(currentBoard === "free") return [...communityBoards, "noticeboard", "news"];
   if(currentBoard === "noticeboard") return ["noticeboard", "news"];
   if(currentBoard === "infoboard") return ["infoboard"];
   return [currentBoard];
@@ -742,11 +755,13 @@ function renderPage(page){
     return;
   }
 
-  const startIndex = (page - 1) * postsPerPage;
-  const endIndex = Math.min(startIndex + postsPerPage, posts.length);
+  const startIndex = (page - 1) * getPostsPerPage();
+  const endIndex = Math.min(startIndex + getPostsPerPage(), posts.length);
   const pagePosts = posts.slice(startIndex, endIndex);
 
-  if(meta.mode === "official"){
+  if(matchMedia("(min-width:769px)").matches && !["request","infoboard","teen"].includes(currentBoard)){
+    renderDesktopPosts(pagePosts, page);
+  }else if(meta.mode === "official"){
     renderOfficialPosts(pagePosts);
   }else if(meta.mode === "consult"){
     renderConsultPosts(pagePosts, startIndex);
@@ -756,6 +771,57 @@ function renderPage(page){
 
   setupPagination(posts.length);
 }
+
+
+function renderDesktopPosts(posts, page){
+  const makeLink = ({id,data}, className) => {
+    const link=document.createElement("a");
+    link.className=className; link.href="post.html?id="+encodeURIComponent(id);
+    link.addEventListener("click",event=>{
+      if(!canOpenPost(data)){event.preventDefault();openPost(id,data);}
+    });
+    return link;
+  };
+  const imageFor = data => {
+    const own=getPublicPostThumbnail(data);
+    // Neutral facility photo is a presentation fallback, never a private attachment.
+    if(own)return own;
+    if(data.isSecret || data.isAdminOnly || getPostCategory(data)==="request")return "";
+    return "센터전체사진1.jpg";
+  };
+  const metaFor=data=>'<span class="desktop-post-label">'+escapeHTML(getPostCategoryLabel(data))+'</span><h2>'+escapeHTML(data.title)+'</h2><time>'+formatDate(data)+'</time>';
+  let remaining=posts;
+  if(page===1 && posts.length){
+    const highlights=document.createElement("div");highlights.className="desktop-post-highlights";
+    const feature=makeLink(posts[0],"desktop-post-feature");
+    const image=imageFor(posts[0].data);
+    feature.innerHTML=(image?'<img src="'+escapeHTML(image)+'" alt="" decoding="async">':'<div class="desktop-post-placeholder">게시글</div>')+'<div class="desktop-post-feature-copy">'+metaFor(posts[0].data)+'<span class="desktop-post-arrow" aria-hidden="true">→</span></div>';
+    highlights.appendChild(feature);
+    const summaries=document.createElement("div");summaries.className="desktop-post-summaries";
+    posts.slice(1,4).forEach(post=>{
+      const link=makeLink(post,"desktop-post-summary"),image=imageFor(post.data);
+      link.innerHTML='<div>'+metaFor(post.data)+'</div>'+(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy">':'');summaries.appendChild(link);
+    });
+    highlights.appendChild(summaries);postList.appendChild(highlights);remaining=posts.slice(4);
+  }
+  if(!remaining.length)return;
+  const title=document.createElement("div");title.className="desktop-post-list-title";
+  title.innerHTML='<h2>더 많은 이야기</h2><span>최신순 · 공지 우선</span>';postList.appendChild(title);
+  const table=document.createElement("table");table.className="desktop-post-table";
+  table.innerHTML='<thead><tr><th scope="col">카테고리</th><th scope="col">제목</th><th scope="col">작성자</th><th scope="col">작성일</th></tr></thead>';
+  const tbody=document.createElement("tbody");
+  remaining.forEach(post=>{
+    const row=document.createElement("tr");
+    row.innerHTML='<td>'+escapeHTML(getPostCategoryLabel(post.data))+'</td><td></td><td>'+escapeHTML(post.data.writerId||"회원")+'</td><td>'+formatDate(post.data)+'</td>';
+    const link=makeLink(post,"desktop-post-title");link.textContent=post.data.title||"제목 없음";row.children[1].appendChild(link);tbody.appendChild(row);
+  });
+  table.appendChild(tbody);postList.appendChild(table);
+}
+
+matchMedia('(min-width:769px)').addEventListener('change',()=>{
+  currentPage=1;
+  if(allPosts.length)renderPage(currentPage);
+});
 
 function renderOfficialPosts(posts){
   const list = document.createElement("div");
@@ -867,6 +933,7 @@ function renderTablePosts(posts, startIndex, totalCount){
 function scrollToPostList(){
   const heading = document.querySelector(".mobile-board-list-title");
   if (heading) heading.scrollIntoView({block:"start"});
+  else if(document.body.classList.contains("desktop-board")) document.getElementById("boardContent")?.scrollIntoView({block:"start"});
   else window.scrollTo(0, 0);
 }
 
@@ -875,7 +942,7 @@ function setupPagination(totalCount){
 
   paginationContainer.innerHTML = "";
 
-  const actualTotalPages = Math.ceil(totalCount / postsPerPage) || 1;
+  const actualTotalPages = Math.ceil(totalCount / getPostsPerPage()) || 1;
   const firstPage = Math.max(1, Math.min(currentPage - 2, actualTotalPages - 4));
   const displayTotalPages = Math.min(actualTotalPages, firstPage + 4);
   if (totalCount === 0) return;

@@ -1,4 +1,6 @@
 (() => {
+ const cp=new URLSearchParams(location.search);
+ if(!['infoboard','request','teen'].includes(cp.get('board'))&&cp.get('category')!=='request')return;
   const media = matchMedia('(max-width: 768px)');
   let cleanup = () => {};
   const icon = path => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg>';

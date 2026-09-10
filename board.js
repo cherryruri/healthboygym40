@@ -744,6 +744,7 @@ function renderPage(page){
 
   postList.innerHTML = "";
 
+  renderCinemaNotices();
   const meta = getMeta();
   const posts = getVisiblePosts().sort((a, b)=>{
     return Number(Boolean(b.data.isNotice)) - Number(Boolean(a.data.isNotice));
@@ -761,6 +762,8 @@ function renderPage(page){
 
   if(matchMedia("(min-width:769px)").matches && !["request","infoboard","teen"].includes(currentBoard)){
     renderDesktopPosts(pagePosts, page);
+  }else if(document.body.classList.contains("cinema-mobile")){
+    renderCinemaRows(pagePosts);
   }else if(meta.mode === "official"){
     renderOfficialPosts(pagePosts);
   }else if(meta.mode === "consult"){
@@ -988,3 +991,16 @@ function replaceBoardLocation(path){
   history.replaceState(null,'',url);
 }
 window.addEventListener('board-view-change',()=>{currentPage=1;renderPage(currentPage);});
+
+function renderCinemaRows(posts){
+ const shown=document.body.classList.contains('board-list-view')?posts:posts.slice(0,4);
+ shown.forEach(({id,data})=>{const a=document.createElement('a');a.className='cinema-post';a.href='post.html?id='+encodeURIComponent(id);a.addEventListener('click',e=>{if(!canOpenPost(data)){e.preventDefault();openPost(id,data);}});const image=getPublicPostThumbnail(data);a.innerHTML=(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy">':'<span class="cinema-post-icon" aria-hidden="true">H</span>')+'<span class="cinema-post-title">'+escapeHTML(data.title||'제목 없음')+'<small>'+escapeHTML(getPostCategoryLabel(data))+'</small></span><time>'+formatDate(data)+'</time>';postList.appendChild(a);});
+}
+function renderCinemaNotices(){
+ const events=allPosts.filter(p=>p.data.isPublic===true&&!p.data.isSecret&&!p.data.isAdminOnly&&getPostCategory(p.data)==='news').slice(0,3).map(({id,data})=>({title:data.title||'센터 소식',image:getPublicPostThumbnail(data),date:formatDate(data),href:'post.html?id='+encodeURIComponent(id)}));
+ window.dispatchEvent(new CustomEvent('cinema-events-ready',{detail:events}));
+ const target=document.getElementById('cinemaNotices');if(!target)return;target.replaceChildren();
+ const notices=allPosts.filter(p=>p.data.isPublic===true&&!p.data.isSecret&&!p.data.isAdminOnly&&(getPostCategory(p.data)==='notice'||p.data.isNotice)).slice(0,4);
+ if(!notices.length){target.innerHTML='<p class="cinema-empty-note">등록된 공지사항이 없습니다.</p>';return;}
+ notices.forEach(({id,data})=>{const d=document.createElement('details'),summary=document.createElement('summary');summary.innerHTML='<span>'+escapeHTML(data.title||'공지사항')+'<time>'+formatDate(data)+'</time></span><b aria-hidden="true">+</b>';d.appendChild(summary);const p=document.createElement('p');const template=document.createElement('template');template.innerHTML=String(data.content||'');p.textContent=(template.content.textContent||'').trim().slice(0,200)||'자세한 내용은 공지 본문에서 확인해 주세요.';d.appendChild(p);const a=document.createElement('a');a.href='post.html?id='+encodeURIComponent(id);a.textContent='공지 자세히 보기 →';d.appendChild(a);target.appendChild(d);});
+}

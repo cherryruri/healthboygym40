@@ -1,4 +1,6 @@
 (() => {
+ const cp=new URLSearchParams(location.search);
+ if(!['infoboard','request','teen'].includes(cp.get('board'))&&cp.get('category')!=='request')return;
   const mobileQuery = window.matchMedia("(max-width: 768px)");
 
   const syncMobileBoardControls = () => {

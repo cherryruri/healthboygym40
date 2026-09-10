@@ -3407,12 +3407,8 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function stageLoaderIntro(){
-    const loader=document.querySelector('.logo-screen');
-    if(!loader)return;
-    setTimeout(()=>loader.classList.add('slogan-visible'),160);
-    setTimeout(()=>loader.classList.add('slogan-out'),1150);
-    setTimeout(()=>loader.classList.add('is-wiping'),1450);
-    setTimeout(()=>loader.classList.add('logo-visible','logo-on-white'),2280);
+    const loader=document.querySelector('.logo-screen');if(!loader)return;
+    requestAnimationFrame(()=>{setTimeout(()=>loader.classList.add('logo-visible'),240);setTimeout(()=>loader.classList.add('is-wiping'),1480);});
   }
 
   function scrollToHashTarget(){
@@ -3683,7 +3679,7 @@ document.addEventListener("DOMContentLoaded", function(){
       window.innerWidth <= 768;
 
     const mobileBlackLogoHold =
-      isMobileLoader ? 200 : 0;
+      isMobileLoader ? 640 : 0;
 
     requestAnimationFrame(()=>{
 
@@ -3732,7 +3728,7 @@ document.addEventListener("DOMContentLoaded", function(){
   initLogoLoaderReplay();
   initCinematicHeader();
   if(document.documentElement.classList.contains('skip-site-loader')) setTimeout(openMain,0);
-  else { stageLoaderIntro(); setTimeout(openMain, 2950); }
+  else { stageLoaderIntro(); setTimeout(openMain, 2860); }
 
 
 

@@ -189,7 +189,7 @@ header {
   --loader-target-y:38px;
   --loader-target-scale:.28;
   --loader-wipe:0%;
-  --loader-logo-skew:-3deg;
+  --loader-logo-skew:-7deg;
   position:fixed;
   inset:0;
   z-index:999999;
@@ -11231,9 +11231,3 @@ html.review-proof-divider-hidden .review-proof-divider{
   }
 }
 
-/* Opening: message, white wipe, then brand. */
-.logo-screen::before{transition-duration:.8s}
-.loader-slogan{position:absolute;left:0;top:50%;width:100%;z-index:2;text-align:center;color:#fff;font-size:clamp(30px,5vw,68px);font-weight:500;letter-spacing:-.035em;opacity:0;transform:translateY(calc(-50% + 12px));transition:opacity .55s ease,transform .7s cubic-bezier(.22,.61,.36,1)}
-.logo-screen.slogan-visible .loader-slogan{opacity:1;transform:translateY(-50%)}
-.logo-screen.slogan-out .loader-slogan{opacity:0;transform:translateY(calc(-50% - 8px));transition-duration:.35s}
-@media(prefers-reduced-motion:reduce){.loader-slogan,.loader-logo,.logo-screen::before{transition-duration:.12s!important}}

@@ -226,3 +226,9 @@ body.desktop-board.desktop-board.desktop-board .mall-carousel{height:clamp(540px
 .mall-interview-slide::after{display:block;position:absolute;inset:0;pointer-events:none;z-index:1;background:linear-gradient(0deg,#000 0%,transparent 18%,transparent 82%,rgba(0,0,0,.55) 100%)}
 .mall-rotation-toggle{position:absolute;bottom:18px;left:15%;z-index:4;border:1px solid #ffffff50;background:#0008;color:#fff;padding:8px 11px;border-radius:3px;font-size:11px;cursor:pointer}
 }
+/* Full landscape crop; shading is reserved for the left-hand caption. */
+@media(min-width:769px){
+.mall-interview-preview{inset:0;width:100%;height:100%;max-width:none;aspect-ratio:auto;object-fit:cover;object-position:center;transform:none;mask-image:none;-webkit-mask-image:none;background:transparent}
+.mall-interview-slide::after{background:linear-gradient(90deg,rgba(0,0,0,.58) 0%,rgba(0,0,0,.36) 30%,rgba(0,0,0,.12) 51%,transparent 68%);pointer-events:none}
+.mall-interview-slide .mall-slide-copy{width:64%}
+}

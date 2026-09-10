@@ -670,7 +670,8 @@ async function loadPosts(){
     renderPage(currentPage);
   }catch(error){
     console.log(error);
-    postList.innerHTML = `<div class="board-empty">게시글을 불러오지 못했습니다.</div>`;
+    postList.innerHTML = `<div class="board-empty" role="status">게시글을 불러오지 못했습니다.<button type="button" class="board-retry">다시 시도</button></div>`;
+    postList.querySelector(".board-retry").addEventListener("click", loadPosts);
   }
 }
 
@@ -736,7 +737,7 @@ function renderPage(page){
   });
 
   if(posts.length === 0){
-    postList.innerHTML = `<div class="board-empty">등록된 글이 없습니다.</div>`;
+    postList.innerHTML = `<div class="board-empty" role="status">${boardSearch?.value.trim() ? "검색 결과가 없습니다. 다른 검색어로 찾아보세요." : "등록된 글이 없습니다."}</div>`;
     setupPagination(posts.length);
     return;
   }
@@ -768,11 +769,11 @@ function renderOfficialPosts(posts){
     const label = getPostCategoryLabel(data);
     const title = escapeHTML(data.title);
     const date = formatDate(data);
-    const thumb = data.thumbnailDataUrl;
+    const thumb = getPublicPostThumbnail(data);
 
     card.innerHTML = `
       <div class="official-post-thumb ${thumb ? "" : "no-thumb"}">
-        ${thumb ? `<img src="${thumb}" alt="">` : `<span>${escapeHTML(label)}</span>`}
+        ${thumb ? `<img src="${escapeHTML(thumb)}" loading="lazy" decoding="async" alt="">` : `<span>${escapeHTML(label)}</span>`}
         <strong>${escapeHTML(label)}</strong>
       </div>
       <div class="official-post-body">
@@ -863,13 +864,21 @@ function renderTablePosts(posts, startIndex, totalCount){
   });
 }
 
+function scrollToPostList(){
+  const heading = document.querySelector(".mobile-board-list-title");
+  if (heading) heading.scrollIntoView({block:"start"});
+  else window.scrollTo(0, 0);
+}
+
 function setupPagination(totalCount){
   if(!paginationContainer) return;
 
   paginationContainer.innerHTML = "";
 
   const actualTotalPages = Math.ceil(totalCount / postsPerPage) || 1;
-  const displayTotalPages = Math.max(actualTotalPages, 5);
+  const firstPage = Math.max(1, Math.min(currentPage - 2, actualTotalPages - 4));
+  const displayTotalPages = Math.min(actualTotalPages, firstPage + 4);
+  if (totalCount === 0) return;
 
   const makeButton = (label, className, disabled, onClick)=>{
     const button = document.createElement("button");
@@ -883,16 +892,16 @@ function setupPagination(totalCount){
   makeButton("&lt;&lt;", "page-arrow", currentPage === 1, ()=>{
     currentPage = 1;
     renderPage(currentPage);
-    window.scrollTo(0, 0);
+    scrollToPostList();
   });
 
   makeButton("&lt;", "page-arrow", currentPage === 1, ()=>{
     currentPage = Math.max(1, currentPage - 1);
     renderPage(currentPage);
-    window.scrollTo(0, 0);
+    scrollToPostList();
   });
 
-  for(let i = 1; i <= displayTotalPages; i++){
+  for(let i = firstPage; i <= displayTotalPages; i++){
     const pageBtn = document.createElement("button");
     pageBtn.innerText = i;
 
@@ -907,7 +916,7 @@ function setupPagination(totalCount){
       if(i <= actualTotalPages){
         currentPage = i;
         renderPage(currentPage);
-        window.scrollTo(0, 0);
+        scrollToPostList();
       }
     });
 
@@ -917,12 +926,12 @@ function setupPagination(totalCount){
   makeButton("&gt;", "page-arrow", currentPage === actualTotalPages, ()=>{
     currentPage = Math.min(actualTotalPages, currentPage + 1);
     renderPage(currentPage);
-    window.scrollTo(0, 0);
+    scrollToPostList();
   });
 
   makeButton("&gt;&gt;", "page-arrow", currentPage === actualTotalPages, ()=>{
     currentPage = actualTotalPages;
     renderPage(currentPage);
-    window.scrollTo(0, 0);
+    scrollToPostList();
   });
 }

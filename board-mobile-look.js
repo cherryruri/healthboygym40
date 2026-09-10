@@ -16,7 +16,7 @@
     document.body.classList.add('mobile-board-look');
     const hero = document.createElement('section');
     hero.className = 'mobile-board-hero';
-    hero.innerHTML = '<h2>우리의 운동 이야기</h2><p>함께 나누고, 함께 성장해요.</p>';
+    hero.innerHTML = '<span class="mobile-board-eyebrow">HEALTHBOY GYM · 수내점</span><h2>우리 센터 이야기</h2><p>새로운 소식과 운동 이야기를 만나보세요.</p>';
     const nav = document.createElement('nav');
     nav.className = 'mobile-board-nav';
     nav.setAttribute('aria-label', '게시판 바로가기');
@@ -32,15 +32,43 @@
       const category = {all:'all', review:'pt', community:'free'}[link.dataset.boardShortcut];
       if (!category) return;
       const button = bar.querySelector('[data-category="'+category+'"]');
-      if (button) { event.preventDefault(); button.click(); }
+      if (button) { event.preventDefault(); button.click(); } // Otherwise follow the real destination URL.
     });
     const news = document.createElement('section');
     news.className = 'mobile-board-news';
-    news.innerHTML = '<div class="mobile-board-section-title"><h2>센터 소식</h2><a href="board.html?board=noticeboard">전체 보기 ↗</a></div><a class="mobile-board-news-card" href="board.html?board=noticeboard"><img src="센터전체사진1.jpg" alt="헬스보이짐 수내점 시설" loading="lazy"><span class="mobile-board-news-badge">NOTICE</span><span class="mobile-board-news-copy"><strong>센터의 새로운 소식</strong><span>공지와 이용 안내를 확인해 보세요 ↗</span></span></a>';
+    const slides = [
+      {image:'센터전체사진1.jpg', badge:'센터 이야기', title:'운동하고 싶은 공간,\n헬스보이짐 수내점', label:'시설 둘러보기', href:'index.html#facility'},
+      {image:'프리웨이트존사진1.jpg', badge:'함께하는 운동', title:'함께 나누는\n우리의 운동 이야기', label:'운동후기 보기', href:'board.html?board=review&category=pt'},
+      {image:'상담실사진.jpg', badge:'센터 소식', title:'알아두면 좋은\n센터 공지와 안내', label:'공지사항 보기', href:'board.html?board=noticeboard'}
+    ];
+    news.setAttribute('aria-label','센터 안내 배너');
+    news.innerHTML = '<a class="mobile-board-news-card"><img alt="" decoding="async"><span class="mobile-board-news-copy"><span class="mobile-board-news-badge"></span><strong></strong><span class="mobile-board-slide-link"></span></span></a><div class="mobile-board-slide-controls" aria-label="배너 선택"></div>';
+    const slideLink = news.querySelector('.mobile-board-news-card');
+    const controls = news.querySelector('.mobile-board-slide-controls');
+    function showSlide(index) {
+      const slide = slides[index];
+      slideLink.href = slide.href;
+      slideLink.querySelector('img').src = slide.image;
+      slideLink.querySelector('img').alt = slide.badge + ' · 헬스보이짐 수내점';
+      slideLink.querySelector('.mobile-board-news-badge').textContent = slide.badge;
+      slideLink.querySelector('strong').textContent = slide.title;
+      slideLink.querySelector('.mobile-board-slide-link').textContent = slide.label + ' →';
+      controls.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===index)));
+    }
+    slides.forEach((slide,index)=>{
+      const button=document.createElement('button');
+      button.type='button'; button.setAttribute('aria-label',slide.badge+' 배너 보기');
+      button.addEventListener('click',()=>showSlide(index)); controls.appendChild(button);
+    });
+    showSlide(0);
+    const quickLinks = document.createElement('div');
+    quickLinks.className = 'mobile-board-quick-links';
+    quickLinks.innerHTML = '<a href="index.html#facility"><img src="기구존사진1.jpg" alt="" loading="lazy"><span>시설 안내 <i aria-hidden="true">→</i></span></a><a href="index.html#hours"><img src="상담실사진.jpg" alt="" loading="lazy"><span>이용 안내 <i aria-hidden="true">→</i></span></a>';
     const listTitle = document.createElement('div');
     listTitle.className = 'mobile-board-section-title mobile-board-list-title';
     listTitle.innerHTML = '<h2>회원들의 이야기</h2><span>최신순 · 공지 우선</span>';
-    shell.prepend(hero,nav,news,listTitle);
+    shell.prepend(hero,news,nav,listTitle);
+    shell.appendChild(quickLinks);
     const back = document.createElement('a');
     back.className = 'mobile-board-back';
     back.href = 'index.html';
@@ -58,12 +86,13 @@
         if (link.dataset.boardShortcut === active && !request) link.setAttribute('aria-current','page');
         else link.removeAttribute('aria-current');
       });
-      const title = request ? '1:1 문의' : official ? '센터 소식' : '우리의 운동 이야기';
-      const subtitle = request ? '작성자와 관리자만 확인할 수 있어요.' : official ? '센터의 공지와 새로운 소식을 확인하세요.' : '함께 나누고, 함께 성장해요.';
+      const title = request ? '1:1 문의' : official ? '센터 소식' : '우리 센터 이야기';
+      const subtitle = request ? '작성자와 관리자만 확인할 수 있어요.' : official ? '센터의 공지와 새로운 소식을 확인하세요.' : '새로운 소식과 운동 이야기를 만나보세요.';
       if (hero.querySelector('h2').textContent !== title) hero.querySelector('h2').textContent = title;
       if (hero.querySelector('p').textContent !== subtitle) hero.querySelector('p').textContent = subtitle;
-      news.hidden = official || request;
-      const heading = request ? '내 문의' : official ? '공지와 뉴스' : '회원들의 이야기';
+      news.hidden = request;
+      quickLinks.hidden = request;
+      const heading = request ? '내 문의' : official ? '공지와 뉴스' : '새로운 이야기';
       if (listTitle.querySelector('h2').textContent !== heading) listTitle.querySelector('h2').textContent = heading;
       shell.querySelectorAll('.board-post').forEach(card => {
         if (!card.hasAttribute('tabindex')) {
@@ -83,7 +112,7 @@
       shell.querySelectorAll('[data-mobile-board-keyboard]').forEach(card => {
         card.removeAttribute('tabindex'); card.removeAttribute('role'); delete card.dataset.mobileBoardKeyboard;
       });
-      hero.remove(); nav.remove(); news.remove(); listTitle.remove(); back.remove();
+      hero.remove(); nav.remove(); news.remove(); listTitle.remove(); back.remove(); quickLinks.remove();
       if (search) oldPlaceholder === null ? search.removeAttribute('placeholder') : search.setAttribute('placeholder',oldPlaceholder);
       document.body.classList.remove('mobile-board-look');
     };

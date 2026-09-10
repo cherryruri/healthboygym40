@@ -37,7 +37,7 @@ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-loo
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-section-title h2{font:700 18px/1.4 Pretendard,Arial,sans-serif!important;letter-spacing:-.045em!important;color:#14263e!important;margin:0!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-section-title>a, html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-section-title>span{color:#8b8f83;font-size:11px;text-decoration:none;white-space:nowrap}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card{display:block;position:relative;height:192px;border-radius:22px;overflow:hidden;background:#30362b;text-decoration:none;color:#fff}
-html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#1110 20%,#10160bc9 100%);pointer-events:none}
+html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.28);pointer-events:none}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card>img{width:100%;height:100%;display:block;object-fit:cover}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-badge{position:absolute;top:15px;left:15px;z-index:1;padding:6px 10px;border-radius:20px;background:#fffef0e6;color:#142b46;font-size:9px;letter-spacing:.07em;font-weight:600}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-copy{position:absolute;left:19px;bottom:19px;right:19px;z-index:1;display:flex;flex-direction:column;gap:7px}
@@ -98,8 +98,8 @@ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-loo
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-hero h2{color:#14263e!important;font-size:28px!important;letter-spacing:-.045em!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-hero p{color:#798392!important;font-size:13px!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news{grid-row:2;position:relative;margin:0 0 18px}
-html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card{height:280px;border-radius:22px;background:#14263e}
-html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card::after{background:linear-gradient(180deg,rgba(20,38,62,0) 20%,rgba(20,38,62,.45) 48%,rgba(13,30,50,.96) 100%)}
+html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card{height:280px;border-radius:22px;background:#242424}
+html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-card::after{background:rgba(0,0,0,.28)}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-copy{left:20px;right:20px;bottom:24px;gap:10px}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-copy strong{white-space:pre-line;font-size:24px;line-height:1.3;font-weight:750;letter-spacing:-.04em}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-news-badge{position:static;align-self:flex-start;background:#ff655f;color:#fff;font-size:11px;padding:6px 10px;letter-spacing:0;border-radius:9px}
@@ -136,9 +136,9 @@ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-loo
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .official-post-body{padding:0!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look #pagination{grid-row:8;padding-top:20px!important}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links{grid-row:9;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:26px}
-html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links>a{height:120px;position:relative;overflow:hidden;border-radius:16px;background:#14263e;color:white;text-decoration:none}
+html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links>a{height:120px;position:relative;overflow:hidden;border-radius:16px;background:#242424;color:white;text-decoration:none}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links img{width:100%;height:100%;object-fit:cover}
-html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links>a::after{content:'';position:absolute;inset:0;background:linear-gradient(transparent,#102239d9)}
+html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links>a::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.28)}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links span{position:absolute;z-index:1;left:15px;right:15px;bottom:17px;display:flex;justify-content:space-between;font-size:13px;font-weight:600}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look .mobile-board-quick-links i{font-style:normal}
 html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-look #writeBtn{background:#142b46!important;box-shadow:0 6px 20px #142b4626!important}

@@ -28,3 +28,5 @@ body:has(.hb-home) .main-content{padding-top:0!important}
 @media(prefers-reduced-motion:reduce){html:has(.hb-home){scroll-behavior:auto}.hb-home *{transition:none!important}.hb-home .hb-pt{height:100svh}.hb-pt-media{clip-path:none}.hb-pt-intro{display:none}.hb-pt-copy,.hb-video-toggle,.hb-pt-shade{opacity:1;transform:none}}
 
 .hb-photo-fan{scrollbar-width:none}.hb-photo-fan::-webkit-scrollbar{display:none}
+
+.hb-welcome-video-toggle{position:absolute;bottom:30px;right:80px;z-index:3;width:42px;height:42px;border:1px solid #ffffff80;border-radius:50%;background:#0003;color:white;cursor:pointer}@media(max-width:768px){.hb-welcome-video-toggle{right:38px;bottom:25px;width:35px;height:35px}}

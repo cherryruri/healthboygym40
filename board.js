@@ -783,25 +783,7 @@ function renderDesktopPosts(posts, page){
     });
     return link;
   };
-  const imageFor = data => {
-    const own=getPublicPostThumbnail(data);
-    // Neutral facility photo is a presentation fallback, never a private attachment.
-    if(own)return own;
-    if(data.isSecret || data.isAdminOnly || getPostCategory(data)==="request")return "";
-    return "센터전체사진1.jpg";
-  };
-  const metaFor=data=>'<span class="desktop-post-label">'+escapeHTML(getPostCategoryLabel(data))+'</span><h2>'+escapeHTML(data.title)+'</h2><time>'+formatDate(data)+'</time>';
-  const remaining=posts;
-  if(!listView){
-    const grid=document.createElement('div');grid.className='shop-post-grid';
-    posts.slice(0,8).forEach(post=>{
-      const card=makeLink(post,'shop-post-card');
-      const image=imageFor(post.data);
-      card.innerHTML=(image?'<div class="shop-post-image"><img src="'+escapeHTML(image)+'" alt="" loading="lazy"><span aria-hidden="true">↗</span></div>':'<div class="shop-post-image shop-post-noimage">HEALTHBOY GYM</div>')+'<div class="shop-post-copy">'+metaFor(post.data)+'</div>';
-      grid.appendChild(card);
-    });
-    postList.appendChild(grid);return;
-  }
+  const remaining=listView?posts:posts.slice(0,6);
   const title=document.createElement("div");title.className="desktop-post-list-title";
   title.innerHTML='<h2>게시글 목록</h2><span>최신순 · 공지 우선</span>';postList.appendChild(title);
   const table=document.createElement("table");table.className="desktop-post-table";

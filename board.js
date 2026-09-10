@@ -789,6 +789,15 @@ function renderOfficialPosts(posts){
   postList.appendChild(list);
 }
 
+function getPublicPostThumbnail(data){
+  if(!data.isPublic || data.isSecret || data.isAdminOnly || getPostCategory(data) === "request") return "";
+  const template = document.createElement("template");
+  template.innerHTML = String(data.content || "");
+  const src = String(data.thumbnailDataUrl || template.content.querySelector("img")?.getAttribute("src") || "");
+  // Only the post's own public image is shown; never expose private attachments.
+  return /^(https:\/\/|data:image\/(?:png|jpe?g|webp|gif);base64,)/i.test(src) ? src : "";
+}
+
 function renderConsultPosts(posts){
   const list = document.createElement("div");
   list.className = "consult-post-list";
@@ -802,12 +811,14 @@ function renderConsultPosts(posts){
     const isRequest = getPostCategory(data) === "request" && isRequestContext();
     const status = getRequestStatusText(data);
     const locked = isRequest ? "비공개" : data.isPublic ? "" : "비밀글";
+    const thumbnail = getPublicPostThumbnail(data);
 
     if(isRequest){
       card.classList.add("has-status");
     }
 
     card.innerHTML = `
+      ${thumbnail ? `<img class="mobile-post-thumbnail" style="display:none" src="${escapeHTML(thumbnail)}" alt="" loading="lazy" decoding="async">` : ""}
       <div class="consult-post-meta-top">${escapeHTML(label)}</div>
       <div class="consult-post-main">
         <h2>${data.isNotice ? '<span class="notice-title-prefix">| 공지 |</span>' : ""}${escapeHTML(data.title)}</h2>

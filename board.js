@@ -423,28 +423,28 @@ function getFirstCategoryForGroup(groupValue){
 
 function updateBoardUrl(){
   if(currentBoard === "request"){
-    history.replaceState(null, "", "board.html?board=request&category=request");
+    replaceBoardLocation("board.html?board=request&category=request");
     return;
   }
 
   if(currentBoard === "free"){
     if(currentCategory === "all"){
-      history.replaceState(null, "", "board.html");
+      replaceBoardLocation("board.html");
       return;
     }
 
     const boardName = getBoardForCategory(currentCategory);
-    history.replaceState(null, "", `board.html?board=${boardName}&category=${currentCategory}`);
+    replaceBoardLocation(`board.html?board=${boardName}&category=${currentCategory}`);
     return;
   }
 
   if(currentBoard === "infoboard"){
     const categoryQuery = currentCategory === "all" ? "" : `&category=${currentCategory}`;
-    history.replaceState(null, "", `board.html?board=infoboard${categoryQuery}`);
+    replaceBoardLocation(`board.html?board=infoboard${categoryQuery}`);
     return;
   }
 
-  history.replaceState(null, "", `board.html?board=${currentBoard}`);
+  replaceBoardLocation(`board.html?board=${currentBoard}`);
 }
 
 function updateBoardInfo(){
@@ -521,7 +521,7 @@ document.querySelectorAll(".board-tab").forEach(tab=>{
     currentBoard = tab.dataset.board;
     currentPage = 1;
     currentCategory = "all";
-    history.replaceState(null, "", `board.html?board=${currentBoard}`);
+    replaceBoardLocation(`board.html?board=${currentBoard}`);
 
     document.querySelectorAll(".board-tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
@@ -774,6 +774,7 @@ function renderPage(page){
 
 
 function renderDesktopPosts(posts, page){
+  const listView = document.body.classList.contains('board-list-view');
   const makeLink = ({id,data}, className) => {
     const link=document.createElement("a");
     link.className=className; link.href="post.html?id="+encodeURIComponent(id);
@@ -790,23 +791,19 @@ function renderDesktopPosts(posts, page){
     return "센터전체사진1.jpg";
   };
   const metaFor=data=>'<span class="desktop-post-label">'+escapeHTML(getPostCategoryLabel(data))+'</span><h2>'+escapeHTML(data.title)+'</h2><time>'+formatDate(data)+'</time>';
-  let remaining=posts;
-  if(page===1 && posts.length){
-    const highlights=document.createElement("div");highlights.className="desktop-post-highlights";
-    const feature=makeLink(posts[0],"desktop-post-feature");
-    const image=imageFor(posts[0].data);
-    feature.innerHTML=(image?'<img src="'+escapeHTML(image)+'" alt="" decoding="async">':'<div class="desktop-post-placeholder">게시글</div>')+'<div class="desktop-post-feature-copy">'+metaFor(posts[0].data)+'<span class="desktop-post-arrow" aria-hidden="true">→</span></div>';
-    highlights.appendChild(feature);
-    const summaries=document.createElement("div");summaries.className="desktop-post-summaries";
-    posts.slice(1,4).forEach(post=>{
-      const link=makeLink(post,"desktop-post-summary"),image=imageFor(post.data);
-      link.innerHTML='<div>'+metaFor(post.data)+'</div>'+(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy">':'');summaries.appendChild(link);
+  const remaining=posts;
+  if(!listView){
+    const grid=document.createElement('div');grid.className='shop-post-grid';
+    posts.slice(0,8).forEach(post=>{
+      const card=makeLink(post,'shop-post-card');
+      const image=imageFor(post.data);
+      card.innerHTML=(image?'<div class="shop-post-image"><img src="'+escapeHTML(image)+'" alt="" loading="lazy"><span aria-hidden="true">↗</span></div>':'<div class="shop-post-image shop-post-noimage">HEALTHBOY GYM</div>')+'<div class="shop-post-copy">'+metaFor(post.data)+'</div>';
+      grid.appendChild(card);
     });
-    highlights.appendChild(summaries);postList.appendChild(highlights);remaining=posts.slice(4);
+    postList.appendChild(grid);return;
   }
-  if(!remaining.length)return;
   const title=document.createElement("div");title.className="desktop-post-list-title";
-  title.innerHTML='<h2>더 많은 이야기</h2><span>최신순 · 공지 우선</span>';postList.appendChild(title);
+  title.innerHTML='<h2>게시글 목록</h2><span>최신순 · 공지 우선</span>';postList.appendChild(title);
   const table=document.createElement("table");table.className="desktop-post-table";
   table.innerHTML='<thead><tr><th scope="col">카테고리</th><th scope="col">제목</th><th scope="col">작성자</th><th scope="col">작성일</th></tr></thead>';
   const tbody=document.createElement("tbody");
@@ -1002,3 +999,10 @@ function setupPagination(totalCount){
     scrollToPostList();
   });
 }
+
+function replaceBoardLocation(path){
+  const url=new URL(path,location.href);
+  if(document.body.classList.contains('board-list-view'))url.searchParams.set('view','list');
+  history.replaceState(null,'',url);
+}
+window.addEventListener('board-view-change',()=>{currentPage=1;renderPage(currentPage);});

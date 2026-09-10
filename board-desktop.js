@@ -16,6 +16,27 @@
     <a href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer"><img src="상담실사진.jpg" alt="" loading="lazy"><span><strong>당신의 시작을 함께해요</strong><em>상담 예약 ↗</em></span></a>
   </div><footer class="desktop-community-footer"><div><strong>HEALTHBOY GYM <small>수내점</small></strong><p>건강한 일상이 시작되는 곳</p></div><nav aria-label="게시판 하단 안내"><a href="index.html#facility">시설 안내</a><a href="index.html#hours">운영시간</a><a href="index.html#location">오시는 길</a></nav><small>© HEALTHBOY GYM. All rights reserved.</small></footer>`;
   shell.after(lower);
+  const controls=document.createElement('div');
+  controls.className='board-view-controls';
+  controls.innerHTML='<span class="board-view-caption">새로운 소식과 회원들의 이야기</span><button type="button" class="board-view-toggle">더보기 →</button>';
+  shell.querySelector('.board-toolbar').after(controls);
+  const toggle=controls.querySelector('button');
+  const applyView=()=>{
+    const list=new URLSearchParams(location.search).get('view')==='list';
+    document.body.classList.toggle('board-list-view',list);
+    toggle.textContent=list?'카드로 보기 ↗':'더보기 →';
+    controls.querySelector('span').textContent=list?'전체 게시글':'새로운 소식과 회원들의 이야기';
+    window.dispatchEvent(new Event('board-view-change'));
+  };
+  toggle.addEventListener('click',()=>{
+    const url=new URL(location.href);
+    if(document.body.classList.contains('board-list-view'))url.searchParams.delete('view');else url.searchParams.set('view','list');
+    history.pushState(null,'',url);applyView();
+    shell.scrollIntoView({block:'start',behavior:'instant'});
+    toggle.focus({preventScroll:true});
+  });
+  window.addEventListener('popstate',()=>location.reload());
+  applyView();
   const sync = () => {
     document.body.classList.toggle('desktop-board',media.matches);
     if (media.matches) {
@@ -25,3 +46,4 @@
   };
   sync(); media.addEventListener('change',sync);
 })();
+

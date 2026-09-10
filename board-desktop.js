@@ -31,7 +31,7 @@
 
  const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none"></video>';document.body.appendChild(dialog);
  const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
- const specs=[{index:0,poster:'member-landscape-v1.jpg',preview:'member-landscape-v1.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-landscape-v1.jpg',preview:'sangwon-landscape-v1.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
+ const specs=[{index:0,poster:'member-highlight-v2.jpg',preview:'member-highlight-v2.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-highlight-v2.jpg',preview:'sangwon-highlight-v2.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
  let inView=false,rotationPaused=false,rotationTimer=null,lastOpenButton=null;
  const rotationButton=document.createElement('button');rotationButton.type='button';rotationButton.className='mall-rotation-toggle';rotationButton.textContent='자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed','false');hero.appendChild(rotationButton);
  const available=()=>media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');

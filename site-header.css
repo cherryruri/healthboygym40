@@ -256,3 +256,6 @@ html body:is(body,#site-typography) :where(.board-header h1,.login-form h1,#post
  html body:is(body,#site-typography) .board-post h2{font-size:15px!important;font-weight:600!important;line-height:1.5!important;letter-spacing:-.02em!important}
  html body:is(body,#site-typography) :where(.consult-post-meta-bottom,.consult-post-meta-bottom time,.official-post-body time){font-size:12px!important;line-height:1.5!important}
 }
+
+/* Keep one gentle slant instead of combining italic and skew. */
+html body #site-header .logo a{font-style:normal!important;transform:skewX(-3deg)!important}

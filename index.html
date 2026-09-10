@@ -2733,7 +2733,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     <div class="trainer-proof-sticky">
       <h2>검증된 전문성과 책임감으로<br>회원의 변화를 향한 바른 길을 걸어갑니다.</h2>
       <div class="trainer-proof-portraits" aria-hidden="true">
-        <img class="tp tp1" src="정위영.jpg" alt=""><img class="tp tp3" src="이상원.jpg" alt="">
+        <img class="tp tp1" src="정위영.jpg" alt=""><img class="tp tp2" src="이용빈.jpg" alt=""><img class="tp tp3" src="이상원.jpg" alt="">
         <img class="tp tp4" src="이루리.jpg" alt=""><img class="tp tp5" src="최호준.jpg" alt=""><img class="tp tp6" src="이연주.jpg" alt="">
       </div>
       <div class="trainer-proof-final">국내외에서 인정받은 실력으로<br>신뢰를 향한 바른 길을 걸어갑니다.</div>
@@ -3005,7 +3005,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
  const clamp=v=>Math.max(0,Math.min(1,v)); let ticking=false;
  const render=()=>{ticking=false;const r=scene.getBoundingClientRect(),range=Math.max(scene.offsetHeight-innerHeight,1),p=clamp(-r.top/range);
  heading.style.opacity=String(clamp(1-(p-.18)/.26));
- portraits.forEach((img,i)=>{const local=clamp((p-.08-i*.035)/.42),e=local*local*(3-2*local),dir=img.classList.contains('tp1')||img.classList.contains('tp3')?-1:1;img.style.opacity=String(e*(1-clamp((p-.63)/.2)));img.style.transform='translate3d('+(dir*(1-e)*42)+'vw,'+((1-e)*42)+'vh,0) scale('+(0.8+e*.2)+')'});
+ portraits.forEach((img,i)=>{const local=clamp((p-.08-i*.035)/.42),e=local*local*(3-2*local),dir=i<3?-1:1;img.style.opacity=String(e*(1-clamp((p-.63)/.2)));img.style.transform='translate3d('+(dir*(1-e)*42)+'vw,'+((1-e)*42)+'vh,0) scale('+(0.8+e*.2)+')'});
  const fp=clamp((p-.58)/.22);final.style.opacity=String(fp);final.style.transform='translate(-50%,calc(-50% + '+((1-fp)*55)+'px))'};
  const req=()=>{if(ticking)return;ticking=true;requestAnimationFrame(render)};addEventListener('scroll',req,{passive:true});addEventListener('resize',req);render();
 })();
@@ -3020,9 +3020,10 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
  border-radius:0!important;object-fit:cover!important;object-position:center top!important;
  opacity:.88!important;transform:none!important;filter:brightness(.84) saturate(.9)!important;
 }
-.trainer-proof-portraits .tp1{left:0!important;top:0!important;height:50%!important}
+.trainer-proof-portraits .tp1{left:0!important;top:0!important}
+.trainer-proof-portraits .tp2{left:0!important;top:33.3333%!important;bottom:auto!important}
 
-.trainer-proof-portraits .tp3{left:0!important;top:50%!important;height:50%!important}
+.trainer-proof-portraits .tp3{left:0!important;top:66.6666%!important}
 .trainer-proof-portraits .tp4{right:0!important;left:auto!important;top:0!important;bottom:auto!important}
 .trainer-proof-portraits .tp5{right:0!important;top:33.3333%!important;bottom:auto!important}
 .trainer-proof-portraits .tp6{right:0!important;top:66.6666%!important;bottom:auto!important}
@@ -3229,7 +3230,7 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
     var cards=document.querySelectorAll(".trainer-proof-portraits .tp");
     cards.forEach(function(el,i){
       var q=ease(clamp((p-.06-i*.035)/.34));
-      var side=el.classList.contains("tp1")||el.classList.contains("tp3")?-1:1;
+      var side=i<3?-1:1;
       el.style.setProperty("--tp-opacity",q*.9);
       el.style.setProperty("--tp-x",(side*(1-q)*115)+"%");
       el.style.setProperty("--tp-y",((1-q)*(i%3-1)*12)+"vh");

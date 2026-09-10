@@ -5,7 +5,7 @@
  if(!shell)return;
  const booking='https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&lang=ko&theme=place';
  const slides=[
- ['community-event-marble-v1.jpg','함께 만드는<br>건강한 일상','헬스보이짐 수내점','센터 소식 보기 →','board.html?board=free&category=news&view=list'],
+ ['bodychallenge34-interview-poster.jpg','바디챌린지 34기<br>수내점 김영관 회원님 인터뷰','','인터뷰 영상 보기 ▶','bodychallenge34-interview.mp4'],
  ['프리웨이트존사진1.jpg','나에게 맞는<br>운동의 시작','당신의 목표에 한 걸음 더','트레이너 만나보기 →','index.html#trainer'],
  ['기구존사진1.jpg','오늘도 한 걸음,<br>더 나은 나로','건강한 일상이 시작되는 곳','시설 둘러보기 →','index.html#facility']
  ];
@@ -13,7 +13,7 @@
  hero.innerHTML='<div class="mall-slide-track">'+slides.map((s,i)=>`<article class="mall-slide" aria-label="${i+1} / ${slides.length}"><img src="${s[0]}" alt="" ${i?'loading="lazy"':'fetchpriority="high"'}><div class="mall-slide-copy"><p>${s[1]}</p><span>${s[2]}</span><a href="${s[4]}">${s[3]}</a></div></article>`).join('')+'</div><button type="button" class="mall-prev" aria-label="이전 배너">‹</button><button type="button" class="mall-next" aria-label="다음 배너">›</button><div class="mall-slide-dots">'+slides.map((_,i)=>`<button type="button" aria-label="${i+1}번 배너" data-slide="${i}"></button>`).join('')+'</div><span class="mall-slide-count" aria-live="polite"></span>';
  shell.before(hero);
  let active=0;
- const showSlide=index=>{active=(index+slides.length)%slides.length;hero.querySelectorAll('.mall-slide').forEach((slide,i)=>{const position=(i-active+slides.length)%slides.length;slide.dataset.position=position;slide.setAttribute('aria-hidden',String(position!==0));slide.inert=position!==0;});hero.querySelectorAll('[data-slide]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===active)));hero.querySelector('.mall-slide-count').textContent=`0${active+1} / 03`;};
+ const showSlide=index=>{active=(index+slides.length)%slides.length;hero.querySelectorAll('.mall-slide').forEach((slide,i)=>{const position=(i-active+slides.length)%slides.length;slide.dataset.position=position;slide.setAttribute('aria-hidden',String(position!==0));slide.inert=position!==0;});hero.querySelectorAll('[data-slide]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===active)));hero.querySelector('.mall-slide-count').textContent=`0${active+1} / 03`;hero.dispatchEvent(new Event("slidechange"));};
  hero.querySelector('.mall-prev').addEventListener('click',()=>showSlide(active-1));hero.querySelector('.mall-next').addEventListener('click',()=>showSlide(active+1));hero.querySelectorAll('[data-slide]').forEach(b=>b.addEventListener('click',()=>showSlide(Number(b.dataset.slide))));
  hero.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();showSlide(active+(e.key==='ArrowRight'?1:-1));}});showSlide(0);
  const stories=document.createElement('section');stories.className='mall-stories';stories.setAttribute('aria-label','지금 헬스보이짐');
@@ -27,4 +27,20 @@
  toggle.addEventListener('click',()=>{const url=new URL(location.href);if(document.body.classList.contains('board-list-view'))url.searchParams.delete('view');else url.searchParams.set('view','list');history.pushState(null,'',url);applyView();shell.scrollIntoView({block:'start',behavior:'instant'});toggle.focus({preventScroll:true});});window.addEventListener('popstate',()=>location.reload());applyView();
  const footer=document.createElement('footer');footer.className='desktop-community-bottom mall-footer';footer.innerHTML='<strong>HEALTHBOYGYM <small>수내점</small></strong><span>건강한 일상이 시작되는 곳</span><nav aria-label="하단 안내"><a href="index.html#facility">시설 안내</a><a href="index.html#hours">운영시간</a><a href="index.html#location">오시는 길</a></nav>';shell.after(footer);
  const sync=()=>{document.body.classList.toggle('desktop-board',media.matches);if(media.matches){shell.removeAttribute('aria-hidden');document.body.classList.remove('board-header-over-hero');}};sync();media.addEventListener('change',sync);
+
+ const interview=hero.querySelector('.mall-slide');interview.classList.add('mall-interview-slide');
+ const still=interview.querySelector('img');still.remove();
+ const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.playsInline=true;preview.preload='none';preview.poster='bodychallenge34-interview-poster.jpg';preview.setAttribute('aria-hidden','true');interview.prepend(preview);
+ const openButton=document.createElement('button');openButton.type='button';openButton.className='mall-interview-open';openButton.setAttribute('aria-label','바디챌린지 34기 수내점 김영관 회원님 인터뷰 영상 보기');interview.appendChild(openButton);
+ const pauseButton=document.createElement('button');pauseButton.type='button';pauseButton.className='mall-interview-pause';pauseButton.textContent='미리보기 일시정지';pauseButton.setAttribute('aria-label','배너 영상 미리보기 일시정지');interview.appendChild(pauseButton);
+ const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.setAttribute('aria-label','김영관 회원님 인터뷰 영상');dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none" poster="bodychallenge34-interview-poster.jpg" aria-label="바디챌린지 34기 인터뷰"></video>';document.body.appendChild(dialog);
+ const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
+ let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches,inView=false;
+ const updatePreview=()=>{const playing=media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view')&&interview.dataset.position==='0'&&!userPaused;if(playing){if(!preview.getAttribute('src'))preview.src='bodychallenge34-preview.mp4';preview.play().catch(()=>{});}else preview.pause();pauseButton.textContent=userPaused?'미리보기 재생':'미리보기 일시정지';pauseButton.setAttribute('aria-label',userPaused?'배너 영상 미리보기 재생':'배너 영상 미리보기 일시정지');};
+ const openInterview=e=>{e.preventDefault();if(!player.getAttribute('src'))player.src='bodychallenge34-interview.mp4';dialog.showModal();preview.pause();player.currentTime=0;player.play().catch(()=>{});closeButton.focus();};
+ openButton.addEventListener('click',openInterview);interview.querySelector('.mall-slide-copy a').addEventListener('click',openInterview);
+ pauseButton.addEventListener('click',()=>{userPaused=!userPaused;updatePreview();});closeButton.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{player.pause();updatePreview();openButton.focus({preventScroll:true});});
+ new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;updatePreview();},{threshold:.1}).observe(hero);
+ hero.addEventListener('slidechange',updatePreview);document.addEventListener('visibilitychange',updatePreview);window.addEventListener('board-view-change',updatePreview);media.addEventListener('change',updatePreview);updatePreview();
+
 })();

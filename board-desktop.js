@@ -30,12 +30,12 @@
 
  const interview=hero.querySelector('.mall-slide');interview.classList.add('mall-interview-slide');
  const still=interview.querySelector('img');still.remove();
- const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.playsInline=true;preview.preload='none';preview.poster='bodychallenge34-interview-poster.jpg';preview.setAttribute('aria-hidden','true');interview.prepend(preview);
+ const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.autoplay=true;preview.playsInline=true;preview.preload='none';preview.poster='bodychallenge34-interview-poster.jpg';preview.setAttribute('aria-hidden','true');interview.prepend(preview);
  const openButton=document.createElement('button');openButton.type='button';openButton.className='mall-interview-open';openButton.setAttribute('aria-label','바디챌린지 34기 수내점 김영관 회원님 인터뷰 영상 보기');interview.appendChild(openButton);
  const pauseButton=document.createElement('button');pauseButton.type='button';pauseButton.className='mall-interview-pause';pauseButton.textContent='미리보기 일시정지';pauseButton.setAttribute('aria-label','배너 영상 미리보기 일시정지');interview.appendChild(pauseButton);
  const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.setAttribute('aria-label','김영관 회원님 인터뷰 영상');dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none" poster="bodychallenge34-interview-poster.jpg" aria-label="바디챌린지 34기 인터뷰"></video>';document.body.appendChild(dialog);
  const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
- let userPaused=matchMedia('(prefers-reduced-motion: reduce)').matches,inView=false;
+ let userPaused=false,inView=false;
  const updatePreview=()=>{const playing=media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view')&&interview.dataset.position==='0'&&!userPaused;if(playing){if(!preview.getAttribute('src'))preview.src='bodychallenge34-preview.mp4';preview.play().catch(()=>{});}else preview.pause();pauseButton.textContent=userPaused?'미리보기 재생':'미리보기 일시정지';pauseButton.setAttribute('aria-label',userPaused?'배너 영상 미리보기 재생':'배너 영상 미리보기 일시정지');};
  const openInterview=e=>{e.preventDefault();if(!player.getAttribute('src'))player.src='bodychallenge34-interview.mp4';dialog.showModal();preview.pause();player.currentTime=0;player.play().catch(()=>{});closeButton.focus();};
  openButton.addEventListener('click',openInterview);interview.querySelector('.mall-slide-copy a').addEventListener('click',openInterview);

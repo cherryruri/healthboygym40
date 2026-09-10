@@ -210,3 +210,12 @@ html body:is(body,#site-typography).desktop-board .mall-interview-slide .mall-sl
 .mall-interview-slide .mall-slide-copy{z-index:3}
 .mall-interview-pause{position:absolute;right:12px;top:12px;z-index:4;border:1px solid #ffffff60;background:#0009;color:white;border-radius:3px;padding:8px 10px;font-size:11px;cursor:pointer}
 }
+/* Larger interview stage, with a black feathered edge around the video. */
+@media(min-width:769px){
+body.desktop-board.desktop-board.desktop-board .mall-carousel:has(.mall-interview-slide[data-position="0"]){height:clamp(540px,48vw,760px)!important;background:#000!important}
+.mall-interview-slide{background:#000}
+.mall-interview-preview{width:65%;height:118%;top:-9%;right:0;object-fit:contain;background:#000}
+.mall-interview-slide::after{display:block;z-index:1;pointer-events:none;background:linear-gradient(90deg,#000 0%,#000 32%,rgba(0,0,0,.8) 43%,transparent 62%,transparent 88%,#000 100%),linear-gradient(0deg,#000 0%,transparent 18%,transparent 84%,rgba(0,0,0,.65) 100%)}
+.mall-interview-slide .mall-slide-copy{left:5%;width:57%}
+html body:is(body,#site-typography).desktop-board .mall-interview-slide .mall-slide-copy p{font-size:clamp(24px,2.7vw,42px)!important;line-height:1.5!important;text-shadow:0 2px 18px #000}
+}

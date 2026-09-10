@@ -47,3 +47,14 @@ body:has(.hb-home) .main-content{padding-top:0!important}
 .hb-home .hb-program-track{flex:1;min-height:150px;max-height:45svh}
 
 .hb-home .hb-program-track{flex:1;min-height:150px;max-height:45svh}
+
+/* Synchronize chapter travel, media reveal, and typography. */
+html.hb-page-moving{scroll-behavior:auto!important}
+.hb-welcome-copy,.hb-programs .hb-section-title,.hb-program-track,.hb-program-controls,.hb-space-copy{opacity:0;transform:translateY(32px);transition:opacity .95s ease,transform 1.15s cubic-bezier(.22,.61,.36,1)}
+.hb-chapter.is-current .hb-welcome-copy,.hb-chapter.is-current .hb-section-title,.hb-chapter.is-current .hb-program-track,.hb-chapter.is-current .hb-program-controls,.hb-chapter.is-current .hb-space-copy{opacity:1;transform:translateY(0)}
+.hb-programs.is-current .hb-program-track{transition-delay:.12s}.hb-programs.is-current .hb-program-controls{transition-delay:.22s}
+.hb-pt-media{transition:clip-path 1.5s cubic-bezier(.65,0,.2,1)}
+.hb-pt-copy{transform:translateY(26px);transition:opacity .95s ease .6s,transform 1.1s cubic-bezier(.22,.61,.36,1) .6s}
+.hb-pt.is-revealed .hb-pt-copy{transform:translateY(0)}
+.hb-pt-intro{transition:opacity .55s ease}.hb-pt-shade,.hb-video-toggle{transition:opacity .9s ease .6s}
+@media(prefers-reduced-motion:reduce){.hb-welcome-copy,.hb-programs .hb-section-title,.hb-program-track,.hb-program-controls,.hb-space-copy,.hb-pt-copy{transform:none!important;transition:none!important}.hb-pt-media,.hb-pt-intro,.hb-pt-shade,.hb-video-toggle{transition:none!important}}

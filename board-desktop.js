@@ -6,7 +6,7 @@
  const booking='https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&lang=ko&theme=place';
  const slides=[
  ['bodychallenge34-interview-poster.jpg','바디챌린지 34기<br>수내점 김영관 회원님 인터뷰','','인터뷰 영상 보기 ▶','bodychallenge34-interview.mp4'],
- ['프리웨이트존사진1.jpg','나에게 맞는<br>운동의 시작','당신의 목표에 한 걸음 더','트레이너 만나보기 →','index.html#trainer'],
+ ['community-trainer-v1.jpg','이달의 트레이너<br>이상원 팀장님','','팀장님 영상 보기 ▶','assets/pt/pt-sangwon.mp4'],
  ['기구존사진1.jpg','오늘도 한 걸음,<br>더 나은 나로','건강한 일상이 시작되는 곳','시설 둘러보기 →','index.html#facility']
  ];
  const hero=document.createElement('section');hero.className='desktop-community-hero mall-carousel';hero.setAttribute('aria-label','센터 소개 슬라이드');hero.setAttribute('aria-roledescription','캐러셀');
@@ -28,19 +28,27 @@
  const footer=document.createElement('footer');footer.className='desktop-community-bottom mall-footer';footer.innerHTML='<strong>HEALTHBOYGYM <small>수내점</small></strong><span>건강한 일상이 시작되는 곳</span><nav aria-label="하단 안내"><a href="index.html#facility">시설 안내</a><a href="index.html#hours">운영시간</a><a href="index.html#location">오시는 길</a></nav>';shell.after(footer);
  const sync=()=>{document.body.classList.toggle('desktop-board',media.matches);if(media.matches){shell.removeAttribute('aria-hidden');document.body.classList.remove('board-header-over-hero');}};sync();media.addEventListener('change',sync);
 
- const interview=hero.querySelector('.mall-slide');interview.classList.add('mall-interview-slide');
- const still=interview.querySelector('img');still.remove();
- const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.autoplay=true;preview.playsInline=true;preview.preload='none';preview.poster='bodychallenge34-interview-poster.jpg';preview.setAttribute('aria-hidden','true');interview.prepend(preview);
- const openButton=document.createElement('button');openButton.type='button';openButton.className='mall-interview-open';openButton.setAttribute('aria-label','바디챌린지 34기 수내점 김영관 회원님 인터뷰 영상 보기');interview.appendChild(openButton);
- const pauseButton=document.createElement('button');pauseButton.type='button';pauseButton.className='mall-interview-pause';pauseButton.textContent='미리보기 일시정지';pauseButton.setAttribute('aria-label','배너 영상 미리보기 일시정지');interview.appendChild(pauseButton);
- const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.setAttribute('aria-label','김영관 회원님 인터뷰 영상');dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none" poster="bodychallenge34-interview-poster.jpg" aria-label="바디챌린지 34기 인터뷰"></video>';document.body.appendChild(dialog);
- const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
- let userPaused=false,inView=false;
- const updatePreview=()=>{const playing=media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view')&&interview.dataset.position==='0'&&!userPaused;if(playing){if(!preview.getAttribute('src'))preview.src='bodychallenge34-preview.mp4';preview.play().catch(()=>{});}else preview.pause();pauseButton.textContent=userPaused?'미리보기 재생':'미리보기 일시정지';pauseButton.setAttribute('aria-label',userPaused?'배너 영상 미리보기 재생':'배너 영상 미리보기 일시정지');};
- const openInterview=e=>{e.preventDefault();if(!player.getAttribute('src'))player.src='bodychallenge34-interview.mp4';dialog.showModal();preview.pause();player.currentTime=0;player.play().catch(()=>{});closeButton.focus();};
- openButton.addEventListener('click',openInterview);interview.querySelector('.mall-slide-copy a').addEventListener('click',openInterview);
- pauseButton.addEventListener('click',()=>{userPaused=!userPaused;updatePreview();});closeButton.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{player.pause();updatePreview();openButton.focus({preventScroll:true});});
- new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;updatePreview();},{threshold:.1}).observe(hero);
- hero.addEventListener('slidechange',updatePreview);document.addEventListener('visibilitychange',updatePreview);window.addEventListener('board-view-change',updatePreview);media.addEventListener('change',updatePreview);updatePreview();
 
+ const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none"></video>';document.body.appendChild(dialog);
+ const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
+ const specs=[{index:0,poster:'bodychallenge34-interview-poster.jpg',preview:'bodychallenge34-preview.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'community-trainer-v1.jpg',preview:'sangwon-banner-preview.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
+ let inView=false,rotationPaused=false,rotationTimer=null,lastOpenButton=null;
+ const rotationButton=document.createElement('button');rotationButton.type='button';rotationButton.className='mall-rotation-toggle';rotationButton.textContent='자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed','false');hero.appendChild(rotationButton);
+ const available=()=>media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
+ const schedule=()=>{clearTimeout(rotationTimer);rotationTimer=null;if(available()&&!rotationPaused&&!hero.contains(document.activeElement)){rotationTimer=setTimeout(()=>showSlide(active+1),10000);}};
+ const videoSlides=specs.map(spec=>{
+   const slide=hero.querySelectorAll('.mall-slide')[spec.index];slide.classList.add('mall-interview-slide');slide.querySelector('img').remove();
+   const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.playsInline=true;preview.preload='none';preview.poster=spec.poster;preview.setAttribute('aria-hidden','true');slide.prepend(preview);
+   const openButton=document.createElement('button');openButton.type='button';openButton.className='mall-interview-open';openButton.setAttribute('aria-label',spec.title+' 영상 보기');slide.appendChild(openButton);
+   const pauseButton=document.createElement('button');pauseButton.type='button';pauseButton.className='mall-interview-pause';slide.appendChild(pauseButton);
+   const state={spec,slide,preview,pauseButton,paused:false};
+   const open=e=>{e.preventDefault();lastOpenButton=openButton;dialog.setAttribute('aria-label',spec.title);player.setAttribute('aria-label',spec.title);player.poster=spec.poster;if(player.getAttribute('src')!==spec.full)player.src=spec.full;else player.currentTime=0;dialog.showModal();updatePlayback();player.play().catch(()=>{});closeButton.focus();};
+   openButton.addEventListener('click',open);slide.querySelector('.mall-slide-copy a').addEventListener('click',open);
+   pauseButton.addEventListener('click',()=>{state.paused=!state.paused;updatePlayback();});return state;
+ });
+ function updatePlayback(){videoSlides.forEach(state=>{const shouldPlay=available()&&state.slide.dataset.position==='0'&&!state.paused;if(shouldPlay){if(!state.preview.getAttribute('src'))state.preview.src=state.spec.preview;state.preview.play().catch(()=>{});}else state.preview.pause();state.pauseButton.textContent=state.paused?'미리보기 재생':'미리보기 일시정지';state.pauseButton.setAttribute('aria-label',state.spec.title+' 미리보기 '+(state.paused?'재생':'일시정지'));});schedule();}
+ rotationButton.addEventListener('click',()=>{rotationPaused=!rotationPaused;rotationButton.textContent=rotationPaused?'자동 넘김 재생':'자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed',String(rotationPaused));schedule();});
+ closeButton.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{player.pause();lastOpenButton?.focus({preventScroll:true});updatePlayback();});
+ new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;updatePlayback();},{threshold:.1}).observe(hero);
+ hero.addEventListener('slidechange',updatePlayback);hero.addEventListener('focusin',schedule);hero.addEventListener('focusout',()=>setTimeout(schedule,0));document.addEventListener('visibilitychange',updatePlayback);window.addEventListener('board-view-change',updatePlayback);media.addEventListener('change',updatePlayback);updatePlayback();
 })();

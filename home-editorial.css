@@ -203,3 +203,6 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-welcome-copy{position:absolute;left:8%;right:9%;bottom:12%;padding:0;text-align:left}
 .hb-home .hb-welcome h1{margin:0}
 @media(max-width:768px){.hb-welcome-copy{left:25px;right:35px}}
+
+.hb-welcome-line{white-space:nowrap}
+@media(max-width:768px){.hb-home .hb-welcome h1{font-size:clamp(18px,calc((100vw - 76px)/10.5),50px);line-height:1.4}}

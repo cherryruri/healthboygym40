@@ -15,33 +15,55 @@ const topOf=el=>scrollY+el.getBoundingClientRect().top;
 function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&Math.abs(scrollY-bottom)<90);}
-let motionFrame=0,morph=null,aiIntroUsed=false,introCard=null;
+let motionFrame=0,morph=null,introCard=null;
 function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();document.documentElement.classList.remove('hb-page-moving');}
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
  if(nearest()===2&&index===3)beginMorph(target);
+ if(index===2&&home.querySelector('.hb-programs').classList.contains('is-current'))beginMorph(target,true);
  lockedUntil=start+(index===1?2350:1400);
  document.documentElement.classList.add('hb-page-moving');
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
  motionFrame=requestAnimationFrame(tick);
 }
-function beginMorph(target){
- const source=home.querySelector('.hb-ai-video'),program=home.querySelector('.hb-programs');if(source.readyState<2||aiIntroUsed)return;
- addAiIntro(source);program.classList.add('is-morph-target');const card=program.querySelector('.hb-program-card[data-position="0"]'),r=card.getBoundingClientRect(),surface=document.createElement('div'),canvas=document.createElement('canvas');
- surface.className='hb-video-morph';surface.setAttribute('aria-hidden','true');canvas.width=source.videoWidth;canvas.height=source.videoHeight;
- try{canvas.getContext('2d').drawImage(source,0,0);}catch(e){program.classList.remove('is-morph-target');return;}
- const targetVideo=card.querySelector('video');if(!targetVideo.getAttribute('src'))targetVideo.src=targetVideo.dataset.machineSrc;if(!program.classList.contains('is-motion-paused'))targetVideo.play().catch(()=>{});
- surface.appendChild(canvas);document.body.appendChild(surface);morph={surface,program,width:innerWidth,height:innerHeight,to:{left:r.left,top:r.top-(target-scrollY),width:r.width,height:r.height}};updateMorph(0,0);
+function beginMorph(target,reverse=false){
+ const source=home.querySelector('.hb-ai-video'),program=home.querySelector('.hb-programs');
+ if(!reverse&&source.readyState<2)return;
+ const surface=document.createElement('div');surface.className='hb-video-morph';surface.setAttribute('aria-hidden','true');
+ if(source.readyState>=2){
+  const canvas=document.createElement('canvas');canvas.width=source.videoWidth;canvas.height=source.videoHeight;
+  try{canvas.getContext('2d').drawImage(source,0,0);surface.appendChild(canvas);}catch(e){return;}
+ }else{const poster=document.createElement('img');poster.src=source.poster;poster.alt='';surface.appendChild(poster);}
+ if(!reverse)addAiIntro(source);
+ program.classList.add('is-morph-target');
+ const card=program.querySelector('.hb-program-card[data-position="0"]'),r=card.getBoundingClientRect();
+ const full={left:0,top:0,width:innerWidth,height:innerHeight,radius:0};
+ const small={left:r.left,top:r.top-(reverse?0:target-scrollY),width:r.width,height:r.height,radius:14};
+ if(reverse){home.querySelector('.hb-ai').classList.add('is-returning');source.pause();}
+ else{const targetVideo=card.querySelector('video');if(!targetVideo.getAttribute('src'))targetVideo.src=targetVideo.dataset.machineSrc;if(!program.classList.contains('is-motion-paused'))targetVideo.play().catch(()=>{});}
+ document.body.appendChild(surface);morph={surface,program,reverse,from:reverse?small:full,to:reverse?full:small};
+ clearTimeout(autoSlideTimer);autoSlideTimer=0;updateMorph(0,0);
 }
-function updateMorph(ease,t){if(!morph)return;const m=morph,d=m.to;Object.assign(m.surface.style,{left:d.left*ease+'px',top:d.top*ease+'px',width:m.width+(d.width-m.width)*ease+'px',height:m.height+(d.height-m.height)*ease+'px',borderRadius:14*ease+'px',opacity:String(t<.9?1:Math.max(0,(1-t)/.1))});}
-function finishMorph(){if(!morph)return;morph.surface.remove();morph.program.classList.remove('is-morph-target');morph=null;}
+function updateMorph(ease,t){
+ if(!morph)return;const m=morph,a=m.from,b=m.to;
+ for(const key of ['left','top','width','height'])m.surface.style[key]=a[key]+(b[key]-a[key])*ease+'px';
+ m.surface.style.borderRadius=a.radius+(b.radius-a.radius)*ease+'px';
+ m.surface.style.opacity=String(t<.9?1:Math.max(0,(1-t)/.1));
+ if(m.reverse&&t>=.9)home.querySelector('.hb-ai').classList.remove('is-returning');
+}
+function finishMorph(){
+ if(!morph)return;const reverse=morph.reverse;
+ morph.surface.remove();morph.program.classList.remove('is-morph-target');home.querySelector('.hb-ai').classList.remove('is-returning');morph=null;
+ if(reverse&&introCard)show(cards.indexOf(introCard)+1);
+}
 addEventListener('resize',cancelMotion);
 new MutationObserver(()=>{if(document.body.classList.contains('menu-open'))cancelMotion();}).observe(document.body,{attributes:true,attributeFilter:['class']});
 document.addEventListener('click',e=>{if(e.target.closest('a[href]')&&!e.target.closest('.hb-scroll-hint'))cancelMotion();},true);
 
 function move(direction){
  const machines=home.querySelector('.hb-programs'),start=topOf(machines),end=start+machines.offsetHeight-innerHeight;
+ if(direction<0&&machines.classList.contains('is-current')&&scrollY>=start-2){go(2);return;}
  if(end>start+2&&scrollY>=start-innerHeight*.18&&scrollY<=end+2){
   const target=direction>0?end:start;
   if((direction>0&&scrollY<end-2)||(direction<0&&scrollY>start+2)){lockedUntil=performance.now()+700;window.scrollTo({top:target,behavior:'smooth'});return;}
@@ -60,8 +82,9 @@ function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classLis
 function advanceAi(){if(aiState.visible&&!aiState.advanced&&!aiState.paused&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')){aiState.advanced=true;go(3);}}
 aiVideo.addEventListener('ended',advanceAi);document.addEventListener('visibilitychange',syncAiPlayback);
 const cards=[...home.querySelectorAll('.hb-program-card')],track=home.querySelector('.hb-program-track'),status=home.querySelector('.hb-machine-status');let selected=0,autoSlideTimer=0;
-// The AI video joins the carousel once per page visit, then leaves the rotation.
+// Each descent adds one AI card; it leaves the machine rotation until the next descent.
 function addAiIntro(source){
+ if(introCard){show(cards.indexOf(introCard));return;}
  const card=cards[0].cloneNode(true),preview=card.querySelector('video');
  card.dataset.card='ai-intro';card.dataset.title='AI 체형분석';card.classList.add('hb-ai-intro-card');
  preview.removeAttribute('src');preview.dataset.machineSrc=source.dataset.src;preview.poster=source.poster;
@@ -70,7 +93,7 @@ function addAiIntro(source){
  const detail=card.querySelector('.hb-card-link');detail.setAttribute('aria-label','바디닷 영상 보기');detail.setAttribute('aria-controls','hbBodydotDialog');
  detail.addEventListener('click',()=>bodydotButton.click());
  const select=card.querySelector('.hb-card-select');select.setAttribute('aria-label','AI 체형분석 카드 선택');select.addEventListener('click',()=>show(cards.indexOf(card)));
- introCard=card;aiIntroUsed=true;cards.unshift(card);track.prepend(card);show(0);
+ introCard=card;cards.unshift(card);track.prepend(card);show(0);
 }
 function show(i){
  clearTimeout(autoSlideTimer);autoSlideTimer=0;

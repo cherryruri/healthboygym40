@@ -88,7 +88,7 @@ html.hb-page-moving{scroll-behavior:auto!important}
 .hb-pt-ink{position:absolute;inset:0;z-index:4;pointer-events:none;clip-path:circle(18vmin at 50% 50%);transition:clip-path 1.5s cubic-bezier(.65,0,.2,1)}
 .hb-pt.is-revealed .hb-pt-ink{clip-path:circle(100vmax at 50% 50%)}.hb-home .hb-pt-ink .hb-pt-copy h2{color:#fff!important}.hb-pt-ink .hb-pt-copy{height:auto}
 .hb-video-morph{position:fixed;inset:auto;z-index:99997;overflow:hidden;background:#111;pointer-events:none;will-change:left,top,width,height,border-radius,opacity}
-.hb-video-morph canvas{position:absolute;top:0;left:0;width:100%;height:118%;object-fit:cover;object-position:center top}
+.hb-video-morph canvas,.hb-video-morph img{position:absolute;top:0;left:0;width:100%;height:118%;object-fit:cover;object-position:center top}
 .hb-programs.is-morph-target .hb-program-track{transform:none!important;opacity:1!important;transition:none!important}
 .hb-ai.is-leaving .hb-ai-video{opacity:0;clip-path:none;transition:none}
 
@@ -185,3 +185,5 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
  .hb-home .hb-pt-copy h2,.hb-home .hb-ai h2,.hb-home .hb-programs .hb-section-title h2{font-size:50px}
  .hb-machine-browse{margin-top:20px}
 }
+
+.hb-ai.is-returning .hb-ai-video{opacity:0}

@@ -86,6 +86,7 @@ function allowsFacilityScroll(direction){
 }
 function move(direction){
  const facility=chapters[4],facilityTop=topOf(facility);
+ if(facility.classList.contains('is-current')&&facility.dataset.introRunning==='true')return;
  if(allowsFacilityScroll(direction)){
   cancelMotion();const from=scrollY,target=Math.max(facilityTop,Math.min(facilityTop+facility.offsetHeight-innerHeight,from+direction*innerHeight*.85)),start=performance.now();lockedUntil=start+700;document.documentElement.classList.add('hb-page-moving');
   function tick(now){const t=clamp((now-start)/650),ease=t*t*(3-2*t);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}

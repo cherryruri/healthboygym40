@@ -1,96 +1,18 @@
-/* One sticky image stage serves the introduction and every facility zone. */
-#facility { margin-top: 0 !important; }
-#facilityTour {
-  --facility-viewport: 100svh;
-  --facility-intro-travel: max(1100px, 160svh);
+/* A dark automatic introduction followed by scroll-driven photo layers. */
+.hb-home #facility.hb-facility{height:auto;min-height:0;overflow:visible;margin:0!important;background:#050505;color:#fff}
+#facilityTour.hb-facility-stack{position:relative;background:#050505;height:610svh}
+.hb-facility-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#050505}
+.hb-home:has(.hb-facility.is-current) .hb-page-nav{visibility:hidden}
+.hb-home #facility .hb-stack-intro-title,.hb-home #facility .hb-facility-card-title{font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;text-align:center;color:#fff;margin:0;word-break:keep-all}
+.hb-home #facility .hb-stack-intro-title{position:absolute;z-index:0;top:50%;left:0;width:100%;padding:0 20px;transform:translateY(calc(-50% + 32svh)) scale(4.4);opacity:0;pointer-events:none;will-change:transform}
+.hb-home #facility .hb-stack-intro-title.is-settled{transform:translateY(-50%) scale(1);opacity:1}
+.hb-facility-card{--card-top:calc(56px + var(--stack-index) * 22px);position:absolute;z-index:calc(var(--stack-index) + 1);top:var(--card-top);bottom:18px;left:22px;right:22px;margin:0;padding:0;border:0;border-radius:36px;overflow:hidden;background:#161616;transform:translateY(110svh);box-shadow:0 -10px 35px #0005;will-change:transform}
+.hb-facility-card>img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover}
+.hb-facility-card::after{content:'';position:absolute;inset:0;background:linear-gradient(#0002,#0008 50%,#0003);pointer-events:none}
+.hb-home #facility .hb-facility-card-title{position:absolute;z-index:1;top:calc(50svh - var(--card-top));left:0;width:100%;padding:0 16px;opacity:0;transform:translateY(calc(-50% + 18px));transition:opacity .55s ease,transform .65s cubic-bezier(.22,.61,.36,1);text-shadow:0 2px 24px #0005;pointer-events:none}
+.hb-home #facility .is-caption-visible .hb-facility-card-title{opacity:1;transform:translateY(-50%)}
+@media(max-width:768px){
+ .hb-home #facility .hb-stack-intro-title,.hb-home #facility .hb-facility-card-title{font-size:50px}
+ .hb-facility-card{--card-top:calc(48px + var(--stack-index) * 22px);left:10px;right:10px;bottom:14px;border-radius:30px}
+ .hb-home #facility .hb-facility-card-title{padding:0 8px}
 }
-#facilityTour .cont {
-  min-height: 0 !important;
-  background: #fff !important;
-  transition: none;
-}
-#facilityTour .img_inner {
-  position: sticky !important;
-  top: 0 !important;
-  height: var(--facility-viewport) !important;
-  min-height: 0 !important;
-  background: #fff !important;
-  isolation: isolate;
-}
-#facilityTour .img_box {
-  height: 100% !important;
-  transform: translateY(var(--facility-image-y, 68%)) scale(var(--facility-image-scale, .22));
-  transform-origin: center;
-  opacity: var(--facility-image-opacity, 0);
-  border-radius: var(--facility-image-radius, 28px);
-  background: #111;
-  will-change: transform, opacity;
-}
-#facilityTour .img_box > li.facility-bg,
-#facilityTour .img_box > li.facility-bg.on {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  width: 100% !important;
-  transform: none !important;
-  opacity: var(--facility-crossfade-opacity, 0) !important;
-  z-index: var(--facility-layer, 0) !important;
-  transition: none !important;
-}
-#facilityTour .facility-title-copy {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-  top: 50%;
-  margin: 0;
-  white-space: nowrap;
-  color: #050505;
-  font-size: clamp(150px, 22vw, 420px);
-  font-weight: 700;
-  line-height: .82;
-  letter-spacing: -.085em;
-  opacity: var(--facility-title-opacity, 1);
-  transform: translate(-50%, calc(-50% + var(--facility-title-y, 48vh))) scale(var(--facility-title-scale, 1.58));
-  filter: blur(var(--facility-title-blur, 0px));
-  pointer-events: none;
-}
-#facilityTour .txt_box {
-  margin-top: calc(-1 * var(--facility-viewport)) !important;
-  padding-top: var(--facility-intro-travel);
-  pointer-events: none;
-}
-#facilityTour .txt_box > li {
-  height: var(--facility-viewport) !important;
-  min-height: 0 !important;
-  pointer-events: none !important;
-}
-#facilityTour .txt_box > li:first-child {
-  opacity: var(--facility-caption-opacity, 0);
-}
-#facilityTour .txt_box > li > * { pointer-events: auto; }
-#facilityTour .txt_box > li { cursor: default; }
-.facility-photo-modal { overscroll-behavior: contain; }
-html.facility-gallery-open { overflow: hidden !important; }
-.facility-modal-dialog.facility-gallery-505 { width: 100% !important; }
-.facility-gallery-caption { max-width: calc(100% - 40px); line-height: 1.2 !important; }
-@media (max-width: 768px) {
-  .facility-modal-dialog.facility-gallery-505 { box-sizing: border-box; }
-  .facility-gallery-main { flex: 1 1 0 !important; min-height: 0 !important; }
-  .facility-gallery-side { flex: 0 0 24% !important; height: auto !important; }
-  .facility-gallery-main img { object-fit: contain !important; }
-  .facility-gallery-caption { bottom: 42px !important; font-size: clamp(22px, 6vw, 30px) !important; }
-}
-@media (max-width: 768px) {
-  #facilityTour { --facility-intro-travel: max(900px, 150svh); }
-  #facilityTour .facility-title-copy { font-size: clamp(88px, 25vw, 145px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  #facilityTour .img_box span { transition: none; }
-}
-
-/* The existing photo tour now follows the machine chapter. */
-.hb-home #facility.hb-facility{height:auto;min-height:0;overflow:visible;background:#050505;color:#fff}
-#facilityTour .cont,#facilityTour .img_inner{background:#050505!important}
-#facilityTour .facility-title-copy{width:100%;padding:0 20px;white-space:normal;text-align:center;color:#fff;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;transform:translate(-50%,calc(-50% + var(--facility-title-y,36vh))) scale(var(--facility-title-scale,4.4))}
-@media(max-width:768px){#facilityTour .facility-title-copy{font-size:50px}}

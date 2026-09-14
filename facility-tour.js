@@ -1,64 +1,55 @@
 (() => {
-  const tour = document.querySelector('#facilityTour');
+  const section = document.querySelector('#facility');
+  const tour = section?.querySelector('[data-stack-tour]');
   if (!tour) return;
-  const scene = tour.querySelector('.cont');
-  const stage = tour.querySelector('.img_inner');
-  const slides = [...tour.querySelectorAll('.img_box > li')];
-  const texts = [...tour.querySelectorAll('.txt_box > li')];
-  if (!scene || !stage || !slides.length || !texts.length) return;
-  scene.id = 'facility-title-scroll';
-  const title = document.createElement('h2');
-  title.className = 'facility-title-copy';
-  title.id = 'hbFacilityTitle';
-  title.innerHTML = '수내동 최대시설<br>최대규모';
-  stage.append(title);
+  const stage = tour.querySelector('.hb-facility-stage');
+  const intro = tour.querySelector('.hb-stack-intro-title');
+  const cards = [...tour.querySelectorAll('.hb-facility-card')];
   const clamp = value => Math.max(0, Math.min(1, value));
-  const smooth = value => { const v = clamp(value); return v * v * (3 - 2 * v); };
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  let ticking = false;
-  const render = () => {
-    ticking = false;
-    const sceneTop = scene.getBoundingClientRect().top;
-    const firstTop = texts[0].getBoundingClientRect().top;
-    const travel = Math.max(1, firstTop - sceneTop);
-    const p = clamp(-sceneTop / travel);
-    const mobile = innerWidth <= 768;
-    const settle = smooth(p / .28);
-    const initialScale = mobile ? 4 : 4.4;
-    const reveal = smooth((p - .66) / .32);
-    const set = (name, value) => tour.style.setProperty('--facility-' + name, String(value));
-    set('title-opacity', 1 - reveal);
-    set('title-scale', initialScale + (1 - initialScale) * settle);
-    set('title-y', ((mobile ? 20 : 36) * (1 - settle) - reveal * 7) + 'vh');
-    set('title-blur', (reduceMotion.matches ? 0 : reveal * 24) + 'px');
-    set('image-scale', reduceMotion.matches ? 1 : (mobile ? .3 : .22) + (mobile ? .7 : .78) * reveal);
-    set('image-y', (reduceMotion.matches ? 0 : (mobile ? 70 : 68) * (1 - reveal)) + '%');
-    set('image-opacity', smooth((p - .72) / .20));
-    set('image-radius', ((mobile ? 22 : 28) * (1 - reveal)) + 'px');
-    set('caption-opacity', smooth((p - .94) / .06));
-
-    // Measure the real caption spacing; mobile browser bars can change innerHeight.
-    let from = 0;
-    while (from < texts.length - 1 && texts[from + 1].getBoundingClientRect().top <= 0) from++;
-    const to = Math.min(from + 1, slides.length - 1);
-    const fromTop = texts[from].getBoundingClientRect().top;
-    const distance = to === from ? 1 : texts[to].getBoundingClientRect().top - fromTop;
-    const blend = smooth((clamp(-fromTop / Math.max(distance, 1)) - .18) / .64);
-    slides.forEach((slide, index) => {
-      // Keep the outgoing photo opaque under the incoming photo to avoid a dark dip.
-      slide.style.setProperty('--facility-crossfade-opacity', index === from ? '1' : index === to ? String(blend) : '0');
-      slide.style.setProperty('--facility-layer', index === to && to !== from ? '2' : index === from ? '1' : '0');
+  let frame = 0, entered = false, introAnimation = null, introTimer = 0;
+  const labelTimers = new Map();
+  function finishIntro() {
+    clearTimeout(introTimer);introAnimation?.cancel();introAnimation = null;
+    section.dataset.introRunning = 'false';intro.classList.add('is-settled');
+  }
+  function enter() {
+    entered = true;intro.classList.remove('is-settled');section.dataset.introRunning = 'true';
+    const scale = innerWidth <= 768 ? 4 : 4.4;
+    introAnimation = intro.animate([
+      {transform:`translateY(calc(-50% + 32svh)) scale(${scale})`,opacity:1},
+      {transform:'translateY(-50%) scale(1)',opacity:1}
+    ], {duration:1400,delay:350,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
+    introTimer = setTimeout(finishIntro, 1750);
+  }
+  function hideLabel(card) {
+    clearTimeout(labelTimers.get(card));labelTimers.delete(card);card.classList.remove('is-caption-visible');
+  }
+  function revealLabel(card) {
+    if (labelTimers.has(card) || card.classList.contains('is-caption-visible')) return;
+    labelTimers.set(card, setTimeout(() => {labelTimers.delete(card);card.classList.add('is-caption-visible');}, 240));
+  }
+  function render() {
+    frame = 0;
+    const height = stage.getBoundingClientRect().height,rect = section.getBoundingClientRect(),step = height * .85;
+    tour.style.height = `${height + step * cards.length}px`;
+    const progress = Math.max(0, -rect.top / step),active = section.classList.contains('is-current');
+    if (active && !entered && progress < .05) enter();
+    if (progress > .05 && section.dataset.introRunning === 'true') finishIntro();
+    if (rect.top > height * .6) {
+      if (entered) {finishIntro();intro.classList.remove('is-settled');}
+      entered = false;
+    }
+    cards.forEach((card, index) => {
+      const amount = clamp(progress - index);
+      // Each photo moves over the preceding photo and caption.
+      card.style.transform = `translateY(${(1 - amount) * (height + 50)}px)`;
+      card.setAttribute('aria-hidden', String(amount < .98));
+      if (amount >= .995 && active) revealLabel(card);
+      else if (amount < .995) hideLabel(card);
     });
-  };
-  const requestRender = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(render);
-  };
-  addEventListener('scroll', requestRender, { passive: true });
-  addEventListener('resize', requestRender, { passive: true });
-  addEventListener('pageshow', requestRender);
-  if (window.ResizeObserver) new ResizeObserver(requestRender).observe(scene);
-  document.fonts?.ready.then(requestRender);
-  render();
+  }
+  function schedule() {if (!frame) frame = requestAnimationFrame(render);}
+  addEventListener('scroll', schedule, {passive:true});addEventListener('resize', schedule);addEventListener('pageshow', schedule);
+  new MutationObserver(schedule).observe(section, {attributes:true,attributeFilter:['class']});
+  document.fonts?.ready.then(schedule);render();
 })();

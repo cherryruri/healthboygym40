@@ -198,3 +198,8 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
  .hb-programs .hb-brand-item img{max-height:20px}
  .hb-home .hb-programs .hb-program-track{flex:1 1 0;height:auto;min-height:0;max-height:480px;margin-top:8px}
 }
+
+/* Welcome copy sits at the lower left of the opening video. */
+.hb-welcome-copy{position:absolute;left:8%;right:9%;bottom:12%;padding:0;text-align:left}
+.hb-home .hb-welcome h1{margin:0}
+@media(max-width:768px){.hb-welcome-copy{left:25px;right:35px}}

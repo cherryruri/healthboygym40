@@ -7,9 +7,9 @@ function paint(){frame=0;const h=innerHeight;let active=0;chapters.forEach((el,i
 function requestPaint(){if(!frame)frame=requestAnimationFrame(paint)}addEventListener('scroll',requestPaint,{passive:true});addEventListener('resize',requestPaint);new MutationObserver(requestPaint).observe(document.body,{attributes:true,attributeFilter:['class']});paint();
 function playback(){if(inView&&!paused&&!document.hidden){if(!video.src)video.src=video.dataset.hbVideo;video.play().catch(()=>{});}else video.pause();toggle.textContent=paused?'▶':'Ⅱ';toggle.setAttribute('aria-label','상원 팀장님 영상 '+(paused?'재생':'일시정지'));}
 new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;playback()},{rootMargin:'100px'}).observe(pt);toggle.addEventListener('click',()=>{paused=!paused;playback()});document.addEventListener('visibilitychange',playback);
-const welcome=home.querySelector('.hb-welcome'),welcomeVideo=home.querySelector('.hb-welcome-video'),welcomeToggle=home.querySelector('.hb-welcome-video-toggle');let welcomePaused=false,welcomeVisible=true;
-function welcomePlayback(){if(welcomeVisible&&!welcomePaused&&!document.hidden)welcomeVideo.play().catch(()=>{});else welcomeVideo.pause();welcomeToggle.textContent=welcomePaused?'▶':'Ⅱ';welcomeToggle.setAttribute('aria-label','센터 영상 '+(welcomePaused?'재생':'일시정지'));}
-new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback()}).observe(welcome);welcomeToggle.addEventListener('click',()=>{welcomePaused=!welcomePaused;welcomePlayback()});document.addEventListener('visibilitychange',welcomePlayback);
+const welcome=home.querySelector('.hb-welcome'),welcomeVideo=home.querySelector('.hb-welcome-video');let welcomeVisible=true;
+function welcomePlayback(){if(welcomeVisible&&!document.hidden)welcomeVideo.play().catch(()=>{});else welcomeVideo.pause();}
+new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback()}).observe(welcome);document.addEventListener('visibilitychange',welcomePlayback);
 let lockedUntil=0,lastWheel=0,touchStart=null;
 const topOf=el=>scrollY+el.getBoundingClientRect().top;
 function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');}
@@ -59,7 +59,7 @@ function finishMorph(){
 }
 addEventListener('resize',cancelMotion);
 new MutationObserver(()=>{if(document.body.classList.contains('menu-open'))cancelMotion();}).observe(document.body,{attributes:true,attributeFilter:['class']});
-document.addEventListener('click',e=>{if(e.target.closest('a[href]')&&!e.target.closest('.hb-scroll-hint'))cancelMotion();},true);
+document.addEventListener('click',e=>{if(e.target.closest('a[href]'))cancelMotion();},true);
 
 function move(direction){
  const machines=home.querySelector('.hb-programs'),start=topOf(machines),end=start+machines.offsetHeight-innerHeight;
@@ -75,7 +75,6 @@ window.addEventListener('touchstart',e=>{touchStart={x:e.touches[0].clientX,y:e.
 window.addEventListener('touchmove',e=>{if(!ready()||!touchStart||e.touches.length!==1)return;const dx=e.touches[0].clientX-touchStart.x,dy=touchStart.y-e.touches[0].clientY;if(Math.abs(dx)>Math.abs(dy)||Math.abs(dy)<35)return;const direction=Math.sign(dy);if(touchStart.used){e.preventDefault();return;}if(!inChapters(direction))return;e.preventDefault();touchStart.used=true;if(performance.now()>=lockedUntil)move(direction);},{passive:false});
 window.addEventListener('touchend',()=>touchStart=null,{passive:true});
 window.addEventListener('keydown',e=>{if(!ready()||e.target.closest('a,button,input,textarea,select,[contenteditable]'))return;const direction=['ArrowDown','PageDown',' '].includes(e.key)?1:['ArrowUp','PageUp'].includes(e.key)?-1:0;if(!direction||!inChapters(direction))return;e.preventDefault();if(performance.now()>=lockedUntil)move(direction);});
-home.querySelector('.hb-scroll-hint').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();go(1);});
 const ai=home.querySelector('.hb-ai'),aiVideo=ai.querySelector('video');
 aiState={visible:false,paused:false,advanced:false};
 function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=0;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}

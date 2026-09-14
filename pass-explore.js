@@ -1,0 +1,36 @@
+(()=>{'use strict';
+const branches=window.PASS_EXPLORE_DATA||[],q=s=>document.querySelector(s),grid=q('#branchGrid'),dialog=q('#videoDialog'),video=q('#branchVideo');let region='',selected=branches.find(b=>b.shortName==='수내점')||branches[0],filtered=branches,map,layer,lastOpener;
+const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const countryBounds=[[33.1,125.6],[38.65,130.3]];
+function fitCountry(){if(map)map.fitBounds(countryBounds,{padding:[20,48],animate:!reduced});}
+function addMarkers(){if(!map)return;layer.clearLayers();const groups=[];
+ for(const b of filtered.filter(b=>Number.isFinite(b.lat)&&Number.isFinite(b.lng))){const pt=map.latLngToContainerPoint([b.lat,b.lng]);let group=map.getZoom()<12?groups.find(g=>g.point.distanceTo(pt)<35):null;if(group)group.items.push(b);else groups.push({point:pt,items:[b]});}
+ for(const g of groups){const b=g.items[0],many=g.items.length>1,isSelected=g.items.includes(selected);const marker=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'branch-map-marker',html:`<span class="pin ${many?'':'single'} ${!many&&isSelected?'selected':''}">${many?g.items.length:''}</span>`,iconSize:[many||isSelected?34:22,many||isSelected?34:22],iconAnchor:[many||isSelected?17:11,many||isSelected?17:11]}),title:many?`${b.region} 주변 ${g.items.length}개 지점`:b.shortName,keyboard:true}).addTo(layer);
+ marker.bindTooltip(many?`${b.region} 주변 ${g.items.length}개 지점`:b.shortName,{direction:'top',offset:[0,-15]});
+ marker.on('click',()=>{if(many){map.fitBounds(g.items.map(x=>[x.lat,x.lng]),{padding:[50,65],maxZoom:13,animate:!reduced});}else select(b,true,false);});
+ }
+}
+function select(b,scroll=true,zoom=true){selected=b;q('#selectedTitle').textContent=b.shortName;q('#selectedRegion').textContent=`${b.region} · ${b.tier.toUpperCase()}`;q('#selectedAddress').textContent=b.address;
+ q('#selectedImage').src=b.image;q('#selectedImage').alt=`헬스보이짐 ${b.shortName} 시설`;q('#selectedMeta').textContent=[b.hours,b.parking&&`주차 ${b.parking}`].filter(Boolean).join(' · ');
+ q('#selectedPhone').hidden=!b.phone;q('#selectedPhone').href='tel:'+(b.phone||'').replace(/[^0-9+]/g,'');q('#locateBranch').hidden=!Number.isFinite(b.lat);
+ q('#selectedPlay').innerHTML=b.video?'<span>▶</span> 드론 영상 보기':'시설 사진 · 영상 준비 중';q('#selectedPlay').setAttribute('aria-label',`${b.shortName} ${b.video?'드론 영상 보기':'영상 준비 안내'}`);
+ grid.querySelectorAll('.branch-card').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.name===b.shortName)));
+ if(zoom&&map&&Number.isFinite(b.lat))map.flyTo([b.lat,b.lng],12,{animate:!reduced,duration:1.1});addMarkers();if(scroll)q('.selection').scrollIntoView({behavior:reduced?'instant':'smooth',block:'center'});
+}
+function openVideo(b,opener){lastOpener=opener;q('#videoTitle').textContent=b.shortName;q('#videoPending').hidden=!!b.video;video.hidden=!b.video;q('#videoError').hidden=true;video.poster=b.image;dialog.showModal();document.body.classList.add('video-open');if(b.video){video.src=b.video;video.play().catch(()=>{});}}
+function render(){const term=q('#branchSearch').value.trim().toLowerCase(),tier=q('#tierFilter').value;filtered=branches.filter(b=>(!region||b.region===region)&&(!tier||b.tier===tier)&&(!term||`${b.shortName} ${b.address}`.toLowerCase().includes(term)));
+ q('#resultCount').textContent=`${filtered.length}개 지점 · 드론 영상 ${filtered.filter(b=>b.video).length}개`;q('#emptyState').hidden=filtered.length>0;grid.replaceChildren();
+ for(const b of filtered){const button=document.createElement('button');button.type='button';button.className='branch-card';button.dataset.name=b.shortName;button.setAttribute('aria-label',`${b.shortName} 지점 선택`);button.setAttribute('aria-pressed',String(b===selected));button.innerHTML=`<img src="${safe(b.image)}" alt="${safe(b.shortName)} 시설" loading="lazy" decoding="async">${b.video?'<span class="play-dot" aria-hidden="true">▶</span>':'<span class="pending">영상 준비 중</span>'}<span class="card-copy"><small>${safe(b.region)} · ${safe(b.tier)}</small><strong>${safe(b.shortName)}</strong></span>`;button.addEventListener('click',()=>{select(b,false);openVideo(b,button);});button.querySelector('img').addEventListener('error',e=>{e.target.style.visibility='hidden';},{once:true});grid.append(button);}
+ addMarkers();if(map&&region){const locs=filtered.filter(b=>Number.isFinite(b.lat));if(locs.length)map.fitBounds(locs.map(b=>[b.lat,b.lng]),{padding:[45,65],maxZoom:11,animate:!reduced});}
+}
+const regionList=['',...new Set(branches.map(b=>b.region))];for(const r of regionList){const button=document.createElement('button');button.type='button';button.textContent=r||'전체';button.setAttribute('aria-pressed',String(!r));button.addEventListener('click',()=>{region=r;q('#regionFilters').querySelectorAll('button').forEach(el=>el.setAttribute('aria-pressed',String(el===button)));render();if(!r)fitCountry();});q('#regionFilters').append(button);}
+q('#branchSearch').addEventListener('input',render);q('#tierFilter').addEventListener('change',render);
+q('#clearFilters').addEventListener('click',()=>{q('#branchSearch').value='';q('#tierFilter').value='';q('#regionFilters button').click();});
+q('#selectedPlay').addEventListener('click',e=>openVideo(selected,e.currentTarget));q('#locateBranch').addEventListener('click',()=>{if(map&&Number.isFinite(selected.lat)){map.flyTo([selected.lat,selected.lng],14,{animate:!reduced});q('.map-shell').scrollIntoView({behavior:reduced?'instant':'smooth',block:'center'});}});
+q('#resetMap').addEventListener('click',()=>{region='';q('#branchSearch').value='';q('#tierFilter').value='';q('#regionFilters button').click();});
+q('#closeVideo').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
+dialog.addEventListener('close',()=>{video.pause();video.removeAttribute('src');video.load();document.body.classList.remove('video-open');lastOpener?.focus({preventScroll:true});});video.addEventListener('error',()=>{q('#videoError').hidden=false;});
+try{if(!window.L)throw Error('map unavailable');map=L.map('koreaMap',{zoomControl:true,scrollWheelZoom:false,minZoom:6,maxZoom:17});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);layer=L.layerGroup().addTo(map);fitCountry();map.on('zoomend moveend',addMarkers);new ResizeObserver(()=>{map.invalidateSize();}).observe(q('#koreaMap'));}catch(e){q('#mapFallback').hidden=false;q('#resetMap').hidden=true;}
+render();select(selected,false,false);
+})();

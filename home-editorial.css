@@ -206,3 +206,18 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 
 .hb-welcome-line{white-space:nowrap}
 @media(max-width:768px){.hb-home .hb-welcome h1{font-size:clamp(18px,calc((100vw - 76px)/10.5),50px);line-height:1.4}}
+
+.hb-welcome-copy>.hb-welcome-description{margin:24px 0 0;font-size:18px;line-height:1.8;letter-spacing:normal;color:#fff}
+.hb-space{background:#050505}
+.hb-space::after{background:#0008}
+.hb-space .hb-space-copy{position:absolute;inset:0;max-width:none;padding:0;display:grid;place-items:center;text-align:center;opacity:1;transform:none;transition:none}
+.hb-allpass-center{position:relative;width:100%;min-width:0}
+.hb-home .hb-space h2{margin:0;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em}
+.hb-home .hb-space h2>span{white-space:nowrap;letter-spacing:inherit}
+.hb-space .hb-allpass-link{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:28px;white-space:nowrap;color:#fff}
+.hb-scene-fade{position:fixed;inset:0;z-index:99998;background:#050505;opacity:0;pointer-events:none}
+@media(max-width:768px){
+ .hb-welcome-copy>.hb-welcome-description{font-size:14px}
+ .hb-home .hb-space h2{font-size:50px}
+ .hb-space .hb-allpass-link{margin-top:24px}
+}

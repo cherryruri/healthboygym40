@@ -15,10 +15,11 @@ const topOf=el=>scrollY+el.getBoundingClientRect().top;
 function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&Math.abs(scrollY-bottom)<90);}
-let motionFrame=0,morph=null,introCard=null;
-function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();document.documentElement.classList.remove('hb-page-moving');}
+let motionFrame=0,morph=null,introCard=null,sceneFade=null;
+function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();if(sceneFade){sceneFade.remove();sceneFade=null;}document.documentElement.classList.remove('hb-page-moving');}
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
+ if(index===4&&home.querySelector('.hb-programs').classList.contains('is-current')){goAllpass();return;}
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
  if(nearest()===2&&index===3)beginMorph(target);
  if(index===2&&home.querySelector('.hb-programs').classList.contains('is-current'))beginMorph(target,true);
@@ -27,6 +28,24 @@ function go(index){
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
  motionFrame=requestAnimationFrame(tick);
 }
+function goAllpass(){
+ const surface=document.createElement('div');surface.className='hb-scene-fade';surface.setAttribute('aria-hidden','true');document.body.appendChild(surface);sceneFade=surface;
+ const start=performance.now(),duration=1200,target=topOf(chapters[4]);let switched=false;
+ prepareAllpass();lockedUntil=start+1400;document.documentElement.classList.add('hb-page-moving');
+ function tick(now){
+  const t=clamp((now-start)/duration);
+  if(t>=.5&&!switched){switched=true;window.scrollTo({top:target,behavior:'instant'});requestPaint();}
+  const phase=t<.5?t*2:(1-t)*2;surface.style.opacity=String(phase*phase*(3-2*phase));
+  if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}
+ }
+ motionFrame=requestAnimationFrame(tick);
+}
+const allpassSection=home.querySelector('.hb-space'),allpassVideo=allpassSection.querySelector('video');let allpassVisible=false;
+function prepareAllpass(){if(!allpassVideo.getAttribute('src')){allpassVideo.src=allpassVideo.dataset.src;allpassVideo.load();}}
+function allpassPlayback(){if(allpassVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){prepareAllpass();allpassVideo.play().catch(()=>{});}else allpassVideo.pause();}
+new IntersectionObserver(entries=>{if(entries[0].isIntersecting)prepareAllpass();},{rootMargin:'100% 0px'}).observe(allpassSection);
+new IntersectionObserver(entries=>{allpassVisible=entries[0].isIntersecting;allpassPlayback();}).observe(allpassSection);
+document.addEventListener('visibilitychange',allpassPlayback);new MutationObserver(allpassPlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 function beginMorph(target,reverse=false){
  const source=home.querySelector('.hb-ai-video'),program=home.querySelector('.hb-programs');
  if(!reverse&&source.readyState<2)return;

@@ -53,6 +53,7 @@ const adminControls = document.querySelector("[data-home-video-admin]");
 const editVideoButton = document.querySelector("[data-home-video-edit]");
 const deleteVideoButton = document.querySelector("[data-home-video-delete]");
 
+const noticeGallery=document.querySelector("[data-home-notice-gallery]");
 let latestNoticePosts = [];
 let latestNewsPosts = [];
 let currentVideoSrc = DEFAULT_VIDEO_SRC;
@@ -146,6 +147,19 @@ function renderNewsThumbnail(){
   }
 }
 
+function noticeImage(data){
+  if(data.thumbnailDataUrl) return data.thumbnailDataUrl;
+  const html=data.content||data.body||'';
+  if(typeof html==='string'){const doc=new DOMParser().parseFromString(html,'text/html');const src=doc.querySelector('img')?.getAttribute('src');if(src&&/^(https?:|data:image\/)/i.test(src))return src;}
+  return '';
+}
+function renderNoticeGallery(){
+  if(!noticeGallery)return;
+  const photos=latestNoticePosts.filter(({data})=>noticeImage(data)).slice(0,4);
+  if(!photos.length)return;
+  noticeGallery.innerHTML=photos.map(({id,data})=>`<a class="notice-photo-card" href="post.html?id=${encodeURIComponent(id)}"><div class="notice-photo"><img src="${escapeHTML(noticeImage(data))}" alt="${escapeHTML(data.title||'공지 사진')}" loading="lazy"></div><div class="notice-photo-copy"><span>NOTICE · ${formatDate(data)}</span><h3>${escapeHTML(data.title||'공지사항')}</h3></div></a>`).join('');
+}
+
 async function loadLatestPosts(){
   if(!boardList && !newsThumb) return;
 
@@ -175,7 +189,7 @@ async function loadLatestPosts(){
         data: docSnap.data()
       }))
       .filter(({ data })=>isNoticePost(data))
-      .slice(0, 4);
+      .slice(0, 12);
 
     latestNewsPosts =
       newsSnap.docs.map(docSnap=>({
@@ -191,6 +205,7 @@ async function loadLatestPosts(){
 
   renderBoardList();
   renderNewsThumbnail();
+  renderNoticeGallery();
 }
 
 function setVideoSource(src){
@@ -314,4 +329,4 @@ onAuthStateChanged(auth, async user=>{
 });
 
 loadLatestPosts();
-loadVideoSettings();
+if(video)loadVideoSettings();

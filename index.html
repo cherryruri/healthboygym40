@@ -1605,6 +1605,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <script src="site-header.js?v=20260909-nav-final" defer></script>
 <link rel="stylesheet" href="home-editorial.css?v=20260915-clean-morph">
 <script src="home-editorial.js?v=20260915-clean-morph" defer></script>
+<link rel="stylesheet" href="home-news-layout.css?v=3">
 </head>
 <body>
 
@@ -2243,7 +2244,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   <div class="news-hub-inner">
     <div class="news-hub-top">
       <div class="news-hub-title">
-        <h2>수내점의<br>새로운 소식을<br>만나보세요</h2>
+        <h2>공지/NEWS</h2>
       </div>
 
       <article class="news-board-card">
@@ -2262,28 +2263,11 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 
     <div class="news-hub-head news-notice-head">
       <h3>NEWS</h3>
-      <a href="board.html?board=news" aria-label="뉴스 더보기">+</a>
+      <a href="board.html?board=noticeboard" aria-label="공지 사진 더보기">+</a>
     </div>
 
-    <div class="news-media-grid">
-      <a class="news-thumb-card" data-home-news-thumb href="board.html?board=news" aria-label="최신 뉴스 보기">
-        <img src="헬스보이짐 사진.jpg" alt="뉴스 썸네일" loading="lazy">
-        <span data-home-news-title>NEWS</span>
-      </a>
-
-      <article class="news-video-card" data-home-video-card>
-        <video data-home-video preload="metadata" playsinline muted>
-          <source src="센터 드론 영상.mp4" type="video/mp4">
-        </video>
-        <button class="news-video-play" type="button" data-home-video-play aria-label="영상 재생">
-          <span></span>
-        </button>
-        <div class="news-video-empty" data-home-video-empty hidden>영상 없음</div>
-        <div class="news-video-admin" data-home-video-admin hidden>
-          <button type="button" data-home-video-edit>수정</button>
-          <button type="button" data-home-video-delete>삭제</button>
-        </div>
-      </article>
+    <div class="news-media-grid" data-home-notice-gallery aria-label="공지 사진">
+      <a class="notice-photo-card" href="board.html?board=noticeboard"><div class="notice-photo"><img src="헬스보이짐 사진.jpg" alt="헬스보이짐 수내점" loading="lazy"></div><div class="notice-photo-copy"><span>NOTICE</span><h3>센터 공지 확인하기</h3></div></a>
     </div>
   </div>
 </section>
@@ -2333,7 +2317,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <script src="script.js?v=20260915-complete-loader"></script>
 <script
   src="home-lazy-loader.js?v=20260728-mobile-info2"
-  data-news-src="home-news.js?v=20260705-review-flow18"
+  data-news-src="home-news.js?v=20260915-news-cards"
   data-auth-src="firebase-index.js?v=20260728-mobile-info1"
 ></script>
 

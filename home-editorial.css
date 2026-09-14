@@ -175,3 +175,13 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-programs .hb-program-card::after{display:none}
 
 .hb-programs .hb-program-card.is-intro-retiring{opacity:0;pointer-events:none}
+
+/* Shared, slightly smaller chapter headings. */
+.hb-home .hb-pt-copy h2,.hb-home .hb-ai h2,.hb-home .hb-programs .hb-section-title h2{font-size:clamp(54px,6.3vw,92px)}
+.hb-machine-browse{margin-top:24px;color:#111;border-color:#1118}
+.hb-machine-browse:hover{background:#0000000a}
+#hbMachineVideos{scroll-margin-top:90px}
+@media(max-width:768px){
+ .hb-home .hb-pt-copy h2,.hb-home .hb-ai h2,.hb-home .hb-programs .hb-section-title h2{font-size:50px}
+ .hb-machine-browse{margin-top:20px}
+}

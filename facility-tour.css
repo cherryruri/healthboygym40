@@ -92,5 +92,5 @@ html.facility-gallery-open { overflow: hidden !important; }
 /* The existing photo tour now follows the machine chapter. */
 .hb-home #facility.hb-facility{height:auto;min-height:0;overflow:visible;background:#050505;color:#fff}
 #facilityTour .cont,#facilityTour .img_inner{background:#050505!important}
-#facilityTour .facility-title-copy{width:100%;padding:0 20px;white-space:normal;text-align:center;color:#fff;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;transform:translate(-50%,calc(-50% + var(--facility-title-y,36vh)))}
+#facilityTour .facility-title-copy{width:100%;padding:0 20px;white-space:normal;text-align:center;color:#fff;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;transform:translate(-50%,calc(-50% + var(--facility-title-y,36vh))) scale(var(--facility-title-scale,4.4))}
 @media(max-width:768px){#facilityTour .facility-title-copy{font-size:50px}}

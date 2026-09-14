@@ -24,11 +24,11 @@
     const p = clamp(-sceneTop / travel);
     const mobile = innerWidth <= 768;
     const settle = smooth(p / .28);
-    const fittedScale = Math.min(mobile ? .32 : .36, (innerWidth - (mobile ? 40 : 96)) / Math.max(title.offsetWidth, 1));
+    const initialScale = mobile ? 4 : 4.4;
     const reveal = smooth((p - .66) / .32);
     const set = (name, value) => tour.style.setProperty('--facility-' + name, String(value));
     set('title-opacity', 1 - reveal);
-    set('title-scale', (mobile ? 1.28 : 1.58) + (fittedScale - (mobile ? 1.28 : 1.58)) * settle);
+    set('title-scale', initialScale + (1 - initialScale) * settle);
     set('title-y', ((mobile ? 20 : 36) * (1 - settle) - reveal * 7) + 'vh');
     set('title-blur', (reduceMotion.matches ? 0 : reveal * 24) + 'px');
     set('image-scale', reduceMotion.matches ? 1 : (mobile ? .3 : .22) + (mobile ? .7 : .78) * reveal);

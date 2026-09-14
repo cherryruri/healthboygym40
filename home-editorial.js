@@ -22,7 +22,7 @@ document.addEventListener('visibilitychange',welcomePlayback);
 new MutationObserver(welcomePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 let lockedUntil=0,lastWheel=0,touchStart=null;
 const topOf=el=>scrollY+el.getBoundingClientRect().top;
-function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!document.body.classList.contains('facility-gallery-open');}
+function ready(){return home.offsetHeight>0&&document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!document.body.classList.contains('facility-gallery-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction,travel=0){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&scrollY>=top&&scrollY-Math.max(0,travel)<=bottom+90);}
 let motionFrame=0,morph=null,introCard=null,sceneFade=null,horizontalActive=false;const slideVideos=[];

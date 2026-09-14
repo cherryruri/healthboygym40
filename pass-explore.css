@@ -57,3 +57,5 @@ body.pass-guide main{padding-top:var(--site-header-height)}
 .pass-guide .intro h1,.pass-guide .section-title h2{font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;word-break:keep-all;color:#111}
 .leaflet-control-zoom-out{display:none!important}.pass-guide .intro h1{margin-bottom:16px}.pass-guide .intro .lead{display:none}
 @media(max-width:768px){.pass-guide .intro h1,.pass-guide .section-title h2{font-size:50px}.pass-guide .section-title h2{max-width:100%}}
+
+#koreaMap,.explore-hero,.map-shell{background:#f7f9fa}.korea-city-label{font:500 11px/20px Pretendard,Arial,sans-serif;color:#62717d;white-space:nowrap;text-align:center;text-shadow:0 1px white}.map-shell:after{background:linear-gradient(#ffffffa1,transparent 38%,transparent 75%,#ffffff80)!important}

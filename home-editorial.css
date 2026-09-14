@@ -256,3 +256,9 @@ body.menu-open .hb-call-float,body.hb-bodydot-open .hb-call-float,body.hb-machin
 @media(max-width:768px){.hb-page-nav{right:16px;height:112px}}
 
 .hb-ai-video:not(.is-primed),.hb-challenge-video:not(.is-primed){opacity:0}
+
+/* Keep title, logos and the complete machine card in the same mobile viewport. */
+@media(max-width:768px){.hb-home .hb-programs{height:100svh;min-height:0;max-height:100svh;padding:76px 0 24px;display:flex;flex-direction:column;overflow:hidden}.hb-home .hb-programs .hb-section-title{flex:0 0 auto;padding:0 16px}.hb-home .hb-programs .hb-section-title h2{font-size:clamp(32px,8.8vw,50px);line-height:1.12;margin:0}.hb-programs .hb-machine-browse{margin-top:12px;padding:9px 17px}.hb-programs .hb-machine-brands{margin:10px 0 0;flex:0 0 auto}.hb-programs .hb-brand-row{padding:3px 0}.hb-programs .hb-brand-item{height:15px}.hb-programs .hb-brand-item img{max-height:15px}.hb-home .hb-programs .hb-program-track{flex:1 1 0;height:auto;min-height:0;max-height:none;margin-top:12px}.hb-programs .hb-program-card{height:100%;width:76%}}
+body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>footer,body:not(.location-only-view) #wrap>footer{display:none!important}
+
+@media(max-width:768px){.hb-home .hb-programs{padding-bottom:90px}}

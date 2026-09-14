@@ -2,7 +2,7 @@
   if (!document.getElementById('trainer')) return;
 
   function syncRoute(hash) {
-    const trainerOnly = hash === '#trainer';
+    const trainerOnly = hash === '#trainer' || /^#coach-\d+$/.test(hash);
     const changed = document.documentElement.classList.contains('trainer-only-view') !== trainerOnly;
     document.documentElement.classList.toggle('trainer-only-view', trainerOnly);
     if (trainerOnly) {

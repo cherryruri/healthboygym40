@@ -3,7 +3,7 @@ const branches=window.PASS_EXPLORE_DATA||[],q=s=>document.querySelector(s),grid=
 const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const countryBounds=[[33.1,125.6],[38.65,130.3]];
-function fitCountry(){if(map)map.setView([36.4,127.8],7,{animate:!reduced});}
+function fitCountry(){if(map)map.setView([35.3,127.6],6.5,{animate:!reduced});}
 function addMarkers(){if(!map)return;layer.clearLayers();const groups=[];
  for(const b of (q("#mapPanel").hidden?filtered:branches).filter(b=>Number.isFinite(b.lat)&&Number.isFinite(b.lng))){const pt=map.latLngToContainerPoint([b.lat,b.lng]);let group=map.getZoom()<12&&b!==selected?groups.find(g=>g.items[0]!==selected&&g.point.distanceTo(pt)<35):null;if(group)group.items.push(b);else groups.push({point:pt,items:[b]});}
  for(const g of groups){const b=g.items[0],many=g.items.length>1,isSelected=g.items.includes(selected);const marker=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'branch-map-marker',html:`<span class="pin ${many?'':'single'} ${!many&&isSelected?'selected':''}">${many?g.items.length: isSelected?`<img src="${safe(b.image)}" alt="${safe(b.shortName)}">`:''}</span>`,iconSize:[many||isSelected?34:22,many||isSelected?34:22],iconAnchor:[many||isSelected?17:11,many||isSelected?17:11]}),title:many?`${b.region} 주변 ${g.items.length}개 지점`:b.shortName,keyboard:true}).addTo(layer);
@@ -41,11 +41,14 @@ q('#clearFilters').addEventListener('click',()=>{q('#branchSearch').value='';q('
 q('#resetMap').addEventListener('click',()=>{region='';q('#branchSearch').value='';q('#tierFilter').value='';q('#regionFilters button').click();});
 q('#closeVideo').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 dialog.addEventListener('close',()=>{video.pause();video.removeAttribute('src');video.load();document.body.classList.remove('video-open');lastOpener?.focus({preventScroll:true});});video.addEventListener('error',()=>{q('#videoError').hidden=false;});
-try{if(!window.L)throw Error('map unavailable');map=L.map('koreaMap',{zoomControl:true,scrollWheelZoom:false,minZoom:7,maxZoom:17,zoomSnap:.25,maxBounds:[[32.8,125.1],[38.8,130.3]],maxBoundsViscosity:1});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-// Simplified Natural Earth mainland outline; coastal margin preserves coastal branches.
-const koreaOutline=[[38.72,128.36],[37.45,129.4],[36.8,129.65],[35.6,129.65],[34.95,129.2],[34.7,128.25],[34.28,127.4],[34.2,126.35],[34.9,126.18],[35.68,126.36],[36.7,125.9],[36.94,126.65],[37.75,125.98],[37.95,126.25],[37.94,126.7],[38.4,127.07],[38.45,127.8],[38.52,128.2]];
-const jejuOutline=[[33.6,126.12],[33.65,126.7],[33.48,127.02],[33.17,126.9],[33.1,126.3],[33.28,126.08]];
-L.polygon([[[-85,-180],[-85,180],[85,180],[85,-180]],koreaOutline,jejuOutline],{stroke:false,fillColor:'#edf2f4',fillOpacity:1,fillRule:'evenodd',interactive:false}).addTo(map);
+try{if(!window.L)throw Error('map unavailable');map=L.map('koreaMap',{zoomControl:true,scrollWheelZoom:false,minZoom:6.5,maxZoom:12,zoomSnap:.25,maxBounds:[[32.8,125.1],[38.8,130.3]],maxBoundsViscosity:1});// Country-only vector guide: no rectangular cuts through road-map labels.
+fetch('https://raw.githubusercontent.com/southkorea/southkorea-maps/master/kostat/2013/json/skorea_provinces_geo_simple.json')
+.then(response=>{if(!response.ok)throw Error('boundary unavailable');return response.json();})
+.then(data=>{L.geoJSON(data,{style:{color:'#bac6cc',weight:1,fillColor:'#e7edf0',fillOpacity:1},interactive:false}).addTo(map);})
+.catch(()=>{q('#mapFallback').hidden=false;q('#mapFallback').textContent='지도 윤곽을 불러오지 못했습니다. 지점 표시와 카드는 계속 이용하실 수 있습니다.';});
+const cityLabels=[['서울',37.5665,126.978],['인천',37.4563,126.7052],['수원',37.2636,127.0286],['대전',36.3504,127.3845],['대구',35.8714,128.6014],['부산',35.1796,129.0756],['광주',35.1595,126.8526],['강릉',37.7519,128.8761],['제주',33.4996,126.5312]];
+for(const [name,lat,lng] of cityLabels)L.marker([lat,lng],{icon:L.divIcon({className:'korea-city-label',html:name,iconSize:[42,20],iconAnchor:[21,-20]}),interactive:false}).addTo(map);
+map.attributionControl.addAttribution('Map: KOSTAT / southkorea-maps');
 layer=L.layerGroup().addTo(map);fitCountry();map.on('zoomend moveend',addMarkers);new ResizeObserver(()=>{map.invalidateSize();}).observe(q('#koreaMap'));}catch(e){q('#mapFallback').hidden=false;q('#resetMap').hidden=true;}
 render();select(selected,false,false);
 })();

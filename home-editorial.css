@@ -110,3 +110,54 @@ html.hb-page-moving{scroll-behavior:auto!important}
 .hb-bodydot-dialog video{display:block;width:100%;max-height:calc(100svh - 110px);object-fit:contain;background:#000}
 body.hb-bodydot-open{overflow:hidden}
 .hb-bodydot-link:focus-visible,.hb-bodydot-close:focus-visible{outline:2px solid white;outline-offset:4px}
+
+/* Machine showcase: compact brand marquees above a three-video carousel. */
+.hb-home .hb-programs{padding:90px 0 20px;gap:0;justify-content:flex-start}
+.hb-programs .hb-section-title{width:100%;padding:0 8%;text-align:left;flex-shrink:0}
+.hb-home .hb-programs .hb-section-title h2{font-size:clamp(42px,4.8vw,70px);font-weight:800;line-height:1.16;letter-spacing:-.055em;color:#080808}
+.hb-machine-brands{flex-shrink:0;width:100%;overflow:hidden;margin:22px 0 4px;mask-image:linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent)}
+.hb-brand-row{overflow:hidden;padding:6px 0}
+.hb-brand-track{display:flex;width:max-content;animation:hb-brands-slide 20s linear infinite;animation-play-state:paused}
+.hb-brand-row:nth-child(2) .hb-brand-track{animation-duration:30s}
+.hb-brand-row:nth-child(3) .hb-brand-track{animation-duration:15s}
+.hb-brand-group{display:flex;align-items:center;justify-content:space-around;min-width:100vw;flex-shrink:0;gap:65px;padding-right:65px}
+.hb-brand-item{display:grid;place-items:center;flex:0 0 110px;height:34px}
+.hb-brand-item img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.hb-brand-dark{filter:brightness(0)}
+.hb-programs.is-current:not(.is-motion-paused) .hb-brand-track{animation-play-state:running}
+@keyframes hb-brands-slide{to{transform:translateX(-50%)}}
+.hb-home .hb-programs .hb-program-track{flex:1;min-height:180px;max-height:42svh;margin-top:20px;transform:none}
+.hb-programs .hb-program-card{width:min(58%,620px)}
+.hb-programs .hb-program-card>video{object-position:center 42%}
+.hb-programs .hb-card-link{border:0;line-height:1}
+.hb-home .hb-programs .hb-program-card h3{font-size:clamp(20px,2vw,29px);margin-bottom:8px}
+.hb-programs .hb-program-controls{flex-shrink:0;margin-top:14px;gap:20px}
+.hb-machine-motion-toggle{margin-left:8px}
+body.hb-machine-open{overflow:hidden}
+.hb-machine-dialog{width:min(530px,calc(100vw - 32px))}
+@media(max-width:768px){
+ .hb-home .hb-programs{padding:78px 0 18px}
+ .hb-programs .hb-section-title{padding:0 9%}
+ .hb-home .hb-programs .hb-section-title h2{font-size:clamp(36px,9vw,48px)}
+ .hb-machine-brands{margin:20px 0 0}
+ .hb-brand-row{padding:6px 0}
+ .hb-brand-group{gap:30px;padding-right:30px}
+ .hb-brand-item{flex-basis:46px;height:17px}
+ .hb-home .hb-programs .hb-program-track{margin-top:20px;min-height:155px;max-height:43svh}
+ .hb-programs .hb-program-card{width:76%}
+ .hb-programs .hb-program-card>div{left:20px;right:20px;bottom:24px}
+ .hb-home .hb-programs .hb-program-card h3{font-size:21px;line-height:1.25}
+ .hb-home .hb-programs .hb-program-card p{font-size:12px;line-height:1.6}
+ .hb-programs .hb-program-controls{margin-top:12px;gap:17px}
+}
+@media(max-height:650px){
+ .hb-home .hb-programs{padding-top:68px;padding-bottom:10px}
+ .hb-home .hb-programs .hb-section-title h2{font-size:clamp(30px,5vh,40px)}
+ .hb-machine-brands{margin-top:12px}
+ .hb-brand-item{height:18px}
+ .hb-brand-row{padding:4px 0}
+ .hb-home .hb-programs .hb-program-track{margin-top:12px;min-height:110px}
+}
+@media(prefers-reduced-motion:reduce){.hb-programs .hb-program-track,.hb-programs .hb-section-title,.hb-programs .hb-program-card{transition:none!important}}
+
+body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}

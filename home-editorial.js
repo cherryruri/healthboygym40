@@ -12,7 +12,7 @@ function welcomePlayback(){if(welcomeVisible&&!welcomePaused&&!document.hidden)w
 new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback()}).observe(welcome);welcomeToggle.addEventListener('click',()=>{welcomePaused=!welcomePaused;welcomePlayback()});document.addEventListener('visibilitychange',welcomePlayback);
 let lockedUntil=0,lastWheel=0,touchStart=null;
 const topOf=el=>scrollY+el.getBoundingClientRect().top;
-function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open');}
+function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&Math.abs(scrollY-bottom)<90);}
 let motionFrame=0,morph=null;
@@ -20,7 +20,7 @@ function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMo
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
- if(nearest()===2&&index===3)beginMorph(target);
+ // Machine cards use only their own video footage during entry.
  lockedUntil=start+(index===1?2350:1400);
  document.documentElement.classList.add('hb-page-moving');
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
@@ -48,11 +48,11 @@ window.addEventListener('keydown',e=>{if(!ready()||e.target.closest('a,button,in
 home.querySelector('.hb-scroll-hint').addEventListener('click',e=>{e.preventDefault();e.stopImmediatePropagation();go(1);});
 const ai=home.querySelector('.hb-ai'),aiVideo=ai.querySelector('video');
 aiState={visible:false,paused:false,advanced:false};
-function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=0;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}
-function advanceAi(){if(aiState.visible&&!aiState.advanced&&!aiState.paused&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')){aiState.advanced=true;go(3);}}
+function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=0;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}
+function advanceAi(){if(aiState.visible&&!aiState.advanced&&!aiState.paused&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')){aiState.advanced=true;go(3);}}
 aiVideo.addEventListener('ended',advanceAi);document.addEventListener('visibilitychange',syncAiPlayback);
-const cards=[...home.querySelectorAll('.hb-program-card')],controls=home.querySelector('.hb-program-controls');let selected=0;function show(i){selected=(i+cards.length)%cards.length;cards.forEach((c,j)=>{let offset=(j-selected+cards.length)%cards.length;if(offset>2)offset-=cards.length;c.dataset.position=offset;c.inert=Math.abs(offset)>1;c.querySelector('.hb-card-link').tabIndex=offset===0?0:-1;});controls.querySelector('span').textContent=String(selected+1).padStart(2,'0')+' / 05';if(cardStateReady)syncCardVideos();}controls.querySelector('[aria-label="이전 프로그램"]').addEventListener('click',()=>show(selected-1));controls.querySelector('[aria-label="다음 프로그램"]').addEventListener('click',()=>show(selected+1));cards.forEach((c,i)=>c.querySelector('.hb-card-select').addEventListener('click',()=>show(i)));const track=home.querySelector('.hb-program-track');let touchX=null;track.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});track.addEventListener('touchend',e=>{if(touchX===null)return;const delta=e.changedTouches[0].clientX-touchX;if(Math.abs(delta)>50)show(selected+(delta<0?1:-1));touchX=null},{passive:true});show(0);
-function syncCardVideos(){const r=track.getBoundingClientRect(),visible=r.top<innerHeight&&r.bottom>0&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open');cards.forEach(c=>{const v=c.querySelector('video');if(visible&&Math.abs(Number(c.dataset.position))<=1){if(!v.getAttribute('src'))v.src=v.dataset.trainerSrc;if(v.paused)v.play().catch(()=>{});}else v.pause();});}
+const cards=[...home.querySelectorAll('.hb-program-card')],controls=home.querySelector('.hb-program-controls');let selected=0;function show(i){selected=(i+cards.length)%cards.length;cards.forEach((c,j)=>{let offset=(j-selected+cards.length)%cards.length;if(offset>cards.length/2)offset-=cards.length;c.dataset.position=offset;c.inert=Math.abs(offset)>1;c.querySelector('.hb-card-link').tabIndex=offset===0?0:-1;});controls.querySelector('span').textContent=String(selected+1).padStart(2,'0')+' / '+String(cards.length).padStart(2,'0');if(cardStateReady)syncCardVideos();}controls.querySelector('[aria-label="이전 머신"]').addEventListener('click',()=>show(selected-1));controls.querySelector('[aria-label="다음 머신"]').addEventListener('click',()=>show(selected+1));cards.forEach((c,i)=>c.querySelector('.hb-card-select').addEventListener('click',()=>show(i)));const track=home.querySelector('.hb-program-track');let touchX=null;track.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});track.addEventListener('touchend',e=>{if(touchX===null)return;const delta=e.changedTouches[0].clientX-touchX;if(Math.abs(delta)>50)show(selected+(delta<0?1:-1));touchX=null},{passive:true});show(0);
+function syncCardVideos(){const r=track.getBoundingClientRect(),visible=r.top<innerHeight&&r.bottom>0&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');cards.forEach(c=>{const v=c.querySelector('video');if(visible&&Number(c.dataset.position)===0&&!home.querySelector('.hb-programs').classList.contains('is-motion-paused')){if(!v.getAttribute('src'))v.src=v.dataset.machineSrc;if(v.paused)v.play().catch(()=>{});}else v.pause();});}
 cardStateReady=true;document.addEventListener('visibilitychange',syncCardVideos);syncCardVideos();
 
 const bodydotDialog=document.getElementById('hbBodydotDialog'),bodydotButton=home.querySelector('.hb-bodydot-link');
@@ -79,5 +79,21 @@ if(bodydotDialog&&bodydotButton){
   syncAiPlayback();
   bodydotButton.focus({preventScroll:true});
  });
+}
+
+const machineSection=home.querySelector('.hb-programs'),machineMotion=home.querySelector('.hb-machine-motion-toggle'),machineDialog=document.getElementById('hbMachineDialog');
+function setMachineMotion(stopped){machineSection.classList.toggle('is-motion-paused',stopped);machineMotion.textContent=stopped?'▶':'Ⅱ';machineMotion.setAttribute('aria-pressed',String(stopped));machineMotion.setAttribute('aria-label',stopped?'로고와 미리보기 재생':'로고와 미리보기 일시정지');syncCardVideos();}
+setMachineMotion(matchMedia('(prefers-reduced-motion: reduce)').matches);
+machineMotion.addEventListener('click',()=>setMachineMotion(!machineSection.classList.contains('is-motion-paused')));
+if(machineDialog){
+ const fullVideo=machineDialog.querySelector('video');let opener=null;
+ cards.forEach(card=>card.querySelector('.hb-card-link').addEventListener('click',e=>{
+  opener=e.currentTarget;cancelMotion();machineDialog.showModal();document.body.classList.add('hb-machine-open');syncCardVideos();
+  const preview=card.querySelector('video');fullVideo.src=preview.dataset.machineSrc;fullVideo.poster=preview.poster;machineDialog.querySelector('h2').textContent=card.querySelector('h3').textContent;
+  fullVideo.play().catch(()=>{});
+ }));
+ machineDialog.querySelector('.hb-machine-close').addEventListener('click',()=>machineDialog.close());
+ machineDialog.addEventListener('click',e=>{if(e.target!==machineDialog)return;const r=machineDialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)machineDialog.close();});
+ machineDialog.addEventListener('close',()=>{fullVideo.pause();document.body.classList.remove('hb-machine-open');syncCardVideos();opener?.focus({preventScroll:true});});
 }
 })();

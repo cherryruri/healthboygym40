@@ -9,7 +9,8 @@
   scene.id = 'facility-title-scroll';
   const title = document.createElement('h2');
   title.className = 'facility-title-copy';
-  title.textContent = '몰입할 수 있는 공간을 만듭니다.';
+  title.id = 'hbFacilityTitle';
+  title.innerHTML = '수내동 최대시설<br>최대규모';
   stage.append(title);
   const clamp = value => Math.max(0, Math.min(1, value));
   const smooth = value => { const v = clamp(value); return v * v * (3 - 2 * v); };

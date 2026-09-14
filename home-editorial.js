@@ -12,15 +12,15 @@ function welcomePlayback(){if(welcomeVisible&&!document.hidden)welcomeVideo.play
 new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback()}).observe(welcome);document.addEventListener('visibilitychange',welcomePlayback);
 let lockedUntil=0,lastWheel=0,touchStart=null;
 const topOf=el=>scrollY+el.getBoundingClientRect().top;
-function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');}
+function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!document.body.classList.contains('facility-gallery-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&Math.abs(scrollY-bottom)<90);}
 let motionFrame=0,morph=null,introCard=null,sceneFade=null;
 function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();if(sceneFade){sceneFade.remove();sceneFade=null;}document.documentElement.classList.remove('hb-page-moving');}
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
- if(index===4&&home.querySelector('.hb-programs').classList.contains('is-current')){goAllpass();return;}
- const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
+ if(index===4&&home.querySelector('.hb-programs').classList.contains('is-current')){goDarkScene(4);return;}
+ const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:index===4&&nearest()===5?topOf(chapters[4])+chapters[4].offsetHeight-innerHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
  if(nearest()===2&&index===3)beginMorph(target);
  if(index===2&&home.querySelector('.hb-programs').classList.contains('is-current'))beginMorph(target,true);
  lockedUntil=start+(index===1?2350:1400);
@@ -28,9 +28,9 @@ function go(index){
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
  motionFrame=requestAnimationFrame(tick);
 }
-function goAllpass(){
+function goDarkScene(index){
  const surface=document.createElement('div');surface.className='hb-scene-fade';surface.setAttribute('aria-hidden','true');document.body.appendChild(surface);sceneFade=surface;
- const start=performance.now(),duration=1200,target=topOf(chapters[4]);let switched=false;
+ const start=performance.now(),duration=1200,target=topOf(chapters[index]);let switched=false;
  prepareAllpass();lockedUntil=start+1400;document.documentElement.classList.add('hb-page-moving');
  function tick(now){
   const t=clamp((now-start)/duration);
@@ -80,7 +80,18 @@ addEventListener('resize',cancelMotion);
 new MutationObserver(()=>{if(document.body.classList.contains('menu-open'))cancelMotion();}).observe(document.body,{attributes:true,attributeFilter:['class']});
 document.addEventListener('click',e=>{if(e.target.closest('a[href]'))cancelMotion();},true);
 
+function allowsFacilityScroll(direction){
+ const facility=chapters[4],start=topOf(facility),end=start+facility.offsetHeight-innerHeight;
+ return direction>0?scrollY>=start-innerHeight*.5&&scrollY<end-2:scrollY>start+2&&scrollY<=end+2;
+}
 function move(direction){
+ const facility=chapters[4],facilityTop=topOf(facility);
+ if(allowsFacilityScroll(direction)){
+  cancelMotion();const from=scrollY,target=Math.max(facilityTop,Math.min(facilityTop+facility.offsetHeight-innerHeight,from+direction*innerHeight*.85)),start=performance.now();lockedUntil=start+700;document.documentElement.classList.add('hb-page-moving');
+  function tick(now){const t=clamp((now-start)/650),ease=t*t*(3-2*t);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
+  motionFrame=requestAnimationFrame(tick);return;
+ }
+ if(direction>0&&scrollY>=facilityTop-2&&scrollY<facilityTop+facility.offsetHeight-2){go(5);return;}
  const machines=home.querySelector('.hb-programs'),start=topOf(machines),end=start+machines.offsetHeight-innerHeight;
  if(direction<0&&machines.classList.contains('is-current')&&scrollY>=start-2){go(2);return;}
  if(end>start+2&&scrollY>=start-innerHeight*.18&&scrollY<=end+2){

@@ -88,3 +88,9 @@ html.facility-gallery-open { overflow: hidden !important; }
 @media (prefers-reduced-motion: reduce) {
   #facilityTour .img_box span { transition: none; }
 }
+
+/* The existing photo tour now follows the machine chapter. */
+.hb-home #facility.hb-facility{height:auto;min-height:0;overflow:visible;background:#050505;color:#fff}
+#facilityTour .cont,#facilityTour .img_inner{background:#050505!important}
+#facilityTour .facility-title-copy{width:100%;padding:0 20px;white-space:normal;text-align:center;color:#fff;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;transform:translate(-50%,-50%)}
+@media(max-width:768px){#facilityTour .facility-title-copy{font-size:50px}}

@@ -20,3 +20,20 @@ header{position:absolute;inset:0 0 auto;z-index:600;border:0;background:linear-g
 @media(max-width:700px){.explore-hero{height:100svh;min-height:690px}.intro{top:95px;left:25px;right:20px}.intro h1{font-size:43px;line-height:1.08;margin-bottom:12px}.intro .eyebrow{font-size:9px;margin-bottom:11px}.intro .lead{font-size:11px}.map-heading{top:270px;right:16px}.map-heading button{font-size:10px;padding:8px 11px}.leaflet-control-zoom{margin-top:270px!important}.map-cards{bottom:28px;--card-width:min(72vw,310px)}.map-card{height:258px;border-radius:20px}.map-card-track{gap:7px;padding-top:12px;padding-bottom:17px}.carousel-guide{font-size:9px;margin-bottom:0}.map-card-copy{left:17px;bottom:66px}.map-card-copy strong{font-size:25px}.map-card-play{left:17px;right:17px;font-size:10px}.map-card-tag{left:14px;top:14px;font-size:8px}.all-branches-link{font-size:10px}.selected-info{padding:23px}.selection{margin-bottom:55px}.map-shell:after{background:linear-gradient(#071e32a8,transparent 40%,transparent 58%,#0a202aac)}}
 
 .pin.selected{width:42px;height:42px;border:3px solid white;border-radius:50% 50% 50% 5px;transform:rotate(-45deg);overflow:hidden;box-shadow:0 5px 18px #0005}.pin.selected img{width:100%;height:100%;object-fit:cover;transform:rotate(45deg) scale(1.35)}
+
+/* Light street map: clear labels, green locations, restrained overlays. */
+header{color:#193c32;background:linear-gradient(#f8fbf6f2,transparent)}header .back{color:#486258}
+.explore-hero,.map-shell,#koreaMap{background:#c9e2e9}.leaflet-tile-pane{filter:saturate(.62) contrast(.95) brightness(1.04)}
+.map-shell:after{background:linear-gradient(180deg,#f6faf5ed 0%,#f6faf55c 22%,transparent 37%,transparent 68%,#f1f7f3d9 100%)}
+.intro{color:#153c30;text-shadow:none}.intro .eyebrow{color:#388668}.intro .lead{color:#4a685b}.intro h1{letter-spacing:-.045em}
+.map-heading button{background:#fffffff2;border:1px solid #d8e5dc;color:#24533d;box-shadow:0 3px 12px #244b3414}
+.leaflet-control-zoom{box-shadow:0 3px 12px #244b3420!important;border-radius:10px!important;overflow:hidden}.leaflet-control-zoom a{background:#fffffff5!important;color:#24553f!important;border-color:#dce7df!important}
+.leaflet-control-attribution{background:#ffffffd9!important;color:#50645a!important}.leaflet-control-attribution a{color:#34664f!important}
+.pin{background:#169a63;border:3px solid white;color:white;box-shadow:0 3px 12px #16634838}.pin.single{background:#13a468;border-color:white}.pin.selected{border-color:white;box-shadow:0 0 0 5px #12a96a30,0 5px 16px #174b3533}
+.leaflet-tooltip{background:#fffffff5;border:1px solid #d6e6dc;color:#254c38;box-shadow:0 3px 10px #204f351c}
+.carousel-guide{color:#2c5945;text-shadow:0 1px 5px white;font-weight:500}.all-branches-link{color:#244f3b;background:#fffffff0;border:1px solid #d5e5d9;border-radius:20px;padding:8px 17px;box-shadow:0 3px 12px #244b3412}
+.map-card{border:3px solid white;box-shadow:0 9px 25px #254b3529;opacity:.86}.map-card.is-active{box-shadow:0 14px 35px #204b3542}.map-card-tag{background:#fff;color:#24513d;border:0;backdrop-filter:none;font-weight:600}.map-card-copy small{color:#d8f1df}.map-card-play{border-top-color:#ffffff65}
+@media(max-width:700px){.intro{top:87px}.intro h1{font-size:39px}.intro .lead{font-size:11px}.map-shell:after{background:linear-gradient(#f6faf5f2 0%,#f6faf5a6 21%,transparent 35%,transparent 70%,#f1f7f3e6 100%)}.carousel-guide{font-size:9px}.map-heading{top:250px}.leaflet-control-zoom{margin-top:250px!important}}
+
+@media(min-width:701px){.map-shell:after{background:linear-gradient(90deg,#f6faf5f2 0%,#f6faf5b3 27%,transparent 43%,transparent 68%,#f6faf57a 100%),linear-gradient(180deg,#f6faf5eb,transparent 25%,transparent 65%,#f1f7f3e6)}.carousel-guide{width:max-content;margin:0 auto 10px;background:#ffffffde;padding:8px 15px;border-radius:20px}}
+@media(max-width:700px){.map-shell:after{background:linear-gradient(#f6faf5f5 0%,#f6faf5db 23%,transparent 35%,transparent 67%,#f1f7f3e6 100%)}.carousel-guide{width:max-content;max-width:90%;margin:0 auto;background:#ffffffe8;padding:7px 12px;border-radius:20px;font-size:9px}}

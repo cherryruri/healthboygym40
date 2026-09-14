@@ -271,3 +271,7 @@ body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>foot
  .hb-programs .hb-brand-row{padding:5px 0}
  .hb-home .hb-programs .hb-program-track{margin-top:24px}
 }
+
+/* Lower the complete composition without cropping the mobile video. */
+@media(max-width:768px){.hb-home .hb-programs{padding-top:54px;padding-bottom:74px}}
+@media(min-width:769px){.hb-home .hb-programs{padding-top:96px;padding-bottom:8px}}

@@ -552,6 +552,9 @@
   }
 
   function shouldBypassScrollHijack(event){
+    // The chapter controller also owns upward re-entry from the adjacent news area.
+    const editorialHome=document.getElementById('hbHome');
+    if(editorialHome){const bounds=editorialHome.getBoundingClientRect();if(bounds.height>0&&bounds.top<innerHeight&&bounds.bottom>=-innerHeight)return false;}
     if(!isMobile() || !event.target || !event.target.closest) return false;
     if(event.target.closest(".hero-expand-section, .hb-home")) return false;
     if(isMobileException(event.target)) return false;

@@ -1,36 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>프로필 설정</title>
-
-
-<link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
-<link rel="stylesheet" href="mypage.css?v=20260709-request-board1">
-<link rel="stylesheet" href="mypage-mobile.css?v=20260709-request-board1">
-<link rel="stylesheet" href="mypage-mobile-banner.css?v=20260709-banner-admin2">
-
-<link rel="stylesheet" href="site-header.css?v=20260909-type-system">
-<script src="site-header.js?v=20260909-nav-final" defer></script>
-</head>
-
-<body>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<header id="site-header">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>마이페이지 | 헬스보이짐</title><link rel="stylesheet" href="site-header.css?v=20260915-profile"><link rel="stylesheet" href="member-profile.css?v=1"><script defer src="site-header.js?v=20260915-unified"></script></head><body class="member-page loaded"><header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
     <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
     <ul class="menu">
@@ -49,34 +17,7 @@
     <div class="mobile-menu-overlay"></div>
     <div class="mobile-side-menu"></div>
   </nav>
-</header>
-
-
-
-<div class="my-welcome hide" id="myWelcome">
-  <div class="welcome-text">
-    <h1>안녕하세요</h1>
-    <p>헬스보이짐 수내점 회원님<br>반갑습니다</p>
-  </div>
-</div>
-
-
-<main class="mypage" id="mypageRoot" style="display:none;">
-
-  <header class="mypage-header">
-    <a href="index.html" class="back-btn">‹</a>
-    <h1>프로필 설정</h1>
-    <div></div>
-  </header>
-
-
-
-
-<section class="mypage-grid">
-
-  <div class="top-profile-wrap">
-
-  <section class="profile-area">
+</header><main id="mypageRoot"><section class="member-hero"><div class="member-kicker">MY HEALTHBOYGYM</div><section class="profile-area">
     <label class="profile-image profile-image-edit" for="profileImageInput" aria-label="프로필 사진 변경">
       <img id="myAvatarImage" class="my-avatar-image" alt="" hidden>
       <span class="my-avatar" aria-hidden="true"></span>
@@ -87,9 +28,7 @@
 
     <h2 id="myName">회원님</h2>
     <p id="myId">HEALTHBOYGYM SUNAE</p>
-  </section>
-
-  <section class="info-section">
+  </section><p class="member-tagline">나의 운동, 나의 기록.</p><a class="member-login" href="login.html" hidden>로그인하고 나의 기록 보기 ↗</a><div class="member-stats"><a href="my-posts.html"><strong id="memberPostCount">—</strong><span>내 게시글</span></a><a href="my-comments.html"><strong id="memberCommentCount">—</strong><span>내 댓글</span></a><a href="#saved"><strong id="memberSavedCount">0</strong><span>스크랩</span></a></div><details class="member-settings"><summary>프로필 관리 <span>＋</span></summary><section class="info-section">
     <h3>기본정보</h3>
 
     <div class="info-row">
@@ -124,9 +63,7 @@
   <button type="button" id="adminUsersBtn" style="display:none;">가입 회원 목록</button>
   <button type="button" id="deleteAccountBtn" class="danger">탈퇴하기</button>
 </div>
-  </section>
-</div>
-  <section class="mypage-dashboard">
+  </section></details><nav class="member-links" aria-label="회원 메뉴"><a href="board.html?board=request&category=request&scope=mine">1:1 문의 ↗</a><a href="change-password.html">비밀번호 변경 ↗</a></nav></section><section class="member-collection" id="saved"><div class="member-collection-title"><div><p>MY COLLECTION</p><h1>스크랩한 글</h1></div><span id="savedTotal">0</span></div><p class="saved-storage-note">이 브라우저에 계정별로 저장한 글입니다.</p><div id="savedGrid" class="saved-grid" aria-live="polite"></div></section><details class="member-activity"><summary>나의 최근 활동</summary><section class="mypage-dashboard">
 
     <div class="dash-card inquiry-dash-card">
       <div class="dash-title-row">
@@ -174,36 +111,4 @@
       <p id="joinedDate">가입일 확인 중</p>
     </div>
 
-  </section>
-
-
-</section>
-
-
-
-
-
-
-
-
-  <button id="logoutBtn" class="logout-btn">
-    로그아웃
-  </button>
-
-
-
-
-
-</main>
-
-<script src="js/feather.min.js"></script>
-<script src="site-menu.js?v=20260911-unified-board"></script>
-<script type="module" src="mypage.js?v=20260709-request-board1"></script>
-<script type="module" src="mypage-mobile-profile.js?v=20260709-request-board1"></script>
-<script src="script.js?v=20260705-review-flow18"></script>
-<script type="module" src="./firebase-index.js?v=20260728-mobile-info1"></script>
-
-
-
-</body>
-</html>
+  </section></details></main><script src="js/feather.min.js"></script><script src="site-menu.js?v=20260915-unified"></script><script type="module" src="mypage.js?v=20260915-profile"></script><script type="module" src="member-profile.js?v=1"></script><script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script></body></html>

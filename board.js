@@ -197,6 +197,11 @@ const boardMeta = {
   }
 };
 
+boardMeta.free.categories = [['notice','공지문'],['all','전체게시글']];
+boardMeta.noticeboard.categories = [['notice','공지문'],['all','전체게시글']];
+if(!['request','infoboard','teen'].includes(currentBoard)){
+ currentBoard='free';currentCategory=['noticeboard','news'].includes(initialBoard)||initialCategory==='notice'?'notice':'all';
+}
 function getMeta(){
   return boardMeta[currentBoard] || boardMeta.free;
 }

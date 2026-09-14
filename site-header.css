@@ -271,3 +271,5 @@ html body #site-header .logo a{font-style:normal!important;transform:skewX(-3deg
 #site-header#site-header.site-header-hidden{transform:translateY(-100%)!important}
 body.menu-open #site-header#site-header{transform:none!important}
 @media(max-width:1100px){#site-header#site-header{--site-header-height:66px}#site-header#site-header .logo a{font-size:22px!important}}
+
+@media(max-width:1100px){#site-header#site-header .mobile-primary-link .mobile-nav-en{font-weight:650!important;letter-spacing:-.035em!important}#site-header#site-header .mobile-primary-link .mobile-nav-ko{font-weight:500!important;color:#bbb}}

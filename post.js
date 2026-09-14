@@ -199,6 +199,7 @@ async function loadPost() {
           : "비밀글";
   statusEl.classList.toggle("done", isRequestPost(data) && hasRequestAnswer(data));
 
+  setupSaveButton(data);
   setupPostActions(data);
   setupCommentUi(data);
   markRequestAnswerRead(data);
@@ -614,4 +615,14 @@ function getTimestampMs(value){
   if(value.toDate) return value.toDate().getTime();
   const time = new Date(value).getTime();
   return Number.isFinite(time) ? time : 0;
+}
+import {getSavedPosts,toggleSavedPost} from './saved-posts.js?v=1';
+function setupSaveButton(data){
+ document.querySelector('.post-save-row')?.remove();
+ if(data.isSecret||data.isPublic===false||data.isAdminOnly||isAdminOnlyPost(data)||isRequestPost(data))return;
+ const row=document.createElement('div'),button=document.createElement('button'),message=document.createElement('span');
+ row.className='post-save-row';button.type='button';button.className='post-save-button';message.className='post-save-message';message.setAttribute('role','status');
+ const paint=()=>{let saved=false;try{saved=!!currentUser&&getSavedPosts(currentUser.uid).some(x=>x.id===postId)}catch{}button.setAttribute('aria-pressed',String(saved));button.innerHTML='<svg viewBox="0 0 18 22" aria-hidden="true"><path d="M3 2h12v18l-6-4-6 4z"/></svg><span>'+(saved?'스크랩 완료':'스크랩하기')+'</span>';};
+ button.addEventListener('click',()=>{if(!currentUser){message.textContent='로그인 후 스크랩할 수 있습니다.';if(!row.querySelector('a')){const a=document.createElement('a');a.href='login.html';a.textContent='로그인하기 ↗';row.append(a)}return}try{const saved=toggleSavedPost(currentUser.uid,postId);paint();message.textContent=saved?'마이페이지에 저장했어요. 이 브라우저에서 다시 볼 수 있습니다.':'스크랩을 해제했어요.';}catch(error){message.textContent=error.message.includes('300')?error.message:'저장하지 못했습니다. 브라우저 저장 공간 설정을 확인해 주세요.';}});
+ paint();row.append(button,message);contentEl.after(row);
 }

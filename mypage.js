@@ -140,7 +140,10 @@ const isFirstWelcome = sessionStorage.getItem("welcomeShown");
 
 
 if(!user){
-  location.href = "login.html";
+  document.body.classList.add("is-guest");
+  if(mypageRoot)mypageRoot.style.display="block";
+  document.querySelector(".member-login").hidden=false;
+  setText(myName,"마이페이지");
   return;
 }
 
@@ -153,7 +156,8 @@ document.body.classList.add("loaded");
 
 
   
-const showWelcome = sessionStorage.getItem("showWelcomeOnce");
+document.body.classList.remove("is-guest");
+const showWelcome = null;
 
 if(showWelcome === "yes"){
 document.body.classList.add("welcoming");
@@ -423,6 +427,7 @@ async function loadMyDashboard(user, userData = {}){
   }
 
   if(myPostList){
+    document.getElementById("memberPostCount").textContent=myPosts.length;
     myPostList.innerHTML = "";
 
     if(myPosts.length === 0){
@@ -439,6 +444,7 @@ async function loadMyDashboard(user, userData = {}){
   }
 
   if(myCommentList){
+    document.getElementById("memberCommentCount").textContent=myComments.length;
     myCommentList.innerHTML = "";
 
     if(myComments.length === 0){

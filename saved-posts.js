@@ -1,0 +1,4 @@
+const prefix='hbg-saved-posts-v1:';
+function key(uid){if(!uid||typeof uid!=='string')throw new Error('로그인이 필요합니다.');return prefix+encodeURIComponent(uid)}
+export function getSavedPosts(uid,storage=localStorage){if(!uid)return [];const value=storage.getItem(key(uid));if(!value)return [];try{const items=JSON.parse(value);return Array.isArray(items)?items.filter(x=>x&&typeof x.id==='string'&&Number.isFinite(x.savedAt)):[]}catch{return []}}
+export function toggleSavedPost(uid,id,storage=localStorage){if(typeof id!=='string'||!id||id.includes('/'))throw new Error('올바르지 않은 게시글입니다.');const items=getSavedPosts(uid,storage),exists=items.some(x=>x.id===id);if(!exists&&items.length>=300)throw new Error('스크랩은 최대 300개까지 저장할 수 있습니다.');const next=exists?items.filter(x=>x.id!==id):[{id,savedAt:Date.now()},...items];storage.setItem(key(uid),JSON.stringify(next));return !exists}

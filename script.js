@@ -3533,7 +3533,7 @@ document.addEventListener("DOMContentLoaded", function(){
       document.querySelector("header");
 
     const headerHeight =
-      header ? header.offsetHeight : 0;
+      targetId === 'trainer' || /^coach-\d+$/.test(targetId) ? 0 : (header ? header.offsetHeight : 0);
 
     if(targetId === "about"){
       const hero =

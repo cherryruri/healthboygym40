@@ -46,3 +46,19 @@ html.trainer-only-view body #trainer.trainer-editorial{padding:0!important}
 html body #trainer .coach-hero{height:100svh;min-height:0}
 html body #trainer .coach-hero-copy h1{font-size:clamp(54px,6.3vw,92px)!important;line-height:1.12!important;font-weight:650!important;letter-spacing:-.055em!important}
 @media(max-width:768px){html body #trainer .coach-hero-copy h1{font-size:50px!important}.coach-hero-copy{left:25px;right:20px}.coach-controls{gap:15px;margin-top:45px}.coach-controls i{width:65px}}
+
+@media(max-width:768px){
+ html body #trainer .coach-profile-stage{display:block;position:relative;height:100svh}
+ html body #trainer .coach-portrait{position:absolute;inset:0;width:100%;height:100%;min-height:0}
+ html body #trainer .coach-portrait img{height:100%;width:100%;object-fit:cover;object-position:center 18%}
+ html body #trainer .coach-portrait:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#0000 22%,#0003 40%,#000c 65%,#000e 100%)}
+ html body #trainer .coach-bio{position:absolute;left:0;right:0;bottom:0;height:auto;max-height:66%;padding:22px 26px 32px;background:transparent;overflow:visible;z-index:2;justify-content:flex-end}
+ html body #trainer .coach-bio h2{font-size:34px!important;margin-bottom:18px;text-shadow:0 2px 20px #0005}
+ html body #trainer .coach-profile-number{font-size:10px;letter-spacing:.16em;color:#fff9;margin-bottom:12px}
+ html body #trainer .coach-role{color:#fffc;font-size:11px}
+ html body #trainer .coach-credentials{gap:14px}
+ html body #trainer .coach-credentials h3{color:#fffa;font-size:10px;border-color:#ffffff40}
+ html body #trainer .coach-credentials li{font-size:12px;line-height:1.7;color:#fff}
+ html body #trainer .coach-career-button{margin-top:18px;font-size:12px;padding-bottom:6px;color:#fff;border-color:#fffa}
+}
+@media(max-width:768px) and (max-height:700px){html body #trainer .coach-bio{padding:16px 23px 22px}html body #trainer .coach-credentials li{font-size:11px}html body #trainer .coach-bio h2{font-size:30px!important;margin-bottom:12px}}

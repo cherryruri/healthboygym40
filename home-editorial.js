@@ -23,6 +23,8 @@ function go(index){
  if(index===3&&chapters[4].classList.contains('is-current')){chapters[4].dispatchEvent(new Event('hb-reverse-intro'));goDarkScene(3);return;}
  if(index===5&&chapters[4].classList.contains('is-current')){goDarkScene(5);return;}
  if(index===4&&chapters[5].classList.contains('is-current')){goDarkScene(4,true);return;}
+ if(index===6&&chapters[5].classList.contains('is-current')){goHorizontalScene(5,6);return;}
+ if(index===5&&chapters[6]?.classList.contains('is-current')){goHorizontalScene(6,5);return;}
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:index===4&&nearest()===5?topOf(chapters[4])+chapters[4].offsetHeight-innerHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
  if(nearest()===2&&index===3)beginMorph(target);
  if(index===2&&home.querySelector('.hb-programs').classList.contains('is-current'))beginMorph(target,true);
@@ -30,6 +32,22 @@ function go(index){
  document.documentElement.classList.add('hb-page-moving');
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
  motionFrame=requestAnimationFrame(tick);
+}
+function goHorizontalScene(fromIndex,toIndex){
+ const source=chapters[fromIndex],destination=chapters[toIndex],target=topOf(destination),direction=toIndex>fromIndex?1:-1;
+ const surface=document.createElement('div');surface.className='hb-home hb-horizontal-scene';surface.setAttribute('aria-hidden','true');surface.inert=true;
+ const panels=[source,destination].map(section=>{
+  const panel=section.cloneNode(true);panel.removeAttribute('id');panel.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));panel.classList.add('is-current');
+  panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i];v.src=original.currentSrc||original.dataset.src;v.muted=true;v.loop=true;v.addEventListener('loadedmetadata',()=>{v.currentTime=original.currentTime;v.play().catch(()=>{});},{once:true});});
+  surface.appendChild(panel);return panel;
+ });
+ document.body.appendChild(surface);sceneFade=surface;
+ const start=performance.now(),duration=1100;lockedUntil=start+1350;document.documentElement.classList.add('hb-page-moving');
+ function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);
+  panels[0].style.transform=`translateX(${-direction*ease*100}%)`;panels[1].style.transform=`translateX(${direction*(1-ease)*100}%)`;
+  if(t<1)motionFrame=requestAnimationFrame(tick);else{window.scrollTo({top:target,behavior:'instant'});cancelMotion();requestPaint();}
+ }
+ tick(start);
 }
 function goDarkScene(index,atEnd=false){
  const surface=document.createElement('div');surface.className='hb-scene-fade';surface.setAttribute('aria-hidden','true');document.body.appendChild(surface);sceneFade=surface;
@@ -49,6 +67,11 @@ function allpassPlayback(){if(allpassVisible&&!document.hidden&&!document.body.c
 new IntersectionObserver(entries=>{if(entries[0].isIntersecting)prepareAllpass();},{rootMargin:'100% 0px'}).observe(allpassSection);
 new IntersectionObserver(entries=>{allpassVisible=entries[0].isIntersecting;allpassPlayback();}).observe(allpassSection);
 document.addEventListener('visibilitychange',allpassPlayback);new MutationObserver(allpassPlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
+const challengeSection=home.querySelector('.hb-challenge'),challengeVideo=challengeSection.querySelector('video');let challengeVisible=false;
+function challengePlayback(){if(challengeVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){if(!challengeVideo.getAttribute('src'))challengeVideo.src=challengeVideo.dataset.src;challengeVideo.play().catch(()=>{});}else challengeVideo.pause();}
+new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!challengeVideo.getAttribute('src')){challengeVideo.src=challengeVideo.dataset.src;challengeVideo.load();}},{rootMargin:'100% 0px'}).observe(challengeSection);
+new IntersectionObserver(entries=>{challengeVisible=entries[0].isIntersecting;challengePlayback();}).observe(challengeSection);
+document.addEventListener('visibilitychange',challengePlayback);new MutationObserver(challengePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 function beginMorph(target,reverse=false){
  const source=home.querySelector('.hb-ai-video'),program=home.querySelector('.hb-programs');
  if(!reverse&&source.readyState<2)return;
@@ -89,6 +112,7 @@ function allowsFacilityScroll(direction){
 }
 function move(direction){
  const facility=chapters[4],facilityTop=topOf(facility);
+ if(direction<0&&chapters[5].classList.contains('is-current')){go(4);return;}
  if(facility.classList.contains('is-current')&&facility.dataset.introRunning==='true')return;
  if(allowsFacilityScroll(direction)){
   cancelMotion();const from=scrollY,target=Math.max(facilityTop,Math.min(facilityTop+facility.offsetHeight-innerHeight,from+direction*innerHeight*.85)),start=performance.now();lockedUntil=start+700;document.documentElement.classList.add('hb-page-moving');

@@ -223,6 +223,18 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 }
 
 /* Supporting copy follows the same typography as the body-analysis description. */
+.hb-home .hb-challenge{height:100svh;min-height:560px;overflow:hidden;background:#111;color:#fff}
+.hb-challenge-video{object-position:center 38%}
+.hb-challenge-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0006,#0001 55%,#0005)}
+.hb-challenge-copy{position:absolute;inset:16% 9% 13% 8%;display:flex;flex-direction:column;align-items:flex-end;color:white;opacity:0;transform:translateY(25px);transition:opacity .85s ease,transform 1s ease}
+.hb-challenge.is-current .hb-challenge-copy{opacity:1;transform:none}
+.hb-home .hb-challenge-copy h2{margin-top:12px;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:650;line-height:1.12;letter-spacing:-.055em;color:#fff}
+.hb-challenge-copy>div{align-self:flex-start;margin-top:auto}
+.hb-home .hb-challenge-copy p{font-size:18px;line-height:1.8;margin-bottom:26px}
+.hb-horizontal-scene.hb-home{position:fixed;inset:0;z-index:99997;overflow:hidden;background:#050505;pointer-events:none}
+.hb-horizontal-scene.hb-home>.hb-chapter{position:absolute;inset:0;height:100%;min-height:0;will-change:transform}
+.hb-horizontal-scene .hb-challenge-copy{opacity:1;transform:none;transition:none}
+@media(max-width:768px){.hb-challenge-copy{inset:27% 35px 12% 25px}.hb-home .hb-challenge-copy h2{font-size:50px}.hb-home .hb-challenge-copy p{font-size:14px}}
 .hb-home .hb-allpass-description{position:absolute;top:100%;left:0;width:100%;padding:0 24px;margin:22px 0 0;font-family:inherit;font-size:18px;font-weight:400;line-height:1.8;letter-spacing:normal;word-break:keep-all;color:#fff}
 .hb-space .hb-allpass-link{margin-top:88px}
 @media(max-width:768px){.hb-home .hb-allpass-description{font-size:14px;margin-top:18px}.hb-space .hb-allpass-link{margin-top:88px}}

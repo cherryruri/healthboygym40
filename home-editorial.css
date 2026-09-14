@@ -173,3 +173,5 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-home .hb-programs{height:auto;min-height:100svh;padding-bottom:50px}
 .hb-home .hb-programs .hb-program-track{flex:0 0 auto;height:45svh;min-height:300px;max-height:480px}
 .hb-programs .hb-program-card::after{display:none}
+
+.hb-programs .hb-program-card.is-intro-retiring{opacity:0;pointer-events:none}

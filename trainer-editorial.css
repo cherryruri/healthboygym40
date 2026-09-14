@@ -62,3 +62,7 @@ html body #trainer .coach-hero-copy h1{font-size:clamp(54px,6.3vw,92px)!importan
  html body #trainer .coach-career-button{margin-top:18px;font-size:12px;padding-bottom:6px;color:#fff;border-color:#fffa}
 }
 @media(max-width:768px) and (max-height:700px){html body #trainer .coach-bio{padding:16px 23px 22px}html body #trainer .coach-credentials li{font-size:11px}html body #trainer .coach-bio h2{font-size:30px!important;margin-bottom:12px}}
+
+html body #trainer .coach-career-button{display:none!important}
+html body #trainer .coach-profile .coach-credentials li{display:list-item!important}
+@media(max-width:768px){html body #trainer .coach-profile,html body #trainer .coach-profile-stage{height:var(--coach-scene-height,100svh);min-height:100svh}html body #trainer .coach-bio{max-height:none;padding:20px 26px 30px}html body #trainer .coach-credentials li{font-size:11px;line-height:1.65}html body #trainer .coach-bio h2{font-size:32px!important;margin-bottom:14px}html body #trainer .coach-credentials{gap:12px}}

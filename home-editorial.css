@@ -275,3 +275,6 @@ body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>foot
 /* Lower the complete composition without cropping the mobile video. */
 @media(max-width:768px){.hb-home .hb-programs{padding-top:54px;padding-bottom:74px}}
 @media(min-width:769px){.hb-home .hb-programs{padding-top:96px;padding-bottom:8px}}
+
+/* Native fling momentum must not bypass the authored chapter transitions. */
+html body .hb-home .hb-chapter{touch-action:pinch-zoom!important;overscroll-behavior:contain}

@@ -184,6 +184,15 @@ async function loadPost() {
   titleEl.textContent = data.title;
   writerEl.textContent = data.writerId || "회원";
   contentEl.innerHTML = data.content;
+  const cover = String(data.thumbnailDataUrl || "");
+  if (/^(https:\/\/|data:image\/(?:png|jpe?g|webp|gif);base64,)/i.test(cover) &&
+      ![...contentEl.querySelectorAll("img")].some(image => image.getAttribute("src") === cover)) {
+    const image = document.createElement("img");
+    image.src = cover;
+    image.alt = data.title || "게시글 사진";
+    image.decoding = "async";
+    contentEl.prepend(image);
+  }
 
   if (data.createdAt?.toDate) {
     dateEl.textContent = data.createdAt.toDate().toLocaleDateString("ko-KR");

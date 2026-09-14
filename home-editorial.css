@@ -187,3 +187,14 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 }
 
 .hb-ai.is-returning .hb-ai-video{opacity:0}
+
+/* Fit the desktop showcase into one viewport while retaining the mobile cards. */
+@media(min-width:769px){
+ .hb-home .hb-programs{height:100svh;min-height:0;padding:80px 0 24px;scroll-margin-top:0}
+ .hb-programs .hb-machine-browse{margin-top:12px}
+ .hb-programs .hb-machine-brands{margin:8px 0 0}
+ .hb-programs .hb-brand-row{padding:3px 0}
+ .hb-programs .hb-brand-item{height:20px}
+ .hb-programs .hb-brand-item img{max-height:20px}
+ .hb-home .hb-programs .hb-program-track{flex:1 1 0;height:auto;min-height:0;max-height:480px;margin-top:8px}
+}

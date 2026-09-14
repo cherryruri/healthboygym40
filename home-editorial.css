@@ -262,3 +262,12 @@ body.menu-open .hb-call-float,body.hb-bodydot-open .hb-call-float,body.hb-machin
 body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>footer,body:not(.location-only-view) #wrap>footer{display:none!important}
 
 @media(max-width:768px){.hb-home .hb-programs{padding-bottom:90px}}
+
+@media(max-width:768px){
+ .hb-home .hb-programs{padding-top:38px;padding-bottom:90px;scroll-margin-top:calc(-1 * var(--site-header-height,66px))}
+ .hb-home .hb-programs .hb-section-title h2{font-size:50px;line-height:1.12;letter-spacing:-.055em;font-weight:650}
+ .hb-programs .hb-machine-browse{margin-top:22px;padding:10px 19px}
+ .hb-programs .hb-machine-brands{margin:24px 0 0}
+ .hb-programs .hb-brand-row{padding:5px 0}
+ .hb-home .hb-programs .hb-program-track{margin-top:24px}
+}

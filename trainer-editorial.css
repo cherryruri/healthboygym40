@@ -19,3 +19,19 @@ body:not(.location-only-view) footer{display:none!important}
 @media(min-width:1500px){.coach-credentials{grid-template-columns:1fr 1fr;gap:25px}.coach-credentials li{font-size:14px}.coach-credentials h3{font-size:13px}}
 @media(max-width:768px){html.trainer-only-view #trainer.trainer-editorial{padding-top:66px!important}#trainer .coach-hero{height:calc(100svh - 66px);min-height:480px;border-bottom-right-radius:75px}.coach-hero-copy{left:25px;right:22px;top:24%}.coach-hero-copy>p{font-size:10px;margin-bottom:22px}html body #trainer .coach-hero-copy h1{font-size:30px!important;line-height:1.5!important;word-break:keep-all}.coach-hero-media video{object-position:55% center}.coach-controls{gap:14px;margin-top:45px}.coach-controls i{width:55px}.coach-scroll-cue{left:25px;bottom:35px;font-size:8px}html body #trainer .coach-mindset-stage p{font-size:25px!important;line-height:1.65!important}.coach-mindset-stage{padding:75px 22px}.coach-index{gap:8px;padding:25px 18px}.coach-index a{font-size:10px}.coach-profile{height:200svh}.coach-profile-stage{grid-template-columns:1fr;grid-template-rows:40% 60%;height:100svh}.coach-portrait{grid-column:1;grid-row:1}.coach-portrait img{object-fit:contain;object-position:center top;background:#e7e7e7}.coach-bio{grid-column:1;grid-row:2;padding:24px 24px 28px;justify-content:flex-start;overscroll-behavior:auto}.coach-profile-number{font-size:9px;margin-bottom:12px}.coach-role{font-size:10px;margin-bottom:6px}html body #trainer .coach-bio h2{font-size:29px!important;margin-bottom:18px}.coach-credentials li{font-size:11px;line-height:1.65}.coach-credentials h3{font-size:11px}.coach-credentials{gap:18px}.coach-shutter{width:100%;height:50%;left:0;right:0}.coach-shutter-left{top:0}.coach-shutter-right{top:50%}}
 @media(prefers-reduced-motion:reduce){.coach-hero-media video{transition:none}}
+
+/* The filled statement now flows directly into the opening portrait panels. */
+.coach-profile-stage{--reveal-duration:1.15s}.coach-shutter{transition:transform var(--reveal-duration) cubic-bezier(.22,.61,.36,1)}.coach-portrait img{transition:transform 1.35s cubic-bezier(.22,.61,.36,1)}.coach-bio{transition:opacity .8s ease,transform 1s cubic-bezier(.22,.61,.36,1);opacity:var(--bio-visible,0);transform:translateY(calc((1 - var(--bio-visible,0))*22px))}
+@media(max-width:768px){
+ .coach-profile{height:auto;min-height:100svh;background:#191919}
+ .coach-profile-stage{position:relative;height:auto;min-height:100svh;grid-template-rows:58svh auto;overflow:hidden}
+ .coach-portrait{grid-row:1;min-height:58svh}.coach-portrait img{position:absolute;inset:0;object-fit:cover;object-position:center 18%;width:100%;height:100%}
+ .coach-portrait:after{content:'';position:absolute;inset:60% 0 0;background:linear-gradient(transparent,#191919)}
+ .coach-bio{grid-row:2;overflow:visible;padding:12px 28px 58px;position:relative;z-index:1;margin-top:-28px;background:transparent}
+ .coach-profile-number{margin-bottom:22px;letter-spacing:.14em;color:#bcbcbc}.coach-role{font-size:11px;letter-spacing:.04em;color:#aaa}
+ html body #trainer .coach-bio h2{font-size:34px!important;line-height:1.25!important;margin-bottom:30px}
+ .coach-credentials{gap:28px}.coach-credentials h3{font-size:12px;letter-spacing:.06em;color:#aaa;padding-bottom:10px;border-bottom:1px solid #ffffff24;margin-bottom:12px}.coach-credentials li{font-size:13px;line-height:1.9;color:#f1f1f1}
+ .coach-shutter{width:50%;height:100%;top:0}.coach-shutter-left{left:0;right:auto;top:0}.coach-shutter-right{left:50%;right:0;top:0}
+ .coach-profile+.coach-profile{border-top:1px solid #333}
+}
+@media(prefers-reduced-motion:reduce){.coach-shutter{transition-duration:.35s}.coach-bio,.coach-portrait img{transition-duration:.35s}}

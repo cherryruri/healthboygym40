@@ -248,3 +248,9 @@ body.loaded .hb-call-float{opacity:1;visibility:visible}
 .hb-call-float:focus-visible{outline:2px solid #d9ca9f;outline-offset:4px}
 body.menu-open .hb-call-float,body.hb-bodydot-open .hb-call-float,body.hb-machine-open .hb-call-float{visibility:hidden}
 @media(max-width:768px){.hb-call-float{right:16px;bottom:calc(18px + env(safe-area-inset-bottom));width:52px;height:52px}}
+
+.hb-home .hb-welcome-copy>.hb-welcome-eyebrow{font-family:inherit;font-size:12px;font-weight:400;letter-spacing:.18em;margin:0 0 16px;line-height:normal}
+.hb-page-nav{width:3px;height:140px;right:26px;pointer-events:none;mix-blend-mode:difference}
+.hb-page-track{position:relative;width:100%;height:100%;border-radius:3px;background:#ffffff40;overflow:hidden}
+.hb-page-fill{position:absolute;inset:0;display:block;background:#fff;border-radius:inherit;transform:scaleY(var(--page-progress,.142857));transform-origin:top;transition:transform .12s linear}
+@media(max-width:768px){.hb-page-nav{right:16px;height:112px}}

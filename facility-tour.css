@@ -2,7 +2,7 @@
 .hb-home #facility.hb-facility{height:auto;min-height:0;overflow:visible;margin:0!important;background:#050505;color:#fff}
 #facilityTour.hb-facility-stack{position:relative;background:#050505;height:610svh}
 .hb-facility-stage{position:sticky;top:0;height:100svh;overflow:hidden;isolation:isolate;background:#050505}
-.hb-home:has(.hb-facility.is-current) .hb-page-nav{visibility:hidden}
+
 .hb-home #facility .hb-stack-intro-title,.hb-home #facility .hb-facility-card-title{font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:700;line-height:1.12;letter-spacing:-.055em;text-align:center;color:#fff;margin:0;word-break:keep-all}
 .hb-home #facility .hb-stack-intro-title{position:absolute;z-index:0;top:50%;left:0;width:100%;padding:0 20px;transform:translateY(calc(-50% + 32svh)) scale(4.4);opacity:0;pointer-events:none;will-change:transform}
 .hb-home #facility .hb-stack-intro-title.is-settled{transform:translateY(-50%) scale(1);opacity:1}

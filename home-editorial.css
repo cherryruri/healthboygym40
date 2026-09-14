@@ -221,3 +221,8 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
  .hb-home .hb-space h2{font-size:50px}
  .hb-space .hb-allpass-link{margin-top:24px}
 }
+
+/* Supporting copy follows the same typography as the body-analysis description. */
+.hb-home .hb-allpass-description{position:absolute;top:100%;left:0;width:100%;padding:0 24px;margin:22px 0 0;font-family:inherit;font-size:18px;font-weight:400;line-height:1.8;letter-spacing:normal;word-break:keep-all;color:#fff}
+.hb-space .hb-allpass-link{margin-top:88px}
+@media(max-width:768px){.hb-home .hb-allpass-description{font-size:14px;margin-top:18px}.hb-space .hb-allpass-link{margin-top:88px}}

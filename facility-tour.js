@@ -18,9 +18,16 @@
     introAnimation = intro.animate([
       {transform:`translateY(calc(-50% + 32svh)) scale(${scale})`,opacity:1},
       {transform:'translateY(-50%) scale(1)',opacity:1}
-    ], {duration:1400,delay:350,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
-    introTimer = setTimeout(finishIntro, 1750);
+    ], {duration:1150,delay:180,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
+    introTimer = setTimeout(finishIntro, 1330);
   }
+  section.addEventListener('hb-reverse-intro', () => {
+    finishIntro();
+    introAnimation = intro.animate([
+      {transform:'translateY(-50%) scale(1)',opacity:1},
+      {transform:`translateY(calc(-50% + 32svh)) scale(${innerWidth <= 768 ? 4 : 4.4})`,opacity:1}
+    ], {duration:550,easing:'cubic-bezier(.64,0,.78,.39)',fill:'forwards'});
+  });
   function hideLabel(card) {
     clearTimeout(labelTimers.get(card));labelTimers.delete(card);card.classList.remove('is-caption-visible');
   }

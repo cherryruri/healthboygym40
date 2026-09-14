@@ -20,6 +20,9 @@ function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMo
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
  if(index===4&&home.querySelector('.hb-programs').classList.contains('is-current')){goDarkScene(4);return;}
+ if(index===3&&chapters[4].classList.contains('is-current')){chapters[4].dispatchEvent(new Event('hb-reverse-intro'));goDarkScene(3);return;}
+ if(index===5&&chapters[4].classList.contains('is-current')){goDarkScene(5);return;}
+ if(index===4&&chapters[5].classList.contains('is-current')){goDarkScene(4,true);return;}
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:index===4&&nearest()===5?topOf(chapters[4])+chapters[4].offsetHeight-innerHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
  if(nearest()===2&&index===3)beginMorph(target);
  if(index===2&&home.querySelector('.hb-programs').classList.contains('is-current'))beginMorph(target,true);
@@ -28,9 +31,9 @@ function go(index){
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
  motionFrame=requestAnimationFrame(tick);
 }
-function goDarkScene(index){
+function goDarkScene(index,atEnd=false){
  const surface=document.createElement('div');surface.className='hb-scene-fade';surface.setAttribute('aria-hidden','true');document.body.appendChild(surface);sceneFade=surface;
- const start=performance.now(),duration=1200,target=topOf(chapters[index]);let switched=false;
+ const start=performance.now(),duration=1100,target=topOf(chapters[index])+(atEnd?chapters[index].offsetHeight-innerHeight:0);let switched=false;
  prepareAllpass();lockedUntil=start+1400;document.documentElement.classList.add('hb-page-moving');
  function tick(now){
   const t=clamp((now-start)/duration);

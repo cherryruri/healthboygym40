@@ -226,7 +226,7 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-home .hb-challenge{height:100svh;min-height:560px;overflow:hidden;background:#111;color:#fff}
 .hb-challenge-video{object-position:center top;transform:scale(1.18);transform-origin:center top}
 .hb-challenge-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0006,#0001 55%,#0005)}
-.hb-challenge-copy{position:absolute;inset:16% 9% 13% 8%;display:flex;flex-direction:column;align-items:flex-end;color:white;opacity:0;transform:translateY(25px);transition:opacity .85s ease,transform 1s ease}
+.hb-challenge-copy{position:absolute;inset:16% 9% 13% 8%;display:flex;flex-direction:column;align-items:flex-end;color:white;opacity:0;transform:translateY(25px);transition:opacity .85s ease .35s,transform 1s ease .35s}
 .hb-challenge.is-current .hb-challenge-copy{opacity:1;transform:none}
 .hb-home .hb-challenge-copy h2{margin-top:12px;font-family:Pretendard,Arial,sans-serif;font-size:clamp(54px,6.3vw,92px);font-weight:650;line-height:1.12;letter-spacing:-.055em;color:#fff}
 .hb-challenge-copy>div{align-self:flex-start;margin-top:auto}
@@ -234,7 +234,17 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-horizontal-scene.hb-home{position:fixed;inset:0;z-index:99997;overflow:hidden;background:#050505;pointer-events:none}
 .hb-horizontal-scene.hb-home>.hb-chapter{position:absolute;inset:0;height:100%;min-height:0;will-change:transform}
 .hb-horizontal-scene .hb-challenge-copy{opacity:1;transform:none;transition:none}
+.hb-horizontal-scene .hb-challenge.is-slide-entering .hb-challenge-copy{opacity:0;transform:translateY(25px);transition:none}
 @media(max-width:768px){.hb-challenge-copy{inset:27% 35px 12% 25px}.hb-home .hb-challenge-copy h2{font-size:50px}.hb-home .hb-challenge-copy p{font-size:14px}}
 .hb-home .hb-allpass-description{position:absolute;top:100%;left:0;width:100%;padding:0 24px;margin:22px 0 0;font-family:inherit;font-size:18px;font-weight:400;line-height:1.8;letter-spacing:normal;word-break:keep-all;color:#fff}
 .hb-space .hb-allpass-link{margin-top:88px}
 @media(max-width:768px){.hb-home .hb-allpass-description{font-size:14px;margin-top:18px}.hb-space .hb-allpass-link{margin-top:88px}}
+
+/* A single, discreet phone action, clear of the bottom safe area. */
+.hb-call-float{position:fixed;right:24px;bottom:calc(24px + env(safe-area-inset-bottom));z-index:99996;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;border:1px solid #c9b98b99;background:linear-gradient(145deg,#343833,#141713);color:#f6f3e9;box-shadow:0 6px 24px #0004,inset 0 1px 0 #ffffff20;text-decoration:none;transition:transform .2s,box-shadow .2s;opacity:0;visibility:hidden}
+body.loaded .hb-call-float{opacity:1;visibility:visible}
+.hb-call-float svg{width:23px;height:23px;fill:currentColor}
+.hb-call-float:hover{transform:translateY(-3px);box-shadow:0 10px 28px #0005}
+.hb-call-float:focus-visible{outline:2px solid #d9ca9f;outline-offset:4px}
+body.menu-open .hb-call-float,body.hb-bodydot-open .hb-call-float,body.hb-machine-open .hb-call-float{visibility:hidden}
+@media(max-width:768px){.hb-call-float{right:16px;bottom:calc(18px + env(safe-area-inset-bottom));width:52px;height:52px}}

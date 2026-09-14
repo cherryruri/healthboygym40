@@ -47,7 +47,7 @@ function goHorizontalScene(fromIndex,toIndex){
  const source=chapters[fromIndex],destination=chapters[toIndex],target=topOf(destination),direction=toIndex>fromIndex?1:-1;horizontalActive=true;
  const surface=document.createElement('div');surface.className='hb-home hb-horizontal-scene';surface.setAttribute('aria-hidden','true');surface.inert=true;
  const panels=[source,destination].map(section=>{
-  const panel=section.cloneNode(true);panel.removeAttribute('id');panel.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));panel.classList.add('is-current');
+  const panel=section.cloneNode(true);panel.removeAttribute('id');panel.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));panel.classList.add('is-current');if(section===destination)panel.classList.add('is-slide-entering');
   panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i],marker=document.createComment('video-home');original.before(marker);slideVideos.push({video:original,marker});v.replaceWith(original);if(!original.getAttribute('src'))original.src=original.dataset.src;original.play().catch(()=>{});});
   surface.appendChild(panel);return panel;
  });
@@ -163,8 +163,15 @@ window.addEventListener('touchend',()=>touchStart=null,{passive:true});
 window.addEventListener('touchcancel',()=>touchStart=null,{passive:true});
 window.addEventListener('keydown',e=>{if(!ready()||e.target.closest('a,button,input,textarea,select,[contenteditable]'))return;const direction=['ArrowDown','PageDown',' '].includes(e.key)?1:['ArrowUp','PageUp'].includes(e.key)?-1:0;if(!direction||!inChapters(direction))return;e.preventDefault();if(performance.now()>=lockedUntil)move(direction);});
 const ai=home.querySelector('.hb-ai'),aiVideo=ai.querySelector('video');
-aiState={visible:false,paused:false,advanced:false};
-function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=0;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}
+aiState={visible:false,paused:false,advanced:false,primed:false};
+const aiStart=1;
+aiVideo.style.opacity='0';
+function primeAi(){aiVideo.currentTime=aiStart;}
+aiVideo.addEventListener('loadedmetadata',primeAi);
+aiVideo.addEventListener('seeked',()=>{if(aiVideo.currentTime>=aiStart-.05){aiState.primed=true;aiVideo.style.opacity='1';syncAiPlayback();}});
+new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!aiVideo.getAttribute('src')){aiVideo.preload='auto';aiVideo.src=aiVideo.dataset.src;aiVideo.load();}},{rootMargin:'100% 0px'}).observe(ai);
+if(aiVideo.readyState>=1)primeAi();
+function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=aiStart;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiState.primed&&aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}
 function advanceAi(){if(aiState.visible&&!aiState.advanced&&!aiState.paused&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')){aiState.advanced=true;go(3);}}
 aiVideo.addEventListener('ended',advanceAi);document.addEventListener('visibilitychange',syncAiPlayback);
 const cards=[...home.querySelectorAll('.hb-program-card')],track=home.querySelector('.hb-program-track'),status=home.querySelector('.hb-machine-status');let selected=0,autoSlideTimer=0;

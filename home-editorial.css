@@ -204,8 +204,8 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 .hb-home .hb-welcome h1{margin:0}
 @media(max-width:768px){.hb-welcome-copy{left:25px;right:35px}}
 
-.hb-welcome-line{white-space:nowrap}
-@media(max-width:768px){.hb-home .hb-welcome h1{font-size:clamp(18px,calc((100vw - 76px)/10.5),50px);line-height:1.4}}
+.hb-welcome-line{white-space:normal;font:inherit;letter-spacing:inherit}
+.hb-home .hb-welcome h1,.hb-home .hb-pt-copy h2{font-family:Pretendard,Arial,sans-serif;font-weight:650;line-height:1.12;letter-spacing:-.055em}
 
 .hb-welcome-copy>.hb-welcome-description{margin:24px 0 0;font-size:18px;line-height:1.8;letter-spacing:normal;color:#fff}
 .hb-space{background:#050505}

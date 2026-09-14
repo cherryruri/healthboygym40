@@ -3406,9 +3406,15 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
-  function stageLoaderIntro(){
-    const loader=document.querySelector('.logo-screen');if(!loader)return;
-    requestAnimationFrame(()=>{setTimeout(()=>loader.classList.add('logo-visible'),240);setTimeout(()=>loader.classList.add('is-wiping'),1480);});
+  function visibleDelay(duration){
+    return new Promise(resolve=>{let elapsed=0,last=performance.now();function tick(now){if(!document.hidden)elapsed+=Math.min(now-last,100);last=now;if(elapsed>=duration)resolve();else requestAnimationFrame(tick);}requestAnimationFrame(tick);});
+  }
+  async function stageLoaderIntro(){
+    const loader=document.querySelector('.logo-screen');if(!loader){openMain();return;}
+    await document.fonts.ready;
+    await visibleDelay(240);loader.classList.add('logo-visible');
+    await visibleDelay(1240);loader.classList.add('is-wiping');
+    await visibleDelay(1380);openMain();
   }
 
   function scrollToHashTarget(){
@@ -3653,64 +3659,21 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   }
 
-  function openMain(){
-
-    const loader =
-      document.querySelector(".logo-screen");
-
-    const mainContent =
-      document.querySelector(".main-content");
-
-    if(mainContent){
-      mainContent.style.display = "block";
+  async function openMain(){
+    const loader=document.querySelector('.logo-screen'),mainContent=document.querySelector('.main-content');
+    if(mainContent)mainContent.style.display='block';
+    if(loader){
+      setLoaderTarget();loader.classList.add('is-wiping','logo-visible','logo-on-white');
+      await visibleDelay(innerWidth<=768?640:120);
+      setLoaderTarget();document.body.classList.add('loader-docking');loader.classList.add('dock-to-logo');
+      await visibleDelay(1240);
+      const welcomeVideo=document.querySelector('.hb-welcome-video');
+      if(welcomeVideo&&welcomeVideo.dataset.ready!=='true'&&!welcomeVideo.error){
+        await new Promise(resolve=>{const finish=()=>{clearTimeout(timer);welcomeVideo.removeEventListener('hb-welcome-ready',finish);welcomeVideo.removeEventListener('error',finish);resolve();};const timer=setTimeout(finish,12000);welcomeVideo.addEventListener('hb-welcome-ready',finish,{once:true});welcomeVideo.addEventListener('error',finish,{once:true});});
+      }
     }
-
-    if(!loader || document.documentElement.classList.contains('skip-site-loader')){
-      if(loader)loader.style.display='none';
-      document.body.classList.add('loaded','hero-reveal-start','hero-step-line','hero-step-kicker','hero-step-message','hero-step-button','hero-step-scroll','hero-sequence-complete');
-      startSite();
-      initHashNavigation();
-      queueHashScroll();
-      return;
-    }
-
-    setLoaderTarget();
-    const isMobileLoader =
-      window.innerWidth <= 768;
-
-    const mobileBlackLogoHold =
-      isMobileLoader ? 640 : 0;
-
-    requestAnimationFrame(()=>{
-
-      setLoaderTarget();
-      loader.classList.add("is-wiping", "logo-visible", "logo-on-white");
-
-      setTimeout(()=>{
-
-        document.body.classList.add("loader-docking");
-        loader.classList.add("dock-to-logo");
-
-      }, mobileBlackLogoHold);
-
-    });
-
-    setTimeout(()=>{
-
-      startHeroRevealSequence();
-      loader.classList.add("release");
-      startSite();
-      initHashNavigation();
-      queueHashScroll();
-
-    },1240 + mobileBlackLogoHold);
-
-    setTimeout(()=>{
-
-      loader.style.display = "none";
-
-    },1880 + mobileBlackLogoHold);
-
+    startHeroRevealSequence();if(loader)loader.classList.add('release');startSite();initHashNavigation();queueHashScroll();
+    if(loader){await visibleDelay(680);loader.style.display='none';}
   }
 
   window.addEventListener("resize", ()=>{
@@ -3727,8 +3690,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   initLogoLoaderReplay();
   initCinematicHeader();
-  if(document.documentElement.classList.contains('skip-site-loader')) setTimeout(openMain,0);
-  else { stageLoaderIntro(); setTimeout(openMain, 2860); }
+  stageLoaderIntro();
 
 
 

@@ -7,16 +7,26 @@ function paint(){frame=0;const h=innerHeight;let active=0;chapters.forEach((el,i
 function requestPaint(){if(!frame)frame=requestAnimationFrame(paint)}addEventListener('scroll',requestPaint,{passive:true});addEventListener('resize',requestPaint);new MutationObserver(requestPaint).observe(document.body,{attributes:true,attributeFilter:['class']});paint();
 function playback(){if(inView&&!paused&&!document.hidden){if(!video.src)video.src=video.dataset.hbVideo;video.play().catch(()=>{});}else video.pause();toggle.textContent=paused?'▶':'Ⅱ';toggle.setAttribute('aria-label','상원 팀장님 영상 '+(paused?'재생':'일시정지'));}
 new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;playback()},{rootMargin:'100px'}).observe(pt);toggle.addEventListener('click',()=>{paused=!paused;playback()});document.addEventListener('visibilitychange',playback);
-const welcome=home.querySelector('.hb-welcome'),welcomeVideo=home.querySelector('.hb-welcome-video');let welcomeVisible=true;
-function welcomePlayback(){if(welcomeVisible&&!document.hidden)welcomeVideo.play().catch(()=>{});else welcomeVideo.pause();}
-new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback()}).observe(welcome);document.addEventListener('visibilitychange',welcomePlayback);
+const welcome=home.querySelector('.hb-welcome'),welcomeVideo=home.querySelector('.hb-welcome-video');let welcomeVisible=true,welcomePrimed=false;
+const welcomeStart=4;
+function welcomePlayback(){if(welcomePrimed&&welcomeVisible&&!document.hidden&&document.body.classList.contains('loaded'))welcomeVideo.play().catch(()=>{});else welcomeVideo.pause();}
+function markWelcomeReady(){if(welcomeVideo.currentTime<welcomeStart-.1)return;welcomePrimed=true;welcomeVideo.dataset.ready='true';welcomeVideo.style.opacity='1';welcomeVideo.dispatchEvent(new Event('hb-welcome-ready'));welcomePlayback();}
+welcomeVideo.style.opacity='0';
+welcomeVideo.addEventListener('loadedmetadata',()=>{welcomeVideo.currentTime=welcomeStart;});
+welcomeVideo.addEventListener('seeked',markWelcomeReady);
+welcomeVideo.addEventListener('loadeddata',markWelcomeReady);
+welcomeVideo.addEventListener('ended',()=>{welcomeVideo.currentTime=welcomeStart;});
+if(welcomeVideo.readyState>=1)welcomeVideo.currentTime=welcomeStart;
+new IntersectionObserver(entries=>{welcomeVisible=entries[0].isIntersecting;welcomePlayback();}).observe(welcome);
+document.addEventListener('visibilitychange',welcomePlayback);
+new MutationObserver(welcomePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 let lockedUntil=0,lastWheel=0,touchStart=null;
 const topOf=el=>scrollY+el.getBoundingClientRect().top;
 function ready(){return document.body.classList.contains('loaded')&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!document.body.classList.contains('facility-gallery-open');}
 function nearest(){let index=0,distance=Infinity;chapters.forEach((c,i)=>{const d=Math.abs(c.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}
 function inChapters(direction){const top=topOf(home),bottom=top+home.offsetHeight;return scrollY>=top-2&&scrollY<bottom-2||(direction<0&&Math.abs(scrollY-bottom)<90);}
-let motionFrame=0,morph=null,introCard=null,sceneFade=null;
-function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();if(sceneFade){sceneFade.remove();sceneFade=null;}document.documentElement.classList.remove('hb-page-moving');}
+let motionFrame=0,morph=null,introCard=null,sceneFade=null,horizontalActive=false;const slideVideos=[];
+function cancelMotion(){slideVideos.splice(0).forEach(({video,marker})=>{marker.replaceWith(video);});horizontalActive=false;cancelAnimationFrame(motionFrame);motionFrame=0;finishMorph();if(sceneFade){sceneFade.remove();sceneFade=null;}document.documentElement.classList.remove('hb-page-moving');}
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
  if(index===4&&home.querySelector('.hb-programs').classList.contains('is-current')){goDarkScene(4);return;}
@@ -34,11 +44,11 @@ function go(index){
  motionFrame=requestAnimationFrame(tick);
 }
 function goHorizontalScene(fromIndex,toIndex){
- const source=chapters[fromIndex],destination=chapters[toIndex],target=topOf(destination),direction=toIndex>fromIndex?1:-1;
+ const source=chapters[fromIndex],destination=chapters[toIndex],target=topOf(destination),direction=toIndex>fromIndex?1:-1;horizontalActive=true;
  const surface=document.createElement('div');surface.className='hb-home hb-horizontal-scene';surface.setAttribute('aria-hidden','true');surface.inert=true;
  const panels=[source,destination].map(section=>{
   const panel=section.cloneNode(true);panel.removeAttribute('id');panel.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));panel.classList.add('is-current');
-  panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i];v.src=original.currentSrc||original.dataset.src;v.muted=true;v.loop=true;v.addEventListener('loadedmetadata',()=>{v.currentTime=original.currentTime;v.play().catch(()=>{});},{once:true});});
+  panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i],marker=document.createComment('video-home');original.before(marker);slideVideos.push({video:original,marker});v.replaceWith(original);if(!original.getAttribute('src'))original.src=original.dataset.src;original.play().catch(()=>{});});
   surface.appendChild(panel);return panel;
  });
  document.body.appendChild(surface);sceneFade=surface;
@@ -63,12 +73,12 @@ function goDarkScene(index,atEnd=false){
 }
 const allpassSection=home.querySelector('.hb-space'),allpassVideo=allpassSection.querySelector('video');let allpassVisible=false;
 function prepareAllpass(){if(!allpassVideo.getAttribute('src')){allpassVideo.src=allpassVideo.dataset.src;allpassVideo.load();}}
-function allpassPlayback(){if(allpassVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){prepareAllpass();allpassVideo.play().catch(()=>{});}else allpassVideo.pause();}
+function allpassPlayback(){if(horizontalActive)return;if(allpassVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){prepareAllpass();allpassVideo.play().catch(()=>{});}else allpassVideo.pause();}
 new IntersectionObserver(entries=>{if(entries[0].isIntersecting)prepareAllpass();},{rootMargin:'100% 0px'}).observe(allpassSection);
 new IntersectionObserver(entries=>{allpassVisible=entries[0].isIntersecting;allpassPlayback();}).observe(allpassSection);
 document.addEventListener('visibilitychange',allpassPlayback);new MutationObserver(allpassPlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 const challengeSection=home.querySelector('.hb-challenge'),challengeVideo=challengeSection.querySelector('video');let challengeVisible=false;
-function challengePlayback(){if(challengeVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){if(!challengeVideo.getAttribute('src'))challengeVideo.src=challengeVideo.dataset.src;challengeVideo.play().catch(()=>{});}else challengeVideo.pause();}
+function challengePlayback(){if(horizontalActive)return;if(challengeVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){if(!challengeVideo.getAttribute('src'))challengeVideo.src=challengeVideo.dataset.src;challengeVideo.play().catch(()=>{});}else challengeVideo.pause();}
 new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!challengeVideo.getAttribute('src')){challengeVideo.src=challengeVideo.dataset.src;challengeVideo.load();}},{rootMargin:'100% 0px'}).observe(challengeSection);
 new IntersectionObserver(entries=>{challengeVisible=entries[0].isIntersecting;challengePlayback();}).observe(challengeSection);
 document.addEventListener('visibilitychange',challengePlayback);new MutationObserver(challengePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});

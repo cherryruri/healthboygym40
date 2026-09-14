@@ -20,7 +20,7 @@ function cancelMotion(){cancelAnimationFrame(motionFrame);motionFrame=0;finishMo
 function go(index){
  cancelMotion();index=Math.max(0,Math.min(chapters.length,index));chapters.forEach(c=>c.classList.remove('is-leaving'));if(nearest()===2&&index===3)home.querySelector('.hb-ai').classList.add('is-leaving');
  const from=scrollY,target=index===chapters.length?topOf(home)+home.offsetHeight:topOf(chapters[index]),start=performance.now(),duration=1250;
- // Machine cards use only their own video footage during entry.
+ if(nearest()===2&&index===3)beginMorph(target);
  lockedUntil=start+(index===1?2350:1400);
  document.documentElement.classList.add('hb-page-moving');
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);window.scrollTo({top:from+(target-from)*ease,behavior:'instant'});updateMorph(ease,t);if(t<1)motionFrame=requestAnimationFrame(tick);else{cancelMotion();requestPaint();}}
@@ -31,9 +31,10 @@ function beginMorph(target){
  program.classList.add('is-morph-target');const card=program.querySelector('.hb-program-card[data-position="0"]'),r=card.getBoundingClientRect(),surface=document.createElement('div'),canvas=document.createElement('canvas');
  surface.className='hb-video-morph';surface.setAttribute('aria-hidden','true');canvas.width=source.videoWidth;canvas.height=source.videoHeight;
  try{canvas.getContext('2d').drawImage(source,0,0);}catch(e){program.classList.remove('is-morph-target');return;}
+ const targetVideo=card.querySelector('video');if(!targetVideo.getAttribute('src'))targetVideo.src=targetVideo.dataset.machineSrc;if(!program.classList.contains('is-motion-paused'))targetVideo.play().catch(()=>{});
  surface.appendChild(canvas);document.body.appendChild(surface);morph={surface,program,width:innerWidth,height:innerHeight,to:{left:r.left,top:r.top-(target-scrollY),width:r.width,height:r.height}};updateMorph(0,0);
 }
-function updateMorph(ease,t){if(!morph)return;const m=morph,d=m.to;Object.assign(m.surface.style,{left:d.left*ease+'px',top:d.top*ease+'px',width:m.width+(d.width-m.width)*ease+'px',height:m.height+(d.height-m.height)*ease+'px',borderRadius:14*ease+'px',opacity:String(t<.8?1:Math.max(0,(1-t)/.2))});}
+function updateMorph(ease,t){if(!morph)return;const m=morph,d=m.to;Object.assign(m.surface.style,{left:d.left*ease+'px',top:d.top*ease+'px',width:m.width+(d.width-m.width)*ease+'px',height:m.height+(d.height-m.height)*ease+'px',borderRadius:14*ease+'px',opacity:String(t<.9?1:Math.max(0,(1-t)/.1))});}
 function finishMorph(){if(!morph)return;morph.surface.remove();morph.program.classList.remove('is-morph-target');morph=null;}
 addEventListener('resize',cancelMotion);
 new MutationObserver(()=>{if(document.body.classList.contains('menu-open'))cancelMotion();}).observe(document.body,{attributes:true,attributeFilter:['class']});
@@ -51,8 +52,25 @@ aiState={visible:false,paused:false,advanced:false};
 function syncAiPlayback(){const r=ai.getBoundingClientRect(),visible=ai.classList.contains('is-current')&&Math.abs(r.top)<8;if(!visible){if(aiState.visible){aiVideo.pause();aiVideo.currentTime=0;aiState.paused=false;aiState.advanced=false;}aiState.visible=false;return;}aiState.visible=true;const allowed=!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')&&!aiState.paused;if(allowed){if(!aiVideo.getAttribute('src'))aiVideo.src=aiVideo.dataset.src;if(aiVideo.ended){advanceAi();}else if(aiVideo.paused)aiVideo.play().catch(()=>{});}else aiVideo.pause();}
 function advanceAi(){if(aiState.visible&&!aiState.advanced&&!aiState.paused&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open')){aiState.advanced=true;go(3);}}
 aiVideo.addEventListener('ended',advanceAi);document.addEventListener('visibilitychange',syncAiPlayback);
-const cards=[...home.querySelectorAll('.hb-program-card')],controls=home.querySelector('.hb-program-controls');let selected=0;function show(i){selected=(i+cards.length)%cards.length;cards.forEach((c,j)=>{let offset=(j-selected+cards.length)%cards.length;if(offset>cards.length/2)offset-=cards.length;c.dataset.position=offset;c.inert=Math.abs(offset)>1;c.querySelector('.hb-card-link').tabIndex=offset===0?0:-1;});controls.querySelector('span').textContent=String(selected+1).padStart(2,'0')+' / '+String(cards.length).padStart(2,'0');if(cardStateReady)syncCardVideos();}controls.querySelector('[aria-label="이전 머신"]').addEventListener('click',()=>show(selected-1));controls.querySelector('[aria-label="다음 머신"]').addEventListener('click',()=>show(selected+1));cards.forEach((c,i)=>c.querySelector('.hb-card-select').addEventListener('click',()=>show(i)));const track=home.querySelector('.hb-program-track');let touchX=null;track.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});track.addEventListener('touchend',e=>{if(touchX===null)return;const delta=e.changedTouches[0].clientX-touchX;if(Math.abs(delta)>50)show(selected+(delta<0?1:-1));touchX=null},{passive:true});show(0);
-function syncCardVideos(){const r=track.getBoundingClientRect(),visible=r.top<innerHeight&&r.bottom>0&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');cards.forEach(c=>{const v=c.querySelector('video');if(visible&&Number(c.dataset.position)===0&&!home.querySelector('.hb-programs').classList.contains('is-motion-paused')){if(!v.getAttribute('src'))v.src=v.dataset.machineSrc;if(v.paused)v.play().catch(()=>{});}else v.pause();});}
+const cards=[...home.querySelectorAll('.hb-program-card')],track=home.querySelector('.hb-program-track'),status=home.querySelector('.hb-machine-status');let selected=0;
+function show(i){
+ selected=(i+cards.length)%cards.length;
+ cards.forEach((c,j)=>{let offset=(j-selected+cards.length)%cards.length;if(offset>cards.length/2)offset-=cards.length;c.dataset.position=offset;c.inert=Math.abs(offset)>1;c.querySelector('.hb-card-link').tabIndex=offset===0?0:-1;});
+ status.textContent=cards[selected].querySelector('h3').textContent;
+ if(cardStateReady)syncCardVideos();
+}
+cards.forEach((c,i)=>c.querySelector('.hb-card-select').addEventListener('click',()=>show(i)));
+let touchX=null,mouseX=null,ignoreClickUntil=0;
+track.addEventListener('touchstart',e=>touchX=e.touches[0].clientX,{passive:true});
+track.addEventListener('touchend',e=>{if(touchX===null)return;const delta=e.changedTouches[0].clientX-touchX;if(Math.abs(delta)>35){show(selected+(delta<0?1:-1));ignoreClickUntil=performance.now()+350;}touchX=null;},{passive:true});
+track.addEventListener('touchcancel',()=>touchX=null,{passive:true});
+track.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button===0&&!e.target.closest('.hb-card-link'))mouseX=e.clientX;});
+document.addEventListener('pointerup',e=>{if(mouseX===null)return;const delta=e.clientX-mouseX;mouseX=null;if(Math.abs(delta)>35){show(selected+(delta<0?1:-1));ignoreClickUntil=performance.now()+350;}});
+document.addEventListener('pointercancel',()=>mouseX=null);
+track.addEventListener('click',e=>{if(performance.now()<ignoreClickUntil){e.preventDefault();e.stopImmediatePropagation();}},true);
+track.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();e.stopPropagation();show(selected+(e.key==='ArrowRight'?1:-1));}});
+show(0);
+function syncCardVideos(){const r=track.getBoundingClientRect(),visible=r.top<innerHeight&&r.bottom>0&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.body.classList.contains('hb-bodydot-open')&&!document.body.classList.contains('hb-machine-open');cards.forEach(c=>{const v=c.querySelector('video');if(visible&&Math.abs(Number(c.dataset.position))<=1&&!home.querySelector('.hb-programs').classList.contains('is-motion-paused')){if(!v.getAttribute('src'))v.src=v.dataset.machineSrc;if(v.paused)v.play().catch(()=>{});}else v.pause();});}
 cardStateReady=true;document.addEventListener('visibilitychange',syncCardVideos);syncCardVideos();
 
 const bodydotDialog=document.getElementById('hbBodydotDialog'),bodydotButton=home.querySelector('.hb-bodydot-link');
@@ -83,7 +101,7 @@ if(bodydotDialog&&bodydotButton){
 
 const machineSection=home.querySelector('.hb-programs'),machineMotion=home.querySelector('.hb-machine-motion-toggle'),machineDialog=document.getElementById('hbMachineDialog');
 function setMachineMotion(stopped){machineSection.classList.toggle('is-motion-paused',stopped);machineMotion.textContent=stopped?'▶':'Ⅱ';machineMotion.setAttribute('aria-pressed',String(stopped));machineMotion.setAttribute('aria-label',stopped?'로고와 미리보기 재생':'로고와 미리보기 일시정지');syncCardVideos();}
-setMachineMotion(matchMedia('(prefers-reduced-motion: reduce)').matches);
+setMachineMotion(false);
 machineMotion.addEventListener('click',()=>setMachineMotion(!machineSection.classList.contains('is-motion-paused')));
 if(machineDialog){
  const fullVideo=machineDialog.querySelector('video');let opener=null;

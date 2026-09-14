@@ -92,9 +92,21 @@ html.hb-page-moving{scroll-behavior:auto!important}
 .hb-programs.is-morph-target .hb-program-track{transform:none!important;opacity:1!important;transition:none!important}
 .hb-ai.is-leaving .hb-ai-video{opacity:0;clip-path:none;transition:none}
 
-/* Align the supporting copy with PT, including the space below its description. */
+/* Mirror PT: AI heading at upper left, supporting copy and action at lower right. */
 .hb-ai-copy{top:22%;bottom:auto}
-.hb-ai-description-wrap{position:absolute;left:8%;right:9%;bottom:calc(13% + 78px);color:#fff;pointer-events:none}
-.hb-ai-description-wrap>p{margin:0;letter-spacing:normal;word-break:keep-all}
+.hb-ai-description-wrap{position:absolute;left:8%;right:9%;bottom:13%;color:#fff;text-align:right;pointer-events:none}
+.hb-ai-description-wrap>p{margin:0 0 26px;letter-spacing:normal;word-break:keep-all}
 .hb-ai.is-leaving .hb-ai-description-wrap{opacity:0;transition:opacity .45s}
-@media(max-width:768px){.hb-ai-copy{top:27%;bottom:auto}.hb-ai-description-wrap{left:25px;right:35px;bottom:calc(12% + 72px)}}
+@media(max-width:768px){.hb-ai-copy{top:27%;bottom:auto}.hb-ai-description-wrap{left:25px;right:35px;bottom:12%}}
+
+.hb-bodydot-link{font-family:inherit;color:inherit;background:transparent;cursor:pointer}
+.hb-ai.is-current:not(.is-leaving) .hb-bodydot-link{pointer-events:auto}
+
+.hb-bodydot-dialog{position:fixed;inset:0;margin:auto;width:min(900px,calc(100vw - 32px));max-height:calc(100svh - 32px);padding:0;border:1px solid #ffffff40;border-radius:16px;background:#111;color:#fff;overflow:auto}
+.hb-bodydot-dialog::backdrop{background:#000c}
+.hb-bodydot-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px}
+.hb-bodydot-dialog-heading h2{margin:0;font-size:18px;color:#fff}
+.hb-bodydot-close{width:44px;height:44px;border:1px solid #ffffff80;border-radius:50%;background:transparent;color:#fff;font-size:28px;cursor:pointer}
+.hb-bodydot-dialog video{display:block;width:100%;max-height:calc(100svh - 110px);object-fit:contain;background:#000}
+body.hb-bodydot-open{overflow:hidden}
+.hb-bodydot-link:focus-visible,.hb-bodydot-close:focus-visible{outline:2px solid white;outline-offset:4px}

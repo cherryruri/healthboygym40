@@ -375,3 +375,31 @@ body.desktop-board.desktop-board.desktop-board .mall-carousel{height:clamp(540px
     width:58%!important;
   }
 }
+
+
+/* 2026-09-17: equal media frames, poster-filled video backgrounds, solid header */
+@media (min-width:769px){
+  body.desktop-board #site-header#site-header{
+    background:#050505!important;
+    background-color:#050505!important;
+    opacity:1!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+  .mall-slide,.mall-slide>img,.mall-interview-slide,.mall-interview-preview{width:100%;height:100%}
+  .mall-slide>img,.mall-interview-preview{display:block}
+  .mall-interview-slide{background:#343434!important}
+  .mall-interview-slide::before{
+    display:block!important;content:""!important;position:absolute!important;inset:-30px!important;z-index:0!important;
+    background-position:center!important;background-size:cover!important;background-repeat:no-repeat!important;
+    filter:blur(24px) brightness(.72) saturate(.82)!important;transform:scale(1.08)!important;opacity:1!important;
+  }
+  .mall-slide:nth-child(1).mall-interview-slide::before{background-image:url("member-tensecond-v3.jpg")!important}
+  .mall-slide:nth-child(2).mall-interview-slide::before{background-image:url("sangwon-tensecond-v3.jpg")!important}
+  .mall-interview-preview{
+    position:absolute!important;inset:0!important;z-index:1!important;object-fit:contain!important;
+    object-position:center!important;background:transparent!important;
+  }
+  .mall-interview-slide::after{z-index:2!important}
+  .mall-interview-slide .mall-slide-copy{z-index:3!important}
+}

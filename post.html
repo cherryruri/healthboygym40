@@ -5,15 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>게시글</title>
 
+
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
 <link rel="stylesheet" href="editor.css?v=20260618-type-scale">
 <link rel="stylesheet" href="post.css?v=20260709-request-answer1">
 
+
 <link rel="stylesheet" href="site-header.css?v=20260915-quick">
-<script src="site-header.js?v=20260915-quick" defer></script>
+<script src="site-header.js?v=20260917-globaldock1" defer></script>
 <link rel="stylesheet" href="saved-posts.css?v=1"><link rel="stylesheet" href="post-readable.css?v=1"></head>
 
+
 <body class="loaded readable-post">
+
 
 <header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
@@ -36,52 +40,69 @@
   </nav>
 </header>
 
+
 <main class="post-page">
 
+
   <section class="post-card">
+
 
     <div class="post-top">
       <a href="board.html" class="back-list">목록으로</a>
       <div id="postStatus" class="post-status">비밀글</div>
     </div>
 
+
     <h1 id="postTitle">불러오는 중...</h1>
+
 
     <div class="post-meta">
       <span id="postWriter">-</span>
       <span id="postDate">-</span>
     </div>
 
+
     <div id="postContent" class="post-content"></div>
+
 
       <div class="post-actions" id="postActions" hidden>
   <button id="editPostBtn">수정</button>
   <button id="deletePostBtn">삭제</button>
 </div>
 
+
 <!-- 🔥 여기부터 붙이기 -->
 <div class="comment-section">
 
+
   <h3>댓글</h3>
 
+
   <div id="commentList"></div>
+
 
   <div class="comment-input">
     <input type="text" id="commentText">
     <button id="commentBtn">등록</button>
   </div>
 
+
 </div>
+
+
 
 
   </section>
 
+
 </main>
+
 
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20260911-unified-board"></script>
 <script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
 <script type="module" src="post.js?v=20260915-readable"></script>
+
 
 </body>
 </html>

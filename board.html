@@ -5,19 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>게시판</title>
 
+
 <script>
   (() => {
     try {
-      const board = new URLSearchParams(location.search).get('board');
-      const introType = board === 'infoboard' ? 'info' : 'community';
-      const introKey = `hbg-board-intro-seen-v1:${introType}`;
+      const introKey = 'hbg-entry-intro-seen-v2';
 
-      if (localStorage.getItem(introKey) === '1') {
+
+      if (sessionStorage.getItem(introKey) === '1') {
         document.documentElement.classList.add('board-intro-seen');
+      } else {
+        window.addEventListener('load', () => sessionStorage.setItem(introKey, '1'), { once:true });
       }
     } catch (error) {}
   })();
 </script>
+
 
 <link rel="stylesheet" href="style.css?v=20260911-opening16">
 <link rel="stylesheet" href="board.css?v=20260721-motion-board2">
@@ -35,6 +38,7 @@
 <link rel="stylesheet" href="board-cinema-mobile.css?v=20260911-opening16">
 <link rel="stylesheet" href="community-unified.css?v=1"></head>
 <body class="loaded board-header-over-hero">
+
 
 <header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
@@ -57,10 +61,15 @@
   </nav>
 </header>
 
+
 <section class="board-page" data-board-mode="consult" data-board="free">
 <div class="board-layout">
 
+
   <div class="board-main">
+
+
+
 
 
 
@@ -90,6 +99,7 @@
       </a>
     </section>
 
+
     <section class="board-content-shell" aria-label="게시판 글 목록">
       <div class="board-header" id="boardContent">
         <span class="board-section-index">01 / COMMUNITY BOARD</span>
@@ -98,6 +108,7 @@
           <p id="boardDesc">헬스보이짐 수내점 회원님들의 자유로운 이야기와 후기를 확인하는 공간입니다.</p>
         </div>
       </div>
+
 
       <div class="board-toolbar">
         <div id="boardCategoryBar" class="board-category-bar">
@@ -116,6 +127,7 @@
         </div>
       </div>
 
+
       <div class="board-table">
         <div class="board-row board-head">
           <div>No</div>
@@ -128,19 +140,24 @@
         <div id="postList"></div>
       </div>
 
+
       <div id="pagination" class="pagination"></div>
     </section>
 
+
   </div>
+
 
 </div>
 </section>
+
 
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20260915-unified"></script>
 <script src="board-mobile-controls.js?v=20260911-colors15"></script>
 <script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script>
 <script type="module" src="board.js?v=20260915-scrap" defer></script>
+
 
 <script>
   window.addEventListener('load', () => {
@@ -159,22 +176,28 @@
 </script>
 
 
+
+
 <script>
   (() => {
     const hero = document.querySelector('.board-operation-hero');
 
+
     if (!hero) return;
+
 
     const syncBoardHeaderTone = () => {
       const heroBottom = hero.getBoundingClientRect().bottom;
       document.body.classList.toggle('board-header-over-hero', heroBottom > 82);
     };
 
+
     syncBoardHeaderTone();
     window.addEventListener('scroll', syncBoardHeaderTone, { passive: true });
     window.addEventListener('resize', syncBoardHeaderTone);
   })();
 </script>
+
 
 <script src="board-panel-20260721.js?v=20260911-colors15"></script>
 </body>

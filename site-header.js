@@ -44,6 +44,10 @@
 
 
 
+
+
+
+
 // Remember deliberate navigation before another page loads.
 document.addEventListener('click', event => {
  const link=event.target.closest('a[href]');if(!link)return;
@@ -53,6 +57,10 @@ document.addEventListener('click', event => {
   else sessionStorage.setItem('hb-internal-navigation','1');
  }catch(_){}
 },{capture:true});
+
+
+
+
 
 
 
@@ -126,5 +134,20 @@ document.addEventListener('click', event => {
   style.textContent='@media(min-width:769px){.travel-quick-dock{display:none!important}}@media(max-width:768px){body.global-mobile-quick-menu .travel-quick-actions{max-height:calc(100vh - 146px);overflow-y:auto;scrollbar-width:none;padding:4px}body.global-mobile-quick-menu .travel-quick-actions::-webkit-scrollbar{display:none}body.global-mobile-quick-menu .travel-quick-actions a{width:50px;height:50px;background:#f4c400!important;color:#161616!important;box-shadow:0 7px 18px rgba(0,0,0,.2)!important}body.global-mobile-quick-menu .travel-quick-toggle{background:#f4c400!important;color:#111!important}body.global-mobile-quick-menu .travel-quick-actions a:nth-child(n){transition-delay:0s!important}body.global-mobile-quick-menu .travel-quick-dock svg{width:24px;height:24px}}';
   document.head.append(style);
   const run=()=>{ensureDesktopMyPage();setTimeout(mountAllMobileMenus,120)};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+})();
+;(() => {
+  const media=matchMedia('(max-width:768px)');
+  if(!media.matches)return;
+  const restore=()=>{
+    document.body.classList.remove('global-mobile-quick-menu');
+    document.querySelectorAll('.travel-quick-dock').forEach(el=>el.remove());
+    const header=document.getElementById('site-header');
+    if(header)header.style.setProperty('display','block','important');
+  };
+  const style=document.createElement('style');
+  style.textContent='@media(max-width:768px){.travel-quick-dock{display:none!important}body #site-header#site-header{display:block!important}}';
+  document.head.append(style);
+  const run=()=>{restore();setTimeout(restore,180);setTimeout(restore,700);const observer=new MutationObserver(restore);observer.observe(document.body,{childList:true});};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();

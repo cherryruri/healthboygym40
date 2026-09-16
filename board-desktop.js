@@ -39,6 +39,18 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
  const arrow=direction=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+(direction==='left'?'m14 6-6 6 6 6':'m10 6 6 6-6 6')+'"/></svg>';
  hero.querySelector('.mall-prev').innerHTML=arrow('left');hero.querySelector('.mall-next').innerHTML=arrow('right');
  const mobileTabs=document.createElement('nav');mobileTabs.className='cinema-top-tabs';mobileTabs.setAttribute('aria-label','모바일 게시판 보기');mobileTabs.innerHTML='<a href="board.html?category=notice">공지문</a><a href="board.html?view=list">전체게시글</a>';/* Categories live in the single shared board bar. */
@@ -74,6 +86,6 @@
  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;updatePlayback();},{threshold:.1}).observe(hero);
  hero.addEventListener('slidechange',updatePlayback);hero.addEventListener('focusin',schedule);hero.addEventListener('focusout',()=>setTimeout(schedule,0));document.addEventListener('visibilitychange',updatePlayback);window.addEventListener('board-view-change',updatePlayback);media.addEventListener('change',updatePlayback);updatePlayback();
  const retailCarouselStyle=document.createElement('style');
- retailCarouselStyle.textContent='@media (min-width:769px){.mall-slide{transition:transform .72s cubic-bezier(.22,.72,.24,1),opacity .72s ease,filter .72s ease!important}.mall-prev,.mall-next{top:50%!important;transform:translateY(-50%)!important;width:72px!important;height:104px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#fff!important;filter:drop-shadow(0 2px 8px rgba(0,0,0,.7));opacity:.94!important}.mall-prev:hover,.mall-next:hover{background:rgba(0,0,0,.16)!important;opacity:1!important}.mall-prev svg,.mall-next svg{width:58px!important;height:58px!important;stroke-width:1.1!important}.mall-interview-preview{object-fit:contain!important;object-position:center!important;background:#050505!important}}';
+ retailCarouselStyle.textContent='@media (min-width:769px){.mall-slide{transition:transform .72s cubic-bezier(.22,.72,.24,1),opacity .72s ease,filter .72s ease!important}.mall-prev,.mall-next{display:grid!important;place-items:center!important;top:50%!important;transform:translateY(-50%)!important;width:72px!important;height:104px!important;z-index:20!important;border:0!important;border-radius:0!important;background:transparent!important;color:#fff!important;filter:drop-shadow(0 2px 8px rgba(0,0,0,.7));opacity:.94!important}.mall-prev{left:calc(26% - 36px)!important}.mall-next{right:calc(26% - 36px)!important}.mall-interview-pause,.mall-rotation-toggle{display:none!important}.mall-prev:hover,.mall-next:hover{background:rgba(0,0,0,.16)!important;opacity:1!important}.mall-prev svg,.mall-next svg{width:58px!important;height:58px!important;stroke-width:1.1!important}.mall-interview-preview{object-fit:contain!important;object-position:center!important;background:#050505!important}}';
  document.head.appendChild(retailCarouselStyle);
 })();

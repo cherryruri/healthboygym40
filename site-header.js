@@ -42,6 +42,8 @@
 })();
 
 
+
+
 // Remember deliberate navigation before another page loads.
 document.addEventListener('click', event => {
  const link=event.target.closest('a[href]');if(!link)return;
@@ -51,6 +53,8 @@ document.addEventListener('click', event => {
   else sessionStorage.setItem('hb-internal-navigation','1');
  }catch(_){}
 },{capture:true});
+
+
 
 
 (()=>{if(document.querySelector('.site-quick-actions'))return;const group=document.createElement('nav');group.className='site-quick-actions';group.setAttribute('aria-label','빠른 이동');const top=document.createElement('button');top.type='button';top.className='site-top-button';top.textContent='TOP';top.setAttribute('aria-label','맨 위로 이동');top.addEventListener('click',()=>{const event=new CustomEvent('site:top',{cancelable:true});if(window.dispatchEvent(event))window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})});const phone=document.querySelector('.hb-call-float')||document.createElement('a');phone.className='site-phone-button';phone.href='tel:050713802239';phone.setAttribute('aria-label','헬스보이짐 수내점 전화하기');phone.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>';group.append(top,phone);document.body.append(group)})();
@@ -77,4 +81,50 @@ document.addEventListener('click', event => {
   document.head.append(style);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(mount,0), {once:true});
   else setTimeout(mount,0);
+})();
+;(() => {
+  const ensureDesktopMyPage = () => {
+    if (matchMedia('(max-width: 768px)').matches) return;
+    const menu = document.querySelector('#site-header .menu');
+    if (!menu || menu.querySelector('a[href="mypage.html"]')) return;
+    const item = document.createElement('li');
+    item.className = 'mypage-menu';
+    item.innerHTML = '<a href="mypage.html">MY PAGE</a>';
+    const login = menu.querySelector('.login-menu');
+    menu.insertBefore(item, login || null);
+  };
+  const icons = {
+    home:'<path d="m3 11 9-8 9 8v9H3z"/><path d="M9 20v-6h6v6"/>',
+    about:'<path d="M4 21V5l8-3 8 3v16"/><path d="M8 9h1M8 13h1M15 9h1M15 13h1M10 21v-4h4v4"/>',
+    pass:'<path d="M4 6h16v4a2 2 0 0 0 0 4v4H4v-4a2 2 0 0 0 0-4z"/><path d="M12 6v12"/>',
+    space:'<path d="M3 10v4M6 8v8M18 8v8M21 10v4M6 12h12"/>',
+    trainer:'<circle cx="12" cy="8" r="3.5"/><path d="M5 21c.6-4.2 3-6.3 7-6.3s6.4 2.1 7 6.3"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    location:'<path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"/><circle cx="12" cy="10" r="2.5"/>',
+    board:'<path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+    mypage:'<circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/>',
+    login:'<path d="M10 4H5v16h5M14 8l4 4-4 4M8 12h10"/>'
+  };
+  const links = [
+    ['index.html','홈','home'],['company.html','회사소개','about'],['allpass.html','올패스','pass'],
+    ['index.html#facility','시설 투어','space'],['index.html#trainer','트레이너 소개','trainer'],
+    ['index.html#hours','운영 시간','clock'],['index.html#location','오시는 길','location'],
+    ['board.html','공지문/자유게시판','board'],['mypage.html','마이페이지','mypage'],['login.html','로그인','login']
+  ];
+  const mountAllMobileMenus = () => {
+    if (!matchMedia('(max-width: 768px)').matches) return;
+    document.body.classList.add('global-mobile-quick-menu');
+    let dock = document.querySelector('.travel-quick-dock');
+    if (!dock) { dock = document.createElement('nav'); dock.className='travel-quick-dock'; document.body.append(dock); }
+    dock.setAttribute('aria-label','전체 메뉴');
+    const actions = links.map(([href,label,key]) => '<a href="'+href+'" aria-label="'+label+'" title="'+label+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+icons[key]+'</svg></a>').join('');
+    dock.innerHTML = '<div class="travel-quick-actions">'+actions+'</div><button class="travel-quick-toggle" type="button" aria-label="전체 메뉴 열기" aria-expanded="false"><span>+</span></button><a class="travel-quick-phone" href="tel:050713802239" aria-label="전화하기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.36l3.2 1.05a1.5 1.5 0 0 1 1.03 1.43V20a1.5 1.5 0 0 1-1.5 1.5C10.17 21.5 2.5 13.83 2.5 4.5A1.5 1.5 0 0 1 4 3h2.68a1.5 1.5 0 0 1 1.43 1.03l1.05 3.2a1.5 1.5 0 0 1-.36 1.5z"/></svg></a>';
+    const toggle=dock.querySelector('.travel-quick-toggle');
+    toggle.addEventListener('click',()=>{const open=dock.classList.toggle('is-open');toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'전체 메뉴 닫기':'전체 메뉴 열기');});
+  };
+  const style=document.createElement('style');
+  style.textContent='@media(min-width:769px){.travel-quick-dock{display:none!important}}@media(max-width:768px){body.global-mobile-quick-menu .travel-quick-actions{max-height:calc(100vh - 146px);overflow-y:auto;scrollbar-width:none;padding:4px}body.global-mobile-quick-menu .travel-quick-actions::-webkit-scrollbar{display:none}body.global-mobile-quick-menu .travel-quick-actions a{width:50px;height:50px;background:#f4c400!important;color:#161616!important;box-shadow:0 7px 18px rgba(0,0,0,.2)!important}body.global-mobile-quick-menu .travel-quick-toggle{background:#f4c400!important;color:#111!important}body.global-mobile-quick-menu .travel-quick-actions a:nth-child(n){transition-delay:0s!important}body.global-mobile-quick-menu .travel-quick-dock svg{width:24px;height:24px}}';
+  document.head.append(style);
+  const run=()=>{ensureDesktopMyPage();setTimeout(mountAllMobileMenus,120)};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();

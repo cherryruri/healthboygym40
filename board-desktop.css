@@ -322,3 +322,12 @@ body.desktop-board.desktop-board.desktop-board .mall-carousel{height:clamp(540px
     width:48%!important;
   }
 }
+
+
+@media (min-width:769px){
+  body.desktop-board #site-header#site-header{
+    background:#050505!important;
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}

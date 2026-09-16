@@ -4,16 +4,17 @@
   if (!['infoboard','request','teen'].includes(requestedBoard) && requestedCategory !== 'request') return;
   const desktop = window.matchMedia('(min-width: 769px)');
 
+
   const body = document.body;
   const hero = document.querySelector('.board-operation-hero');
   const panel = document.querySelector('.board-content-shell');
   const trigger = document.querySelector('.board-operation-scroll');
   if (!hero || !panel || !trigger) return;
 
+
   const params = new URLSearchParams(location.search);
   const isInfoBoard = params.get('board') === 'infoboard';
-  const introType = isInfoBoard ? 'info' : 'community';
-  const introKey = `hbg-board-intro-seen-v1:${introType}`;
+  const introKey = 'hbg-entry-intro-seen-v2';
   const titleText = isInfoBoard ? 'INFO BOARD' : 'COMMUNITY';
   const title = document.getElementById('boardOperationTitle');
   const kickerLabel = document.querySelector('.board-operation-kicker span:last-child');
@@ -22,6 +23,7 @@
   const guideLabel = document.querySelector('.board-operation-label span');
   const sectionIndex = document.querySelector('.board-section-index');
 
+
   if (kickerLabel) kickerLabel.textContent = titleText;
   if (title) {
     title.setAttribute('aria-label', titleText);
@@ -29,6 +31,7 @@
       .map((letter, index) => `<span style="--letter:${index}">${letter === ' ' ? '&nbsp;' : letter}</span>`)
       .join('');
   }
+
 
   if (isInfoBoard) {
     if (lead) lead.innerHTML = '<span>센터 운영 정보를,</span> <span>한곳에서 공유합니다.</span>';
@@ -42,27 +45,34 @@
     if (sectionIndex) sectionIndex.textContent = '01 / INFO BOARD';
   }
 
+
   let hasSeenIntro = document.documentElement.classList.contains('board-intro-seen');
 
+
   try {
-    hasSeenIntro = localStorage.getItem(introKey) === '1';
-    if (!hasSeenIntro) localStorage.setItem(introKey, '1');
+    hasSeenIntro = sessionStorage.getItem(introKey) === '1';
+    if (!hasSeenIntro) sessionStorage.setItem(introKey, '1');
   } catch (error) {}
+
 
   if (!desktop.matches) return;
 
+
   body.classList.add('board-panel-ready');
   panel.setAttribute('tabindex', '-1');
+
 
   let active = hasSeenIntro;
   let introDismissed = hasSeenIntro;
   let locked = false;
   let touchStartY = 0;
 
+
   const lockBriefly = () => {
     locked = true;
     window.setTimeout(() => { locked = false; }, 760);
   };
+
 
   const showBoard = (updateHash = true) => {
     if (active || locked) return;
@@ -77,6 +87,7 @@
     window.setTimeout(() => panel.focus({ preventScroll:true }), 600);
   };
 
+
   const showIntro = (updateHash = true) => {
     if (!active || locked || introDismissed) return;
     active = false;
@@ -88,10 +99,12 @@
     window.setTimeout(() => trigger.focus({ preventScroll:true }), 600);
   };
 
+
   trigger.addEventListener('click', (event) => {
     event.preventDefault();
     showBoard();
   });
+
 
   window.addEventListener('wheel', (event) => {
     if (locked) {
@@ -99,11 +112,13 @@
       return;
     }
 
+
     if (!active && event.deltaY > 24) {
       event.preventDefault();
       showBoard();
       return;
     }
+
 
     if (active && panel.scrollTop <= 0 && event.deltaY < -32) {
       event.preventDefault();
@@ -111,9 +126,11 @@
     }
   }, { passive:false });
 
+
   window.addEventListener('touchstart', (event) => {
     touchStartY = event.changedTouches[0]?.clientY || 0;
   }, { passive:true });
+
 
   window.addEventListener('touchend', (event) => {
     if (locked) return;
@@ -123,6 +140,7 @@
     if (active && panel.scrollTop <= 0 && distance < -60) showIntro();
   }, { passive:true });
 
+
   window.addEventListener('keydown', (event) => {
     if (!active && ['ArrowDown','PageDown',' '].includes(event.key)) {
       event.preventDefault();
@@ -130,16 +148,19 @@
       return;
     }
 
+
     if (active && panel.scrollTop <= 0 && ['ArrowUp','PageUp','Escape'].includes(event.key)) {
       event.preventDefault();
       showIntro();
     }
   });
 
+
   window.addEventListener('hashchange', () => {
     if (location.hash === '#boardContent') showBoard(false);
     else if (active) showIntro(false);
   });
+
 
   if (hasSeenIntro || location.hash === '#boardContent') {
     active = true;

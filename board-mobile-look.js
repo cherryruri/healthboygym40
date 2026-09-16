@@ -123,3 +123,39 @@
   else sync();
   media.addEventListener('change',sync);
 })();
+
+(() => {
+ const media=matchMedia('(max-width:768px)');
+ const boot=()=>{
+  if(!media.matches||document.querySelector('.travel-board-mobile'))return;
+  const params=new URLSearchParams(location.search),board=params.get('board')||'free';
+  if(['request','teen','infoboard'].includes(board)||params.get('category')==='request')return;
+  const shell=document.querySelector('.board-content-shell'),searchField=document.querySelector('.board-search-field');
+  if(!shell||!searchField)return;
+  document.body.classList.add('travel-board-mobile-active');
+  const official=['noticeboard','news'].includes(board);
+  const slides=official?[
+   {image:'센터전체사진1.jpg',eyebrow:'HEALTHBOYGYM NEWS',title:'센터의 새로운 소식과\n중요한 안내',desc:'운영 안내와 공지사항을 빠르게 확인하세요.',label:'공지 확인하기',href:'#boardContent'},
+   {image:'상담실사진.jpg',eyebrow:'MEMBER GUIDE',title:'편안한 운동을 위한\n이용 안내',desc:'헬스보이짐 수내점 이용 정보를 모았습니다.',label:'이용 안내 보기',href:'index.html#hours'},
+   {image:'기구존사진1.jpg',eyebrow:'CENTER UPDATE',title:'더 좋은 운동 공간을\n만들어갑니다',desc:'센터의 변화와 새로운 소식을 만나보세요.',label:'게시글 보기',href:'#boardContent'}
+  ]:[
+   {image:'센터전체사진1.jpg',eyebrow:'HEALTHBOYGYM COMMUNITY',title:'함께 운동하고\n함께 성장하는 공간',desc:'회원님들의 새로운 이야기와 운동 후기를 만나보세요.',label:'게시글 보기',href:'#boardContent'},
+   {image:'member-tensecond-v3.jpg',eyebrow:'MEMBER STORY',title:'도전이 만드는\n놀라운 변화',desc:'헬스보이짐 회원님들의 생생한 운동 이야기입니다.',label:'운동 후기 보기',href:'board.html?board=free&category=pt&view=list'},
+   {image:'community-trainer-v1.jpg',eyebrow:'TRAINER STORY',title:'목표를 함께하는\n전문가의 이야기',desc:'수내점 트레이너와 유용한 운동 정보를 만나보세요.',label:'트레이너 보기',href:'index.html#trainer'}
+  ];
+  const stage=document.createElement('section');stage.className='travel-board-mobile';
+  stage.innerHTML='<div class="travel-board-hero"><div class="travel-board-shade"></div><div class="travel-board-copy"><span></span><h1></h1><p></p><a></a></div><div class="travel-board-dots" aria-label="배너 선택"></div></div><div class="travel-board-search-panel"><p>공지와 게시글을 검색해 보세요</p></div>';
+  shell.before(stage);
+  const hero=stage.querySelector('.travel-board-hero'),copy=stage.querySelector('.travel-board-copy'),dots=stage.querySelector('.travel-board-dots');
+  stage.querySelector('.travel-board-search-panel').append(searchField);
+  let active=0,timer;
+  const show=index=>{active=(index+slides.length)%slides.length;const slide=slides[active];hero.style.setProperty('--travel-board-image','url("'+slide.image+'")');copy.querySelector('span').textContent=slide.eyebrow;copy.querySelector('h1').textContent=slide.title;copy.querySelector('p').textContent=slide.desc;const link=copy.querySelector('a');link.textContent=slide.label+' ›';link.href=slide.href;dots.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===active)));};
+  const restart=()=>{clearInterval(timer);timer=setInterval(()=>show(active+1),4800);};
+  slides.forEach((slide,index)=>{const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',(index+1)+'번 배너');button.addEventListener('click',()=>{show(index);restart();});dots.append(button);});
+  show(0);restart();
+ };
+ const style=document.createElement('style');
+ style.textContent='@media(max-width:768px){body.travel-board-mobile-active{background:#fff!important}body.travel-board-mobile-active #site-header#site-header{height:64px!important;background:#050505!important;background-color:#050505!important;opacity:1!important;backdrop-filter:none!important}body.travel-board-mobile-active .board-page{padding-top:64px!important;background:#fff!important}body.travel-board-mobile-active .board-operation-hero,body.travel-board-mobile-active .desktop-community-hero,body.travel-board-mobile-active .mall-stories,body.travel-board-mobile-active .cinema-top-tabs,body.travel-board-mobile-active .cinema-extras,body.travel-board-mobile-active .mobile-board-nav,body.travel-board-mobile-active .mobile-board-quick-links{display:none!important}.travel-board-mobile{display:block;background:#fff;color:#111}.travel-board-hero{position:relative;height:clamp(440px,76vh,590px);overflow:hidden;background-image:var(--travel-board-image);background-size:cover;background-position:center;transition:background-image .45s ease}.travel-board-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.08) 42%,rgba(0,0,0,.64))}.travel-board-copy{position:absolute;left:30px;right:26px;bottom:82px;z-index:2;color:#fff;text-align:left}.travel-board-copy>span{display:block;margin-bottom:14px;font-size:11px;font-weight:750;letter-spacing:.13em}.travel-board-copy h1{margin:0!important;white-space:pre-line;font-size:clamp(32px,9vw,46px)!important;line-height:1.25!important;letter-spacing:-.055em!important;color:#fff!important;text-align:left!important}.travel-board-copy p{margin:14px 0 22px!important;font-size:15px!important;line-height:1.65!important;color:rgba(255,255,255,.88)!important;text-align:left!important}.travel-board-copy a{display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border-radius:24px;background:#fff;color:#151515!important;font-size:13px;font-weight:700;text-decoration:none}.travel-board-dots{position:absolute;left:50%;bottom:48px;z-index:3;display:flex;gap:10px;transform:translateX(-50%)}.travel-board-dots button{width:8px;height:8px;padding:0;border:0;border-radius:50%;background:rgba(255,255,255,.48)}.travel-board-dots button[aria-pressed=true]{background:#fff;transform:scale(1.18)}.travel-board-search-panel{position:relative;z-index:5;margin-top:-30px;padding:38px 24px 26px;border-radius:34px 34px 0 0;background:#fff}.travel-board-search-panel>p{margin:0 0 15px;font-size:12px;color:#888}.travel-board-search-panel .board-search-field{display:block!important;width:100%!important;margin:0!important}.travel-board-search-panel #boardSearch{display:block!important;width:100%!important;height:58px!important;padding:0 50px 0 20px!important;border:1px solid #ddd!important;border-radius:30px!important;background:#fff!important;color:#222!important;font-size:15px!important;box-shadow:none!important}.travel-board-search-panel .board-search-field i{display:block!important;right:20px!important}.travel-board-mobile+.board-content-shell{padding-top:8px!important}.travel-board-mobile+.board-content-shell .board-bottom{justify-content:flex-end!important}.travel-board-mobile+.board-content-shell .board-toolbar{padding-top:0!important}}';
+ document.head.append(style);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+})();

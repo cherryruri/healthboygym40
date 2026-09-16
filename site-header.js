@@ -41,6 +41,7 @@
   }).observe(document.body, {attributes:true, attributeFilter:['class']});
 })();
 
+
 // Remember deliberate navigation before another page loads.
 document.addEventListener('click', event => {
  const link=event.target.closest('a[href]');if(!link)return;
@@ -51,4 +52,29 @@ document.addEventListener('click', event => {
  }catch(_){}
 },{capture:true});
 
+
 (()=>{if(document.querySelector('.site-quick-actions'))return;const group=document.createElement('nav');group.className='site-quick-actions';group.setAttribute('aria-label','빠른 이동');const top=document.createElement('button');top.type='button';top.className='site-top-button';top.textContent='TOP';top.setAttribute('aria-label','맨 위로 이동');top.addEventListener('click',()=>{const event=new CustomEvent('site:top',{cancelable:true});if(window.dispatchEvent(event))window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})});const phone=document.querySelector('.hb-call-float')||document.createElement('a');phone.className='site-phone-button';phone.href='tel:050713802239';phone.setAttribute('aria-label','헬스보이짐 수내점 전화하기');phone.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1C10.61 21 3 13.39 3 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>';group.append(top,phone);document.body.append(group)})();
+;(() => {
+  const media = matchMedia('(max-width: 768px)');
+  if (!media.matches) return;
+  const mount = () => {
+    document.body.classList.add('global-mobile-quick-menu');
+    if (document.querySelector('.travel-quick-dock')) return;
+    const dock = document.createElement('nav');
+    dock.className = 'travel-quick-dock';
+    dock.setAttribute('aria-label','빠른 메뉴');
+    dock.innerHTML = '<div class="travel-quick-actions"><a href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 9-8 9 8v9H3z"/><path d="M9 20v-6h6v6"/></svg></a><a href="mypage.html" aria-label="마이페이지"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/></svg></a><a href="board.html?board=noticeboard" aria-label="공지사항"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a></div><button class="travel-quick-toggle" type="button" aria-label="빠른 메뉴 열기" aria-expanded="false"><span>+</span></button><a class="travel-quick-phone" href="tel:050713802239" aria-label="전화하기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.36l3.2 1.05a1.5 1.5 0 0 1 1.03 1.43V20a1.5 1.5 0 0 1-1.5 1.5C10.17 21.5 2.5 13.83 2.5 4.5A1.5 1.5 0 0 1 4 3h2.68a1.5 1.5 0 0 1 1.43 1.03l1.05 3.2a1.5 1.5 0 0 1-.36 1.5z"/></svg></a>';
+    document.body.append(dock);
+    const toggle = dock.querySelector('.travel-quick-toggle');
+    toggle.addEventListener('click', () => {
+      const open = dock.classList.toggle('is-open');
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? '빠른 메뉴 닫기' : '빠른 메뉴 열기');
+    });
+  };
+  const style = document.createElement('style');
+  style.textContent = '@media(max-width:768px){body.global-mobile-quick-menu #site-header{display:none!important}body.global-mobile-quick-menu .site-floating-actions,body.global-mobile-quick-menu .site-top-button,body.global-mobile-quick-menu .site-phone-button{display:none!important}.travel-quick-dock{position:fixed;right:18px;bottom:18px;z-index:12000;display:flex;flex-direction:column;align-items:center;gap:10px}.travel-quick-actions{display:flex;flex-direction:column;gap:10px;pointer-events:none}.travel-quick-actions a,.travel-quick-toggle,.travel-quick-phone{width:54px;height:54px;border:0;border-radius:50%;display:grid;place-items:center;text-decoration:none;box-shadow:0 8px 22px rgba(0,0,0,.18)}.travel-quick-actions a{background:#f15b47;color:#fff;opacity:0;transform:translateY(22px) scale(.72);transition:opacity .25s ease,transform .38s cubic-bezier(.22,1,.36,1)}.travel-quick-actions a:nth-child(2){transition-delay:.04s}.travel-quick-actions a:nth-child(1){transition-delay:.08s}.travel-quick-dock.is-open .travel-quick-actions{pointer-events:auto}.travel-quick-dock.is-open .travel-quick-actions a{opacity:1;transform:none}.travel-quick-toggle{background:#ffbec6;color:#111;font-size:38px;font-weight:300;line-height:1;cursor:pointer}.travel-quick-toggle span{display:block;transition:transform .32s ease}.travel-quick-dock.is-open .travel-quick-toggle span{transform:rotate(45deg)}.travel-quick-phone{background:#111;color:#fff}.travel-quick-dock svg{width:25px;height:25px;display:block}}';
+  document.head.append(style);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => setTimeout(mount,0), {once:true});
+  else setTimeout(mount,0);
+})();

@@ -331,3 +331,47 @@ body.desktop-board.desktop-board.desktop-board .mall-carousel{height:clamp(540px
     -webkit-backdrop-filter:none!important;
   }
 }
+
+
+/* 2026-09-17: H Fashion-style wide center stage with readable side previews */
+@media (min-width:769px){
+  body.desktop-board.desktop-board.desktop-board .mall-carousel,
+  body.desktop-board.desktop-board.desktop-board .mall-carousel:has(.mall-interview-slide[data-position="0"]){
+    height:clamp(360px,32vw,620px)!important;
+    min-height:360px!important;
+    max-height:620px!important;
+  }
+  .mall-slide{
+    left:26%!important;
+    width:48%!important;
+    opacity:.92!important;
+    filter:brightness(.68) saturate(.88)!important;
+    transform:translateX(0) scale(1)!important;
+  }
+  .mall-slide[data-position="0"]{
+    opacity:1!important;
+    filter:none!important;
+  }
+  .mall-slide[data-position="1"]{
+    transform:translateX(calc(100% + 12px))!important;
+  }
+  .mall-slide[data-position="2"]{
+    transform:translateX(calc(-100% - 12px))!important;
+  }
+  .mall-slide[data-position="1"]::before,
+  .mall-slide[data-position="2"]::before{
+    background:rgba(0,0,0,.08)!important;
+  }
+  .mall-prev{left:23%!important}
+  .mall-next{right:23%!important}
+  .mall-slide-count{right:27.5%!important}
+  .mall-rotation-toggle{left:27.5%!important}
+  .mall-interview-preview{
+    object-fit:cover!important;
+    object-position:center!important;
+  }
+  .mall-interview-slide .mall-slide-copy{
+    left:6%!important;
+    width:58%!important;
+  }
+}

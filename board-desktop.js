@@ -33,6 +33,12 @@
 
 
 
+
+
+
+
+
+
  const arrow=direction=>'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="'+(direction==='left'?'m14 6-6 6 6 6':'m10 6 6 6-6 6')+'"/></svg>';
  hero.querySelector('.mall-prev').innerHTML=arrow('left');hero.querySelector('.mall-next').innerHTML=arrow('right');
  const mobileTabs=document.createElement('nav');mobileTabs.className='cinema-top-tabs';mobileTabs.setAttribute('aria-label','모바일 게시판 보기');mobileTabs.innerHTML='<a href="board.html?category=notice">공지문</a><a href="board.html?view=list">전체게시글</a>';/* Categories live in the single shared board bar. */
@@ -47,11 +53,11 @@
  window.addEventListener('cinema-events-ready',e=>{e.detail.forEach((item,i)=>{const card=eventBox.querySelectorAll('.cinema-event-card')[i];if(!card)return;card.href=item.href;card.querySelector('h3').textContent=item.title;card.querySelector('p').textContent=item.date;card.querySelector('.cinema-event-badge').textContent='센터 소식';card.querySelector('img').src=item.image||'community-event-marble-v1.jpg';});});
  const dialog=document.createElement('dialog');dialog.className='mall-interview-dialog';dialog.innerHTML='<button type="button" class="mall-interview-close" aria-label="영상 닫기">×</button><video controls playsinline preload="none"></video>';document.body.appendChild(dialog);
  const player=dialog.querySelector('video'),closeButton=dialog.querySelector('button');
- const specs=[{index:0,poster:'member-landscape-v1.jpg',preview:'member-landscape-v1.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-tensecond-v3.jpg',preview:'sangwon-tensecond-v3.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
+ const specs=[{index:0,poster:'member-tensecond-v3.jpg',preview:'member-tensecond-v3.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-tensecond-v3.jpg',preview:'sangwon-tensecond-v3.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
  let inView=false,rotationPaused=false,rotationTimer=null,lastOpenButton=null;
  const rotationButton=document.createElement('button');rotationButton.type='button';rotationButton.className='mall-rotation-toggle';rotationButton.textContent='자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed','false');hero.appendChild(rotationButton);
  const available=()=>inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
- const schedule=()=>{clearTimeout(rotationTimer);rotationTimer=null;if(available()&&!rotationPaused&&!hero.contains(document.activeElement)){rotationTimer=setTimeout(()=>showSlide(active+1),10000);}};
+ const schedule=()=>{clearTimeout(rotationTimer);rotationTimer=null;if(available()&&!rotationPaused&&!hero.contains(document.activeElement)){rotationTimer=setTimeout(()=>showSlide(active+1),4800);}};
  const videoSlides=specs.map(spec=>{
    const slide=hero.querySelectorAll('.mall-slide')[spec.index];slide.classList.add('mall-interview-slide');slide.querySelector('img').remove();
    const preview=document.createElement('video');preview.className='mall-interview-preview';preview.muted=true;preview.defaultMuted=true;preview.loop=true;preview.playsInline=true;preview.preload='none';preview.poster=spec.poster;preview.setAttribute('aria-hidden','true');slide.prepend(preview);
@@ -67,4 +73,7 @@
  closeButton.addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close();});dialog.addEventListener('close',()=>{player.pause();lastOpenButton?.focus({preventScroll:true});updatePlayback();});
  new IntersectionObserver(entries=>{inView=entries[0].isIntersecting;updatePlayback();},{threshold:.1}).observe(hero);
  hero.addEventListener('slidechange',updatePlayback);hero.addEventListener('focusin',schedule);hero.addEventListener('focusout',()=>setTimeout(schedule,0));document.addEventListener('visibilitychange',updatePlayback);window.addEventListener('board-view-change',updatePlayback);media.addEventListener('change',updatePlayback);updatePlayback();
+ const retailCarouselStyle=document.createElement('style');
+ retailCarouselStyle.textContent='@media (min-width:769px){.mall-slide{transition:transform .72s cubic-bezier(.22,.72,.24,1),opacity .72s ease,filter .72s ease!important}.mall-prev,.mall-next{top:50%!important;transform:translateY(-50%)!important;width:72px!important;height:104px!important;border:0!important;border-radius:0!important;background:transparent!important;color:#fff!important;filter:drop-shadow(0 2px 8px rgba(0,0,0,.7));opacity:.94!important}.mall-prev:hover,.mall-next:hover{background:rgba(0,0,0,.16)!important;opacity:1!important}.mall-prev svg,.mall-next svg{width:58px!important;height:58px!important;stroke-width:1.1!important}.mall-interview-preview{object-fit:contain!important;object-position:center!important;background:#050505!important}}';
+ document.head.appendChild(retailCarouselStyle);
 })();

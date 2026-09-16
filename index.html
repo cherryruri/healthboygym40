@@ -5,10 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>헬스보이짐</title>
 
+<script>
+  (() => {
+    const key = 'hbg-entry-intro-seen-v2';
+    try {
+      if (sessionStorage.getItem(key) === '1') {
+        document.documentElement.classList.add('site-loader-seen');
+        document.addEventListener('DOMContentLoaded', () => {
+          document.body.classList.add('loaded');
+          document.querySelector('.logo-screen')?.remove();
+        }, { once:true });
+      } else {
+        window.addEventListener('load', () => sessionStorage.setItem(key, '1'), { once:true });
+      }
+    } catch (error) {}
+  })();
+</script>
+<style>.site-loader-seen .logo-screen{display:none!important}</style>
+
+
 <link rel="stylesheet" href="style.css?v=20260911-home25">
 <link rel="stylesheet" href="trainer-cover.css?v=20260909-centered-question">
 <link rel="stylesheet" href="css/swiper.min.css">
 <script src="trainer-route.js?v=20260915-coach-editorial" defer></script>
+
 
 <script
   src="home-device-loader.js?v=20260705-device-flow4"
@@ -27,20 +47,24 @@
     background:#fff !important;
   }
 
+
   header,
   header .navbar{
     background:#fff !important;
   }
 
+
   header{
     border-bottom:1px solid rgba(0,0,0,.10) !important;
   }
+
 
   .logo a,
   #logo-text,
   .mobile-menu-btn{
     color:#111 !important;
   }
+
 
   body .hero-expand-sticky,
   body .hero-expand-sticky::before{
@@ -51,17 +75,20 @@
     mix-blend-mode:normal;
   }
 
+
   body .hero-expand-sticky::after{
     content:none !important;
     display:none !important;
     background:none !important;
   }
 
+
   .intro-main,
   .intro-title-line{
     color:#111 !important;
     text-shadow:none !important;
   }
+
 
   .intro-desc,
   .intro-desc-line,
@@ -71,14 +98,17 @@
     text-shadow:none !important;
   }
 
+
   .intro-mobile-guide a{
     color:#222 !important;
     text-shadow:none !important;
   }
 
+
   .intro-mobile-scroll-bar{
     background:#d5d5d5 !important;
   }
+
 
   .intro-mobile-scroll-bar i{
     background:#222 !important;
@@ -94,6 +124,7 @@
   background-repeat:no-repeat !important;
 }
 
+
 @media (min-width:769px){
   .logo-screen{
     background-image:none !important;
@@ -101,10 +132,12 @@
 }
 </style>
 
+
 <style id="cinematic-static-hero">
 .main-content{
   padding-top:0 !important;
 }
+
 
 .intro.hero-expand-section{
   height:100vh !important;
@@ -114,6 +147,7 @@
   background:#050505 !important;
   color:#fff !important;
 }
+
 
 body .hero-expand-sticky{
   position:relative !important;
@@ -126,11 +160,13 @@ body .hero-expand-sticky{
   isolation:isolate;
 }
 
+
 body .hero-expand-sticky::before{
   content:none !important;
   display:none !important;
   opacity:0 !important;
 }
+
 
 body .hero-video-frame{
   position:absolute !important;
@@ -146,6 +182,7 @@ body .hero-video-frame{
   background:#050505 url('센터전체사진1.jpg') center / cover no-repeat !important;
 }
 
+
 body .intro-video,
 html[data-home-device="mobile"] body .intro-video{
   display:block !important;
@@ -158,6 +195,7 @@ html[data-home-device="mobile"] body .intro-video{
   filter:brightness(.82) contrast(1.04) saturate(.92) !important;
 }
 
+
 body .hero-video-frame::after{
   content:"" !important;
   display:block !important;
@@ -168,6 +206,7 @@ body .hero-video-frame::after{
     linear-gradient(180deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,.08) 38%, rgba(0,0,0,.52) 100%) !important;
   pointer-events:none;
 }
+
 
 body .intro-inner{
   position:absolute !important;
@@ -182,6 +221,7 @@ body .intro-inner{
   transform:none !important;
 }
 
+
 body .intro-main{
   align-items:flex-start !important;
   max-width:980px;
@@ -194,6 +234,7 @@ body .intro-main{
   text-shadow:0 3px 24px rgba(0,0,0,.3);
 }
 
+
 body .intro-title-line,
 body.loaded .intro-title-line{
   color:#fff !important;
@@ -202,6 +243,7 @@ body.loaded .intro-title-line{
   clip-path:none !important;
   animation:none !important;
 }
+
 
 body .intro-desc{
   margin-top:24px !important;
@@ -212,6 +254,7 @@ body .intro-desc{
   text-shadow:0 2px 16px rgba(0,0,0,.42);
 }
 
+
 body .intro-desc-line,
 body .intro-desc .desc-char,
 body.loaded .intro-desc .desc-char{
@@ -220,15 +263,18 @@ body.loaded .intro-desc .desc-char{
   animation:none !important;
 }
 
+
 body .intro-statement,
 body .review-proof-title{
   display:none !important;
 }
 
+
 body header,
 body header .navbar{
   background:transparent !important;
 }
+
 
 body header{
   border-bottom:1px solid transparent !important;
@@ -241,6 +287,7 @@ body header{
     transform .34s ease !important;
 }
 
+
 body header .logo a,
 body header .menu a,
 body header #loginLink,
@@ -250,12 +297,14 @@ body header .mobile-menu-btn{
   text-shadow:0 2px 14px rgba(0,0,0,.34);
 }
 
+
 body header .download-btn{
   color:#fff !important;
   border-color:rgba(255,255,255,.72) !important;
   background:rgba(0,0,0,.10) !important;
   backdrop-filter:blur(8px);
 }
+
 
 body.site-scrolled header,
 body.site-scrolled header .navbar{
@@ -264,9 +313,11 @@ body.site-scrolled header .navbar{
   -webkit-backdrop-filter:blur(16px) saturate(125%) !important;
 }
 
+
 body.site-scrolled header{
   border-bottom-color:rgba(255,255,255,.13) !important;
 }
+
 
 @media (hover:hover) and (min-width:769px){
   body.site-scrolled header:hover,
@@ -275,21 +326,25 @@ body.site-scrolled header{
   }
 }
 
+
 @media(max-width:768px){
   .intro.hero-expand-section,
   body .hero-expand-sticky{
     min-height:100svh !important;
   }
 
+
   body .intro-inner{
     padding:0 22px 96px !important;
   }
+
 
   body .intro-main{
     max-width:340px;
     font-size:clamp(38px, 12vw, 54px) !important;
     line-height:1.02 !important;
   }
+
 
   body .intro-desc{
     max-width:330px;
@@ -298,23 +353,28 @@ body.site-scrolled header{
     line-height:1.52 !important;
   }
 
+
   body .intro-desc-line{
     white-space:normal !important;
   }
+
 
   body .intro-mobile-guide{
     color:#fff !important;
   }
 
+
   body .intro-mobile-guide a{
     color:#fff !important;
   }
+
 
   body.site-scrolled header,
   body.site-scrolled header .navbar{
     background:rgba(0,0,0,.66) !important;
   }
 }
+
 
 /* HEALTHBOYGYM hero brand composition */
 body .hero-brand-composition{
@@ -327,6 +387,7 @@ body .hero-brand-composition{
   padding:104px clamp(48px, 7vw, 112px) 88px !important;
 }
 
+
 body .hero-brand-symbol{
   display:flex;
   align-items:center;
@@ -334,6 +395,7 @@ body .hero-brand-symbol{
   min-width:0;
   color:#fff;
 }
+
 
 body .hero-brand-wordmark{
   flex:0 0 auto;
@@ -350,6 +412,7 @@ body .hero-brand-wordmark{
   text-shadow:0 3px 24px rgba(0,0,0,.36);
 }
 
+
 body .hero-brand-line{
   flex:1 1 auto;
   height:2px;
@@ -360,6 +423,7 @@ body .hero-brand-line{
   transform-origin:left center;
 }
 
+
 body .hero-brand-copy{
   align-self:center;
   min-width:0;
@@ -367,6 +431,7 @@ body .hero-brand-copy{
   opacity:0;
   transform:translateY(24px);
 }
+
 
 body .hero-brand-copy .intro-main{
   max-width:720px;
@@ -376,6 +441,7 @@ body .hero-brand-copy .intro-main{
   letter-spacing:-.052em !important;
 }
 
+
 body .hero-brand-copy .intro-desc{
   max-width:590px;
   margin-top:25px !important;
@@ -383,6 +449,7 @@ body .hero-brand-copy .intro-desc{
   font-weight:560 !important;
   line-height:1.64 !important;
 }
+
 
 body .hero-scroll-explore{
   position:absolute;
@@ -398,6 +465,7 @@ body .hero-scroll-explore{
   pointer-events:none;
 }
 
+
 body .hero-scroll-orbit{
   position:relative;
   display:block;
@@ -406,6 +474,7 @@ body .hero-scroll-orbit{
   border:1px solid rgba(255,255,255,.65);
   border-radius:50%;
 }
+
 
 body .hero-scroll-orbit::before{
   content:"";
@@ -417,6 +486,7 @@ body .hero-scroll-orbit::before{
   background:rgba(255,255,255,.82);
   transform:translateX(-50%);
 }
+
 
 body .hero-scroll-orbit i{
   position:absolute;
@@ -430,6 +500,7 @@ body .hero-scroll-orbit i{
   animation:heroScrollPulse 1.9s ease-in-out infinite;
 }
 
+
 body .hero-scroll-label{
   font-family:Georgia, "Times New Roman", serif;
   font-size:15px;
@@ -438,21 +509,26 @@ body .hero-scroll-label{
   text-shadow:0 2px 12px rgba(0,0,0,.4);
 }
 
+
 body.loaded .hero-brand-wordmark{
   animation:heroBrandLogoIn .72s cubic-bezier(.19,1,.22,1) .18s forwards;
 }
+
 
 body.loaded .hero-brand-line{
   animation:heroBrandLineDraw 1.05s cubic-bezier(.65,0,.2,1) .62s forwards;
 }
 
+
 body.loaded .hero-brand-copy{
   animation:heroBrandCopyIn .9s cubic-bezier(.19,1,.22,1) 1.48s forwards;
 }
 
+
 body.loaded .hero-scroll-explore{
   animation:heroBrandScrollIn .7s ease 2.05s forwards;
 }
+
 
 @keyframes heroBrandLogoIn{
   to{
@@ -460,6 +536,7 @@ body.loaded .hero-scroll-explore{
     transform:translateY(0);
   }
 }
+
 
 @keyframes heroBrandLineDraw{
   0%{
@@ -475,6 +552,7 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+
 @keyframes heroBrandCopyIn{
   to{
     opacity:1;
@@ -482,12 +560,14 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+
 @keyframes heroBrandScrollIn{
   to{
     opacity:1;
     transform:translate(-50%, 0);
   }
 }
+
 
 @keyframes heroScrollPulse{
   0%,100%{
@@ -500,6 +580,7 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+
 @media(max-width:768px){
   body .hero-brand-composition{
     display:flex !important;
@@ -510,6 +591,7 @@ body.loaded .hero-scroll-explore{
     padding:86px 22px 108px !important;
   }
 
+
   body .hero-brand-symbol{
     position:absolute;
     left:22px;
@@ -518,24 +600,29 @@ body.loaded .hero-scroll-explore{
     width:auto;
   }
 
+
   body .hero-brand-wordmark{
     font-size:clamp(27px, 8.6vw, 36px);
   }
+
 
   body .hero-brand-line{
     height:1px;
     margin-left:14px;
   }
 
+
   body .hero-brand-copy{
     width:100%;
   }
+
 
   body .hero-brand-copy .intro-main{
     max-width:350px;
     font-size:clamp(32px, 9.8vw, 41px) !important;
     line-height:1.03 !important;
   }
+
 
   body .hero-brand-copy .intro-desc{
     max-width:340px;
@@ -544,20 +631,24 @@ body.loaded .hero-scroll-explore{
     line-height:1.58 !important;
   }
 
+
   body .hero-scroll-explore{
     bottom:20px;
     gap:10px;
   }
+
 
   body .hero-scroll-orbit{
     width:46px;
     height:46px;
   }
 
+
   body .hero-scroll-orbit::before{
     top:9px;
     height:19px;
   }
+
 
   body .hero-scroll-orbit i{
     top:10px;
@@ -565,12 +656,15 @@ body.loaded .hero-scroll-explore{
     height:6px;
   }
 
+
   body .hero-scroll-label{
     font-size:12px;
   }
 }
 
+
 </style>
+
 
 <style id="garden-sequence-hero">
 /* Reference-style first-view sequence: logo -> line -> message -> scroll cue */
@@ -587,10 +681,12 @@ body.loaded .hero-scroll-explore{
     padding:0 40px !important;
   }
 
+
   body .hero-brand-symbol{
     flex:0 0 auto !important;
     width:auto !important;
   }
+
 
   body .hero-brand-wordmark{
     font-size:clamp(25px,2.2vw,32px) !important;
@@ -598,12 +694,14 @@ body.loaded .hero-scroll-explore{
     letter-spacing:-.065em !important;
   }
 
+
   body .hero-brand-line{
     flex:0 0 clamp(145px,14vw,201px) !important;
     width:clamp(145px,14vw,201px) !important;
     height:1px !important;
     margin-left:28px !important;
   }
+
 
   body .hero-brand-copy{
     position:relative !important;
@@ -613,6 +711,7 @@ body.loaded .hero-scroll-explore{
     padding-right:300px !important;
     box-sizing:border-box !important;
   }
+
 
   body .hero-brand-copy .intro-main{
     width:433px !important;
@@ -624,6 +723,7 @@ body.loaded .hero-scroll-explore{
     letter-spacing:-.03em !important;
     text-transform:none !important;
   }
+
 
   body .hero-brand-copy .intro-desc{
     position:absolute !important;
@@ -639,6 +739,7 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+
 @media (min-width:769px) and (max-width:1199px){
   body .hero-brand-composition{
     display:flex !important;
@@ -649,14 +750,17 @@ body.loaded .hero-scroll-explore{
     padding:0 34px !important;
   }
 
+
   body .hero-brand-symbol{
     flex:0 0 auto !important;
     width:auto !important;
   }
 
+
   body .hero-brand-wordmark{
     font-size:24px !important;
   }
+
 
   body .hero-brand-line{
     flex:0 0 100px !important;
@@ -665,9 +769,11 @@ body.loaded .hero-scroll-explore{
     margin-left:20px !important;
   }
 
+
   body .hero-brand-copy{
     flex:0 1 540px !important;
   }
+
 
   body .hero-brand-copy .intro-main{
     font-family:Georgia, "Times New Roman", serif !important;
@@ -676,30 +782,36 @@ body.loaded .hero-scroll-explore{
     line-height:1.04 !important;
   }
 
+
   body .hero-brand-copy .intro-desc{
     margin-top:20px !important;
     font-size:16px !important;
   }
 }
 
+
 body .hero-scroll-explore{
   bottom:48px !important;
   gap:20px !important;
 }
+
 
 body .hero-scroll-orbit{
   width:78px !important;
   height:78px !important;
 }
 
+
 body .hero-scroll-orbit::before{
   top:17px !important;
   height:25px !important;
 }
 
+
 body .hero-scroll-orbit i{
   top:18px !important;
 }
+
 
 body .hero-scroll-label{
   font-family:Georgia, "Times New Roman", serif !important;
@@ -709,38 +821,47 @@ body .hero-scroll-label{
   letter-spacing:-.05em !important;
 }
 
+
 body.loaded .hero-brand-wordmark{
   animation:heroBrandLogoIn .72s cubic-bezier(.19,1,.22,1) .12s forwards !important;
 }
+
 
 body.loaded .hero-brand-line{
   animation:heroBrandLineDraw 1.05s cubic-bezier(.65,0,.2,1) .72s forwards !important;
 }
 
+
 body.loaded .hero-brand-copy{
   animation:heroBrandCopyIn .9s cubic-bezier(.19,1,.22,1) 1.62s forwards !important;
 }
 
+
 body.loaded .hero-scroll-explore{
   animation:heroBrandScrollIn .7s ease 2.38s forwards !important;
 }
+
 
 @media (max-width:768px){
   body .hero-brand-composition{
     padding:82px 22px 104px !important;
   }
 
+
   body .hero-brand-symbol{
     top:29% !important;
   }
+
 
   body .hero-brand-wordmark{
     font-size:clamp(25px,8vw,33px) !important;
   }
 
+
   body .hero-brand-line{
     height:1px !important;
   }
+
 
   body .hero-brand-copy .intro-main{
     font-family:Georgia, "Times New Roman", serif !important;
@@ -750,6 +871,7 @@ body.loaded .hero-scroll-explore{
     letter-spacing:-.035em !important;
   }
 
+
   body .hero-brand-copy .intro-desc{
     margin-top:18px !important;
     font-size:14px !important;
@@ -757,29 +879,35 @@ body.loaded .hero-scroll-explore{
     line-height:1.5 !important;
   }
 
+
   body .hero-scroll-explore{
     bottom:22px !important;
     gap:12px !important;
   }
+
 
   body .hero-scroll-orbit{
     width:52px !important;
     height:52px !important;
   }
 
+
   body .hero-scroll-orbit::before{
     top:11px !important;
     height:21px !important;
   }
 
+
   body .hero-scroll-orbit i{
     top:12px !important;
   }
+
 
   body .hero-scroll-label{
     font-size:12px !important;
   }
 }
+
 
 /* Mobile cinematic framing: preserve the horizontal video and fade it into black. */
 @media (max-width:768px){
@@ -787,6 +915,7 @@ body.loaded .hero-scroll-explore{
   html[data-home-device="mobile"] body .hero-expand-sticky{
     background:#030303 !important;
   }
+
 
   html[data-home-device="mobile"] body .hero-video-frame{
     inset:0 0 auto 0 !important;
@@ -801,6 +930,7 @@ body.loaded .hero-scroll-explore{
     background:#030303 !important;
   }
 
+
   html[data-home-device="mobile"] body .intro-video{
     width:100% !important;
     height:100% !important;
@@ -808,6 +938,7 @@ body.loaded .hero-scroll-explore{
     object-position:center center !important;
     filter:brightness(.82) contrast(1.03) saturate(.94) !important;
   }
+
 
   html[data-home-device="mobile"] body .hero-video-frame::after{
     inset:0 !important;
@@ -822,6 +953,7 @@ body.loaded .hero-scroll-explore{
   }
 }
 
+
 /* Final-state safety: the copy must remain visible even if a browser pauses CSS animations. */
 body.hero-sequence-complete .hero-brand-wordmark{
   opacity:1 !important;
@@ -829,11 +961,13 @@ body.hero-sequence-complete .hero-brand-wordmark{
   animation:none !important;
 }
 
+
 body.hero-sequence-complete .hero-brand-line{
   opacity:1 !important;
   transform:scaleX(1) !important;
   animation:none !important;
 }
+
 
 body.hero-sequence-complete .hero-brand-copy{
   opacity:1 !important;
@@ -841,13 +975,17 @@ body.hero-sequence-complete .hero-brand-copy{
   animation:none !important;
 }
 
+
 body.hero-sequence-complete .hero-scroll-explore{
   opacity:1 !important;
   transform:translate(-50%,0) !important;
   animation:none !important;
 }
 
+
 </style>
+
+
 
 
 <style id="hero-vertical-message">
@@ -862,6 +1000,7 @@ body .hero-brand-composition{
   text-align:center !important;
 }
 
+
 body .hero-brand-symbol{
   position:relative !important;
   top:auto !important;
@@ -875,9 +1014,11 @@ body .hero-brand-symbol{
   min-width:1px !important;
 }
 
+
 body .hero-brand-wordmark{
   display:none !important;
 }
+
 
 body .hero-brand-line{
   position:relative !important;
@@ -892,6 +1033,7 @@ body .hero-brand-line{
   overflow:hidden !important;
 }
 
+
 body .hero-brand-line::after{
   content:"";
   position:absolute;
@@ -903,6 +1045,7 @@ body .hero-brand-line::after{
   transform-origin:center top;
   will-change:transform;
 }
+
 
 body .hero-brand-copy{
   position:static !important;
@@ -921,6 +1064,7 @@ body .hero-brand-copy{
   transform:none !important;
 }
 
+
 body .hero-brand-kicker{
   position:static !important;
   width:auto !important;
@@ -938,6 +1082,7 @@ body .hero-brand-kicker{
   will-change:opacity,filter,transform;
 }
 
+
 body .hero-brand-copy .intro-main{
   width:100% !important;
   max-width:980px !important;
@@ -954,6 +1099,7 @@ body .hero-brand-copy .intro-main{
   will-change:opacity,filter,transform;
 }
 
+
 body .hero-brand-copy .intro-main{
   display:flex !important;
   flex-direction:column !important;
@@ -961,6 +1107,7 @@ body .hero-brand-copy .intro-main{
   justify-content:center !important;
   text-align:center !important;
 }
+
 
 body .hero-brand-copy .intro-title-line{
   display:block !important;
@@ -970,13 +1117,16 @@ body .hero-brand-copy .intro-title-line{
   text-align:center !important;
 }
 
+
 body .hero-scroll-orbit{
   display:none !important;
 }
 
+
 body .hero-scroll-explore{
   gap:0 !important;
 }
+
 
 body .hero-booking-cta{
   position:relative;
@@ -1008,6 +1158,7 @@ body .hero-booking-cta{
   transition:background .25s ease,border-color .25s ease,transform .25s ease;
 }
 
+
 @media(hover:hover){
   body .hero-booking-cta:hover{
     background:rgba(255,255,255,.14);
@@ -1015,9 +1166,11 @@ body .hero-booking-cta{
   }
 }
 
+
 body .hero-brand-line::after{
   transition:transform 1.32s cubic-bezier(.76,0,.24,1);
 }
+
 
 body .hero-brand-kicker,
 body .hero-brand-copy .intro-main,
@@ -1028,11 +1181,13 @@ body .hero-booking-cta{
     transform 1.12s cubic-bezier(.16,1,.3,1);
 }
 
+
 body .hero-scroll-explore{
   transition:
     opacity .92s cubic-bezier(.16,1,.3,1),
     transform .92s cubic-bezier(.16,1,.3,1);
 }
+
 
 body.hero-reveal-start .hero-scroll-explore{
   opacity:0 !important;
@@ -1040,14 +1195,17 @@ body.hero-reveal-start .hero-scroll-explore{
   animation:none !important;
 }
 
+
 body.hero-reveal-start.hero-step-scroll .hero-scroll-explore{
   opacity:1 !important;
   transform:translate(-50%,0) !important;
 }
 
+
 body.hero-step-line .hero-brand-line::after{
   transform:scaleY(1);
 }
+
 
 body.hero-step-kicker .hero-brand-kicker,
 body.hero-step-message .hero-brand-copy .intro-main,
@@ -1057,10 +1215,12 @@ body.hero-step-button .hero-booking-cta{
   transform:translateY(0) !important;
 }
 
+
 body.hero-step-scroll .hero-scroll-explore{
   opacity:1 !important;
   transform:translate(-50%,0) !important;
 }
+
 
 body.hero-sequence-complete .hero-brand-line{
   opacity:1 !important;
@@ -1068,10 +1228,12 @@ body.hero-sequence-complete .hero-brand-line{
   animation:none !important;
 }
 
+
 body.hero-sequence-complete .hero-brand-line::after{
   transform:scaleY(1) !important;
   animation:none !important;
 }
+
 
 body.hero-sequence-complete .hero-brand-kicker,
 body.hero-sequence-complete .hero-brand-copy .intro-main,
@@ -1082,6 +1244,7 @@ body.hero-sequence-complete .hero-booking-cta{
   animation:none !important;
 }
 
+
 @media(max-width:768px){
   body .hero-brand-composition{
     justify-content:flex-start !important;
@@ -1091,15 +1254,18 @@ body.hero-sequence-complete .hero-booking-cta{
     text-align:center !important;
   }
 
+
   body .hero-brand-symbol{
     width:1px !important;
     height:72px !important;
   }
 
+
   body .hero-brand-copy{
     align-self:center !important;
     width:100% !important;
   }
+
 
   body .hero-brand-kicker{
     margin:0 0 18px !important;
@@ -1108,6 +1274,7 @@ body.hero-sequence-complete .hero-booking-cta{
     white-space:nowrap !important;
   }
 
+
   body .hero-brand-copy .intro-main{
     width:100% !important;
     font-size:clamp(27px,7.7vw,33px) !important;
@@ -1115,9 +1282,11 @@ body.hero-sequence-complete .hero-booking-cta{
     letter-spacing:-.07em !important;
   }
 
+
   body .hero-brand-copy .intro-title-line{
     white-space:nowrap !important;
   }
+
 
   body .hero-booking-cta{
     width:min(292px,82vw) !important;
@@ -1128,9 +1297,11 @@ body.hero-sequence-complete .hero-booking-cta{
     font-size:16px !important;
   }
 
+
   body .hero-scroll-explore{
     bottom:18px !important;
   }
+
 
   body .hero-brand-symbol{
     right:auto !important;
@@ -1140,6 +1311,7 @@ body.hero-sequence-complete .hero-booking-cta{
     align-self:center !important;
   }
 
+
   body .hero-brand-copy,
   body .hero-brand-copy .intro-main{
     margin-right:auto !important;
@@ -1147,16 +1319,19 @@ body.hero-sequence-complete .hero-booking-cta{
     text-align:center !important;
   }
 
+
   body header .navbar{
     min-height:56px !important;
     padding-right:14px !important;
     padding-left:14px !important;
   }
 
+
   body header .logo{
     display:flex !important;
     align-items:center !important;
   }
+
 
   body header .logo a{
     display:inline-block !important;
@@ -1165,6 +1340,7 @@ body.hero-sequence-complete .hero-booking-cta{
     letter-spacing:-.045em !important;
     text-shadow:0 2px 10px rgba(0,0,0,.72) !important;
   }
+
 
   body header .mobile-menu-btn{
     position:relative !important;
@@ -1187,6 +1363,7 @@ body.hero-sequence-complete .hero-booking-cta{
     text-shadow:none !important;
   }
 
+
   body header .mobile-menu-btn::before,
   body header .mobile-menu-btn::after{
     content:"" !important;
@@ -1200,15 +1377,18 @@ body.hero-sequence-complete .hero-booking-cta{
     box-shadow:0 1px 7px rgba(0,0,0,.58) !important;
   }
 
+
   body header .mobile-menu-btn::before{
     top:9px !important;
   }
+
 
   body header .mobile-menu-btn::after{
     bottom:9px !important;
   }
 }
 </style>
+
 
 <style id="pt-reasons-showcase-style">
 .pt-reasons-showcase{
@@ -1547,6 +1727,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   }
 }
 
+
 @media(max-width:768px){
   body.pt-header-light header,
   body.pt-header-light header .navbar,
@@ -1573,6 +1754,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     box-shadow:none !important;
   }
 }
+
 
 .pt-to-facility-transition{
   --facility-transition-height:clamp(360px,62vh,680px);
@@ -1601,6 +1783,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 }
 </style>
 
+
 <link rel="stylesheet" href="site-header.css?v=20260915-quick">
 <script src="site-header.js?v=20260915-quick" defer></script>
 <link rel="stylesheet" href="home-editorial.css?v=20260915-guard">
@@ -1611,12 +1794,16 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <body>
 
 
+
+
   
 <div class="logo-screen" aria-hidden="true">
   <div class="loader-logo" data-text="HEALTHBOYGYM">HEALTHBOYGYM</div>
 </div>
 
+
 <div class="main-content">
+
 
 <header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
@@ -1639,7 +1826,9 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   </nav>
 </header>
 
+
 <main>
+
 
 <div class="hb-home" id="hbHome">
 <div class="hb-page-nav" role="progressbar" aria-label="메인 섹션 진행도" aria-valuemin="0" aria-valuemax="100" aria-valuenow="14"><span class="hb-page-track"><span class="hb-page-fill"></span></span></div>
@@ -1653,17 +1842,21 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <video data-machine-src="gym80-high-row.mp4" muted loop playsinline preload="none" poster="gym80-high-row.jpg" aria-label="짐80 하이로우 미리보기"></video>
 <button type="button" class="hb-card-link" aria-haspopup="dialog" aria-controls="hbMachineDialog" aria-label="짐80 하이로우 영상 보기">↗</button>
 
+
 <button type="button" class="hb-card-select" aria-label="짐80 하이로우 카드 선택"></button></article><article class="hb-program-card" data-title="짐80 로우로우" data-card="1">
 <video data-machine-src="gym80-low-row.mp4" muted loop playsinline preload="none" poster="gym80-low-row.jpg" aria-label="짐80 로우로우 미리보기"></video>
 <button type="button" class="hb-card-link" aria-haspopup="dialog" aria-controls="hbMachineDialog" aria-label="짐80 로우로우 영상 보기">↗</button>
+
 
 <button type="button" class="hb-card-select" aria-label="짐80 로우로우 카드 선택"></button></article><article class="hb-program-card" data-title="부티빌더 스탠딩 아웃타이" data-card="2">
 <video data-machine-src="bootybuilder-standing-abductor.mp4" muted loop playsinline preload="none" poster="bootybuilder-standing-abductor.jpg" aria-label="부티빌더 스탠딩 아웃타이 미리보기"></video>
 <button type="button" class="hb-card-link" aria-haspopup="dialog" aria-controls="hbMachineDialog" aria-label="부티빌더 스탠딩 아웃타이 영상 보기">↗</button>
 
+
 <button type="button" class="hb-card-select" aria-label="부티빌더 스탠딩 아웃타이 카드 선택"></button></article></div>
 <span class="hb-machine-status" aria-live="off"></span><button type="button" class="hb-machine-motion-toggle" aria-label="로고와 미리보기 일시정지" aria-pressed="false">Ⅱ</button>
 </section>
+
 
 <section id="facility" class="facility-tour-section hb-chapter hb-facility" aria-labelledby="hbFacilityTitle">
 <div id="facilityTour" class="hb-facility-stack" data-stack-tour>
@@ -1691,11 +1884,13 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </button>
     </div>
 
+
     <div class="pass-transition-panel" data-pass-transition aria-hidden="true">
       <div class="pass-transition-sticky">
         <span class="pass-transition-orb" data-pass-transition-orb></span>
       </div>
     </div>
+
 
     <section class="pass-locator-section" data-pass-locator aria-label="헬스보이짐 올패스 지점찾기">
       <button type="button" class="pass-locator-back" data-pass-locator-close>
@@ -1707,6 +1902,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
           <h2>올패스<br>지점 찾기</h2>
           <p>한 지점 등록 가격으로 전국 헬스보이짐 지점을 더 자유롭게 이용해보세요.</p>
         </div>
+
 
         <div class="pass-locator-controls">
           <label>
@@ -1728,6 +1924,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
           </button>
         </div>
 
+
         <div class="pass-locator-map-shell">
           <div class="pass-naver-map" data-pass-naver-map aria-label="헬스보이짐 올패스 지도"></div>
           <div class="pass-fallback-map" data-pass-fallback-map aria-hidden="true">
@@ -1735,6 +1932,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
             <div class="pass-fallback-markers" data-pass-fallback-markers></div>
             <p>전국 올패스 지점</p>
           </div>
+
 
           <article class="pass-map-detail" data-pass-detail hidden>
             <button type="button" class="pass-detail-close" data-pass-detail-close aria-label="지점 정보 닫기">
@@ -1762,6 +1960,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
           </article>
         </div>
 
+
         <div class="pass-selected-block">
           <h3>선택된 지점 (<span data-pass-selected-count>0</span>)</h3>
           <div class="pass-selected-list" data-pass-selected-list>
@@ -1769,11 +1968,13 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
           </div>
         </div>
 
+
         <div class="pass-recommend-panel" data-pass-recommend hidden>
           <h3>맞춤 올패스 추천</h3>
           <p>선택하신 지점을 모두 이용하기 위한 최적의 패스 플랜입니다.</p>
           <div class="pass-plan-cards" data-pass-plan-cards></div>
         </div>
+
 
         <div class="pass-result-card">
           <button type="button" class="pass-result-toggle" data-pass-result-toggle aria-expanded="true">
@@ -1785,13 +1986,32 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </section>
 
+
     
+
 
     <div class="bg_wrap"><div class="bg"></div></div>
 
 
+
+
   </article>
 </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1816,6 +2036,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     <p>한 지점 등록 가격으로 전국 90여개 지점을 매일매일 자유롭게 운동해보세요.</p>
   </div>
 
+
   <div class="pass-map-layout">
     <div class="pass-map-copy">
       <div>
@@ -1835,6 +2056,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
     <div class="pass-korea-map pass-real-map pass-static-map" aria-label="대한민국 헬스보이짐 올패스 지도">
       <div class="pass-map-frame">
         <img class="pass-korea-map-image" src="https://upload.wikimedia.org/wikipedia/commons/d/dc/Map_of_South_Korea-blank.svg" alt="대한민국 백지도">
@@ -1850,11 +2072,13 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
     <div class="pass-branch-panel">
       <div class="pass-panel-head">
         <span>BRANCH FINDER</span>
         <strong>지점 선택</strong>
       </div>
+
 
       <div class="pass-region-tabs" aria-label="올패스 지역 필터">
         <button type="button" class="pass-region-tab" data-region="전체">전체</button>
@@ -1868,6 +2092,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         <button type="button" class="pass-region-tab" data-region="대구">대구</button>
         <button type="button" class="pass-region-tab" data-region="전북">전북</button>
       </div>
+
 
       <div class="pass-branch-list" aria-label="헬스보이짐 올패스 지점 목록">
         <button type="button" class="pass-branch-btn" data-region="서울" data-tier="BLACK" data-branch="가양역점" data-query="헬스보이짐 가양역점">가양역점</button>
@@ -1891,6 +2116,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         <button type="button" class="pass-branch-btn" data-region="서울" data-tier="PREMIUM" data-branch="건대스타시티몰점" data-query="헬스보이짐 건대스타시티몰점">건대스타시티몰점</button>
         <button type="button" class="pass-branch-btn" data-region="서울" data-tier="S PREMIUM" data-branch="신촌점" data-query="헬스보이짐 신촌점">신촌점</button>
         <button type="button" class="pass-branch-btn" data-region="서울" data-tier="S PREMIUM" data-branch="가락점" data-query="헬스보이짐 가락점">가락점</button>
+
 
         <button type="button" class="pass-branch-btn" data-region="경기" data-tier="BLACK" data-branch="비전점" data-query="헬스보이짐 비전점">비전점</button>
         <button type="button" class="pass-branch-btn" data-region="경기" data-tier="BLACK" data-branch="철산점" data-query="헬스보이짐 철산점">철산점</button>
@@ -1917,6 +2143,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         <button type="button" class="pass-branch-btn" data-region="경기" data-tier="PREMIUM" data-branch="매탄점" data-query="헬스보이짐 매탄점">매탄점</button>
         <button type="button" class="pass-branch-btn" data-region="경기" data-tier="PREMIUM" data-branch="판교역점" data-query="헬스보이짐 판교역점">판교역점</button>
 
+
         <button type="button" class="pass-branch-btn" data-region="대전" data-tier="BLACK" data-branch="가오점" data-query="헬스보이짐 가오점">가오점</button>
         <button type="button" class="pass-branch-btn" data-region="대전" data-tier="SILVER" data-branch="관저점" data-query="헬스보이짐 관저점">관저점</button>
         <button type="button" class="pass-branch-btn" data-region="대전" data-tier="SILVER" data-branch="둔산점" data-query="헬스보이짐 둔산점">둔산점</button>
@@ -1932,9 +2159,11 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         <button type="button" class="pass-branch-btn" data-region="대전" data-tier="GOLD" data-branch="테크노밸리점" data-query="헬스보이짐 테크노밸리점">테크노밸리점</button>
         <button type="button" class="pass-branch-btn" data-region="대전" data-tier="PREMIUM" data-branch="송촌점" data-query="헬스보이짐 송촌점">송촌점</button>
 
+
         <button type="button" class="pass-branch-btn" data-region="충청" data-tier="BLACK" data-branch="복대점" data-query="헬스보이짐 복대점">복대점</button>
         <button type="button" class="pass-branch-btn" data-region="충청" data-tier="SILVER" data-branch="쌍용점" data-query="헬스보이짐 쌍용점">쌍용점</button>
         <button type="button" class="pass-branch-btn" data-region="충청" data-tier="GOLD" data-branch="신부점" data-query="헬스보이짐 신부점">신부점</button>
+
 
         <button type="button" class="pass-branch-btn" data-region="부산" data-tier="BLACK" data-branch="남포점" data-query="헬스보이짐 남포점">남포점</button>
         <button type="button" class="pass-branch-btn" data-region="부산" data-tier="BLACK" data-branch="당리점" data-query="헬스보이짐 당리점">당리점</button>
@@ -1942,11 +2171,13 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         <button type="button" class="pass-branch-btn" data-region="부산" data-tier="BLACK" data-branch="하단점" data-query="헬스보이짐 하단점">하단점</button>
         <button type="button" class="pass-branch-btn" data-region="부산" data-tier="GOLD" data-branch="롯데백화점광복점" data-query="헬스보이짐 롯데백화점광복점">롯데백화점광복점</button>
 
+
         <button type="button" class="pass-branch-btn" data-region="경상" data-tier="BLACK" data-branch="창원중앙점" data-query="헬스보이짐 창원중앙점">창원중앙점</button>
         <button type="button" class="pass-branch-btn" data-region="울산" data-tier="GOLD" data-branch="삼산점" data-query="헬스보이짐 삼산점">삼산점</button>
         <button type="button" class="pass-branch-btn" data-region="대구" data-tier="GOLD" data-branch="롯데대구역점" data-query="헬스보이짐 롯데대구역점">롯데대구역점</button>
         <button type="button" class="pass-branch-btn" data-region="전북" data-tier="S PREMIUM" data-branch="송천점" data-query="헬스보이짐 송천점">송천점</button>
       </div>
+
 
       <div class="pass-place-card" aria-live="polite">
         <a href="https://map.naver.com/p/search/%ED%97%AC%EC%8A%A4%EB%B3%B4%EC%9D%B4%EC%A7%90%20%EC%88%98%EB%82%B4%EC%A0%90" class="pass-place-link" data-pass-place-link target="_blank" rel="noopener">수내점 네이버플레이스 바로가기 &gt;</a>
@@ -1970,7 +2201,9 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
     </div>
   </div>
 
+
   <div class="pass-list">
+
 
     <div class="pass-card">
       <div class="pass-left">
@@ -1991,6 +2224,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
     <div class="pass-card">
       <div class="pass-left">
         <div class="pass-name">Silver</div>
@@ -2007,6 +2241,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
         </div>
       </div>
     </div>
+
 
     <div class="pass-card">
       <div class="pass-left">
@@ -2028,6 +2263,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
     <div class="pass-card">
       <div class="pass-left">
         <div class="pass-name">Premium</div>
@@ -2044,6 +2280,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
     <div class="pass-card">
       <div class="pass-left">
         <div class="pass-name">S Premium</div>
@@ -2059,12 +2296,15 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </div>
     </div>
 
+
   </div>
 </section>
+
 
 <section id="trainer" class="trainer-section trainer-editorial" aria-label="수내점 전문 코칭팀">
 <section class="coach-hero"><div class="coach-hero-media"><video class="is-active" src="assets/pt/pt-sangwon.mp4" muted playsinline preload="metadata" poster="이상원.jpg"></video><video data-src="assets/pt/pt-hojun.mp4" muted playsinline preload="none" poster="최호준.jpg"></video><video data-src="assets/pt/pt-dohyun.mp4" muted playsinline preload="none" poster="이도현.jpg"></video><video data-src="https://healthboygym40.com/assets/pt/pt-yeonju.mp4" muted playsinline preload="none" poster="이연주.jpg"></video><video data-src="https://healthboygym40.com/assets/pt/pt-yongbin.mp4" muted playsinline preload="none" poster="이용빈.jpg"></video></div><div class="coach-hero-copy"><p>OUR COACHING</p><h1>나의 몸을<br>이해하는 코칭</h1><div class="coach-controls"><span id="coachSlideNumber">01</span><i></i><span>05</span><button type="button" data-coach-prev aria-label="이전 트레이너 영상">‹</button><button type="button" data-coach-next aria-label="다음 트레이너 영상">›</button><button type="button" data-coach-pause aria-label="트레이너 영상 일시정지">Ⅱ</button></div></div><span class="coach-scroll-cue">SCROLL TO MEET YOUR COACH ↓</span></section>
 <section class="coach-mindset"><div class="coach-mindset-stage"><p><span>전문성을 갖춘 코칭으로,</span><span>한 사람의 몸과 목표에 집중합니다.</span><span>당신의 변화를 끝까지 함께합니다.</span></p></div></section>
+
 
 <article class="coach-profile" id="coach-1" style="--coach-index:0"><div class="coach-profile-stage"><div class="coach-portrait"><img src="정위영.jpg" alt="정위영 점장님" loading="lazy"></div><div class="coach-bio" tabindex="0" aria-label="트레이너 자격과 경력"><p class="coach-profile-number">OUR TEAM · 01 / 07</p><p class="coach-role">Branch Manager</p><h2>정위영 점장님</h2><div class="coach-credentials"><div><h3>자격 및 교육</h3><ul><li>경기대 스포츠건강과학 전공</li><li>생활스포츠지도자 2급(보디빌딩)</li><li>ISSA 메디컬필라테스 수료</li><li>KT테이핑 교육 수료</li><li>CES 기능해부학 교육 수료</li><li>CES 교정 운동 전문가 수료</li><li>컨디셔닝 케어 전문가 과정 5기(바디케어컴퍼니)</li></ul></div><div><h3>경력 및 수상</h3><ul><li>대학보디빌딩대회(UFBB) 피지크 3위</li><li>2021 WNGP 대구 클래식피지크 오픈 3위</li><li>2022 WNGP 광명 피지크 오픈 2위</li><li>2022 WNGP 화성 피지크 오픈 1위</li><li>전) 화이트짐 청계점 트레이너</li><li>전) XP짐 트레이너</li><li>전) 헬스보이짐 상현점 PT팀장</li><li>현) 헬스보이짐 수내점 지점장</li></ul></div></div></div><div class="coach-shutter coach-shutter-left" aria-hidden="true"></div><div class="coach-shutter coach-shutter-right" aria-hidden="true"></div></div></article>
 <article class="coach-profile" id="coach-2" style="--coach-index:1"><div class="coach-profile-stage"><div class="coach-portrait"><img src="이상원.jpg" alt="이상원 팀장님" loading="lazy"></div><div class="coach-bio" tabindex="0" aria-label="트레이너 자격과 경력"><p class="coach-profile-number">OUR TEAM · 02 / 07</p><p class="coach-role">PT Team Leader</p><h2>이상원 팀장님</h2><div class="coach-credentials"><div><h3>자격 및 교육</h3><ul><li>생활스포츠지도자 2급(보디빌딩)</li><li>운동처방사 자격증</li><li>RAD 재활기능운동지도자</li><li>불균형 교정 전문가</li><li>상지 및 하지 통합 재활 전문가</li><li>관절 움직임 트레이닝 전문가 과정</li><li>가동성, 안정성 평가 전문가 과정</li><li>신경계 다이나믹 스트레칭 전문가 과정</li></ul></div><div><h3>경력 및 수상</h3><ul><li>전) GS휘트니스 PT팀장</li><li>현) 헬스보이짐 수내점 PT팀장</li></ul></div></div></div><div class="coach-shutter coach-shutter-left" aria-hidden="true"></div><div class="coach-shutter coach-shutter-right" aria-hidden="true"></div></div></article>
@@ -2075,7 +2315,9 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
 <article class="coach-profile" id="coach-7" style="--coach-index:6"><div class="coach-profile-stage"><div class="coach-portrait"><img src="이용빈.jpg" alt="이용빈 트레이너" loading="lazy"></div><div class="coach-bio" tabindex="0" aria-label="트레이너 자격과 경력"><p class="coach-profile-number">OUR TEAM · 07 / 07</p><p class="coach-role">Personal Trainer</p><h2>이용빈 트레이너</h2><div class="coach-credentials"><div><h3>자격 및 교육</h3><ul><li>생활스포츠지도자 2급 (보디빌딩)</li><li>태권도 4단 (선수 출신)</li><li>TRX STC 자격증</li><li>케틀벨 자격 과정 수료</li><li>TRIGGER POINT 근막 이완 수료</li><li>RTS Level 1,2</li><li>기능해부학, 운동 재활 수료</li><li>근막 신경 교육 수료</li></ul></div><div><h3>경력 및 수상</h3><ul><li>전) Bplan 트레이너</li><li>전) 발리휘트니스 트레이너</li><li>전) 리버휘트니스 트레이너</li><li>전) 휘트니스클럽s 트레이너</li><li>현) 헬스보이짐 수내점 트레이너</li></ul></div></div></div><div class="coach-shutter coach-shutter-left" aria-hidden="true"></div><div class="coach-shutter coach-shutter-right" aria-hidden="true"></div></div></article>
 </section>
 
+
 <section id="hours" class="visit-hours" aria-labelledby="hoursTitle"><div class="visit-hours-inner"><div class="visit-hours-heading"><p class="visit-eyebrow">OPENING HOURS</p><h2 id="hoursTitle">센터<br>운영시간</h2><p class="visit-hours-description">당신의 일상에 맞춰,<br>매일 열려 있는 운동 공간.</p><span class="visit-open-badge">365일 연중무휴</span></div><div class="visit-hours-schedule"><article><span>WEEKDAY</span><h3>평일</h3><p><strong>06:00</strong><i>—</i><strong>24:00</strong></p></article><article><span>WEEKEND &amp; HOLIDAY</span><h3>주말 · 공휴일</h3><p><strong>08:00</strong><i>—</i><strong>21:00</strong></p></article><a class="visit-contact" href="tel:050713802239">이용 문의 <span>↗</span></a></div></div></section>
+
 
 <section id="newsHub" class="news-hub-section fade" aria-label="헬스보이짐 수내점 새 소식">
   <div class="news-hub-inner">
@@ -2083,6 +2325,7 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       <div class="news-hub-title">
         <h2>공지/NEWS</h2>
       </div>
+
 
       <article class="news-board-card">
         <div class="news-hub-head">
@@ -2098,10 +2341,12 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
       </article>
     </div>
 
+
     <div class="news-hub-head news-notice-head">
       <h3>NEWS</h3>
       <a href="board.html?board=noticeboard" aria-label="공지 사진 더보기">+</a>
     </div>
+
 
     <div class="news-media-grid" data-home-notice-gallery aria-label="공지 사진">
       <a class="notice-photo-card" href="board.html?board=noticeboard"><div class="notice-photo"><img src="헬스보이짐 사진.jpg" alt="헬스보이짐 수내점" loading="lazy"></div><div class="notice-photo-copy"><span>NOTICE</span><h3>센터 공지 확인하기</h3></div></a>
@@ -2109,17 +2354,25 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   </div>
 </section>
 
+
 <section id="location" class="visit-location" aria-labelledby="visitLocationTitle"><div class="visit-location-heading"><p class="visit-eyebrow">FIND US</p><h2 id="visitLocationTitle">오시는 길</h2><p>헬스보이짐 수내점</p></div><div class="visit-location-layout"><div class="visit-map" id="sunaeLocationMap" role="region" aria-label="헬스보이짐 수내점 위치 지도"></div><div class="visit-location-info"><span>ADDRESS</span><h3>수내역에서 만나요.</h3><p>경기도 성남시 분당구<br>내정로173번길 49, 5층</p><p class="visit-transit">수내역 1번 출구에서 267m</p><a href="https://map.naver.com/v5/search/내정로173번길49" target="_blank" rel="noopener noreferrer">네이버 지도로 길찾기 <span>↗</span></a><a href="tel:050713802239">전화 문의 <span>↗</span></a></div></div></section>
+
+
+
 
 
 
 </main>
 
+
 <footer class="fade">
   HEALTHBOYGYM PILAGIRL SUNAE
 </footer>
 
+
 </div>
+
+
 
 
 <script src="js/swiper.min.js"></script>
@@ -2134,6 +2387,14 @@ body.pt-title-revealing .pt-reasons-title .pt-char{
   data-news-src="home-news.js?v=20260915-news-cards"
   data-auth-src="firebase-index.js?v=20260728-mobile-info1"
 ></script>
+
+
+
+
+
+
+
+
 
 
 
@@ -2181,10 +2442,12 @@ html body.hero-card-morph .pt-reason-card:not(.pt-origin-card){opacity:var(--sid
 </body>
 </html>
 
+
   <style id="pt-title-size-fix">
 .pt-reasons-title{font-size:clamp(36px,3.8vw,52px)!important;}
 @media(max-width:768px){.pt-reasons-title{font-size:clamp(28px,7.8vw,36px)!important;}}
 </style>
+
 
   
 <style id="facility-gallery-505-style">
@@ -2242,10 +2505,13 @@ body.facility-gallery-open{overflow:hidden!important}
 </style>
 
 
+
+
 <style id="facility-gallery-top-layer-fix">
 .facility-photo-modal{z-index:2147483000!important}
 .facility-photo-modal .facility-modal-close{z-index:2147483647!important}
 </style>
+
 
   
 <!-- Unified facility transition and mobile video behavior: 2026-08-24 -->
@@ -2280,6 +2546,7 @@ body.facility-gallery-open{overflow:hidden!important}
 }
 </style>
 
+
           
 <!-- Let native morph variables override the old mobile full-width frame rule -->
 <style id="native-mobile-hero-morph-specificity-fix">
@@ -2289,9 +2556,17 @@ html[data-home-device="mobile"] body.hero-card-morph>.hero-video-frame::after{op
 }
 </style>
 
+
 <link rel="stylesheet" href="facility-tour.css?v=20260915-clean-morph">
 <script src="facility-tour.js?v=20260915-clean-morph"></script>
 <script src="facility-gallery.js?v=20260909"></script>
+
+
+
+
+
+
+
 
 
 
@@ -2314,11 +2589,14 @@ html body .hero-brand-symbol,html body .hero-brand-line,html body .hero-booking-
 }
 </style>
 
+
 <style id="home-title-fade-20260909">
 html body.home-title-fade .hero-brand-composition .hero-brand-copy{opacity:0!important;transform:translateY(10px)!important;transition:opacity 2s ease,transform 2s cubic-bezier(.22,1,.36,1)!important}
 html body.home-title-fade.hero-title-fade-ready .hero-brand-composition .hero-brand-copy{opacity:1!important;transform:translateY(0)!important}
 @media(prefers-reduced-motion:reduce){html body.home-title-fade .hero-brand-composition .hero-brand-copy{transition:opacity 2s ease!important;transform:none!important}}
 </style>
+
+
 
 
 <style id="hero-stats-sequence-style">
@@ -2332,11 +2610,13 @@ html body .hero-opening-stats span{font:400 clamp(11px,1vw,14px)/1.65 Pretendard
 @media(max-width:768px){html body .hero-opening-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;width:calc(100% - 40px)!important;gap:38px 16px!important}html body .hero-opening-stats strong{font-size:clamp(38px,11vw,54px)!important}html body .hero-opening-stats p{font-size:12px!important;margin:13px 0 6px!important}html body .hero-opening-stats span{font-size:11px!important}}
 </style>
 
+
 <style id="hero-countup-style">
 html body .hero-opening-stats [data-opening-count]{font:inherit!important;color:inherit!important;letter-spacing:inherit!important;font-variant-numeric:tabular-nums}
 html body .hero-opening-stats{transition:opacity .55s ease,visibility 0s .55s!important}
 html body.hero-stats-visible:not(.hero-stats-finished) .hero-opening-stats{transition:opacity .45s ease,visibility 0s!important}
 </style>
+
 
 <style id="home-greeting-spacing">
 html body .hero-brand-composition .intro-main{line-height:1.25!important}
@@ -2344,10 +2624,10 @@ html body .hero-brand-composition .hero-brand-kicker{margin-bottom:14px!importan
 @media(max-width:768px){html body .hero-brand-composition .intro-main{line-height:1.3!important}html body .hero-brand-composition .hero-brand-kicker{margin-bottom:12px!important}}
 </style>
 
+
 <style id="mobile-pt-card-cleanup">
 @media(max-width:768px){
  html body.hero-card-morph.hero-card-morph .hero-video-frame,html body .pt-reason-card,html body .pt-reason-card.swiper-slide-active{box-shadow:none!important}
  html body .pt-reason-card::after{display:none!important}
 }
 </style>
-

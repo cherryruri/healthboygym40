@@ -1495,3 +1495,5 @@ body{
 }
 
 .signup-service-notice{margin:18px 0 0;padding:16px;border-radius:12px;background:#f4f4f4;color:#333;font-size:14px;line-height:1.7;text-align:left;word-break:keep-all}.signup-service-notice[hidden]{display:none!important}
+
+html body #signupServiceNotice.signup-service-notice{color:#c62828!important;-webkit-text-fill-color:#c62828!important;font-weight:700}

@@ -281,3 +281,5 @@ body.menu-open #site-header#site-header{transform:none!important}
 html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[href*="my-comments.html"],html body #signupBox{display:none!important}
 
 html body .mypage-menu,html body #mypageBtn,html body .mobile-mypage-link{display:none!important}
+
+html body #site-header#site-header a[href*="mypage.html"]{display:none!important}

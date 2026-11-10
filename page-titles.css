@@ -1,0 +1,13 @@
+/* Shared page headings for community, directions, hours and history. */
+:root{--page-heading-size:48px}
+html body:is(body,#site-typography).desktop-board .board-header h1,
+html body #hours #hoursTitle,
+html body #location #visitLocationTitle,
+html body .history-page-title h1{
+ font-size:var(--page-heading-size)!important;
+ font-weight:700!important;
+ line-height:1.25!important;
+ letter-spacing:-.04em!important;
+ word-break:keep-all;
+}
+@media(max-width:768px){:root{--page-heading-size:32px}}

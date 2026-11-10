@@ -73,7 +73,7 @@ let currentCategory =
           : "all";
 let allPosts = [];
 
-function getPostsPerPage(){ return matchMedia("(min-width:769px)").matches ? 12 : 20; }
+function getPostsPerPage(){ return matchMedia("(min-width:769px)").matches ? 15 : 20; }
 const postList = document.getElementById("postList");
 const noticeList = document.getElementById("noticeList");
 const paginationContainer = document.getElementById("pagination");

@@ -172,7 +172,7 @@ function updateEditorHeader(){
   }
 
   if(thumbnailField){
-    thumbnailField.hidden = !officialBoards.has(effectiveBoard);
+    thumbnailField.hidden = effectiveBoard === "infoboard" || getEffectiveCategory(effectiveBoard) === "request";
   }
 
   if(noticeOption){
@@ -238,17 +238,15 @@ function readImageAsDataUrl(file){
       const image = new Image();
 
       image.onload = ()=>{
-        const maxWidth = 960;
-        const maxHeight = 720;
-        const scale = Math.min(1, maxWidth / image.width, maxHeight / image.height);
-        const width = Math.max(1, Math.round(image.width * scale));
-        const height = Math.max(1, Math.round(image.height * scale));
+        const crop = Math.min(image.width, image.height);
+        const size = Math.min(800, crop);
         const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
         const ctx = canvas.getContext("2d");
-
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(image, 0, 0, width, height);
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0, 0, size, size);
+        ctx.drawImage(image, (image.width-crop)/2, (image.height-crop)/2, crop, crop, 0, 0, size, size);
         resolve(canvas.toDataURL("image/jpeg", 0.84));
       };
 
@@ -346,7 +344,7 @@ submitBtn.addEventListener("click", async ()=>{
     board: effectiveBoard,
     title,
     content,
-    thumbnailDataUrl: isOfficial ? thumbnailDataUrl : "",
+    thumbnailDataUrl: !isAdminOnly && category !== "request" ? thumbnailDataUrl : "",
     category,
     isSecret: category === "request",
     isPublic: category !== "request",

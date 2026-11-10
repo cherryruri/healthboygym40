@@ -1,4 +1,5 @@
 (() => {
+ if(matchMedia('(min-width:769px)').matches){document.body.classList.add('desktop-board');return;}
  const params=new URLSearchParams(location.search);
  if(['infoboard','request','teen'].includes(params.get('board'))||params.get('category')==='request')return;
  const media=matchMedia('(min-width:769px)'),shell=document.querySelector('.board-content-shell');

@@ -140,7 +140,7 @@
 
 
 (() => {
- const media=matchMedia('(min-width:0px)');
+ const media=matchMedia('(max-width:768px)');
  const boot=()=>{
   if(!media.matches||document.querySelector('.travel-board-mobile'))return;
   const params=new URLSearchParams(location.search),board=params.get('board')||'free';
@@ -153,7 +153,7 @@
   const slides=[
    {video:'mobile-center-intro.mp4',eyebrow:'HEALTHBOYGYM SUNAE',title:'운동이 즐거워지는\n새로운 공간',desc:'더 좋은 시설과 편안한 분위기에서 건강한 일상을 시작하세요.',label:official?'센터 공지 보기':'센터 이야기 보기',href:'#boardContent'},
    {video:'mobile-weight-story.mp4',eyebrow:'MY BODY, MY PACE',title:'숫자보다 중요한 건\n달라지는 나의 일상',desc:'나만의 속도로 만들어가는 건강한 변화와 운동 이야기를 만나보세요.',label:'회원 이야기 보기',href:'board.html?board=free&category=pt&view=list'},
-   {video:'mobile-trainer-yeonju.mp4',eyebrow:'TRAIN WITH YEONJU',title:'목표를 현실로 만드는\n이연주 선생님',desc:'세심한 코칭과 꾸준한 동행으로 회원님의 변화를 함께 만듭니다.',label:'트레이너 만나보기',href:'index.html#trainer'}
+   {video:'mobile-trainer-yeonju.mp4',eyebrow:'TRAIN WITH YEONJU',title:'헬스장 이용 매너\n재밌게 알려드려요!',desc:'세심한 코칭과 꾸준한 동행으로 회원님의 변화를 함께 만듭니다.',label:'트레이너 만나보기',href:'index.html#trainer'}
   ];
   const stage=document.createElement('section');stage.className='travel-board-mobile';
   stage.innerHTML='<div class="travel-board-hero"><video class="travel-board-video" muted autoplay playsinline loop preload="metadata"></video><div class="travel-board-shade"></div><div class="travel-board-copy"><span></span><h1></h1><p></p><a></a></div><div class="travel-board-dots" aria-label="배너 선택"></div></div><div class="travel-board-content"><div class="travel-board-search-panel"></div></div>';
@@ -165,7 +165,7 @@
   contentLayer.append(shell);
   const dock=document.createElement('nav');dock.className='travel-quick-dock';dock.setAttribute('aria-label','빠른 메뉴');dock.innerHTML='<div class="travel-quick-actions"><a href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 9-8 9 8v9H3z"/><path d="M9 20v-6h6v6"/></svg></a><a href="mypage.html" aria-label="마이페이지"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/></svg></a><a href="board.html?board=noticeboard" aria-label="공지사항"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a></div><button class="travel-quick-toggle" type="button" aria-label="빠른 메뉴 열기" aria-expanded="false"><span>+</span></button><a class="travel-quick-phone" href="tel:050713802239" aria-label="전화하기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.36l3.2 1.05a1.5 1.5 0 0 1 1.03 1.43V20a1.5 1.5 0 0 1-1.5 1.5C10.17 21.5 2.5 13.83 2.5 4.5A1.5 1.5 0 0 1 4 3h2.68a1.5 1.5 0 0 1 1.43 1.03l1.05 3.2a1.5 1.5 0 0 1-.36 1.5z"/></svg></a>';document.body.append(dock);const dockToggle=dock.querySelector('.travel-quick-toggle');dockToggle.addEventListener('click',()=>{const open=dock.classList.toggle('is-open');dockToggle.setAttribute('aria-expanded',String(open));dockToggle.setAttribute('aria-label',open?'빠른 메뉴 닫기':'빠른 메뉴 열기');});
   let active=0,timer;
-  const show=index=>{active=(index+slides.length)%slides.length;const slide=slides[active];hero.dataset.slide=String(active);if(video.getAttribute('src')!==slide.video){video.src=slide.video;video.load();}video.play().catch(()=>{});copy.querySelector('span').textContent=slide.eyebrow;copy.querySelector('h1').textContent=slide.title;copy.querySelector('p').textContent=slide.desc;const link=copy.querySelector('a');link.textContent=slide.label+' ›';link.href=slide.href;dots.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===active)));};
+  const show=index=>{active=(index+slides.length)%slides.length;const slide=slides[active];hero.dataset.slide=String(active);if(video.getAttribute('src')!==slide.video){video.src=slide.video;video.load();}video.play().catch(()=>{});copy.querySelector('span').textContent=slide.eyebrow;copy.querySelector('h1').textContent=slide.title;copy.querySelector('p').textContent=slide.desc;const link=copy.querySelector('a');link.hidden=active===1||active===2;link.style.display=link.hidden?'none':'';link.textContent=slide.label+' ›';link.href=slide.href;dots.querySelectorAll('button').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===active)));};
   const restart=()=>{clearInterval(timer);timer=setInterval(()=>show(active+1),7800);};
   slides.forEach((slide,index)=>{const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',(index+1)+'번 배너');button.addEventListener('click',()=>{show(index);restart();});dots.append(button);});
   show(0);restart();

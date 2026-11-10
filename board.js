@@ -197,8 +197,8 @@ const boardMeta = {
   }
 };
 
-boardMeta.free.categories = [['notice','공지문'],['all','전체게시글']];
-boardMeta.noticeboard.categories = [['notice','공지문'],['all','전체게시글']];
+boardMeta.free.categories = [['notice','공지문'],['all','전체게시판']];
+boardMeta.noticeboard.categories = [['notice','공지문'],['all','전체게시판']];
 if(!['request','infoboard','teen'].includes(currentBoard)){
  currentBoard='free';currentCategory=['noticeboard','news'].includes(initialBoard)||initialCategory==='notice'?'notice':'all';
 }
@@ -781,28 +781,20 @@ function renderPage(page){
 }
 
 
-function renderDesktopPosts(posts, page){
-  const listView = document.body.classList.contains('board-list-view');
-  const makeLink = ({id,data}, className) => {
-    const link=document.createElement("a");
-    link.className=className; link.href="post.html?id="+encodeURIComponent(id);
-    link.addEventListener("click",event=>{
-      if(!canOpenPost(data)){event.preventDefault();openPost(id,data);}
-    });
-    return link;
-  };
-  const remaining=listView?posts:posts.slice(0,6);
-  const title=document.createElement("div");title.className="desktop-post-list-title";
-  title.innerHTML='<h2>게시글 목록</h2><span>최신순 · 공지 우선</span>';postList.appendChild(title);
-  const table=document.createElement("table");table.className="desktop-post-table";
-  table.innerHTML='<thead><tr><th scope="col">카테고리</th><th scope="col">제목</th><th scope="col">작성자</th><th scope="col">작성일</th></tr></thead>';
-  const tbody=document.createElement("tbody");
-  remaining.forEach(post=>{
-    const row=document.createElement("tr");
-    row.innerHTML='<td>'+escapeHTML(getPostCategoryLabel(post.data))+'</td><td></td><td>'+escapeHTML(post.data.writerId||"회원")+'</td><td>'+formatDate(post.data)+'</td>';
-    const link=makeLink(post,"desktop-post-title");link.textContent=post.data.title||"제목 없음";row.children[1].appendChild(link);tbody.appendChild(row);
+function renderDesktopPosts(posts){
+  const grid=document.createElement('div');
+  grid.className='square-post-grid';
+  posts.forEach(({id,data})=>{
+    const card=document.createElement('a');
+    card.className='square-post-card';
+    card.href='post.html?id='+encodeURIComponent(id);
+    const image=getPublicPostThumbnail(data);
+    const label=getPostCategory(data)==='notice'||data.isNotice?'공지문':'전체게시판';
+    card.innerHTML='<div class="square-post-image">'+(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy" decoding="async">':'<span>HEALTHBOYGYM</span>')+'</div><div class="square-post-copy"><small>'+label+'</small><h2>'+escapeHTML(data.title||'제목 없음')+'</h2><time>'+formatDate(data)+'</time></div>';
+    card.addEventListener('click',event=>{if(!canOpenPost(data)){event.preventDefault();openPost(id,data);}});
+    grid.appendChild(card);
   });
-  table.appendChild(tbody);postList.appendChild(table);
+  postList.appendChild(grid);
 }
 
 matchMedia('(min-width:769px)').addEventListener('change',()=>{

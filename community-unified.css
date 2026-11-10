@@ -20,7 +20,7 @@ html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[
 @media(min-width:769px){
  html body .board-operation-hero,html body .desktop-community-hero,html body .mall-stories,html body .board-head,html body #noticeList{display:none!important}
  html body.desktop-board.desktop-board.desktop-board.desktop-board .board-page{padding:130px 32px 80px!important;margin:0 auto!important;max-width:1264px!important;width:100%!important;box-sizing:border-box}
- html body.desktop-board.desktop-board.desktop-board.desktop-board .board-content-shell{width:100%!important;margin:0 auto!important;padding:0!important;max-width:1200px!important}
+ html body.desktop-board.desktop-board.desktop-board.desktop-board .board-content-shell{display:block!important;grid-template-columns:none!important;width:100%!important;margin:0 auto!important;padding:0!important;max-width:1200px!important}
  html body.desktop-board.desktop-board.desktop-board.desktop-board .board-header{display:block!important;margin:0 0 28px!important}
  html body.desktop-board.desktop-board.desktop-board.desktop-board .board-header h1{font-size:36px!important;color:#111!important}
  html body.desktop-board.desktop-board.desktop-board.desktop-board .board-toolbar{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:24px!important;padding:0 0 28px!important;flex-wrap:wrap}

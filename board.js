@@ -124,7 +124,7 @@ const communityCategoryGroupMap = {
 
 const boardMeta = {
   free: {
-    title: "공지문/자유게시판",
+    title: "공지문 / 전체게시판",
     desc: "센터의 새로운 소식부터 회원들의 운동 이야기까지, 한곳에서 만나보세요.",
     mode: "consult",
     categories: [
@@ -711,7 +711,7 @@ function getVisiblePosts(){
     const categoryMatches =
       currentCategory === "all" ||
       category === currentCategory ||
-      (meta.mode === "official" && currentCategory === "notice" && data.isNotice);
+      (currentCategory === "notice" && data.isNotice);
 
     const searchMatches =
       !search ||

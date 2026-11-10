@@ -51,4 +51,6 @@ for(const [name,lat,lng] of cityLabels)L.marker([lat,lng],{icon:L.divIcon({class
 map.attributionControl.addAttribution('Map: KOSTAT / southkorea-maps');
 layer=L.layerGroup().addTo(map);fitCountry();map.on('zoomend moveend',addMarkers);new ResizeObserver(()=>{map.invalidateSize();}).observe(q('#koreaMap'));}catch(e){q('#mapFallback').hidden=false;q('#resetMap').hidden=true;}
 render();select(selected,false,false);
+const requestedView=new URLSearchParams(location.search).get("view");
+setView(requestedView==="tier"||(requestedView!=="map"&&matchMedia("(min-width:769px)").matches));
 })();

@@ -59,3 +59,22 @@ body.pass-guide main{padding-top:var(--site-header-height)}
 @media(max-width:768px){.pass-guide .intro h1,.pass-guide .section-title h2{font-size:50px}.pass-guide .section-title h2{max-width:100%}}
 
 #koreaMap,.explore-hero,.map-shell{background:#f7f9fa}.korea-city-label{font:500 11px/20px Pretendard,Arial,sans-serif;color:#62717d;white-space:nowrap;text-align:center;text-shadow:0 1px white}.map-shell:after{background:linear-gradient(#ffffffa1,transparent 38%,transparent 75%,#ffffff80)!important}
+
+/* Desktop gallery matches the community photo board. */
+@media(min-width:769px){
+ .pass-guide .view-tabs{width:min(1200px,calc(100% - 64px));margin:0 auto;justify-content:flex-start;padding-left:0;padding-right:0}
+ .pass-guide .branch-section{width:min(1200px,calc(100% - 64px));max-width:1200px;margin:0 auto;padding:36px 0 80px}
+ .pass-guide .section-title h2{font-size:48px;line-height:1.25;letter-spacing:-.04em}
+ .pass-guide .section-title h2 br{display:none}
+ .pass-guide .branch-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:30px 20px}
+ .pass-guide .branch-card{min-width:0;aspect-ratio:auto;border:0;border-radius:0;overflow:visible;background:transparent;color:#111;text-align:center;align-self:start}
+ .pass-guide .branch-card>img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;border-radius:16px;background:#f1f1ef}
+ .pass-guide .branch-card:after{display:none}
+ .pass-guide .branch-card:hover>img{transform:none;filter:brightness(.96)}
+ .pass-guide .branch-card .card-copy{position:static;display:block;padding:16px 0}
+ .pass-guide .branch-card .card-copy small{font-size:12px;color:#777;line-height:1.5;margin-bottom:8px}
+ .pass-guide .branch-card .card-copy strong{display:block;font-size:16px;line-height:1.45;font-weight:700;letter-spacing:-.03em}
+ .pass-guide .branch-card[aria-pressed=true]{outline-offset:6px}
+ .pass-guide .branch-card:focus-visible{outline:2px solid #111;outline-offset:6px}
+}
+@media(min-width:769px) and (max-width:1099px){.pass-guide .branch-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}

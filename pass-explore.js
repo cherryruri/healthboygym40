@@ -4,7 +4,7 @@ const safe=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const countryBounds=[[33.1,125.6],[38.65,130.3]];
 function fitCountry(){if(map)map.setView([35.3,127.6],6.5,{animate:!reduced});}
-function addMarkers(){if(!map)return;layer.clearLayers();const groups=[];
+function addMarkers(){if(!map||q("#mapPanel").hidden)return;layer.clearLayers();const groups=[];
  for(const b of (q("#mapPanel").hidden?filtered:branches).filter(b=>Number.isFinite(b.lat)&&Number.isFinite(b.lng))){const pt=map.latLngToContainerPoint([b.lat,b.lng]);let group=map.getZoom()<12&&b!==selected?groups.find(g=>g.items[0]!==selected&&g.point.distanceTo(pt)<35):null;if(group)group.items.push(b);else groups.push({point:pt,items:[b]});}
  for(const g of groups){const b=g.items[0],many=g.items.length>1,isSelected=g.items.includes(selected);const marker=L.marker([b.lat,b.lng],{icon:L.divIcon({className:'branch-map-marker',html:`<span class="pin ${many?'':'single'} ${!many&&isSelected?'selected':''}">${many?g.items.length: isSelected?`<img src="${safe(b.image)}" alt="${safe(b.shortName)}">`:''}</span>`,iconSize:[many||isSelected?34:22,many||isSelected?34:22],iconAnchor:[many||isSelected?17:11,many||isSelected?17:11]}),title:many?`${b.region} 주변 ${g.items.length}개 지점`:b.shortName,keyboard:true}).addTo(layer);
  marker.bindTooltip(many?`${b.region} 주변 ${g.items.length}개 지점`:b.shortName,{direction:'top',offset:[0,-15]});
@@ -13,25 +13,25 @@ function addMarkers(){if(!map)return;layer.clearLayers();const groups=[];
 }
 function select(b,scroll=true,zoom=true){selected=b;
  grid.querySelectorAll('.branch-card').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.name===b.shortName)));
- if(zoom&&map&&Number.isFinite(b.lat))focusBranch(b);addMarkers();syncCards(b);if(scroll)q('.explore-hero').scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'});
+ if(!q("#mapPanel").hidden){if(zoom&&map&&Number.isFinite(b.lat)&&Number.isFinite(b.lng))focusBranch(b);addMarkers();syncCards(b);}if(scroll)q('.explore-hero').scrollIntoView({behavior:reduced?'instant':'smooth',block:'start'});
 }
 function openVideo(b,opener){lastOpener=opener;q('#videoTitle').textContent=b.shortName;q('#videoPending').hidden=!!b.video;video.hidden=!b.video;q('#videoError').hidden=true;video.poster=b.image;dialog.showModal();document.body.classList.add('video-open');if(b.video){video.src=b.video;video.play().catch(()=>{});}}
 function render(){const term=q('#branchSearch').value.trim().toLowerCase(),tier=q('#tierFilter').value;filtered=branches.filter(b=>(!region||b.region===region)&&(!tier||b.tier===tier)&&(!term||`${b.shortName} ${b.address}`.toLowerCase().includes(term)));
  q('#gradeFilters').querySelectorAll('button').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.grade===tier)));
  q('#resultCount').textContent=`${filtered.length}개 지점 · 드론 영상 ${filtered.filter(b=>b.video).length}개`;q('#emptyState').hidden=filtered.length>0;grid.replaceChildren();
  for(const b of filtered){const button=document.createElement('button');button.type='button';button.className='branch-card';button.dataset.name=b.shortName;button.setAttribute('aria-label',`${b.shortName} 지점 선택`);button.setAttribute('aria-pressed',String(b===selected));button.innerHTML=`<img src="${safe(b.image)}" alt="${safe(b.shortName)} 시설" loading="lazy" decoding="async">${b.video?'<span class="play-dot" aria-hidden="true">▶</span>':'<span class="pending">영상 준비 중</span>'}<span class="card-copy"><small>${safe(b.region)} · ${safe(b.tier)}</small><strong>${safe(b.shortName)}</strong></span>`;button.addEventListener('click',()=>{select(b,false);openVideo(b,button);});button.querySelector('img').addEventListener('error',e=>{e.target.style.visibility='hidden';},{once:true});grid.append(button);}
- addMarkers();if(map&&region){const locs=filtered.filter(b=>Number.isFinite(b.lat));if(locs.length)map.fitBounds(locs.map(b=>[b.lat,b.lng]),{padding:[45,65],maxZoom:11,animate:!reduced});}
+ addMarkers();if(map&&!q("#mapPanel").hidden&&region){const locs=filtered.filter(b=>Number.isFinite(b.lat));if(locs.length)map.fitBounds(locs.map(b=>[b.lat,b.lng]),{padding:[45,65],maxZoom:11,animate:!reduced});}
 }
 
 const track=q('#mapCardTrack'),ordered=[...branches];const homeIndex=ordered.indexOf(selected);ordered.splice(homeIndex,1);ordered.splice(1,0,selected);let cardTimer,syncingUntil=0;
-function focusBranch(b){const target=map.project([b.lat,b.lng],10).add([0,75]);map.flyTo(map.unproject(target,10),10,{animate:!reduced,duration:.8});}
+function focusBranch(b){if(!map||q("#mapPanel").hidden||!Number.isFinite(b.lat)||!Number.isFinite(b.lng))return;const target=map.project([b.lat,b.lng],10).add([0,75]);map.flyTo(map.unproject(target,10),10,{animate:!reduced,duration:.8});}
 function syncCards(b){track.querySelectorAll('.map-card').forEach(el=>{el.classList.toggle('is-active',el.dataset.name===b.shortName);el.querySelector('.map-card-select').setAttribute('aria-pressed',String(el.dataset.name===b.shortName));});const el=[...track.children].find(el=>el.dataset.name===b.shortName);if(el){const left=el.offsetLeft-(track.clientWidth-el.offsetWidth)/2;if(Math.abs(track.scrollLeft-left)>3){syncingUntil=performance.now()+900;track.scrollTo({left,behavior:reduced?'instant':'smooth'});}}}
 for(const b of ordered){const card=document.createElement('article');card.className='map-card';card.dataset.name=b.shortName;card.innerHTML=`<img src="${safe(b.image)}" alt="${safe(b.shortName)} 시설" loading="lazy"><span class="map-card-tag">ALL-PASS · ${safe(b.tier)}</span><button type="button" class="map-card-select" aria-label="${safe(b.shortName)} 지도에서 선택"><span class="map-card-copy"><small>${safe(b.region)} · HEALTHBOYGYM</small><strong>${safe(b.shortName)}</strong></span></button><button type="button" class="map-card-play" aria-label="${safe(b.shortName)} 카드 영상 보기">${b.video?'드론 영상으로 둘러보기':'지점 영상 준비 중'}<span>${b.video?'↗':'—'}</span></button>`;card.querySelector('.map-card-select').addEventListener('click',()=>select(b,false));card.querySelector('.map-card-play').addEventListener('click',e=>{select(b,false);openVideo(b,e.currentTarget);});track.append(card);}
 track.addEventListener('scroll',()=>{clearTimeout(cardTimer);cardTimer=setTimeout(()=>{if(performance.now()<syncingUntil)return;const center=track.scrollLeft+track.clientWidth/2;const nearest=[...track.children].reduce((a,b)=>Math.abs(b.offsetLeft+b.offsetWidth/2-center)<Math.abs(a.offsetLeft+a.offsetWidth/2-center)?b:a);const b=branches.find(b=>b.shortName===nearest.dataset.name);if(b&&b!==selected)select(b,false);},170);},{passive:true});
 
 
 const viewTabs=[q('#mapTab'),q('#tierTab')];
-function setView(tierView){q('#mapPanel').hidden=tierView;q('#branches').hidden=!tierView;q('footer').hidden=!tierView;viewTabs.forEach((tab,i)=>{const active=Boolean(i)===tierView;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});if(!tierView)requestAnimationFrame(()=>{if(map){map.invalidateSize();fitCountry();}syncCards(selected);});window.scrollTo({top:0,behavior:'instant'});}
+function setView(tierView){if(tierView&&map)map.stop();q('#mapPanel').hidden=tierView;q('#branches').hidden=!tierView;q('footer').hidden=!tierView;viewTabs.forEach((tab,i)=>{const active=Boolean(i)===tierView;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});if(!tierView)requestAnimationFrame(()=>{if(map){map.invalidateSize();fitCountry();}syncCards(selected);});window.scrollTo({top:0,behavior:'instant'});}
 viewTabs.forEach((tab,i)=>{tab.addEventListener('click',()=>setView(!!i));tab.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?1:1-i;setView(!!next);viewTabs[next].focus();}});});
 for(const grade of ['', 'Silver','Gold','Black','Premium','S Premium']){const button=document.createElement('button');button.type='button';button.textContent=grade||'전체 등급';button.dataset.grade=grade;button.setAttribute('aria-pressed',String(!grade));button.addEventListener('click',()=>{q('#tierFilter').value=grade;render();});q('#gradeFilters').append(button);}
 
@@ -49,7 +49,7 @@ fetch('https://raw.githubusercontent.com/southkorea/southkorea-maps/master/kosta
 const cityLabels=[['서울',37.5665,126.978],['인천',37.4563,126.7052],['수원',37.2636,127.0286],['대전',36.3504,127.3845],['대구',35.8714,128.6014],['부산',35.1796,129.0756],['광주',35.1595,126.8526],['강릉',37.7519,128.8761],['제주',33.4996,126.5312]];
 for(const [name,lat,lng] of cityLabels)L.marker([lat,lng],{icon:L.divIcon({className:'korea-city-label',html:name,iconSize:[42,20],iconAnchor:[21,-20]}),interactive:false}).addTo(map);
 map.attributionControl.addAttribution('Map: KOSTAT / southkorea-maps');
-layer=L.layerGroup().addTo(map);fitCountry();map.on('zoomend moveend',addMarkers);new ResizeObserver(()=>{map.invalidateSize();}).observe(q('#koreaMap'));}catch(e){q('#mapFallback').hidden=false;q('#resetMap').hidden=true;}
+layer=L.layerGroup().addTo(map);fitCountry();map.on('zoomend moveend',addMarkers);new ResizeObserver(()=>{if(!q("#mapPanel").hidden)map.invalidateSize();}).observe(q('#koreaMap'));}catch(e){q('#mapFallback').hidden=false;q('#resetMap').hidden=true;}
 render();select(selected,false,false);
 const requestedView=new URLSearchParams(location.search).get("view");
 setView(requestedView==="tier"||(requestedView!=="map"&&matchMedia("(min-width:769px)").matches));

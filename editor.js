@@ -196,6 +196,11 @@ function updateEditorHeader(){
 }
 
 function ensureOfficialPermission(){
+  if(window.HBG_SITE_ACCESS?.adminOnlyPosting !== false && (!currentUser || !isAdmin())){
+    alert("현재 게시물 작성은 관리자만 이용할 수 있습니다.");
+    location.href="board.html";
+    return false;
+  }
   const effectiveBoard = getEffectiveBoard();
 
   if(isAdminOnlyBoard(effectiveBoard) && !isAdmin()){
@@ -261,7 +266,7 @@ function readImageAsDataUrl(file){
 
 onAuthStateChanged(auth, async user=>{
   if(!user){
-    alert("로그인한 회원만 글을 쓸 수 있습니다.");
+    alert("관리자로 로그인한 뒤 게시물을 작성할 수 있습니다.");
     location.href = "login.html";
     return;
   }
@@ -270,11 +275,10 @@ onAuthStateChanged(auth, async user=>{
   currentUserData = await loadUserData(user);
   updateEditorHeader();
 
+  if(!ensureOfficialPermission())return;
   if(editId){
     await loadPostForEdit();
   }
-
-  ensureOfficialPermission();
 });
 
 document.querySelectorAll(".editor-toolbar button[data-command]").forEach(btn=>{
@@ -320,7 +324,7 @@ submitBtn.addEventListener("click", async ()=>{
   if(!ensureOfficialPermission()) return;
 
   if(!currentUser){
-    alert("로그인한 회원만 글을 쓸 수 있습니다.");
+    alert("관리자로 로그인한 뒤 게시물을 작성할 수 있습니다.");
     location.href = "login.html";
     return;
   }

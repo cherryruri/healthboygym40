@@ -16,7 +16,7 @@ html body .mall-story:hover img{transform:scale(1.04)}
 @media(max-width:768px){html body.cinema-mobile.cinema-mobile #boardCategoryBar{display:flex!important}html body.cinema-mobile.cinema-mobile .board-content-shell{display:block!important;padding-top:0!important}html body.cinema-mobile .board-header{display:none!important}html body.cinema-mobile .mall-carousel{margin-bottom:18px!important}.mall-story-grid{grid-template-columns:repeat(2,1fr)!important}}
 
 /* Membership pages stay in the source until ready for release. */
-html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[href*="my-comments.html"],html body [onclick*="showSignup"],html body #signupBox{display:none!important}
+html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[href*="my-comments.html"],html body #signupBox{display:none!important}
 @media(min-width:769px){
  html body .board-operation-hero,html body .desktop-community-hero,html body .mall-stories,html body .board-head,html body #noticeList{display:none!important}
  html body.desktop-board.desktop-board.desktop-board.desktop-board .board-page{padding:130px 32px 80px!important;margin:0 auto!important;max-width:1264px!important;width:100%!important;box-sizing:border-box}

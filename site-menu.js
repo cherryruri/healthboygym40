@@ -15,7 +15,7 @@
           <a href="login.html" class="mobile-auth-title" id="mobileProfileName">로그인 하기</a>
           <p id="mobileProfileText" class="mobile-auth-sub">회원 전용 메뉴를 이용해보세요.</p>
           <div class="mobile-auth-links" id="mobileGuestActions">
-            <a href="login.html">회원가입 하기</a>
+            <a href="login.html?signup=unavailable">회원가입 하기</a>
             <span>|</span>
             <a href="change-password.html">P/W 변경</a>
           </div>

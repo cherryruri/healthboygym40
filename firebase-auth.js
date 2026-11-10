@@ -147,7 +147,7 @@ window.login = async function(){
 await signInWithEmailAndPassword(auth, email, password);
 
 sessionStorage.setItem("showWelcomeOnce", "yes");
-window.location.href = "./mypage.html";
+window.location.href = "./board.html";
 
   }catch(error){
     console.log(error);
@@ -157,6 +157,7 @@ window.location.href = "./mypage.html";
 
 /* 회원가입 */
 window.signup = async function(){
+  if(window.HBG_SITE_ACCESS?.signupEnabled !== true){window.showSignupUnavailable();return;}
 
   const id = cleanId(document.getElementById("signupId").value);
   const password = document.getElementById("signupPassword").value;

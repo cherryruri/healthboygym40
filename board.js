@@ -311,6 +311,7 @@ function isOfficialWriteContext(){
 }
 
 function canWriteCurrentBoard(){
+  if(window.HBG_SITE_ACCESS?.adminOnlyPosting !== false)return Boolean(currentUser && isAdmin());
   if(isAdminOnlyBoard()) return isAdmin();
   if(isOfficialWriteContext()) return isAdmin();
   return true;
@@ -323,7 +324,8 @@ function updateWriteButton(){
   const adminOnly = isAdminOnlyBoard();
   const canWrite = canWriteCurrentBoard();
 
-  writeBtn.hidden = (official || adminOnly) && !canWrite;
+  writeBtn.hidden = !canWrite;
+  writeBtn.style.setProperty("display",canWrite ? "inline-flex" : "none","important");
   writeBtn.textContent = currentBoard === "request" ? "문의 작성" : official ? "공지 작성" : "글쓰기";
 }
 
@@ -567,6 +569,7 @@ if(boardSearch){
 
 if(writeBtn){
   writeBtn.addEventListener("click", ()=>{
+    if(!canWriteCurrentBoard())return;
     if(isAdminOnlyBoard() && !isAdmin()){
       alert("관리자만 인포게시판에 글을 쓸 수 있습니다.");
       return;

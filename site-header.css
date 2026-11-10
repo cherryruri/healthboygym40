@@ -278,4 +278,6 @@ body.menu-open #site-header#site-header{transform:none!important}
 
 
 /* Membership pages stay in the source until ready for release. */
-html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[href*="my-comments.html"],html body [onclick*="showSignup"],html body #signupBox{display:none!important}
+html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[href*="my-comments.html"],html body #signupBox{display:none!important}
+
+html body .mypage-menu,html body #mypageBtn,html body .mobile-mypage-link{display:none!important}

@@ -34,6 +34,7 @@ fill.style.width = `${signupPageIndex * 16.6}%`;
 }
 
 window.showSignup = function(){
+  if(window.HBG_SITE_ACCESS?.signupEnabled !== true){window.showSignupUnavailable();return;}
   hideAll();
   signupPageIndex = 1;
   updateSignupPage();
@@ -289,3 +290,5 @@ window.resetPassword = function(){
 
 updateSignupPage();
 checkPasswordLive();
+
+if(new URLSearchParams(location.search).get('signup')==='unavailable')window.showSignupUnavailable();

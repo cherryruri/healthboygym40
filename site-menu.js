@@ -110,6 +110,7 @@
     const extraLinks = [
       ['mypage.html','MY PAGE','마이페이지'],
       ['board.html','COMMUNITY','공지문/자유게시판'],
+      ['login.html','LOGIN','로그인'],
 
     ];
     extraLinks.forEach(([href,en,ko])=>{

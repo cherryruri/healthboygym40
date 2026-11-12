@@ -3,10 +3,47 @@
 const hero=trainer.querySelector('.coach-hero'),videos=[...hero.querySelectorAll('video')],profiles=[...trainer.querySelectorAll('.coach-profile')],mindset=trainer.querySelector('.coach-mindset'),lines=[...mindset.querySelectorAll('span')],scenes=[hero,mindset,...profiles];let current=0,paused=false,timer=0,frame=0,sliding=false,motion=0,lockedUntil=0,lastWheel=0,touch=null,fillFrame=0,fillDone=false;
 const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-x,4);
 function active(){return document.documentElement.classList.contains('trainer-only-view')&&!document.hidden&&!document.body.classList.contains('menu-open')&&!document.querySelector('.coach-career-dialog[open]');}
-function ensure(v){if(!v.getAttribute('src')){v.src=v.dataset.src;v.load();}}
+const desktop = matchMedia('(min-width:769px)');
+function syncPosters(){
+ videos.forEach(video=>{
+  if(desktop.matches)video.removeAttribute('poster');
+  else if(!video.hasAttribute('poster'))video.poster=video.dataset.poster;
+ });
+}
+syncPosters();
+desktop.addEventListener('change',syncPosters);
+videos.forEach(video=>{
+ const markFrameReady=()=>video.classList.add('is-frame-ready');
+ video.addEventListener('loadeddata',markFrameReady);
+ if(video.readyState>=2)markFrameReady();
+});
+function ensure(v){
+ if(desktop.matches)v.preload='auto';
+ if(!v.getAttribute('src'))v.src=v.dataset.src;
+}
+function waitForFrame(video){
+ if(video.readyState>=2)return Promise.resolve(true);
+ if(video.error)return Promise.resolve(false);
+ return new Promise(resolve=>{
+  const events=new AbortController();
+  const finish=ready=>{clearTimeout(timeout);events.abort();resolve(ready);};
+  const timeout=setTimeout(()=>finish(false),8000);
+  video.addEventListener('loadeddata',()=>finish(true),{signal:events.signal});
+  video.addEventListener('error',()=>finish(false),{signal:events.signal});
+ });
+}
 function scheduleSlide(){if(!timer&&!paused&&!sliding)timer=setTimeout(()=>{timer=0;show(current+1)},8000);}
 function playback(){const r=hero.getBoundingClientRect(),visible=active()&&r.bottom>1&&r.top<innerHeight-1;if(visible&&!paused){ensure(videos[current]);videos[current].play().catch(()=>{});if(!sliding)videos.forEach((v,i)=>{if(i!==current)v.pause()});scheduleSlide();ensure(videos[(current+1)%videos.length]);}else{clearTimeout(timer);timer=0;videos.forEach(v=>v.pause());}}
-function show(index){if(sliding)return;const next=(index+videos.length)%videos.length;if(next===current)return;clearTimeout(timer);timer=0;const direction=index>current?1:-1,old=videos[current],incoming=videos[next];ensure(incoming);if(!paused)incoming.play().catch(()=>{});sliding=true;old.classList.add('is-sliding');old.classList.remove('is-active');incoming.classList.add('is-active');current=next;document.getElementById('coachSlideNumber').textContent=String(current+1).padStart(2,'0');const timing={duration:1000,easing:'cubic-bezier(.22,.61,.36,1)'};old.animate([{transform:'translateX(0)'},{transform:`translateX(${-direction*100}%)`}],timing);const anim=incoming.animate([{transform:`translateX(${direction*100}%)`},{transform:'translateX(0)'}],timing);anim.finished.catch(()=>{}).then(()=>{old.classList.remove('is-sliding');old.pause();sliding=false;playback();});}
+async function show(index){if(sliding)return;const next=(index+videos.length)%videos.length;if(next===current)return;clearTimeout(timer);timer=0;const direction=index>current?1:-1,old=videos[current],incoming=videos[next];ensure(incoming);sliding=true;
+ if(desktop.matches){
+  const ready=await waitForFrame(incoming);
+  if(!ready||!active()||hero.getBoundingClientRect().bottom<=1){
+   sliding=false;
+   playback();
+   return;
+  }
+ }
+ if(!paused)incoming.play().catch(()=>{});old.classList.add('is-sliding');old.classList.remove('is-active');incoming.classList.add('is-active');current=next;document.getElementById('coachSlideNumber').textContent=String(current+1).padStart(2,'0');const timing={duration:1000,easing:'cubic-bezier(.22,.61,.36,1)'};old.animate([{transform:'translateX(0)'},{transform:`translateX(${-direction*100}%)`}],timing);const anim=incoming.animate([{transform:`translateX(${direction*100}%)`},{transform:'translateX(0)'}],timing);anim.finished.catch(()=>{}).then(()=>{old.classList.remove('is-sliding');old.pause();sliding=false;playback();});}
 hero.querySelector('[data-coach-prev]').addEventListener('click',()=>show(current-1));hero.querySelector('[data-coach-next]').addEventListener('click',()=>show(current+1));hero.querySelector('[data-coach-pause]').addEventListener('click',e=>{paused=!paused;e.currentTarget.textContent=paused?'▶':'Ⅱ';e.currentTarget.setAttribute('aria-label',paused?'트레이너 영상 재생':'트레이너 영상 일시정지');playback();});videos.forEach(v=>v.addEventListener('ended',()=>{if(v===videos[current])show(current+1)}));
 function fillStatement(){if(fillFrame||fillDone)return;const start=performance.now(),duration=1900;lockedUntil=Math.max(lockedUntil,start+duration+150);function tick(now){const progress=clamp((now-start)/duration);lines.forEach((line,i)=>line.style.setProperty('--fill',clamp(progress*3-i)*100+'%'));if(progress<1)fillFrame=requestAnimationFrame(tick);else{fillFrame=0;fillDone=true;}}fillFrame=requestAnimationFrame(tick);}
 function nearest(){let index=0,distance=Infinity;scenes.forEach((s,i)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<distance){distance=d;index=i;}});return index;}

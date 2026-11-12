@@ -194,9 +194,11 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
  .hb-programs .hb-machine-browse{margin-top:12px}
  .hb-programs .hb-machine-brands{margin:8px 0 0}
  .hb-programs .hb-brand-row{padding:3px 0}
- .hb-programs .hb-brand-item{height:20px}
- .hb-programs .hb-brand-item img{max-height:20px}
- .hb-home .hb-programs .hb-program-track{flex:1 1 0;height:auto;min-height:0;max-height:480px;margin-top:8px}
+ .hb-home .hb-programs .hb-section-title #hbProgramsTitle{font-size:clamp(36px,5vw,76px);white-space:nowrap}
+ #hbProgramsTitle br{display:none}
+ .hb-programs .hb-brand-item{flex-basis:150px;height:34px}
+ .hb-programs .hb-brand-item img{max-height:34px}
+ .hb-home .hb-programs .hb-program-track{flex:1 1 0;height:auto;min-height:0;max-height:min(43svh,430px);margin-top:12px}
 }
 
 /* Welcome copy sits at the lower left of the opening video. */

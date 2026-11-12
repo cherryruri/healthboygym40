@@ -15,8 +15,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  limit,
-  orderBy,
   query,
   serverTimestamp,
   setDoc,
@@ -38,13 +36,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const DEFAULT_VIDEO_SRC = "센터 드론 영상.mp4";
-const FALLBACK_THUMB_SRC = "헬스보이짐 사진.jpg";
 const settingsRef = doc(db, "siteSettings", "homeNews");
 
 const boardList = document.querySelector("[data-home-board-list]");
-const newsThumb = document.querySelector("[data-home-news-thumb]");
-const newsThumbImg = newsThumb ? newsThumb.querySelector("img") : null;
-const newsThumbTitle = document.querySelector("[data-home-news-title]");
 const videoCard = document.querySelector("[data-home-video-card]");
 const video = document.querySelector("[data-home-video]");
 const playButton = document.querySelector("[data-home-video-play]");
@@ -55,7 +49,6 @@ const deleteVideoButton = document.querySelector("[data-home-video-delete]");
 
 const noticeGallery=document.querySelector("[data-home-notice-gallery]");
 let latestNoticePosts = [];
-let latestNewsPosts = [];
 let currentVideoSrc = DEFAULT_VIDEO_SRC;
 let currentUserData = null;
 
@@ -115,96 +108,53 @@ function renderBoardList(){
 }
 
 function isNoticePost(data){
-  return data.board === "noticeboard" && (data.category === "notice" || data.isNotice || !data.category);
-}
-
-function isNewsPost(data){
-  return data.board === "news" || data.category === "news";
-}
-
-function renderNewsThumbnail(){
-  if(!newsThumb || !newsThumbImg) return;
-
-  const postWithThumb =
-    latestNewsPosts.find(({ data })=>data.thumbnailDataUrl) ||
-    latestNewsPosts[0];
-
-  if(!postWithThumb){
-    newsThumb.href = "board.html?board=news";
-    newsThumbImg.src = FALLBACK_THUMB_SRC;
-    newsThumbImg.alt = "뉴스 썸네일";
-    if(newsThumbTitle) newsThumbTitle.textContent = "NEWS";
-    return;
-  }
-
-  const { id, data } = postWithThumb;
-  newsThumb.href = `post.html?id=${encodeURIComponent(id)}`;
-  newsThumbImg.src = data.thumbnailDataUrl || FALLBACK_THUMB_SRC;
-  newsThumbImg.alt = data.title || "뉴스 썸네일";
-
-  if(newsThumbTitle){
-    newsThumbTitle.textContent = data.title || "NEWS";
-  }
+  if(data.isPublic === false || data.isSecret || data.isAdminOnly || data.category === "request") return false;
+  return data.isNotice === true || data.category === "notice" || (data.board === "noticeboard" && !data.category);
 }
 
 function noticeImage(data){
-  if(data.thumbnailDataUrl) return data.thumbnailDataUrl;
-  const html=data.content||data.body||'';
-  if(typeof html==='string'){const doc=new DOMParser().parseFromString(html,'text/html');const src=doc.querySelector('img')?.getAttribute('src');if(src&&/^(https?:|data:image\/)/i.test(src))return src;}
-  return '';
+  if(data.isPublic !== true) return "";
+  const imagePattern = /^(https:\/\/|data:image\/(?:png|jpe?g|webp|gif);base64,)/i;
+  if(imagePattern.test(data.thumbnailDataUrl || "")) return data.thumbnailDataUrl;
+
+  const template = document.createElement("template");
+  template.innerHTML = String(data.content || data.body || "");
+  const src = template.content.querySelector("img")?.getAttribute("src") || "";
+  return imagePattern.test(src) ? src : "";
 }
+
 function renderNoticeGallery(){
-  if(!noticeGallery)return;
-  const photos=latestNoticePosts.filter(({data})=>noticeImage(data)).slice(0,4);
-  if(!photos.length)return;
-  noticeGallery.innerHTML=photos.map(({id,data})=>`<a class="notice-photo-card" href="post.html?id=${encodeURIComponent(id)}"><div class="notice-photo"><img src="${escapeHTML(noticeImage(data))}" alt="${escapeHTML(data.title||'공지 사진')}" loading="lazy"></div><div class="notice-photo-copy"><span>NOTICE · ${formatDate(data)}</span><h3>${escapeHTML(data.title||'공지사항')}</h3></div></a>`).join('');
+  if(!noticeGallery) return;
+  const photos = latestNoticePosts.map(post => ({...post, src: noticeImage(post.data)}))
+    .filter(({src}) => src)
+    .slice(0, 5);
+
+  noticeGallery.innerHTML = photos.length ? photos.map(({id, data, src}) => `
+    <a class="notice-photo-card" href="post.html?id=${encodeURIComponent(id)}">
+      <div class="notice-photo"><img src="${escapeHTML(src)}" alt="" loading="lazy"></div>
+      <div class="notice-photo-copy"><span>NOTICE · ${formatDate(data)}</span><h3>${escapeHTML(data.title || "공지사항")}</h3></div>
+    </a>
+  `).join("") : '<p class="notice-gallery-empty">등록된 공지 사진이 없습니다.</p>';
 }
 
 async function loadLatestPosts(){
-  if(!boardList && !newsThumb) return;
+  if(!boardList && !noticeGallery) return;
 
-  try{
-    const noticeQuery = query(
-      collection(db, "boards"),
-      where("board", "==", "noticeboard"),
-      orderBy("createdAt", "desc"),
-      limit(12)
-    );
+  const posts = collection(db, "boards");
+  const results = await Promise.allSettled(["noticeboard", "free", "news"].map(board =>
+    getDocs(query(posts, where("board", "==", board)))
+  ));
 
-    const newsQuery = query(
-      collection(db, "boards"),
-      where("board", "in", ["noticeboard", "news"]),
-      orderBy("createdAt", "desc"),
-      limit(24)
-    );
-
-    const [noticeSnap, newsSnap] = await Promise.all([
-      getDocs(noticeQuery),
-      getDocs(newsQuery)
-    ]);
-
-    latestNoticePosts =
-      noticeSnap.docs.map(docSnap=>({
-        id: docSnap.id,
-        data: docSnap.data()
-      }))
-      .filter(({ data })=>isNoticePost(data))
-      .slice(0, 12);
-
-    latestNewsPosts =
-      newsSnap.docs.map(docSnap=>({
-        id: docSnap.id,
-        data: docSnap.data()
-      }))
-      .filter(({ data })=>isNewsPost(data));
-  }catch(error){
-    console.log(error);
-    latestNoticePosts = [];
-    latestNewsPosts = [];
-  }
+  latestNoticePosts = results.flatMap(result => {
+    if(result.status === "fulfilled"){
+      return result.value.docs.map(snapshot => ({id: snapshot.id, data: snapshot.data()}));
+    }
+    console.error(result.reason);
+    return [];
+  }).filter(({data}) => isNoticePost(data))
+    .sort((a, b) => (b.data.createdAt?.toMillis?.() || 0) - (a.data.createdAt?.toMillis?.() || 0));
 
   renderBoardList();
-  renderNewsThumbnail();
   renderNoticeGallery();
 }
 

@@ -12,6 +12,12 @@
  ];
  const hero=document.createElement('section');hero.className='desktop-community-hero mall-carousel';hero.setAttribute('aria-label','센터 소개 슬라이드');hero.setAttribute('aria-roledescription','캐러셀');
  hero.innerHTML='<div class="mall-slide-track">'+slides.map((s,i)=>`<article class="mall-slide" aria-label="${i+1} / ${slides.length}"><img src="${s[0]}" alt="" ${i?'loading="lazy"':'fetchpriority="high"'}><div class="mall-slide-copy"><p>${s[1]}</p><span>${s[2]}</span><a href="${s[4]}">${s[3]}</a></div></article>`).join('')+'</div><button type="button" class="mall-prev" aria-label="이전 배너">‹</button><button type="button" class="mall-next" aria-label="다음 배너">›</button><div class="mall-slide-dots">'+slides.map((_,i)=>`<button type="button" aria-label="${i+1}번 배너" data-slide="${i}"></button>`).join('')+'</div><span class="mall-slide-count" aria-live="polite"></span>';
+ const syncHeroVisibility=()=>{
+  if(media.matches)hero.style.removeProperty('display');
+  else hero.style.setProperty('display','none','important');
+ };
+ syncHeroVisibility();
+ media.addEventListener('change',syncHeroVisibility);
  shell.before(hero);
  let active=0;
  const showSlide=index=>{active=(index+slides.length)%slides.length;hero.querySelectorAll('.mall-slide').forEach((slide,i)=>{const position=(i-active+slides.length)%slides.length;slide.dataset.position=position;slide.setAttribute('aria-hidden',String(position!==0));slide.inert=position!==0;});hero.querySelectorAll('[data-slide]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===active)));hero.querySelector('.mall-slide-count').textContent=`0${active+1} / 03`;hero.dispatchEvent(new Event("slidechange"));};

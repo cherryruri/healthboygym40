@@ -1,5 +1,5 @@
 import { authReady } from "./firebase-index.js?v=20261112-admin";
-import { recordTraffic } from "./site-traffic.js?v=1";
+import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=1";
 
 (async () => {
   const hero = document.querySelector('#hbChapter1');
@@ -18,7 +18,7 @@ import { recordTraffic } from "./site-traffic.js?v=1";
     const isDiscount = card.dataset.promotion === 'new-member';
     if (isAdmin) return true;
     if (isDiscount && (Date.now() < startsAt || Date.now() >= endsAt)) return false;
-    try { return localStorage.getItem(storageKey(card)) !== '1'; }
+    try { return localStorage.getItem(storageKey(card)) !== todayInSeoul(); }
     catch { return true; }
   });
   if (!cards.length) return;
@@ -96,7 +96,7 @@ import { recordTraffic } from "./site-traffic.js?v=1";
         return;
       }
       if (!isAdmin) {
-        try { localStorage.setItem(storageKey(card), '1'); } catch {}
+        try { localStorage.setItem(storageKey(card), todayInSeoul()); } catch {}
       }
       closeCard(card);
     });

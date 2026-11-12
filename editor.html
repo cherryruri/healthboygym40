@@ -6,10 +6,10 @@
 <title>글쓰기</title>
 
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
-<link rel="stylesheet" href="editor.css?v=20261112-info-grid">
+<link rel="stylesheet" href="editor.css?v=20261112-text-thumbnail">
 
-<link rel="stylesheet" href="site-header.css?v=20261110-access2">
-<script src="site-header.js?v=20260909-nav-final" defer></script>
+<link rel="stylesheet" href="site-header.css?v=20261112-talk">
+<script src="site-header.js?v=20261112-talk" defer></script>
 <style>.thumbnail-preview{aspect-ratio:1;width:min(100%,320px);height:auto;background-size:cover;background-position:center}</style><script src="site-access.js?v=20261110-access1"></script></head>
 
 <body class="loaded">
@@ -54,6 +54,15 @@
         <span id="thumbnailLabel">이미지 선택</span>
       </label>
       <button type="button" id="removeThumbnail" class="thumbnail-remove" hidden>삭제</button>
+      <div id="infoThumbnailMaker" class="info-thumbnail-maker" hidden>
+        <label for="infoThumbnailText">썸네일 문구</label>
+        <textarea id="infoThumbnailText" rows="2" maxlength="32" placeholder="비워 두면 글 제목 사용"></textarea>
+        <label for="infoThumbnailHighlight">강조하고 싶은 단어</label>
+        <input id="infoThumbnailHighlight" type="text" maxlength="14" placeholder="예시: 웰컴PT">
+        <p>문구는 최대 32자, 4줄입니다. 원하는 위치에서 줄을 바꿀 수 있어요.</p>
+        <button type="button" id="makeInfoThumbnail">자동 썸네일 만들기</button>
+        <p id="infoThumbnailStatus" role="status"></p>
+      </div>
       <div id="thumbnailPreview" class="thumbnail-preview" hidden></div>
     </div>
 
@@ -143,7 +152,7 @@
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20261112-admin"></script>
 <script type="module" src="firebase-index.js?v=20261112-admin"></script>
-<script type="module" src="editor.js?v=20261112-info-grid"></script>
+<script type="module" src="editor.js?v=20261112-text-thumbnail"></script>
 
 </body>
 </html>

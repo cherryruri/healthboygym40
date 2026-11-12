@@ -49,6 +49,7 @@ const contentBox = document.getElementById("postContent");
 const submitBtn = document.getElementById("submitPost");
 const editorBoardName = document.getElementById("editorBoardName");
 const thumbnailField = document.getElementById("editorThumbnailField");
+const infoThumbnailMaker = document.getElementById("infoThumbnailMaker");
 const thumbnailInput = document.getElementById("postThumbnail");
 const thumbnailLabel = document.getElementById("thumbnailLabel");
 const categoryField = document.getElementById("editorCategoryField");
@@ -172,6 +173,7 @@ function updateEditorHeader(){
       categoryNames[category] || boardNames[effectiveBoard] || "수내점 게시판";
   }
 
+  infoThumbnailMaker.hidden = effectiveBoard !== "infoboard";
   if(thumbnailField){
     thumbnailField.hidden = getEffectiveCategory(effectiveBoard) === "request";
   }
@@ -306,6 +308,78 @@ const backColor = document.getElementById("backColor");
 const textColorBtn = document.getElementById("textColorBtn");
 const backColorBtn = document.getElementById("backColorBtn");
 const dividerSelect = document.getElementById("dividerSelect");
+
+
+function makeTextThumbnail(text, highlight){
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 800;
+  const context = canvas.getContext("2d");
+  const paragraphs = text.split(/\n+/).map(paragraph=>{
+    const parts = highlight ? paragraph.split(highlight) : [paragraph];
+    return parts.flatMap((part, index)=>[
+      ...(index ? [{ text: highlight, yellow: true }] : []),
+      ...(part.match(/\s+|\S+/g) || []).map(word=>({ text: /^\s/.test(word) ? " " : word }))
+    ]);
+  });
+  const widthOf = tokens => context.measureText(tokens.map(token=>token.text).join("").trim()).width;
+
+  let lines;
+  let size;
+  for(size = 110; size >= 18; size -= 2){
+    context.font = '900 ' + size + 'px Pretendard, "Malgun Gothic", sans-serif';
+    lines = [];
+    for(const tokens of paragraphs){
+      let line = [];
+      for(const token of tokens){
+        if(token.text === " " && !line.length) continue;
+        if(line.length && token.text !== " " && widthOf([...line, token]) > 600){
+          lines.push(line);
+          line = [];
+        }
+        line.push(token);
+      }
+      if(line.length) lines.push(line);
+    }
+    if(lines.length <= 4 && lines.length * size * 1.24 <= 510 && lines.every(line=>widthOf(line) <= 600)) break;
+  }
+  if(size < 18 || !lines.length) return "";
+
+  context.fillStyle = "#000";
+  context.fillRect(0, 0, 800, 800);
+  context.textBaseline = "middle";
+  lines.forEach((line, index)=>{
+    const left = (800 - widthOf(line)) / 2;
+    const y = 400 + (index - (lines.length - 1) / 2) * size * 1.24;
+    let prefix = "";
+    for(const token of line){
+      context.fillStyle = token.yellow ? "#ffce19" : "#fff";
+      context.fillText(token.text, left + context.measureText(prefix).width, y);
+      prefix += token.text;
+    }
+  });
+  return canvas.toDataURL("image/jpeg", 0.88);
+}
+
+document.getElementById("makeInfoThumbnail").addEventListener("click", ()=>{
+  const text = document.getElementById("infoThumbnailText").value.trim() || titleInput.value.trim();
+  const highlight = document.getElementById("infoThumbnailHighlight").value.trim();
+  const status = document.getElementById("infoThumbnailStatus");
+  if(!text || text.length > 32){
+    status.textContent = "썸네일 문구를 1~32자로 입력해 주세요.";
+    return;
+  }
+  if(highlight && !text.split("\n").some(line=>line.includes(highlight))){
+    status.textContent = "강조할 단어를 썸네일 문구에 들어 있는 그대로 입력해 주세요.";
+    return;
+  }
+  const image = makeTextThumbnail(text, highlight);
+  if(!image){
+    status.textContent = "문구를 줄이거나 줄바꿈을 조정해 주세요. 최대 4줄까지 표시됩니다.";
+    return;
+  }
+  setThumbnailPreview(image);
+  status.textContent = "썸네일을 만들었어요. 글을 저장하면 함께 등록됩니다.";
+});
 
 if(thumbnailInput){
   thumbnailInput.addEventListener("change", async ()=>{

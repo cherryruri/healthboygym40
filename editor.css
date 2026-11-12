@@ -582,3 +582,9 @@ border-radius:6px;
   font-weight:700;
   line-height:1.4;
 }
+
+.info-thumbnail-maker:not([hidden]){display:grid;gap:8px;justify-items:start;width:min(100%,420px)}
+.info-thumbnail-maker label{font-weight:650}
+.info-thumbnail-maker :is(input,textarea){width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;font:inherit}
+#makeInfoThumbnail{padding:10px 15px;border:0;border-radius:8px;background:#111;color:#fff;cursor:pointer}
+#infoThumbnailStatus:empty{display:none}

@@ -51,3 +51,78 @@ html body[data-board="infoboard"] #boardCategoryBar button[data-category].active
 .board-category-manager input,.board-category-manager button{padding:7px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;font:inherit}
 .board-category-manager button{cursor:pointer}
 .board-category-manager li span{overflow-wrap:anywhere}
+
+.board-menu-heading { display: none; }
+.board-menu-panel { min-width: 0; }
+.board-custom-categories { list-style: none; padding: 0; }
+.board-menu-edit { display: flex; flex-wrap: wrap; gap: 6px; width: 100%; }
+.board-menu-edit input { flex: 1 1 100px; }
+.board-category-manager input { min-width: 0; width: 100%; }
+.board-category-manager form label { display: grid; gap: 6px; width: 100%; }
+.board-category-manager li { margin: 8px 0; }
+.board-category-manager [role="status"]:empty { display: none; }
+
+@media (max-width: 768px) {
+  .board-menu-panel { width: 100%; }
+}
+
+@media (min-width: 769px) {
+  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-content-shell[aria-label] {
+    display: grid !important;
+    grid-template-columns: clamp(172px, 18vw, 224px) minmax(0, 1fr) !important;
+    column-gap: clamp(22px, 3vw, 40px);
+    align-items: start;
+  }
+  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-page.board-page {
+    max-width: 1480px !important;
+  }
+  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-toolbar.board-toolbar {
+    display: contents !important;
+  }
+  .desktop-board:is([data-board="free"],[data-board="infoboard"]) .board-menu-panel {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    position: sticky;
+    top: 112px;
+    max-height: calc(100vh - 132px);
+    overflow: auto;
+    padding: 16px;
+    background: #f7f7f6;
+    border: 1px solid #e7e7e5;
+    border-radius: 16px;
+  }
+  .desktop-board .board-menu-heading { display: block; margin: 0 0 16px; padding: 0 8px; font-size: 16px; }
+  html body.desktop-board .board-menu-panel #boardCategoryBar {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 5px !important;
+    background: transparent !important;
+  }
+  html body.desktop-board .board-menu-panel #boardCategoryBar button[data-category] {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 12px !important;
+    border-color: transparent !important;
+    border-radius: 9px !important;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+  html body.desktop-board .board-menu-panel #boardCategoryBar button.active { border-color: #111 !important; }
+  .desktop-board .board-menu-panel .board-category-manager {
+    margin-top: 16px;
+    padding: 12px 0 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+    border-radius: 0;
+    font-size: 13px;
+  }
+  .desktop-board:is([data-board="free"],[data-board="infoboard"]) :is(.board-header,.board-bottom,.board-table,.pagination) {
+    grid-column: 2;
+    min-width: 0;
+  }
+  .desktop-board:is([data-board="free"],[data-board="infoboard"]) .board-bottom {
+    justify-self: end;
+    padding-bottom: 18px;
+  }
+}

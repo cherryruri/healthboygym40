@@ -443,15 +443,15 @@ function updateCategoryManager(bar){
     categoryManager = document.createElement("details");
     categoryManager.className = "board-category-manager";
     categoryManager.innerHTML = `
-      <summary>분류 관리</summary>
+      <summary>게시판 메뉴 설정</summary>
       <form class="board-category-add">
-        <label>새 분류 이름 <input name="label" maxlength="24" required></label>
-        <button type="submit">분류 추가</button>
+        <label>새 메뉴 이름 <input name="label" maxlength="24" required></label>
+        <button type="submit">메뉴 추가</button>
       </form>
       <ul class="board-custom-categories"></ul>
       <p role="status"></p>
     `;
-    categoryManager.querySelector("form").addEventListener("submit", event=>{
+    categoryManager.querySelector(".board-category-add").addEventListener("submit", event=>{
       event.preventDefault();
       const input = event.currentTarget.elements.label;
       const label = input.value.trim().replace(/\s+/g," ");
@@ -461,13 +461,13 @@ function updateCategoryManager(bar){
       const id = "custom_" + crypto.randomUUID();
       void saveCategoryChange(currentScope, items=>{
         if(builtIns.some(([, name])=>name === label) || items.some(item=>item.label === label && !item.archived)){
-          throw new Error("이미 사용 중인 분류 이름입니다.");
+          throw new Error("이미 사용 중인 메뉴 이름입니다.");
         }
         const archived = items.find(item=>item.label === label && item.archived);
         if(archived) return items.map(item=>item.id === archived.id ? {...item,archived:false} : item);
-        if(items.length >= 100) throw new Error("분류는 최대 100개까지 만들 수 있어요.");
+        if(items.length >= 100) throw new Error("메뉴는 최대 100개까지 만들 수 있어요.");
         return [...items,{id,label,archived:false}];
-      }, "분류를 추가했어요.", ()=>{input.value = "";});
+      }, "메뉴를 추가했어요.", ()=>{input.value = "";});
     });
   }
   if(categoryManager.previousElementSibling !== bar) bar.after(categoryManager);
@@ -476,19 +476,45 @@ function updateCategoryManager(bar){
   list.replaceChildren();
   for(const item of boardCategories[scope].filter(category=>!category.archived)){
     const row = document.createElement("li");
-    const name = document.createElement("span");
-    name.textContent = item.label;
+    const form = document.createElement("form");
+    form.className = "board-menu-edit";
+    const name = document.createElement("input");
+    name.value = item.label;
+    name.maxLength = 24;
+    name.required = true;
+    name.setAttribute("aria-label", item.label + " 메뉴 이름");
+    const save = document.createElement("button");
+    save.type = "submit";
+    save.textContent = "수정";
+    save.setAttribute("aria-label", item.label + " 이름 수정");
+    form.addEventListener("submit", event=>{
+      event.preventDefault();
+      const label = name.value.trim().replace(/\s+/g," ");
+      if(!label || label === item.label) return;
+      const builtIns = getMeta().categories.filter(([id])=>!isCustomCategory(id));
+      void saveCategoryChange(scope, items=>{
+        if(!items.some(category=>category.id === item.id && !category.archived)){
+          throw new Error("이미 삭제된 메뉴입니다.");
+        }
+        if(builtIns.some(([, text])=>text === label) ||
+           items.some(category=>category.id !== item.id && category.label === label && !category.archived)){
+          throw new Error("이미 사용 중인 메뉴 이름입니다.");
+        }
+        return items.map(category=>category.id === item.id ? {...category,label} : category);
+      }, "메뉴 이름을 수정했어요.");
+    });
     const remove = document.createElement("button");
     remove.type = "button";
     remove.textContent = "삭제";
-    remove.setAttribute("aria-label", item.label + " 분류 삭제");
+    remove.setAttribute("aria-label", item.label + " 메뉴 삭제");
     remove.addEventListener("click", ()=>{
-      if(!confirm(item.label + " 분류를 삭제할까요? 글은 전체 목록에 남습니다.")) return;
+      if(!confirm(item.label + " 메뉴를 삭제할까요? 글은 전체 목록에 남습니다.")) return;
       void saveCategoryChange(scope, items=>items.map(category=>
         category.id === item.id ? {...category,archived:true} : category
-      ), "분류를 삭제했어요.");
+      ), "메뉴를 삭제했어요.");
     });
-    row.append(name, remove);
+    form.append(name, save, remove);
+    row.append(form);
     list.append(row);
   }
 }
@@ -507,7 +533,7 @@ async function saveCategoryChange(scope, change, message, onSaved){
     renderPage(currentPage);
     status.textContent = message;
   }catch(error){
-    status.textContent = error.code ? "분류를 저장하지 못했어요." : error.message;
+    status.textContent = error.code ? "메뉴를 저장하지 못했어요." : error.message;
   }finally{
     controls.forEach(control=>{control.disabled = false;});
   }

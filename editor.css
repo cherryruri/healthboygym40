@@ -588,3 +588,11 @@ border-radius:6px;
 .info-thumbnail-maker :is(input,textarea){width:100%;padding:10px 12px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;font:inherit}
 #makeInfoThumbnail{padding:10px 15px;border:0;border-radius:8px;background:#111;color:#fff;cursor:pointer}
 #infoThumbnailStatus:empty{display:none}
+
+.editor-thumbnail-field{grid-template-columns:minmax(0,1fr) minmax(0,420px);align-items:start;gap:24px}
+.thumbnail-preview-panel .thumbnail-preview{margin:12px 0}
+.thumbnail-image-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.thumbnail-colors{display:flex;flex-wrap:wrap;gap:16px}
+.thumbnail-colors label{display:flex;align-items:center;gap:8px}
+.info-thumbnail-maker .thumbnail-colors input[type=color]{width:42px;height:36px;padding:3px;cursor:pointer}
+@media(max-width:768px){.editor-thumbnail-field{grid-template-columns:1fr}.thumbnail-image-actions :is(.editor-thumbnail-drop,.thumbnail-remove){width:auto}}

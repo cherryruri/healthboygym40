@@ -49,7 +49,6 @@ const contentBox = document.getElementById("postContent");
 const submitBtn = document.getElementById("submitPost");
 const editorBoardName = document.getElementById("editorBoardName");
 const thumbnailField = document.getElementById("editorThumbnailField");
-const infoThumbnailMaker = document.getElementById("infoThumbnailMaker");
 const thumbnailInput = document.getElementById("postThumbnail");
 const thumbnailLabel = document.getElementById("thumbnailLabel");
 const categoryField = document.getElementById("editorCategoryField");
@@ -173,7 +172,6 @@ function updateEditorHeader(){
       categoryNames[category] || boardNames[effectiveBoard] || "수내점 게시판";
   }
 
-  infoThumbnailMaker.hidden = effectiveBoard !== "infoboard";
   if(thumbnailField){
     thumbnailField.hidden = getEffectiveCategory(effectiveBoard) === "request";
   }
@@ -310,7 +308,7 @@ const backColorBtn = document.getElementById("backColorBtn");
 const dividerSelect = document.getElementById("dividerSelect");
 
 
-function makeTextThumbnail(text, highlight){
+function makeTextThumbnail(text, highlight, background, accent){
   const canvas = document.createElement("canvas");
   canvas.width = canvas.height = 800;
   const context = canvas.getContext("2d");
@@ -344,7 +342,11 @@ function makeTextThumbnail(text, highlight){
   }
   if(size < 18 || !lines.length) return "";
 
-  context.fillStyle = "#000";
+  const [red, green, blue] = background.slice(1).match(/../g).map(value=>parseInt(value, 16) / 255);
+  const linearize = value => value <= .04045 ? value / 12.92 : ((value + .055) / 1.055) ** 2.4;
+  const luminance = .2126 * linearize(red) + .7152 * linearize(green) + .0722 * linearize(blue);
+  const foreground = luminance > .179 ? "#000" : "#fff";
+  context.fillStyle = background;
   context.fillRect(0, 0, 800, 800);
   context.textBaseline = "middle";
   lines.forEach((line, index)=>{
@@ -352,7 +354,7 @@ function makeTextThumbnail(text, highlight){
     const y = 400 + (index - (lines.length - 1) / 2) * size * 1.24;
     let prefix = "";
     for(const token of line){
-      context.fillStyle = token.yellow ? "#ffce19" : "#fff";
+      context.fillStyle = token.yellow ? accent : foreground;
       context.fillText(token.text, left + context.measureText(prefix).width, y);
       prefix += token.text;
     }
@@ -372,7 +374,9 @@ document.getElementById("makeInfoThumbnail").addEventListener("click", ()=>{
     status.textContent = "강조할 단어를 썸네일 문구에 들어 있는 그대로 입력해 주세요.";
     return;
   }
-  const image = makeTextThumbnail(text, highlight);
+  const background = document.getElementById("thumbnailBackground").value;
+  const accent = document.getElementById("thumbnailAccent").value;
+  const image = makeTextThumbnail(text, highlight, background, accent);
   if(!image){
     status.textContent = "문구를 줄이거나 줄바꿈을 조정해 주세요. 최대 4줄까지 표시됩니다.";
     return;

@@ -181,6 +181,11 @@ async function loadPost() {
   }
 
   currentPost = data;
+  if(isAdminOnlyPost(data)){
+    const params = new URLSearchParams({board:"infoboard"});
+    if(data.category) params.set("category", data.category);
+    document.querySelector(".back-list").href = "board.html?" + params;
+  }
 
   titleEl.textContent = data.title;
   writerEl.textContent = data.writerId || "회원";

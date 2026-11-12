@@ -6,7 +6,7 @@
 <title>글쓰기</title>
 
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
-<link rel="stylesheet" href="editor.css?v=20261112-text-thumbnail">
+<link rel="stylesheet" href="editor.css?v=20261112-thumbnail-colors">
 
 <link rel="stylesheet" href="site-header.css?v=20261112-talk">
 <script src="site-header.js?v=20261112-talk" defer></script>
@@ -45,25 +45,31 @@
   <section class="editor-card">
 
     <div class="editor-thumbnail-field" id="editorThumbnailField" hidden>
-      <div>
-        <strong>썸네일 이미지</strong>
-        <p>게시판 대표 사진은 중앙 기준 1:1 정사각형으로 자동 조정됩니다. 미리보기를 확인해 주세요.</p>
+      <div class="thumbnail-preview-panel">
+        <strong>썸네일 미리보기</strong>
+        <p>게시판 대표 사진은 중앙 기준 1:1 정사각형으로 자동 조정됩니다. 문구로 만들거나 사진을 선택해 주세요.</p>
+        <div id="thumbnailPreview" class="thumbnail-preview" role="img" aria-label="게시판 썸네일 미리보기" hidden></div>
+        <div class="thumbnail-image-actions">
+          <label class="editor-thumbnail-drop">
+            <input type="file" id="postThumbnail" accept="image/*">
+            <span id="thumbnailLabel">이미지 선택</span>
+          </label>
+          <button type="button" id="removeThumbnail" class="thumbnail-remove" hidden>삭제</button>
+        </div>
       </div>
-      <label class="editor-thumbnail-drop">
-        <input type="file" id="postThumbnail" accept="image/*">
-        <span id="thumbnailLabel">이미지 선택</span>
-      </label>
-      <button type="button" id="removeThumbnail" class="thumbnail-remove" hidden>삭제</button>
-      <div id="infoThumbnailMaker" class="info-thumbnail-maker" hidden>
+      <div id="infoThumbnailMaker" class="info-thumbnail-maker">
         <label for="infoThumbnailText">썸네일 문구</label>
         <textarea id="infoThumbnailText" rows="2" maxlength="32" placeholder="비워 두면 글 제목 사용"></textarea>
         <label for="infoThumbnailHighlight">강조하고 싶은 단어</label>
         <input id="infoThumbnailHighlight" type="text" maxlength="14" placeholder="예시: 웰컴PT">
         <p>문구는 최대 32자, 4줄입니다. 원하는 위치에서 줄을 바꿀 수 있어요.</p>
-        <button type="button" id="makeInfoThumbnail">자동 썸네일 만들기</button>
+        <div class="thumbnail-colors">
+          <label>배경색 <input id="thumbnailBackground" type="color" value="#000000"></label>
+          <label>강조색 <input id="thumbnailAccent" type="color" value="#ffce19"></label>
+        </div>
+        <button type="button" id="makeInfoThumbnail">썸네일 미리보기</button>
         <p id="infoThumbnailStatus" role="status"></p>
       </div>
-      <div id="thumbnailPreview" class="thumbnail-preview" hidden></div>
     </div>
 
     <label class="editor-category-field" id="editorCategoryField" hidden>
@@ -152,7 +158,7 @@
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20261112-admin"></script>
 <script type="module" src="firebase-index.js?v=20261112-admin"></script>
-<script type="module" src="editor.js?v=20261112-text-thumbnail"></script>
+<script type="module" src="editor.js?v=20261112-thumbnail-colors"></script>
 
 </body>
 </html>

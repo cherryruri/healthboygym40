@@ -2,6 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<script>
+  (() => {
+    const params = new URLSearchParams(location.search);
+    if (params.get("board") === "request" || params.get("category") === "request") {
+      location.replace("board.html");
+    }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>글쓰기</title>
 
@@ -160,7 +168,7 @@
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20261112-admin-mypage"></script>
 <script type="module" src="firebase-index.js?v=20261112-admin"></script>
-<script type="module" src="editor.js?v=20261112-category-tools"></script>
+<script type="module" src="editor.js?v=inquiry-paused"></script>
 
 </body>
 </html>

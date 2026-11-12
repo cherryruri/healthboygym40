@@ -458,6 +458,11 @@ submitBtn.addEventListener("click", async ()=>{
   const effectiveBoard = getEffectiveBoard();
   const category = getEffectiveCategory(effectiveBoard);
 
+  if(!editId && category === "request"){
+    alert("1:1 문의 접수가 잠시 중단되었습니다.");
+    return;
+  }
+
   if(!ensureOfficialPermission()) return;
 
   if(!currentUser){

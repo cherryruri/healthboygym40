@@ -46,11 +46,25 @@ import { recordTraffic } from "./site-traffic.js?v=1";
   }, { threshold: 0.5 });
   const loader = new MutationObserver(showWhenReady);
 
-  function showWhenReady() {
-    if (popup.open || !heroVisible || !document.body.classList.contains('loaded') ||
-        document.body.classList.contains('menu-open') || document.hidden ||
-        artwork.some(image => !image.complete)) return;
+  let revealTimer;
+  function canReveal() {
+    return !popup.open && heroVisible && document.body.classList.contains('loaded') &&
+      !document.body.classList.contains('menu-open') && !document.hidden &&
+      artwork.every(image => image.complete);
+  }
 
+  function showWhenReady() {
+    if (!canReveal()) {
+      clearTimeout(revealTimer);
+      revealTimer = undefined;
+      return;
+    }
+    revealTimer ??= setTimeout(revealPopup, 650);
+  }
+
+  function revealPopup() {
+    revealTimer = undefined;
+    if (!canReveal()) return;
     cards.forEach((card, index) => { card.hidden = !artwork[index].naturalWidth; });
     observer.disconnect();
     loader.disconnect();

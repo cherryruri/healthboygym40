@@ -317,6 +317,12 @@ html:has(.home-promotion[open]){overflow:hidden}
  .home-promotion-card:not([hidden]) ~ .home-promotion-card{display:none}
 }
 .home-promotion::backdrop{background:#000b}
+@media(prefers-reduced-motion:no-preference){
+ .home-promotion[open]{animation:home-promotion-reveal 280ms ease-out both}
+ .home-promotion[open]::backdrop{animation:home-promotion-backdrop 280ms ease-out both}
+}
+@keyframes home-promotion-reveal{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes home-promotion-backdrop{from{opacity:0}to{opacity:1}}
 .home-promotion-panel{overflow:hidden;border-radius:12px;background:#000}
 .home-promotion-pilates{background:#714d3a}
 .home-promotion-art{aspect-ratio:8/7;overflow:hidden}

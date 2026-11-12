@@ -1,0 +1,30 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: #111; color: #f4f4f4; font-family: Pretendard, system-ui, sans-serif; }
+.traffic-page { width: min(1440px, 100%); margin: auto; padding: 118px clamp(16px, 4vw, 52px) 80px; }
+.traffic-page h1 { font-size: clamp(28px, 4vw, 48px); margin: 0 0 24px; }
+.traffic-controls, .traffic-card { background: #1c1c1e; border: 1px solid #39393b; border-radius: 14px; padding: 16px; }
+.traffic-controls, .traffic-modes, .traffic-period { display: flex; gap: 8px; align-items: center; }
+.traffic-controls { justify-content: space-between; flex-wrap: wrap; }
+.traffic-period { justify-content: space-between; min-width: 208px; }
+.traffic-page button { min-height: 42px; min-width: 42px; padding: 0 12px; color: inherit; background: #252527; border: 1px solid #4b4b4c; border-radius: 8px; cursor: pointer; font: inherit; }
+.traffic-page button[aria-pressed="true"] { color: #171411; border-color: #ffab65; background: #ffab65; font-weight: 700; }
+.traffic-page button:disabled { opacity: .45; cursor: default; }
+.traffic-page button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.traffic-note, #traffic-status { color: #c3c3c3; font-size: 13px; margin: 12px 0; }
+#traffic-status:empty { display: none; }
+.traffic-charts { display: grid; gap: 14px; }
+.traffic-card { --bar-color: #ffab65; min-width: 0; }
+.traffic-card[data-metric="new-member"] { --bar-color: #7dd9ff; }
+.traffic-card[data-metric="pilates"] { --bar-color: #c5aaff; }
+.traffic-card h2 { font-size: 15px; margin: 0 0 8px; }
+.traffic-total { display: block; font-size: 28px; color: var(--bar-color); }
+.traffic-plot { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(26px, 1fr); gap: 4px; margin: 14px 0 0; padding: 12px 0 24px; height: 168px; list-style: none; overflow-x: auto; overflow-y: hidden; }
+.traffic-plot li { position: relative; display: flex; justify-content: center; align-items: flex-end; border-bottom: 1px solid #666; }
+.traffic-plot li::before { content: ""; width: min(68%, 52px); height: var(--bar-height); background: var(--bar-color); border-radius: 4px 4px 0 0; }
+.traffic-bar-value { position: absolute; bottom: var(--bar-height); font-size: 10px; color: #eee; }
+.traffic-tick { position: absolute; top: calc(100% + 4px); font-size: 10px; color: #ccc; white-space: nowrap; }
+@media (max-width: 768px) {
+  .traffic-page { padding-top: 88px; }
+  .traffic-period { width: 100%; }
+}

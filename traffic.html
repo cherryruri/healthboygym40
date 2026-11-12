@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>방문 통계 | 헬스보이짐</title>
+  <link rel="stylesheet" href="site-header.css?v=20261112-admin-mypage">
+  <link rel="stylesheet" href="traffic.css">
+  <script defer src="site-header.js?v=20261112-talk"></script>
+  <script defer src="site-menu.js?v=admin-traffic"></script>
+  <script type="module" src="traffic.js"></script>
+</head>
+<body class="loaded">
+<header id="site-header">
+  <nav class="navbar" aria-label="주 메뉴">
+    <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
+    <ul class="menu">
+      <li><a href="company.html">회사소개</a></li>
+      <li><a href="allpass.html?v=20260909-soft-scene">올패스</a></li>
+      <li><a href="index.html#facility">시설 투어</a></li>
+      <li><a href="index.html#trainer">트레이너 소개</a></li>
+      <li><a href="index.html#hours">운영 시간</a></li>
+      <li><a href="index.html#location">오시는 길</a></li>
+      <li><a href="board.html">게시판</a></li>
+      <li><a href="board.html?board=noticeboard">공지문/뉴스</a></li>
+      <li class="login-menu" id="userMenu"><a href="login.html" id="loginLink">LOGIN</a><button id="logoutBtn" style="display:none;">LOGOUT</button></li>
+    </ul>
+    <a class="download-btn" href="https://m.booking.naver.com/booking/6/bizes/593585/items/6533348?entry=pll&amp;lang=ko&amp;theme=place" target="_blank" rel="noopener noreferrer">네이버 문의 및 예약 바로가기</a>
+    <button class="mobile-menu-btn" type="button" aria-label="메뉴 열기" aria-expanded="false"></button>
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-side-menu"></div>
+  </nav>
+</header>
+<main class="traffic-page">
+  <h1>방문 통계</h1>
+  <p id="access" role="status">관리자 권한 확인 중…</p>
+  <section id="dashboard" hidden>
+    <div class="traffic-controls">
+      <div class="traffic-modes" role="group" aria-label="집계 단위">
+        <button type="button" data-mode="hour" aria-pressed="false">시간대별</button>
+        <button type="button" data-mode="day" aria-pressed="true">일별</button>
+        <button type="button" data-mode="month" aria-pressed="false">월별</button>
+      </div>
+      <div class="traffic-period">
+        <button type="button" id="previous" aria-label="이전 기간">‹</button>
+        <strong id="period"></strong>
+        <button type="button" id="next" aria-label="다음 기간">›</button>
+      </div>
+    </div>
+    <p class="traffic-note">한국 시간 기준 · 브라우저당 하루 한 번 집계</p>
+    <p id="traffic-status" role="status"></p>
+    <div id="traffic-charts" class="traffic-charts"></div>
+  </section>
+</main>
+</body>
+</html>

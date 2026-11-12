@@ -18,3 +18,38 @@ html.location-only-view body #location.visit-location{box-sizing:border-box;disp
 html:not(.hours-only-view) body #hours.visit-hours{display:none!important}
 .sunae-map-pin{background:transparent;border:0}.sunae-map-pin span{display:grid;place-items:center;width:38px;height:38px;background:#111;border:3px solid #fff;border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 3px 15px #0004;font:800 18px/1 Arial;color:#fff}.sunae-map-label{font:600 12px/1.5 Pretendard,Arial,sans-serif;color:#111;background:#fff;padding:8px 12px;border:1px solid #ddd;box-shadow:0 3px 15px #0002}.visit-map .leaflet-tile-pane{filter:saturate(.5)}.visit-map .leaflet-control-attribution{font-size:9px}.visit-map{isolation:isolate;z-index:0}
 .sunae-map-pin span{transform:none;border-radius:50%}
+
+@media(min-width:769px){
+ html.hours-only-view,html.hours-only-view body{height:auto;overflow-y:auto!important;background:#fff!important}
+ html.hours-only-view main{height:auto!important}
+ html.hours-only-view body #hours.visit-hours,
+ html.location-only-view body #location.visit-location{
+  display:block!important;
+  height:auto;
+  min-height:100svh;
+  padding:calc(var(--site-header-height,80px) + clamp(28px,5vh,64px)) 8vw 56px!important;
+  background:#fff;
+  color:#111;
+ }
+ html body .visit-hours-inner,.visit-location-inner{
+  display:block;
+  width:100%;
+  max-width:1200px;
+  margin-inline:auto;
+ }
+ .visit-hours-heading,.visit-location-heading{margin-bottom:clamp(28px,4.5vh,48px)}
+ html body #hours #hoursTitle br,.visit-hours-description br{display:none}
+ html body .visit-hours-description,.visit-location-heading>p:last-child{
+  color:#666;
+  font-size:16px;
+  line-height:1.7;
+  margin:18px 0 0;
+ }
+ .visit-open-badge{border-color:#ddd;color:#444;margin-top:14px}
+ .visit-hours-schedule{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,4vw,56px)}
+ .visit-hours-schedule article{border-color:#ddd}
+ .visit-hours-schedule h3{color:#222}
+ .visit-contact{grid-column:1/-1;border-color:#ddd;color:#222;align-items:center}
+ .visit-location-layout{gap:clamp(24px,4vw,56px)}
+ .visit-map{height:clamp(300px,45vh,460px)}
+}

@@ -20,7 +20,7 @@ html:not(.hours-only-view) body #hours.visit-hours{display:none!important}
 .sunae-map-pin span{transform:none;border-radius:50%}
 
 @media(min-width:769px){
- html.hours-only-view,html.hours-only-view body{height:auto;overflow-y:auto!important;background:#fff!important}
+ html.hours-only-view,html.hours-only-view body{height:auto;overflow-y:auto!important;background:#111!important}
  html.hours-only-view main{height:auto!important}
  html.hours-only-view body #hours.visit-hours,
  html.location-only-view body #location.visit-location{
@@ -45,11 +45,11 @@ html:not(.hours-only-view) body #hours.visit-hours{display:none!important}
   line-height:1.7;
   margin:18px 0 0;
  }
- .visit-open-badge{border-color:#ddd;color:#444;margin-top:14px}
+ html.hours-only-view body #hours.visit-hours{background:#111;color:#fff}
+ html body .visit-hours-description{color:#aaa}
+ .visit-open-badge{margin-top:14px}
  .visit-hours-schedule{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(24px,4vw,56px)}
- .visit-hours-schedule article{border-color:#ddd}
- .visit-hours-schedule h3{color:#222}
- .visit-contact{grid-column:1/-1;border-color:#ddd;color:#222;align-items:center}
+ .visit-contact{grid-column:1/-1;align-items:center}
  .visit-location-layout{gap:clamp(24px,4vw,56px)}
  .visit-map{height:clamp(300px,45vh,460px)}
 }

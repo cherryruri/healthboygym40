@@ -49,10 +49,10 @@ function goHorizontalScene(fromIndex,toIndex){
  const surface=document.createElement('div');surface.className='hb-home hb-horizontal-scene';surface.setAttribute('aria-hidden','true');surface.inert=true;
  const panels=[source,destination].map(section=>{
   const panel=section.cloneNode(true);panel.removeAttribute('id');panel.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));panel.classList.add('is-current');if(section===destination)panel.classList.add('is-slide-entering');
-  panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i],marker=document.createComment('video-home');original.before(marker);slideVideos.push({video:original,marker});v.replaceWith(original);if(!original.getAttribute('src'))original.src=original.dataset.src;if(original!==challengeVideo||challengePrimed)original.play().catch(()=>{});});
+  panel.querySelectorAll('video').forEach((v,i)=>{const original=section.querySelectorAll('video')[i],marker=document.createComment('video-home');original.before(marker);slideVideos.push({video:original,marker});v.replaceWith(original);if(original!==challengeVideo){prepareAllpass();original.play().catch(()=>{});}});
   surface.appendChild(panel);return panel;
  });
- document.body.appendChild(surface);sceneFade=surface;
+ document.body.appendChild(surface);sceneFade=surface;challengePlayback();
  const start=performance.now(),duration=1100;lockedUntil=start+1350;document.documentElement.classList.add('hb-page-moving');
  function tick(now){const t=clamp((now-start)/duration),ease=t*t*t*(t*(t*6-15)+10);
   panels[0].style.transform=`translateX(${-direction*ease*100}%)`;panels[1].style.transform=`translateX(${direction*(1-ease)*100}%)`;
@@ -78,16 +78,42 @@ function allpassPlayback(){if(horizontalActive)return;if(allpassVisible&&!docume
 new IntersectionObserver(entries=>{if(entries[0].isIntersecting)prepareAllpass();},{rootMargin:'100% 0px'}).observe(allpassSection);
 new IntersectionObserver(entries=>{allpassVisible=entries[0].isIntersecting;allpassPlayback();}).observe(allpassSection);
 document.addEventListener('visibilitychange',allpassPlayback);new MutationObserver(allpassPlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
-const challengeSection=home.querySelector('.hb-challenge'),challengeVideo=challengeSection.querySelector('video');let challengeVisible=false,challengePrimed=false;
+const challengeSection=home.querySelector('.hb-challenge'),challengeVideo=challengeSection.querySelector('video');
 const challengeStart=25;
+let challengeVisible=false;
+
+function prepareChallenge(){
+ if(challengeVideo.hasAttribute('src'))return;
+ challengeVideo.preload='auto';
+ challengeVideo.src=challengeVideo.dataset.src;
+}
+
+function challengePlayback(){
+ const visible=horizontalActive
+  ?challengeVideo.closest('.hb-horizontal-scene')!==null
+  :challengeVisible;
+ if(!visible||document.hidden||document.body.classList.contains('menu-open')){
+  challengeVideo.pause();
+  return;
+ }
+ prepareChallenge();
+ if(challengeVideo.readyState<1||challengeVideo.seeking)return;
+ if(challengeVideo.ended||challengeVideo.currentTime<challengeStart-.05){
+  challengeVideo.currentTime=challengeStart;
+  return;
+ }
+ if(challengeVideo.paused)challengeVideo.play().catch(()=>{});
+}
+
 challengeVideo.addEventListener('loadedmetadata',()=>{challengeVideo.currentTime=challengeStart;});
-challengeVideo.addEventListener('seeked',()=>{if(challengeVideo.currentTime>=challengeStart-.05){challengePrimed=true;challengeVideo.classList.add('is-primed');if(horizontalActive)challengeVideo.play().catch(()=>{});else challengePlayback();}});
-challengeVideo.addEventListener('ended',()=>{challengeVideo.currentTime=challengeStart;});
-if(challengeVideo.readyState>=1)challengeVideo.currentTime=challengeStart;
-function challengePlayback(){if(horizontalActive)return;if(challengeVisible&&!document.hidden&&!document.body.classList.contains('menu-open')){if(!challengeVideo.getAttribute('src'))challengeVideo.src=challengeVideo.dataset.src;if(challengePrimed)challengeVideo.play().catch(()=>{});}else challengeVideo.pause();}
-new IntersectionObserver(entries=>{if(entries[0].isIntersecting&&!challengeVideo.getAttribute('src')){challengeVideo.src=challengeVideo.dataset.src;challengeVideo.load();}},{rootMargin:'100% 0px'}).observe(challengeSection);
+challengeVideo.addEventListener('playing',()=>challengeVideo.classList.add('is-primed'));
+challengeVideo.addEventListener('seeked',challengePlayback);
+challengeVideo.addEventListener('canplay',challengePlayback);
+challengeVideo.addEventListener('ended',challengePlayback);
+new IntersectionObserver(entries=>{if(entries[0].isIntersecting)prepareChallenge();},{rootMargin:'100% 0px'}).observe(challengeSection);
 new IntersectionObserver(entries=>{challengeVisible=entries[0].isIntersecting;challengePlayback();}).observe(challengeSection);
-document.addEventListener('visibilitychange',challengePlayback);new MutationObserver(challengePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
+document.addEventListener('visibilitychange',challengePlayback);
+new MutationObserver(challengePlayback).observe(document.body,{attributes:true,attributeFilter:['class']});
 function beginMorph(target,reverse=false){
  const source=home.querySelector('.hb-ai-video'),program=home.querySelector('.hb-programs');
  if(!reverse&&source.readyState<2)return;

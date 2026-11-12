@@ -225,7 +225,7 @@ body.hb-machine-open .hb-programs .hb-brand-track{animation-play-state:paused}
 }
 
 /* Supporting copy follows the same typography as the body-analysis description. */
-.hb-home .hb-challenge{height:100svh;min-height:560px;overflow:hidden;background:#111;color:#fff}
+.hb-home .hb-challenge{height:100svh;min-height:560px;overflow:hidden;background:#111 url('bodychallenge34-interview-poster.jpg') center top/cover no-repeat;color:#fff}
 .hb-challenge-video{object-position:center top;transform:scale(1.18);transform-origin:center top}
 .hb-challenge-shade{position:absolute;inset:0;background:linear-gradient(90deg,#0006,#0001 55%,#0005)}
 .hb-challenge-copy{position:absolute;inset:16% 9% 13% 8%;display:flex;flex-direction:column;align-items:flex-end;color:white;opacity:0;transform:translateY(25px);transition:opacity .85s ease .35s,transform 1s ease .35s}

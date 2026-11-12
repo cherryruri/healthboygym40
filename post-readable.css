@@ -1,5 +1,5 @@
 html:has(body.readable-post),html body.readable-post{background:#fff!important;color:#111!important;min-height:100%;height:auto;overflow-y:auto}
-html body.readable-post main.post-page{box-sizing:border-box;width:100%;min-height:100svh;background:#fff!important;color:#111!important;margin:0!important;padding:calc(var(--site-header-height,80px) + 40px) 30px 90px!important}
+html body.readable-post main.post-page{box-sizing:border-box;width:100%;max-width:none;min-height:100svh;background:#fff!important;color:#111!important;margin:0!important;padding:calc(var(--site-header-height,80px) + 40px) 30px 90px!important}
 html body.readable-post .post-container,html body.readable-post .post-card,html body.readable-post main>section{background:#fff!important;color:#111!important;border-color:#e5e5e5!important;max-width:980px;margin:0 auto;box-shadow:none!important}
 html body.readable-post #postTitle{color:#111!important;-webkit-text-fill-color:#111!important;line-height:1.4!important;word-break:keep-all;overflow-wrap:anywhere}
 html body.readable-post .post-meta,html body.readable-post .post-meta span{color:#777!important;background:transparent!important}

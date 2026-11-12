@@ -16,7 +16,8 @@ import {
   serverTimestamp,
   doc,
   getDoc,
-  updateDoc
+  updateDoc,
+  writeBatch
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -172,7 +173,7 @@ function updateEditorHeader(){
   }
 
   if(thumbnailField){
-    thumbnailField.hidden = effectiveBoard === "infoboard" || getEffectiveCategory(effectiveBoard) === "request";
+    thumbnailField.hidden = getEffectiveCategory(effectiveBoard) === "request";
   }
 
   if(noticeOption){
@@ -216,6 +217,17 @@ function ensureOfficialPermission(){
   }
 
   return true;
+}
+
+async function saveInfoPost(postRef, payload, editing){
+  const batch = writeBatch(db);
+  const thumbnailRef = doc(postRef, "private", "thumbnail");
+  const data = { ...payload, hasInfoThumbnail: Boolean(thumbnailDataUrl) };
+  if(editing) batch.update(postRef, data);
+  else batch.set(postRef, data);
+  if(thumbnailDataUrl) batch.set(thumbnailRef, { dataUrl: thumbnailDataUrl });
+  else if(editing) batch.delete(thumbnailRef);
+  await batch.commit();
 }
 
 function setThumbnailPreview(dataUrl){
@@ -360,7 +372,8 @@ submitBtn.addEventListener("click", async ()=>{
 
   try{
     if(editId){
-      await updateDoc(doc(db, "boards", editId), payload);
+      if(isAdminOnly) await saveInfoPost(doc(db, "boards", editId), payload, true);
+      else await updateDoc(doc(db, "boards", editId), payload);
       alert("수정되었습니다.");
       location.href = `post.html?id=${editId}`;
       return;
@@ -379,8 +392,10 @@ submitBtn.addEventListener("click", async ()=>{
     };
 
     try{
-      await addDoc(collection(db, "boards"), newPost);
+      if(isAdminOnly) await saveInfoPost(doc(collection(db, "boards")), newPost, false);
+      else await addDoc(collection(db, "boards"), newPost);
     }catch(error){
+      if(isAdminOnly) throw error;
       const legacyCategory = getLegacyCategory(category);
       const legacyBoard = getLegacyBoard(effectiveBoard, category);
 
@@ -503,7 +518,12 @@ async function loadPostForEdit(){
 
   titleInput.value = post.title || "";
   contentBox.innerHTML = post.content || "";
-  setThumbnailPreview(post.thumbnailDataUrl || "");
+  if(post.board === "infoboard" && post.hasInfoThumbnail && isAdmin()){
+    const thumbnail = await getDoc(doc(db, "boards", editId, "private", "thumbnail"));
+    setThumbnailPreview(thumbnail.data()?.dataUrl || "");
+  }else{
+    setThumbnailPreview(post.thumbnailDataUrl || "");
+  }
 
   if(noticeCheckbox){
     noticeCheckbox.checked = post.isNotice === true;

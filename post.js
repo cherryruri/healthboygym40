@@ -14,6 +14,7 @@ import {
   doc,
   getDoc,
   deleteDoc,
+  writeBatch,
   updateDoc, 
   collection,
   addDoc,
@@ -558,7 +559,15 @@ if(deleteBtn){
     if(!currentPost || (!isAdmin() && !isPostOwner(currentPost))) return;
     if(!confirm("정말 삭제하시겠습니까?")) return;
 
-    await deleteDoc(doc(db,"boards",postId));
+    const postRef = doc(db, "boards", postId);
+    if(currentPost?.board === "infoboard" && currentPost.hasInfoThumbnail){
+      const batch = writeBatch(db);
+      batch.delete(doc(postRef, "private", "thumbnail"));
+      batch.delete(postRef);
+      await batch.commit();
+    }else{
+      await deleteDoc(postRef);
+    }
 
     alert("삭제되었습니다.");
     location.href = isRequestPost(currentPost)

@@ -768,7 +768,7 @@ function renderPage(page){
   const endIndex = Math.min(startIndex + getPostsPerPage(), posts.length);
   const pagePosts = posts.slice(startIndex, endIndex);
 
-  if(matchMedia("(min-width:769px)").matches && !["request","infoboard","teen"].includes(currentBoard)){
+  if(currentBoard === "infoboard" || (matchMedia("(min-width:769px)").matches && !["request","teen"].includes(currentBoard))){
     renderDesktopPosts(pagePosts, page);
   }else if(document.body.classList.contains("cinema-mobile")){
     renderCinemaRows(pagePosts);
@@ -791,11 +791,22 @@ function renderDesktopPosts(posts){
     const card=document.createElement('a');
     card.className='square-post-card';
     card.href='post.html?id='+encodeURIComponent(id);
-    const image=getPublicPostThumbnail(data);
-    const label=getPostCategory(data)==='notice'||data.isNotice?'공지문':'전체게시판';
+    const isInfo = currentBoard === "infoboard";
+    const image = isInfo && isAdmin() && data.board === "infoboard" ? getPostThumbnail(data) : getPublicPostThumbnail(data);
+    const label=isInfo ? escapeHTML(getPostCategoryLabel(data)) : getPostCategory(data)==='notice'||data.isNotice?'공지문':'전체게시판';
     card.innerHTML='<div class="square-post-image">'+(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy" decoding="async">':'<span>HEALTHBOYGYM</span>')+'</div><div class="square-post-copy"><small>'+label+'</small><h2>'+escapeHTML(data.title||'제목 없음')+'</h2><time>'+formatDate(data)+'</time></div>';
     card.addEventListener('click',event=>{if(!canOpenPost(data)){event.preventDefault();openPost(id,data);}});
     grid.appendChild(card);
+    if(isInfo && isAdmin() && data.board === "infoboard" && data.hasInfoThumbnail){
+      getDoc(doc(db, "boards", id, "private", "thumbnail")).then(snapshot=>{
+        const src = snapshot.data()?.dataUrl;
+        if(!card.isConnected || !isAdmin() || !isThumbnailSource(src)) return;
+        const thumbnail = new Image();
+        thumbnail.alt = "";
+        thumbnail.src = src;
+        card.querySelector(".square-post-image").replaceChildren(thumbnail);
+      }).catch(error=>console.warn("인포게시판 썸네일을 불러오지 못했습니다.", error));
+    }
   });
   postList.appendChild(grid);
 }
@@ -839,12 +850,19 @@ function renderOfficialPosts(posts){
 }
 
 function getPublicPostThumbnail(data){
-  if(!data.isPublic || data.isSecret || data.isAdminOnly || getPostCategory(data) === "request") return "";
+  if(!data.isPublic || data.isSecret || data.isAdminOnly || data.board === "infoboard" || getPostCategory(data) === "request") return "";
+  return getPostThumbnail(data);
+}
+
+function getPostThumbnail(data){
   const template = document.createElement("template");
   template.innerHTML = String(data.content || "");
   const src = String(data.thumbnailDataUrl || template.content.querySelector("img")?.getAttribute("src") || "");
-  // Only the post's own public image is shown; never expose private attachments.
-  return /^(https:\/\/|data:image\/(?:png|jpe?g|webp|gif);base64,)/i.test(src) ? src : "";
+  return isThumbnailSource(src) ? src : "";
+}
+
+function isThumbnailSource(src){
+  return typeof src === "string" && /^(https:\/\/|data:image\/(?:png|jpe?g|webp|gif);base64,)/i.test(src);
 }
 
 function renderConsultPosts(posts){

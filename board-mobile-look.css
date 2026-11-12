@@ -152,3 +152,15 @@ html body.mobile-board-look.mobile-board-look.mobile-board-look.mobile-board-loo
 html body:is(body,#site-typography).mobile-board-look .mobile-board-eyebrow{font-size:10px!important;letter-spacing:.12em!important}
 html body:is(body,#site-typography).mobile-board-look .board-post h2{font-size:14px!important;line-height:1.5!important}
 }
+
+@media (max-width: 768px) {
+  html body.travel-board-mobile-active .site-quick-actions {
+    bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+  html body.travel-board-mobile-active .site-quick-actions > :is(.site-top-button, .site-talk-button, .site-phone-button) {
+    display: grid !important;
+  }
+  html body .desktop-community-hero.mall-carousel {
+    display: none !important;
+  }
+}

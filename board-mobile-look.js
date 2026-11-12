@@ -163,14 +163,13 @@
   const contentLayer=stage.querySelector('.travel-board-content');stage.querySelector('.travel-board-search-panel').append(searchField);
   const searchIcon=document.createElement('span');searchIcon.className='travel-search-icon';searchIcon.setAttribute('aria-hidden','true');searchIcon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>';searchField.append(searchIcon);
   contentLayer.append(shell);
-  const dock=document.createElement('nav');dock.className='travel-quick-dock';dock.setAttribute('aria-label','빠른 메뉴');dock.innerHTML='<div class="travel-quick-actions"><a href="index.html" aria-label="홈"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m3 11 9-8 9 8v9H3z"/><path d="M9 20v-6h6v6"/></svg></a><a href="mypage.html" aria-label="마이페이지"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"/></svg></a><a href="board.html?board=noticeboard" aria-label="공지사항"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a></div><button class="travel-quick-toggle" type="button" aria-label="빠른 메뉴 열기" aria-expanded="false"><span>+</span></button><a class="travel-quick-phone" href="tel:050713802239" aria-label="전화하기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1.5 1.5 0 0 1 1.5-.36l3.2 1.05a1.5 1.5 0 0 1 1.03 1.43V20a1.5 1.5 0 0 1-1.5 1.5C10.17 21.5 2.5 13.83 2.5 4.5A1.5 1.5 0 0 1 4 3h2.68a1.5 1.5 0 0 1 1.43 1.03l1.05 3.2a1.5 1.5 0 0 1-.36 1.5z"/></svg></a>';document.body.append(dock);const dockToggle=dock.querySelector('.travel-quick-toggle');dockToggle.addEventListener('click',()=>{const open=dock.classList.toggle('is-open');dockToggle.setAttribute('aria-expanded',String(open));dockToggle.setAttribute('aria-label',open?'빠른 메뉴 닫기':'빠른 메뉴 열기');});
   video.muted=true;
   video.defaultMuted=true;
   video.playsInline=true;
   video.addEventListener('playing',()=>{
    if(!video.paused&&video.readyState>=2)video.classList.add('is-playing');
   });
-  for(const event of ['pause','emptied','error'])video.addEventListener(event,()=>video.classList.remove('is-playing'));
+  for(const event of ['error'])video.addEventListener(event,()=>video.classList.remove('is-playing'));
   let active=0,timer;
   const show=index=>{active=(index+slides.length)%slides.length;const slide=slides[active];hero.dataset.slide=String(active);if(video.getAttribute('src')!==slide.video){
    video.classList.remove('is-playing');

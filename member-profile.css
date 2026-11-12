@@ -7,3 +7,20 @@
 #adminTraffic dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:0}
 #adminTraffic dl>div{padding:14px;border:1px solid #444;border-radius:8px}
 #adminTraffic dd{margin:8px 0 0;font-size:26px;font-variant-numeric:tabular-nums}
+
+@media (max-width: 768px) {
+  #adminTraffic {
+    margin-top: 8px;
+    padding: 0 14px;
+    border: 1px solid #444;
+    border-radius: 12px;
+    background: #181818;
+  }
+  #adminTraffic summary {
+    padding: 14px 0;
+    color: #fff;
+    font-weight: 600;
+  }
+  #adminTraffic .mypage-dashboard { margin-top: 0; padding: 0 0 14px; }
+  #adminTraffic dl { grid-template-columns: minmax(0, 1fr); }
+}

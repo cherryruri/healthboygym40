@@ -142,7 +142,7 @@
  const specs=[{index:0,poster:'member-tensecond-v3.jpg',preview:'member-tensecond-v3.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-tensecond-v3.jpg',preview:'sangwon-tensecond-v3.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
  let inView=false,rotationPaused=false,rotationTimer=null,lastOpenButton=null;
  const rotationButton=document.createElement('button');rotationButton.type='button';rotationButton.className='mall-rotation-toggle';rotationButton.textContent='자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed','false');hero.appendChild(rotationButton);
- const available=()=>inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
+ const available=()=>media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
  const schedule=()=>{clearTimeout(rotationTimer);rotationTimer=null;if(available()&&!rotationPaused&&!hero.contains(document.activeElement)){rotationTimer=setTimeout(()=>showSlide(active+1),4800);}};
  const videoSlides=specs.map(spec=>{
    const slide=hero.querySelectorAll('.mall-slide')[spec.index];slide.classList.add('mall-interview-slide');slide.querySelector('img').remove();

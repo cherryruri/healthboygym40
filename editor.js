@@ -20,6 +20,8 @@ import {
   writeBatch
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
+import { loadBoardCategories } from "./board-categories.js?v=1";
+
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
   authDomain: "healthboygym40-4ee44.firebaseapp.com",
@@ -63,11 +65,7 @@ const params = new URLSearchParams(location.search);
 const board = params.get("board") || "free";
 const categoryParam = params.get("category") || "";
 const editId = params.get("id");
-if(postCategory && ["info_fc", "info_pilates", "info_health", "info_pt"].includes(categoryParam)){
-  postCategory.value = categoryParam;
-}
-
-
+let customCategories = {public:[], info:[]};
 
 const boardNames = {
   free: "자유게시판",
@@ -133,14 +131,28 @@ function getEffectiveBoard(){
   return loadedBoard || board;
 }
 
-function getEffectiveCategory(effectiveBoard){
-  if(loadedCategory) return loadedCategory;
-
-  if(effectiveBoard === "infoboard"){
-    const allowedCategories = new Set(["info_fc", "info_pilates", "info_health", "info_pt"]);
-    const selectedCategory = postCategory?.value || categoryParam;
-    return allowedCategories.has(selectedCategory) ? selectedCategory : "info_fc";
+function syncCategoryOptions(){
+  const boardName = getEffectiveBoard();
+  const scope = boardName === "infoboard" ? "info" : "public";
+  const builtIns = scope === "info" ? ["info_fc","info_pilates","info_health","info_pt"] : ["free"];
+  const selected = loadedCategory || categoryParam;
+  const options = builtIns.map(id=>new Option(categoryNames[id],id));
+  for(const item of customCategories[scope]){
+    if(!item.archived || item.id === loadedCategory) options.push(new Option(item.label,item.id));
   }
+  if((loadedCategory || categoryNames[selected]) && !options.some(option=>option.value === selected)){
+    options.push(new Option(categoryNames[selected] || "기존 분류",selected));
+  }
+  postCategory.replaceChildren(...options);
+  if(options.some(option=>option.value === selected)) postCategory.value = selected;
+}
+
+function getEffectiveCategory(effectiveBoard){
+  if(effectiveBoard === "infoboard" || effectiveBoard === "free"){
+    if(categoryParam === "request" || loadedCategory === "request") return "request";
+    return postCategory.value || (effectiveBoard === "infoboard" ? "info_fc" : "free");
+  }
+  if(loadedCategory) return loadedCategory;
 
   if(categoryParam) return categoryParam;
 
@@ -169,6 +181,7 @@ function updateEditorHeader(){
   if(editorBoardName){
     const category = getEffectiveCategory(effectiveBoard);
     editorBoardName.textContent =
+      postCategory.selectedOptions[0]?.value === category ? postCategory.selectedOptions[0].text :
       categoryNames[category] || boardNames[effectiveBoard] || "수내점 게시판";
   }
 
@@ -185,7 +198,7 @@ function updateEditorHeader(){
   }
 
   if(categoryField){
-    categoryField.hidden = effectiveBoard !== "infoboard";
+    categoryField.hidden = !["infoboard","free"].includes(effectiveBoard) || categoryParam === "request" || loadedCategory === "request";
   }
 
   if(cancelBtn){
@@ -284,7 +297,13 @@ onAuthStateChanged(auth, async user=>{
   }
 
   currentUser = user;
-  currentUserData = await loadUserData(user);
+  const [profile, categories] = await Promise.all([
+    loadUserData(user),
+    loadBoardCategories(db, true).catch(error=>{console.warn("분류를 불러오지 못했습니다.", error); return customCategories;})
+  ]);
+  currentUserData = profile;
+  customCategories = categories;
+  syncCategoryOptions();
   updateEditorHeader();
 
   if(!ensureOfficialPermission())return;
@@ -307,6 +326,34 @@ const textColorBtn = document.getElementById("textColorBtn");
 const backColorBtn = document.getElementById("backColorBtn");
 const dividerSelect = document.getElementById("dividerSelect");
 
+
+const thumbnailPalettes = {
+  thumbnailBackground: [["검정","#000000"],["흰색","#ffffff"],["네이비","#17223b"],["초록","#173c32"],["버건디","#4d1725"]],
+  thumbnailAccent: [["노랑","#ffce19"],["라임","#baff55"],["하늘","#70d6ff"],["분홍","#ff85bc"],["주황","#ff814a"]]
+};
+document.querySelectorAll(".thumbnail-palette").forEach(palette=>{
+  const input = document.getElementById(palette.dataset.colorInput);
+  const buttons = thumbnailPalettes[input.id].map(([label,color])=>{
+    const button = document.createElement("button");
+    button.type = "button";
+    button.title = label;
+    button.setAttribute("aria-label",label);
+    button.style.setProperty("--swatch",color);
+    button.addEventListener("click",()=>{
+      input.value = color;
+      syncSelection();
+    });
+    return button;
+  });
+  function syncSelection(){
+    buttons.forEach((button,index)=>{
+      button.setAttribute("aria-pressed",String(input.value === thumbnailPalettes[input.id][index][1]));
+    });
+  }
+  input.addEventListener("input",syncSelection);
+  palette.append(...buttons);
+  syncSelection();
+});
 
 function makeTextThumbnail(text, highlight, background, accent){
   const canvas = document.createElement("canvas");
@@ -587,9 +634,7 @@ async function loadPostForEdit(){
   loadedBoard = post.board || board;
   loadedCategory = post.category || null;
 
-  if(postCategory && post.category){
-    postCategory.value = post.category;
-  }
+  syncCategoryOptions();
   updateEditorHeader();
 
 
@@ -611,6 +656,7 @@ async function loadPostForEdit(){
   submitBtn.style.background = "#444";
 }
 
+syncCategoryOptions();
 updateEditorHeader();
 if(postCategory){
   postCategory.addEventListener("change", updateEditorHeader);

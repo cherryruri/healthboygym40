@@ -19,6 +19,8 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
+import { changeBoardCategory, isCustomCategory, loadBoardCategories } from "./board-categories.js?v=1";
+
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
   authDomain: "healthboygym40-4ee44.firebaseapp.com",
@@ -200,10 +202,22 @@ const boardMeta = {
 boardMeta.free.categories = [['notice','공지문'],['all','전체게시판']];
 boardMeta.noticeboard.categories = [['notice','공지문'],['all','전체게시판']];
 if(!['request','infoboard','teen'].includes(currentBoard)){
- currentBoard='free';currentCategory=['noticeboard','news'].includes(initialBoard)||initialCategory==='notice'?'notice':'all';
+ currentBoard='free';currentCategory=isCustomCategory(initialCategory)?initialCategory:['noticeboard','news'].includes(initialBoard)||initialCategory==='notice'?'notice':'all';
 }
+let boardCategories = {public:[], info:[]};
+let categoriesLoaded = false;
+function categoryScope(){
+  if(currentBoard === "infoboard") return "info";
+  if(currentBoard === "free") return "public";
+  return "";
+}
+
 function getMeta(){
-  return boardMeta[currentBoard] || boardMeta.free;
+  const meta = boardMeta[currentBoard] || boardMeta.free;
+  const scope = categoryScope();
+  if(!scope) return meta;
+  const custom = boardCategories[scope].filter(item=>!item.archived).map(item=>[item.id,item.label]);
+  return {...meta, categories:[...meta.categories,...custom]};
 }
 
 function getCurrentUserId(){
@@ -262,6 +276,9 @@ function getPostCategory(post){
 function getPostCategoryLabel(post){
   const category = getPostCategory(post);
 
+  const scope = post.board === "infoboard" ? "info" : "public";
+  const custom = boardCategories[scope].find(item=>item.id === category);
+  if(custom) return custom.label;
   if(category === "praise") return "칭찬합니다";
   if(category === "diet") return "운동&식단 인증";
   if(category === "pt") return "PT후기";
@@ -397,8 +414,9 @@ function updateCategoryBar(){
     return;
   }
 
-  if(!meta.categories.some(([value])=>value === currentCategory)){
-    currentCategory = meta.categories[0][0];
+  if(!meta.categories.some(([value])=>value === currentCategory) &&
+     (categoriesLoaded || !isCustomCategory(currentCategory))){
+    currentCategory = currentBoard === "free" ? "all" : meta.categories[0][0];
   }
 
   bar.hidden = false;
@@ -410,6 +428,89 @@ function updateCategoryBar(){
       </button>
     `)
     .join("");
+  updateCategoryManager(bar);
+}
+
+let categoryManager;
+function updateCategoryManager(bar){
+  const scope = categoryScope();
+  if(!scope || !currentUser || !isAdmin()){
+    if(categoryManager) categoryManager.hidden = true;
+    return;
+  }
+
+  if(!categoryManager){
+    categoryManager = document.createElement("details");
+    categoryManager.className = "board-category-manager";
+    categoryManager.innerHTML = `
+      <summary>분류 관리</summary>
+      <form class="board-category-add">
+        <label>새 분류 이름 <input name="label" maxlength="24" required></label>
+        <button type="submit">분류 추가</button>
+      </form>
+      <ul class="board-custom-categories"></ul>
+      <p role="status"></p>
+    `;
+    categoryManager.querySelector("form").addEventListener("submit", event=>{
+      event.preventDefault();
+      const input = event.currentTarget.elements.label;
+      const label = input.value.trim().replace(/\s+/g," ");
+      if(!label) return;
+      const currentScope = categoryScope();
+      const builtIns = getMeta().categories.filter(([id])=>!isCustomCategory(id));
+      const id = "custom_" + crypto.randomUUID();
+      void saveCategoryChange(currentScope, items=>{
+        if(builtIns.some(([, name])=>name === label) || items.some(item=>item.label === label && !item.archived)){
+          throw new Error("이미 사용 중인 분류 이름입니다.");
+        }
+        const archived = items.find(item=>item.label === label && item.archived);
+        if(archived) return items.map(item=>item.id === archived.id ? {...item,archived:false} : item);
+        if(items.length >= 100) throw new Error("분류는 최대 100개까지 만들 수 있어요.");
+        return [...items,{id,label,archived:false}];
+      }, "분류를 추가했어요.", ()=>{input.value = "";});
+    });
+  }
+  if(categoryManager.previousElementSibling !== bar) bar.after(categoryManager);
+  categoryManager.hidden = false;
+  const list = categoryManager.querySelector("ul");
+  list.replaceChildren();
+  for(const item of boardCategories[scope].filter(category=>!category.archived)){
+    const row = document.createElement("li");
+    const name = document.createElement("span");
+    name.textContent = item.label;
+    const remove = document.createElement("button");
+    remove.type = "button";
+    remove.textContent = "삭제";
+    remove.setAttribute("aria-label", item.label + " 분류 삭제");
+    remove.addEventListener("click", ()=>{
+      if(!confirm(item.label + " 분류를 삭제할까요? 글은 전체 목록에 남습니다.")) return;
+      void saveCategoryChange(scope, items=>items.map(category=>
+        category.id === item.id ? {...category,archived:true} : category
+      ), "분류를 삭제했어요.");
+    });
+    row.append(name, remove);
+    list.append(row);
+  }
+}
+
+async function saveCategoryChange(scope, change, message, onSaved){
+  if(!currentUser || !isAdmin()) return;
+  const status = categoryManager.querySelector('[role="status"]');
+  const controls = [...categoryManager.querySelectorAll("input,button")];
+  controls.forEach(control=>{control.disabled = true;});
+  try{
+    boardCategories[scope] = await changeBoardCategory(db, scope, change);
+    onSaved?.();
+    currentPage = 1;
+    updateCategoryBar();
+    updateBoardUrl();
+    renderPage(currentPage);
+    status.textContent = message;
+  }catch(error){
+    status.textContent = error.code ? "분류를 저장하지 못했어요." : error.message;
+  }finally{
+    controls.forEach(control=>{control.disabled = false;});
+  }
 }
 
 function getActiveCommunityGroup(){
@@ -492,6 +593,9 @@ async function loadUserData(user){
 onAuthStateChanged(auth, async user=>{
   currentUser = user;
   currentUserData = await loadUserData(user);
+  try { boardCategories = await loadBoardCategories(db, Boolean(user && isAdmin() && currentBoard === "infoboard")); }
+  catch(error){ console.warn("분류를 불러오지 못했습니다.", error); }
+  categoriesLoaded = true;
   updateBoardInfo();
   if(!ensureBoardAccess()) return;
   loadPosts();
@@ -593,6 +697,9 @@ if(writeBtn){
 updateBoardInfo();
 
 function getWriteQueryString(){
+  if(currentBoard === "free" && isCustomCategory(currentCategory)){
+    return "board=free&category=" + encodeURIComponent(currentCategory);
+  }
   if(currentBoard === "free" && ["notice","news","trainer"].includes(currentCategory)){
     return `board=${currentCategory === "news" ? "news" : "noticeboard"}&category=${currentCategory}`;
   }
@@ -768,7 +875,7 @@ function renderPage(page){
   const endIndex = Math.min(startIndex + getPostsPerPage(), posts.length);
   const pagePosts = posts.slice(startIndex, endIndex);
 
-  if(currentBoard === "infoboard" || (matchMedia("(min-width:769px)").matches && !["request","teen"].includes(currentBoard))){
+  if(currentBoard === "infoboard" || isCustomCategory(currentCategory) || (matchMedia("(min-width:769px)").matches && !["request","teen"].includes(currentBoard))){
     renderDesktopPosts(pagePosts, page);
   }else if(document.body.classList.contains("cinema-mobile")){
     renderCinemaRows(pagePosts);
@@ -793,7 +900,7 @@ function renderDesktopPosts(posts){
     card.href='post.html?id='+encodeURIComponent(id);
     const isInfo = currentBoard === "infoboard";
     const image = isInfo && isAdmin() && data.board === "infoboard" ? getPostThumbnail(data) : getPublicPostThumbnail(data);
-    const label=isInfo ? escapeHTML(getPostCategoryLabel(data)) : getPostCategory(data)==='notice'||data.isNotice?'공지문':'전체게시판';
+    const label=isInfo || isCustomCategory(getPostCategory(data)) ? escapeHTML(getPostCategoryLabel(data)) : getPostCategory(data)==='notice'||data.isNotice?'공지문':'전체게시판';
     card.innerHTML='<div class="square-post-image">'+(image?'<img src="'+escapeHTML(image)+'" alt="" loading="lazy" decoding="async">':'<span>HEALTHBOYGYM</span>')+'</div><div class="square-post-copy"><small>'+label+'</small><h2>'+escapeHTML(data.title||'제목 없음')+'</h2><time>'+formatDate(data)+'</time></div>';
     card.addEventListener('click',event=>{if(!canOpenPost(data)){event.preventDefault();openPost(id,data);}});
     grid.appendChild(card);

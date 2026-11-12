@@ -28,6 +28,8 @@ import {
 
 /* ================= FIREBASE ================= */
 
+import { isCustomCategory } from "./board-categories.js?v=1";
+
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
   authDomain: "healthboygym40-4ee44.firebaseapp.com",
@@ -181,8 +183,8 @@ async function loadPost() {
   }
 
   currentPost = data;
-  if(isAdminOnlyPost(data)){
-    const params = new URLSearchParams({board:"infoboard"});
+  if(isAdminOnlyPost(data) || isCustomCategory(data.category)){
+    const params = new URLSearchParams({board:isAdminOnlyPost(data) ? "infoboard" : "free"});
     if(data.category) params.set("category", data.category);
     document.querySelector(".back-list").href = "board.html?" + params;
   }

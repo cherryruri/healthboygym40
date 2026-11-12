@@ -184,7 +184,7 @@ service cloud.firestore {
     }
 
     match /siteSettings/{settingId} {
-      allow read: if true;
+      allow read: if settingId != 'infoBoardCategories' || isAdmin();
       allow create, update, delete: if isAdmin();
     }
 

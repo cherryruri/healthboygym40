@@ -596,3 +596,8 @@ border-radius:6px;
 .thumbnail-colors label{display:flex;align-items:center;gap:8px}
 .info-thumbnail-maker .thumbnail-colors input[type=color]{width:42px;height:36px;padding:3px;cursor:pointer}
 @media(max-width:768px){.editor-thumbnail-field{grid-template-columns:1fr}.thumbnail-image-actions :is(.editor-thumbnail-drop,.thumbnail-remove){width:auto}}
+
+.thumbnail-colors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 16px;width:100%}
+.thumbnail-palette{display:flex;flex-wrap:wrap;gap:6px}
+.thumbnail-palette button{width:24px;height:24px;border-radius:50%;border:1px solid #bbb;background:var(--swatch);cursor:pointer}
+.thumbnail-palette button[aria-pressed=true]{outline:2px solid #111;outline-offset:2px}

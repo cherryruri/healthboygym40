@@ -6,7 +6,7 @@
 <title>글쓰기</title>
 
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
-<link rel="stylesheet" href="editor.css?v=20261112-thumbnail-colors">
+<link rel="stylesheet" href="editor.css?v=20261112-category-tools">
 
 <link rel="stylesheet" href="site-header.css?v=20261112-talk">
 <script src="site-header.js?v=20261112-talk" defer></script>
@@ -66,6 +66,8 @@
         <div class="thumbnail-colors">
           <label>배경색 <input id="thumbnailBackground" type="color" value="#000000"></label>
           <label>강조색 <input id="thumbnailAccent" type="color" value="#ffce19"></label>
+          <div class="thumbnail-palette" data-color-input="thumbnailBackground" role="group" aria-label="자주 쓰는 배경색"></div>
+          <div class="thumbnail-palette" data-color-input="thumbnailAccent" role="group" aria-label="자주 쓰는 강조색"></div>
         </div>
         <button type="button" id="makeInfoThumbnail">썸네일 미리보기</button>
         <p id="infoThumbnailStatus" role="status"></p>
@@ -158,7 +160,7 @@
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=20261112-admin"></script>
 <script type="module" src="firebase-index.js?v=20261112-admin"></script>
-<script type="module" src="editor.js?v=20261112-thumbnail-colors"></script>
+<script type="module" src="editor.js?v=20261112-category-tools"></script>
 
 </body>
 </html>

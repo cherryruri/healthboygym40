@@ -41,3 +41,13 @@ html body a[href*="mypage.html"],html body a[href*="my-posts.html"],html body a[
 
 @media(max-width:768px){.square-post-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}}
 @media(min-width:769px) and (max-width:1099px){.square-post-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+html body #boardCategoryBar{flex-wrap:wrap}
+html body[data-board="infoboard"] #boardCategoryBar button[data-category]{min-height:46px;padding:10px 20px!important;font-size:16px!important;font-weight:650;border-color:#bbb!important;color:#222!important}
+html body[data-board="infoboard"] #boardCategoryBar button[data-category].active{border-color:#111!important;color:#fff!important}
+.board-category-manager{flex:0 0 100%;order:3;padding:12px 16px;border:1px solid #ddd;border-radius:12px;background:#f7f7f7;color:#111}
+.board-category-manager summary{cursor:pointer;font-weight:700}
+.board-category-add,.board-category-manager li{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:10px 0}
+.board-category-manager input,.board-category-manager button{padding:7px 10px;border:1px solid #ccc;border-radius:8px;background:#fff;color:#111;font:inherit}
+.board-category-manager button{cursor:pointer}
+.board-category-manager li span{overflow-wrap:anywhere}

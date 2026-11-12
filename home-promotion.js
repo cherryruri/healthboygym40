@@ -6,8 +6,15 @@ import { recordTraffic } from "./site-traffic.js?v=1";
   const popup = document.querySelector('#homePromotion');
   const startsAt = Date.parse('2026-11-10T00:00:00+09:00');
   const endsAt = Date.parse('2026-11-16T00:00:00+09:00');
+  const promotionCards = [...popup.querySelectorAll('[data-promotion]')];
+  const pageUrl = new URL(location.href);
+  if (pageUrl.searchParams.get('showPromotions') === '1') {
+    try { promotionCards.forEach(card => localStorage.removeItem(storageKey(card))); } catch {}
+    pageUrl.searchParams.delete('showPromotions');
+    history.replaceState(history.state, '', pageUrl);
+  }
   const { isAdmin } = await authReady;
-  const cards = [...popup.querySelectorAll('[data-promotion]')].filter(card => {
+  const cards = promotionCards.filter(card => {
     const isDiscount = card.dataset.promotion === 'new-member';
     if (isAdmin) return true;
     if (isDiscount && (Date.now() < startsAt || Date.now() >= endsAt)) return false;

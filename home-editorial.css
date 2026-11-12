@@ -312,7 +312,10 @@ html:has(.home-promotion[open]){overflow:hidden}
 .home-promotion[open]{display:flex;gap:16px;align-items:flex-start}
 .home-promotion-card{width:min(460px,calc((100vw - 48px) / 2),calc((100dvh - 116px) / .875))}
 .home-promotion-card:only-of-type,.home-promotion-card:has(+ [hidden]),.home-promotion-card[hidden]+.home-promotion-card{width:min(460px,calc(100vw - 32px),calc((100dvh - 116px) / .875))}
-@media(max-width:600px){.home-promotion[open]{flex-direction:column}.home-promotion .home-promotion-card{width:min(420px,calc(100vw - 32px))}}
+@media(max-width:600px){
+ .home-promotion .home-promotion-card{width:min(420px,calc(100vw - 32px),calc((100dvh - 116px) / .875))}
+ .home-promotion-card:not([hidden]) ~ .home-promotion-card{display:none}
+}
 .home-promotion::backdrop{background:#000b}
 .home-promotion-panel{overflow:hidden;border-radius:12px;background:#000}
 .home-promotion-pilates{background:#714d3a}

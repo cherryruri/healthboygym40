@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>마이페이지 | 헬스보이짐</title><link rel="stylesheet" href="site-header.css?v=20261110-access2"><link rel="stylesheet" href="member-profile.css?v=1"><script defer src="site-header.js?v=20260917-classicmobile1"></script></head><body class="member-page loaded"><header id="site-header">
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>마이페이지 | 헬스보이짐</title><link rel="stylesheet" href="site-header.css?v=20261110-access2"><link rel="stylesheet" href="member-profile.css?v=2"><script defer src="site-header.js?v=20260917-classicmobile1"></script></head><body class="member-page loaded"><header id="site-header">
   <nav class="navbar" aria-label="주 메뉴">
     <div class="logo"><a href="index.html">HEALTHBOYGYM</a></div>
     <ul class="menu">
@@ -237,4 +237,15 @@
 
 
 
-  </section></details></main><script src="js/feather.min.js"></script><script src="site-menu.js?v=20261111-login1"></script><script type="module" src="mypage.js?v=20260915-profile"></script><script type="module" src="member-profile.js?v=1"></script><script type="module" src="firebase-index.js?v=20260728-mobile-info1"></script></body></html>
+  </section></details><details class="member-activity" id="adminTraffic" hidden><summary>방문 · 팝업 통계</summary>
+    <div class="mypage-dashboard">
+      <p>한국 시간 기준으로 브라우저당 하루 한 번 집계합니다.</p>
+      <label>조회 날짜 <input type="date" id="trafficDate"></label>
+      <dl aria-live="polite">
+        <div><dt>사이트 방문</dt><dd id="trafficVisits">—</dd></div>
+        <div><dt>신규 회원 이벤트 링크 클릭</dt><dd id="trafficMembership">—</dd></div>
+        <div><dt>필라테스 예약 링크 클릭</dt><dd id="trafficPilates">—</dd></div>
+      </dl>
+      <p id="trafficStatus" role="status"></p>
+    </div>
+  </details></main><script type="module" src="mypage-traffic.js?v=1"></script><script src="js/feather.min.js"></script><script src="site-menu.js?v=20261112-admin"></script><script type="module" src="mypage.js?v=20260915-profile"></script><script type="module" src="member-profile.js?v=1"></script><script type="module" src="firebase-index.js?v=20261112-admin"></script></body></html>

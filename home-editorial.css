@@ -319,8 +319,9 @@ html:has(.home-promotion[open]){overflow:hidden}
 .home-promotion-art{aspect-ratio:8/7;overflow:hidden}
 .home-promotion-art img{display:block;width:100%;height:auto;max-height:none}
 .home-promotion-actions{display:flex;justify-content:space-between;align-items:center;padding:4px 10px}
-.home-promotion-dismiss{display:flex;justify-content:flex-end;margin-top:2px}
+.home-promotion-dismiss{display:flex;justify-content:flex-start;margin-top:2px;padding-left:10px}
 .home-promotion button,.home-promotion-actions a{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 9px;border:0;background:transparent;color:#fff;font:inherit;font-weight:650;text-decoration:none;cursor:pointer}
+.home-promotion .home-promotion-dismiss button{font-size:13px;color:#ffffffe6}
 .home-promotion-dismiss button[aria-pressed="true"] span{color:#ffce19}
 .home-promotion :is(button,a):focus-visible{outline:2px solid #ffce19;outline-offset:-2px}
 .home-promotion-dismiss span{display:grid;place-items:center;border:1.5px solid;border-radius:50%;width:20px;height:20px}

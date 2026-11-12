@@ -41,6 +41,7 @@
       <span class="mobile-menu-section-title">커뮤니티</span>
       <a href="board.html"><i data-feather="list" aria-hidden="true"></i><span>게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="board.html?board=noticeboard"><i data-feather="volume-2" aria-hidden="true"></i><span>공지문 / 뉴스</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
+      <a href="mypage.html" data-admin-only hidden><i data-feather="user" aria-hidden="true"></i><span>마이페이지</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="board.html?board=infoboard" data-admin-only hidden><i data-feather="info" aria-hidden="true"></i><span>인포게시판</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <a href="index.html#newsHub"><i data-feather="file-text" aria-hidden="true"></i><span>새 소식</span><i data-feather="chevron-right" aria-hidden="true"></i></a>
       <span class="mobile-menu-section-title member">회원 전용</span>
@@ -186,6 +187,7 @@
       infoItem.className = "info-menu-link";
       infoItem.dataset.adminOnly = "true";
       infoItem.hidden = true;
+      try { infoItem.hidden = sessionStorage.getItem("hbg-admin-menu") !== "1"; } catch {}
       infoItem.innerHTML = `<a href="board.html?board=infoboard">인포게시판</a>`;
 
       if(noticeItem && noticeItem.nextSibling){
@@ -196,6 +198,14 @@
     }
 
     menu.querySelectorAll('a[href="board.html?board=noticeboard"]').forEach(link=>link.closest('li')?.remove());
+    if(!menu.querySelector(".admin-mypage-link")){
+      const myPage = document.createElement("li");
+      myPage.className = "admin-mypage-link";
+      myPage.dataset.adminOnly = "true";
+      myPage.hidden = true;
+      myPage.innerHTML = '<a href="mypage.html">마이페이지</a>';
+      menu.insertBefore(myPage, loginItem || null);
+    }
     if(hasBoard){
       menu.querySelector('a[href="board.html"]').textContent='공지문/자유게시판';
       return;
@@ -298,6 +308,7 @@
     });
 
     document.dispatchEvent(new CustomEvent("siteMenuReady"));
+    import("./site-traffic.js?v=1").then(({ recordTraffic }) => recordTraffic("visit")).catch(console.error);
 
     document.addEventListener("click", event=>{
       if(event.target.closest(".mobile-menu-btn")){
@@ -310,6 +321,14 @@
       }
 
       const optionalHomeLink = event.target.closest("a[href]");
+
+      if(optionalHomeLink?.getAttribute("href") === "board.html?board=infoboard" &&
+         location.pathname.endsWith("/board.html") && location.search === "?board=infoboard" &&
+         !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey){
+        event.preventDefault();
+        closeMenu();
+        return;
+      }
 
       if(optionalHomeLink && handleOptionalHomeMenuLink(optionalHomeLink)){
         event.preventDefault();

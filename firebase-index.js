@@ -31,7 +31,9 @@ const firebaseConfig = {
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
+export const db = getFirestore(app);
+let resolveAuthReady;
+export const authReady = new Promise(resolve => { resolveAuthReady = resolve; });
 
 let latestIsAdmin = false;
 const adminIds = new Set(["cherryruri"]);
@@ -243,21 +245,18 @@ onAuthStateChanged(auth, async user=>{
     }
   }
 
+  const isAdmin = isAdminUser(user, data);
+  const verifiedAdmin = Boolean(user && (data?.role === "admin" || data?.isAdmin === true ||
+    data?.admin === true || data?.permission === "admin"));
+  try { sessionStorage.setItem("hbg-admin-menu", isAdmin ? "1" : "0"); } catch {}
   setUserMenu(user, data);
   setMobileUserMenu(user, data);
-  setAdminOnlyMenus(isAdminUser(user, data));
+  setAdminOnlyMenus(isAdmin);
+  resolveAuthReady({ isAdmin, verifiedAdmin });
 });
 
-if(document.readyState === "loading"){
-  document.addEventListener("DOMContentLoaded", ()=>{
-    setAdminOnlyMenus(latestIsAdmin);
-  });
-}else{
-  setAdminOnlyMenus(latestIsAdmin);
-}
-
 document.addEventListener("siteMenuReady", ()=>{
-  setAdminOnlyMenus(latestIsAdmin);
+  if(document.documentElement.dataset.adminMenuReady === "true") setAdminOnlyMenus(latestIsAdmin);
 });
 
 document.addEventListener("click", async event=>{
@@ -295,6 +294,7 @@ document.addEventListener("click", async event=>{
   if(!logoutButton) return;
 
   await signOut(auth);
+  try { sessionStorage.removeItem("hbg-admin-menu"); } catch {}
   alert("로그아웃 완료");
   location.reload();
 });

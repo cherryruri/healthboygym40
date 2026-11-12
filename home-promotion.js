@@ -1,10 +1,15 @@
-(() => {
+import { authReady } from "./firebase-index.js?v=20261112-admin";
+import { recordTraffic } from "./site-traffic.js?v=1";
+
+(async () => {
   const hero = document.querySelector('#hbChapter1');
   const popup = document.querySelector('#homePromotion');
   const startsAt = Date.parse('2026-11-10T00:00:00+09:00');
   const endsAt = Date.parse('2026-11-16T00:00:00+09:00');
+  const { isAdmin } = await authReady;
   const cards = [...popup.querySelectorAll('[data-promotion]')].filter(card => {
     const isDiscount = card.dataset.promotion === 'new-member';
+    if (isAdmin) return true;
     if (isDiscount && (Date.now() < startsAt || Date.now() >= endsAt)) return false;
     try { return localStorage.getItem(storageKey(card)) !== '1'; }
     catch { return true; }
@@ -48,13 +53,30 @@
 
   cards.forEach(card => {
     card.querySelector('button[value="close"]').addEventListener('click', () => closeCard(card));
+    const link = card.querySelector('.home-promotion-actions a');
+    link.addEventListener('click', async event => {
+      if (isAdmin) return;
+      const kind = card.dataset.promotion;
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
+        void recordTraffic(kind);
+        return;
+      }
+      event.preventDefault();
+      await Promise.race([recordTraffic(kind), new Promise(resolve => setTimeout(resolve, 400))]);
+      location.assign(link.href);
+    });
+    link.addEventListener('auxclick', event => {
+      if (!isAdmin && event.button === 1) void recordTraffic(card.dataset.promotion);
+    });
     const dismiss = card.querySelector('button[value="dismiss"]');
     dismiss.addEventListener('click', () => {
       if (dismiss.getAttribute('aria-pressed') !== 'true') {
         dismiss.setAttribute('aria-pressed', 'true');
         return;
       }
-      try { localStorage.setItem(storageKey(card), '1'); } catch {}
+      if (!isAdmin) {
+        try { localStorage.setItem(storageKey(card), '1'); } catch {}
+      }
       closeCard(card);
     });
   });

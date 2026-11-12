@@ -308,15 +308,17 @@ body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>foot
 @media(max-width:768px){.hb-home .hb-programs{padding-top:54px;padding-bottom:74px}}
 
 html:has(.home-promotion[open]){overflow:hidden}
-.home-promotion{position:fixed;inset:0;margin:auto;padding:0;border:0;border-radius:12px;width:min(460px,calc(100vw - 32px),calc((100dvh - 88px) / .875));max-width:none;max-height:calc(100dvh - 24px);background:#000;color:#fff;overflow:auto;box-shadow:0 18px 80px #0008}
-.home-promotion::backdrop{background:#0008}
+.home-promotion{position:fixed;inset:0;margin:auto;padding:0;border:0;width:min(460px,calc(100vw - 32px),calc((100dvh - 116px) / .875));max-width:none;max-height:calc(100dvh - 24px);background:transparent;color:#fff;overflow:auto}
+.home-promotion::backdrop{background:#000b}
+.home-promotion-panel{overflow:hidden;border-radius:12px;background:#000}
 .home-promotion-art{aspect-ratio:8/7;overflow:hidden}
 .home-promotion-art img{display:block;width:100%;height:auto;max-height:none}
 .home-promotion-actions{display:flex;justify-content:space-between;align-items:center;padding:4px 10px}
-.home-promotion-actions button{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 9px;border:0;background:#000;color:#fff;font:inherit;font-weight:650;cursor:pointer}
-.home-promotion-actions button[aria-pressed="true"] span{color:#ffce19}
-.home-promotion-actions button:focus-visible{outline:2px solid #ffce19;outline-offset:-2px}
-.home-promotion-actions span{display:grid;place-items:center;border:1.5px solid;border-radius:50%;width:20px;height:20px}
+.home-promotion-dismiss{display:flex;justify-content:flex-end;margin-top:2px}
+.home-promotion button,.home-promotion-actions a{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 9px;border:0;background:transparent;color:#fff;font:inherit;font-weight:650;text-decoration:none;cursor:pointer}
+.home-promotion-dismiss button[aria-pressed="true"] span{color:#ffce19}
+.home-promotion :is(button,a):focus-visible{outline:2px solid #ffce19;outline-offset:-2px}
+.home-promotion-dismiss span{display:grid;place-items:center;border:1.5px solid;border-radius:50%;width:20px;height:20px}
 
 /* Native fling momentum must not bypass the authored chapter transitions. */
 html body .hb-home .hb-chapter{touch-action:pinch-zoom!important;overscroll-behavior:contain}

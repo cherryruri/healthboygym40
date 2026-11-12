@@ -31,6 +31,13 @@
     document.removeEventListener('visibilitychange', showWhenReady);
   }
 
+  const dismissButton = popup.querySelector('button[value="dismiss"]');
+  dismissButton.addEventListener('click', event => {
+    if (dismissButton.getAttribute('aria-pressed') === 'true') return;
+    event.preventDefault();
+    dismissButton.setAttribute('aria-pressed', 'true');
+  });
+
   popup.addEventListener('close', () => {
     if (popup.returnValue !== 'dismiss') return;
     try { localStorage.setItem(storageKey, '1'); } catch {}

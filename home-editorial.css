@@ -333,6 +333,7 @@ html:has(.home-promotion[open]){overflow:hidden}
 .home-promotion .home-promotion-dismiss button{font-size:13px;color:#ffffffe6}
 .home-promotion-dismiss button[aria-pressed="true"] span{color:#ffce19}
 .home-promotion :is(button,a):focus-visible{outline:2px solid #ffce19;outline-offset:-2px}
+.home-promotion button[value="close"]:focus-visible{outline:none;text-decoration:underline;text-underline-offset:4px}
 .home-promotion-dismiss span{display:grid;place-items:center;border:1.5px solid;border-radius:50%;width:20px;height:20px}
 
 /* Native fling momentum must not bypass the authored chapter transitions. */

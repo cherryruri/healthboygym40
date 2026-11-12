@@ -1,17 +1,32 @@
 (() => {
   const hero = document.querySelector('#hbChapter1');
   const popup = document.querySelector('#homePromotion');
-  const artwork = popup.querySelector('img');
-  const storageKey = 'hbg-new-member-november-2026-dismissed';
   const startsAt = Date.parse('2026-11-10T00:00:00+09:00');
   const endsAt = Date.parse('2026-11-16T00:00:00+09:00');
-  const isActive = () => Date.now() >= startsAt && Date.now() < endsAt;
+  const cards = [...popup.querySelectorAll('[data-promotion]')].filter(card => {
+    const isDiscount = card.dataset.promotion === 'new-member';
+    if (isDiscount && (Date.now() < startsAt || Date.now() >= endsAt)) return false;
+    try { return localStorage.getItem(storageKey(card)) !== '1'; }
+    catch { return true; }
+  });
+  if (!cards.length) return;
 
-  if (!isActive()) return;
-  try {
-    if (localStorage.getItem(storageKey) === '1') return;
-  } catch {}
+  function storageKey(card) {
+    return card.dataset.promotion === 'new-member'
+      ? 'hbg-new-member-november-2026-dismissed'
+      : 'hbg-pilates-trial-dismissed';
+  }
 
+  function closeCard(card) {
+    card.hidden = true;
+    if (cards.every(item => item.hidden)) {
+      popup.close();
+      return;
+    }
+    popup.querySelector('.home-promotion-card:not([hidden]) button[value="close"]').focus();
+  }
+
+  const artwork = cards.map(card => card.querySelector('img'));
   let heroVisible = false;
   const observer = new IntersectionObserver(([entry]) => {
     heroVisible = entry.isIntersecting && entry.intersectionRatio >= 0.5;
@@ -20,31 +35,35 @@
   const loader = new MutationObserver(showWhenReady);
 
   function showWhenReady() {
-    if (!heroVisible || !document.body.classList.contains('loaded') ||
+    if (popup.open || !heroVisible || !document.body.classList.contains('loaded') ||
         document.body.classList.contains('menu-open') || document.hidden ||
-        !artwork.complete || !artwork.naturalWidth || !isActive()) return;
+        artwork.some(image => !image.complete)) return;
 
-    popup.showModal();
+    cards.forEach((card, index) => { card.hidden = !artwork[index].naturalWidth; });
     observer.disconnect();
     loader.disconnect();
-    artwork.removeEventListener('load', showWhenReady);
     document.removeEventListener('visibilitychange', showWhenReady);
+    if (cards.some(card => !card.hidden)) popup.showModal();
   }
 
-  const dismissButton = popup.querySelector('button[value="dismiss"]');
-  dismissButton.addEventListener('click', event => {
-    if (dismissButton.getAttribute('aria-pressed') === 'true') return;
-    event.preventDefault();
-    dismissButton.setAttribute('aria-pressed', 'true');
+  cards.forEach(card => {
+    card.querySelector('button[value="close"]').addEventListener('click', () => closeCard(card));
+    const dismiss = card.querySelector('button[value="dismiss"]');
+    dismiss.addEventListener('click', () => {
+      if (dismiss.getAttribute('aria-pressed') !== 'true') {
+        dismiss.setAttribute('aria-pressed', 'true');
+        return;
+      }
+      try { localStorage.setItem(storageKey(card), '1'); } catch {}
+      closeCard(card);
+    });
   });
-
-  popup.addEventListener('close', () => {
-    if (popup.returnValue !== 'dismiss') return;
-    try { localStorage.setItem(storageKey, '1'); } catch {}
-  });
-  artwork.addEventListener('load', showWhenReady);
   document.addEventListener('visibilitychange', showWhenReady);
   observer.observe(hero);
   loader.observe(document.body, { attributes: true, attributeFilter: ['class'] });
-  artwork.src = artwork.dataset.src;
+  artwork.forEach(image => {
+    image.addEventListener('load', showWhenReady, { once: true });
+    image.addEventListener('error', showWhenReady, { once: true });
+    image.src = image.dataset.src;
+  });
 })();

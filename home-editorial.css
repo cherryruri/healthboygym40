@@ -308,9 +308,14 @@ body:not(.location-only-view) #location,body:not(.location-only-view)>#wrap>foot
 @media(max-width:768px){.hb-home .hb-programs{padding-top:54px;padding-bottom:74px}}
 
 html:has(.home-promotion[open]){overflow:hidden}
-.home-promotion{position:fixed;inset:0;margin:auto;padding:0;border:0;width:min(460px,calc(100vw - 32px),calc((100dvh - 116px) / .875));max-width:none;max-height:calc(100dvh - 24px);background:transparent;color:#fff;overflow:auto}
+.home-promotion{position:fixed;inset:0;margin:auto;padding:0;border:0;width:max-content;max-width:none;max-height:calc(100dvh - 24px);background:transparent;color:#fff;overflow:auto}
+.home-promotion[open]{display:flex;gap:16px;align-items:flex-start}
+.home-promotion-card{width:min(460px,calc((100vw - 48px) / 2),calc((100dvh - 116px) / .875))}
+.home-promotion-card:only-of-type,.home-promotion-card:has(+ [hidden]),.home-promotion-card[hidden]+.home-promotion-card{width:min(460px,calc(100vw - 32px),calc((100dvh - 116px) / .875))}
+@media(max-width:600px){.home-promotion[open]{flex-direction:column}.home-promotion .home-promotion-card{width:min(420px,calc(100vw - 32px))}}
 .home-promotion::backdrop{background:#000b}
 .home-promotion-panel{overflow:hidden;border-radius:12px;background:#000}
+.home-promotion-pilates{background:#714d3a}
 .home-promotion-art{aspect-ratio:8/7;overflow:hidden}
 .home-promotion-art img{display:block;width:100%;height:auto;max-height:none}
 .home-promotion-actions{display:flex;justify-content:space-between;align-items:center;padding:4px 10px}

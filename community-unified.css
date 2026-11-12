@@ -73,10 +73,10 @@ html body[data-board="infoboard"] #boardCategoryBar button[data-category].active
     column-gap: clamp(22px, 3vw, 40px);
     align-items: start;
   }
-  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-page.board-page {
+  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-page.board-page.board-page {
     max-width: 1480px !important;
   }
-  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-toolbar.board-toolbar {
+  html body.desktop-board[data-board]:is([data-board="free"],[data-board="infoboard"]) .board-toolbar.board-toolbar.board-toolbar {
     display: contents !important;
   }
   .desktop-board:is([data-board="free"],[data-board="infoboard"]) .board-menu-panel {

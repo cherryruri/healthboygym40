@@ -116,7 +116,7 @@
     ];
     extraLinks.forEach(([href,en,ko])=>{
       const link=document.createElement('a');link.href=href;link.className='mobile-primary-link';
-      if(href==='mypage.html'){link.hidden=true;link.style.setProperty('display','none','important');}
+      if(href==='mypage.html'){link.dataset.adminOnly='true';link.hidden=true;}
       link.innerHTML='<span class="mobile-nav-en" lang="en">'+en+'</span><span class="mobile-nav-ko">'+ko+'</span>';
       list.appendChild(link);
     });

@@ -287,3 +287,7 @@ html body #site-header#site-header a[href*="mypage.html"]{display:none!important
 .site-quick-actions .site-talk-button{background:#03c75a!important;border-color:#03c75a!important;color:#fff!important}
 .site-talk-button span{display:block;width:20px;height:20px;color:transparent;background:#fff;clip-path:polygon(0 0,34% 0,66% 47%,66% 0,100% 0,100% 100%,66% 100%,34% 53%,34% 100%,0 100%)}
 @media(max-width:768px){body:is(.global-mobile-quick-menu,.travel-board-mobile-active) .site-quick-actions{right:18px;bottom:calc(146px + env(safe-area-inset-bottom))}body:is(.global-mobile-quick-menu,.travel-board-mobile-active):has(.travel-quick-dock.is-open) .site-talk-button{display:none}}
+
+html[data-admin-menu-access="true"] body #site-header#site-header .admin-mypage-link[data-admin-only]:not([hidden]) > a[href="mypage.html"],
+html[data-admin-menu-access="true"] body #site-header#site-header .mobile-menu-list a[data-admin-only]:not([hidden])[href="mypage.html"]{display:flex!important}
+html[data-admin-menu-access="true"] body .travel-quick-dock.is-open .travel-quick-actions a[href="mypage.html"]{display:grid!important}

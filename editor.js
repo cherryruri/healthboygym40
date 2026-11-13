@@ -669,16 +669,19 @@ if(postCategory){
 
 const quoteStyle = document.getElementById("quoteStyle");
 let quoteRange;
-document.addEventListener("selectionchange", () => {
+function rememberQuoteRange() {
   const selection = window.getSelection();
   if (selection?.rangeCount && contentBox.contains(selection.getRangeAt(0).commonAncestorContainer)) {
     quoteRange = selection.getRangeAt(0).cloneRange();
   }
-});
+}
+document.addEventListener("selectionchange", rememberQuoteRange);
+quoteStyle.addEventListener("pointerdown", rememberQuoteRange);
 quoteStyle.addEventListener("change", () => {
   const style = quoteStyle.value;
   quoteStyle.value = "";
   if (!style) return;
+  const text = quoteRange?.toString() || "";
   contentBox.focus();
   const selection = window.getSelection();
   if (quoteRange && contentBox.contains(quoteRange.commonAncestorContainer)) {
@@ -687,7 +690,7 @@ quoteStyle.addEventListener("change", () => {
   }
   const quote = document.createElement("blockquote");
   quote.className = "editor-quote quote-" + style;
-  quote.textContent = selection.toString();
+  quote.textContent = text;
   if (!quote.textContent) quote.append(document.createElement("br"));
   document.execCommand("insertHTML", false, quote.outerHTML + "<p><br></p>");
   if (!quote.textContent) {

@@ -152,7 +152,7 @@
   const stage = document.createElement('section');
   stage.className = 'travel-board-mobile';
   stage.innerHTML = `
-    <div class="travel-board-hero" style="background-image: url(센터전체사진1.jpg)">
+    <div class="travel-board-hero" style="background-image: url(gym80-high-row.jpg)">
       <video class="travel-board-video" muted playsinline webkit-playsinline loop preload="metadata" aria-hidden="true"></video>
       <div class="travel-board-shade"></div>
       <div class="travel-board-copy">
@@ -177,7 +177,8 @@
    if(!video.paused&&video.readyState>=2)video.classList.add('is-playing');
   });
   video.addEventListener('error', () => video.classList.remove('is-playing'));
-  video.src = '센터 드론 영상.mp4';
+  video.addEventListener('pause', () => video.classList.remove('is-playing'));
+  video.src = 'mobile-center-intro.mp4?v=board-background';
   video.play()?.catch(() => video.classList.remove('is-playing'));
  };
  const style=document.createElement('style');

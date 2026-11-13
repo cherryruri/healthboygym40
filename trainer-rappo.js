@@ -7,6 +7,7 @@
   const video = demo.querySelector("video");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let revealTimer;
+  let fadeTimer;
   let revealed = false;
 
   function reveal() {
@@ -15,16 +16,25 @@
     demo.removeAttribute("aria-hidden");
     demo.inert = false;
     stage.classList.add("is-rappo");
-    video.src = video.dataset.src;
     if (!reducedMotion.matches) video.play().catch(() => {});
   }
 
   new IntersectionObserver(([entry]) => {
     clearTimeout(revealTimer);
     if (entry.intersectionRatio >= .8) {
-      if (!revealed) revealTimer = setTimeout(reveal, 3000);
+      if (revealed) {
+        if (!reducedMotion.matches) video.play().catch(() => {});
+        return;
+      }
+      if (!video.getAttribute("src")) video.src = video.dataset.src;
+      revealTimer = setTimeout(() => {
+        stage.classList.add("is-statement-fading");
+        fadeTimer = setTimeout(reveal, reducedMotion.matches ? 0 : 650);
+      }, 3500);
     } else {
+      clearTimeout(fadeTimer);
       video.pause();
+      if (!revealed) stage.classList.remove("is-statement-fading");
     }
   }, { threshold: .8 }).observe(stage);
 })();

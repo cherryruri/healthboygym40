@@ -74,17 +74,19 @@ html body #trainer .coach-profile .coach-credentials li{display:list-item!import
 .coach-mindset-stage .coach-statement,
 .coach-rappo { grid-area: 1 / 1; transition: opacity .65s ease, transform .65s ease; }
 .coach-rappo { width: min(960px, 100%); display: grid; grid-template-columns: 1fr minmax(200px, 340px); align-items: center; gap: clamp(24px, 7vw, 100px); opacity: 0; transform: translateY(12px); pointer-events: none; }
-.coach-mindset-stage.is-rappo .coach-statement { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+.coach-mindset-stage.is-statement-fading .coach-statement { opacity: 0; transform: translateY(-12px); pointer-events: none; }
 .coach-mindset-stage.is-rappo .coach-rappo { opacity: 1; transform: none; pointer-events: auto; }
 #trainer .coach-rappo h2 { font-family: inherit; font-size: clamp(28px,3vw,46px); font-weight: 650; line-height: 1.55; letter-spacing: -.045em; margin: 0 0 14px; }
 .coach-rappo-copy { word-break: keep-all; }
 .coach-rappo-copy > div { color: #454545; line-height: 1.7; font-size: clamp(14px, 1.35vw, 19px); }
 .coach-rappo-copy a { display: inline-block; margin-top: 14px; color: #111; text-decoration: underline; text-underline-offset: 4px; }
-.coach-rappo video { display: block; width: 100%; height: min(65svh, 580px); object-fit: contain; border-radius: 24px; background: #111; }
+.coach-rappo-phone { justify-self: center; width: min(100%, 29svh, 280px); aspect-ratio: 9 / 19; padding: 6px; border: 2px solid #505157; border-radius: 32px; background: #0c0d11; box-shadow: 0 16px 36px #14182733; }
+.coach-rappo video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 24px; background: #fafbfc; }
 @media (max-width: 768px) {
   .coach-rappo { grid-template-columns: 1fr; gap: 16px; }
   #trainer .coach-rappo h2 { font-size: 25px; line-height: 1.25; margin-bottom: 8px; }
-  .coach-rappo video { height: min(38svh, 340px); }
+  .coach-rappo-phone { width: min(45vw, 20svh, 165px); border-radius: 23px; padding: 4px; }
+  .coach-rappo video { border-radius: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .coach-mindset-stage .coach-statement, .coach-rappo { transition: none; }

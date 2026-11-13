@@ -13,12 +13,11 @@
  const hero=document.createElement('section');hero.className='desktop-community-hero mall-carousel';hero.setAttribute('aria-label','센터 소개 슬라이드');hero.setAttribute('aria-roledescription','캐러셀');
  hero.innerHTML='<div class="mall-slide-track">'+slides.map((s,i)=>`<article class="mall-slide" aria-label="${i+1} / ${slides.length}"><img src="${s[0]}" alt="" ${i?'loading="lazy"':'fetchpriority="high"'}><div class="mall-slide-copy"><p>${s[1]}</p><span>${s[2]}</span><a href="${s[4]}">${s[3]}</a></div></article>`).join('')+'</div><button type="button" class="mall-prev" aria-label="이전 배너">‹</button><button type="button" class="mall-next" aria-label="다음 배너">›</button><div class="mall-slide-dots">'+slides.map((_,i)=>`<button type="button" aria-label="${i+1}번 배너" data-slide="${i}"></button>`).join('')+'</div><span class="mall-slide-count" aria-live="polite"></span>';
  const syncHeroVisibility=()=>{
-  if(media.matches)hero.style.removeProperty('display');
-  else hero.style.setProperty('display','none','important');
+  hero.classList.toggle('board-inline-carousel', !media.matches && Boolean(hero.closest('.travel-board-content')));
  };
+ shell.before(hero);
  syncHeroVisibility();
  media.addEventListener('change',syncHeroVisibility);
- shell.before(hero);
  let active=0;
  const showSlide=index=>{active=(index+slides.length)%slides.length;hero.querySelectorAll('.mall-slide').forEach((slide,i)=>{const position=(i-active+slides.length)%slides.length;slide.dataset.position=position;slide.setAttribute('aria-hidden',String(position!==0));slide.inert=position!==0;});hero.querySelectorAll('[data-slide]').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===active)));hero.querySelector('.mall-slide-count').textContent=`0${active+1} / 03`;hero.dispatchEvent(new Event("slidechange"));};
  hero.querySelector('.mall-prev').addEventListener('click',()=>showSlide(active-1));hero.querySelector('.mall-next').addEventListener('click',()=>showSlide(active+1));hero.querySelectorAll('[data-slide]').forEach(b=>b.addEventListener('click',()=>showSlide(Number(b.dataset.slide))));
@@ -148,7 +147,7 @@
  const specs=[{index:0,poster:'member-tensecond-v3.jpg',preview:'member-tensecond-v3.mp4',full:'bodychallenge34-interview.mp4',title:'바디챌린지 34기 수내점 김영관 회원님 인터뷰'},{index:1,poster:'sangwon-tensecond-v3.jpg',preview:'sangwon-tensecond-v3.mp4',full:'assets/pt/pt-sangwon.mp4',title:'이달의 트레이너 이상원 팀장님'}];
  let inView=false,rotationPaused=false,rotationTimer=null,lastOpenButton=null;
  const rotationButton=document.createElement('button');rotationButton.type='button';rotationButton.className='mall-rotation-toggle';rotationButton.textContent='자동 넘김 일시정지';rotationButton.setAttribute('aria-pressed','false');hero.appendChild(rotationButton);
- const available=()=>media.matches&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
+ const available=()=>hero.classList.contains("board-inline-carousel")&&inView&&!document.hidden&&!dialog.open&&!document.body.classList.contains('board-list-view');
  const schedule=()=>{clearTimeout(rotationTimer);rotationTimer=null;if(available()&&!rotationPaused&&!hero.contains(document.activeElement)){rotationTimer=setTimeout(()=>showSlide(active+1),4800);}};
  const videoSlides=specs.map(spec=>{
    const slide=hero.querySelectorAll('.mall-slide')[spec.index];slide.classList.add('mall-interview-slide');slide.querySelector('img').remove();

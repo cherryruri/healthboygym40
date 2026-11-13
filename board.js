@@ -19,7 +19,7 @@ import {
   where
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-import { changeBoardCategory, isCustomCategory, loadBoardCategories } from "./board-categories.js?v=1";
+import { changeBoardCategory, isCustomCategory, loadBoardCategories } from "./board-categories.js?v=menu-editor";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -216,8 +216,11 @@ function getMeta(){
   const meta = boardMeta[currentBoard] || boardMeta.free;
   const scope = categoryScope();
   if(!scope) return meta;
-  const custom = boardCategories[scope].filter(item=>!item.archived).map(item=>[item.id,item.label]);
-  return {...meta, categories:[...meta.categories,...custom]};
+  const settings = boardCategories[scope];
+  const defaults = meta.categories.map(([id,label])=>({id,label}));
+  const menus = defaults.map(item=>settings.find(saved=>saved.id === item.id) || item);
+  menus.push(...settings.filter(item=>isCustomCategory(item.id)));
+  return {...meta, menus, categories:menus.filter(item=>!item.archived).map(({id,label})=>[id,label])};
 }
 
 function getCurrentUserId(){
@@ -416,7 +419,7 @@ function updateCategoryBar(){
 
   if(!meta.categories.some(([value])=>value === currentCategory) &&
      (categoriesLoaded || !isCustomCategory(currentCategory))){
-    currentCategory = currentBoard === "free" ? "all" : meta.categories[0][0];
+    currentCategory = "all";
   }
 
   bar.hidden = false;
@@ -449,6 +452,7 @@ function updateCategoryManager(bar){
     categoryManager.className = "board-category-manager";
     categoryManager.innerHTML = `
       <summary>게시판 메뉴 설정</summary>
+      <p class="board-menu-help">이름을 바꾸거나 메뉴를 숨길 수 있습니다. 기존 글은 보관됩니다.</p>
       <form class="board-category-add">
         <label>새 메뉴 이름 <input name="label" maxlength="24" required></label>
         <button type="submit">메뉴 추가</button>
@@ -479,7 +483,7 @@ function updateCategoryManager(bar){
   categoryManager.hidden = false;
   const list = categoryManager.querySelector("ul");
   list.replaceChildren();
-  for(const item of boardCategories[scope].filter(category=>!category.archived)){
+  for(const item of getMeta().menus){
     const row = document.createElement("li");
     const form = document.createElement("form");
     form.className = "board-menu-edit";
@@ -496,27 +500,30 @@ function updateCategoryManager(bar){
       event.preventDefault();
       const label = name.value.trim().replace(/\s+/g," ");
       if(!label || label === item.label) return;
-      const builtIns = getMeta().categories.filter(([id])=>!isCustomCategory(id));
+      const builtIns = boardMeta[currentBoard].categories.filter(([id])=>id !== item.id && !isCustomCategory(id) && !boardCategories[scope].some(saved=>saved.id === id));
       void saveCategoryChange(scope, items=>{
-        if(!items.some(category=>category.id === item.id && !category.archived)){
-          throw new Error("이미 삭제된 메뉴입니다.");
-        }
         if(builtIns.some(([, text])=>text === label) ||
            items.some(category=>category.id !== item.id && category.label === label && !category.archived)){
           throw new Error("이미 사용 중인 메뉴 이름입니다.");
         }
-        return items.map(category=>category.id === item.id ? {...category,label} : category);
+        return [...items.filter(category=>category.id !== item.id), {...(items.find(category=>category.id === item.id) || item),label}];
       }, "메뉴 이름을 수정했어요.");
     });
     const remove = document.createElement("button");
     remove.type = "button";
-    remove.textContent = "삭제";
-    remove.setAttribute("aria-label", item.label + " 메뉴 삭제");
+    remove.textContent = item.archived ? "복원" : "삭제";
+    remove.className = "board-menu-remove";
+    row.classList.toggle("is-archived", Boolean(item.archived));
+    remove.setAttribute("aria-label", item.label + " 메뉴 " + remove.textContent);
     remove.addEventListener("click", ()=>{
-      if(!confirm(item.label + " 메뉴를 삭제할까요? 글은 전체 목록에 남습니다.")) return;
-      void saveCategoryChange(scope, items=>items.map(category=>
-        category.id === item.id ? {...category,archived:true} : category
-      ), "메뉴를 삭제했어요.");
+      if(!item.archived && !confirm(item.label + " 메뉴를 삭제할까요? 글은 보관됩니다.")) return;
+      void saveCategoryChange(scope, items=>{
+        const latest = items.find(category=>category.id === item.id) || item;
+        if(item.archived && getMeta().categories.some(([id,label])=>id !== item.id && label === latest.label)){
+          throw new Error("같은 이름의 메뉴가 있어요. 이름을 수정한 후 복원해 주세요.");
+        }
+        return [...items.filter(category=>category.id !== item.id), {...latest,archived:!item.archived}];
+      }, item.archived ? "메뉴를 복원했어요." : "메뉴를 삭제했어요.");
     });
     form.append(name, save, remove);
     row.append(form);

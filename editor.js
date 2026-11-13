@@ -20,7 +20,7 @@ import {
   writeBatch
 } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
 
-import { loadBoardCategories } from "./board-categories.js?v=1";
+import { loadBoardCategories } from "./board-categories.js?v=menu-editor";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC6fYLWkH9oSr7f-H4QNHUuN7Y2bFOvgQ8",
@@ -136,9 +136,9 @@ function syncCategoryOptions(){
   const scope = boardName === "infoboard" ? "info" : "public";
   const builtIns = scope === "info" ? ["info_fc","info_pilates","info_health","info_pt"] : ["free"];
   const selected = loadedCategory || categoryParam;
-  const options = builtIns.map(id=>new Option(categoryNames[id],id));
+  const options = builtIns.filter(id=>!customCategories[scope].some(item=>item.id === id)).map(id=>new Option(categoryNames[id],id));
   for(const item of customCategories[scope]){
-    if(!item.archived || item.id === loadedCategory) options.push(new Option(item.label,item.id));
+    if(!["all","notice"].includes(item.id) && (!item.archived || item.id === loadedCategory)) options.push(new Option(item.label,item.id));
   }
   if((loadedCategory || categoryNames[selected]) && !options.some(option=>option.value === selected)){
     options.push(new Option(categoryNames[selected] || "기존 분류",selected));
@@ -666,3 +666,32 @@ updateEditorHeader();
 if(postCategory){
   postCategory.addEventListener("change", updateEditorHeader);
 }
+
+const quoteStyle = document.getElementById("quoteStyle");
+let quoteRange;
+document.addEventListener("selectionchange", () => {
+  const selection = window.getSelection();
+  if (selection?.rangeCount && contentBox.contains(selection.getRangeAt(0).commonAncestorContainer)) {
+    quoteRange = selection.getRangeAt(0).cloneRange();
+  }
+});
+quoteStyle.addEventListener("change", () => {
+  const style = quoteStyle.value;
+  quoteStyle.value = "";
+  if (!style) return;
+  contentBox.focus();
+  const selection = window.getSelection();
+  if (quoteRange && contentBox.contains(quoteRange.commonAncestorContainer)) {
+    selection.removeAllRanges();
+    selection.addRange(quoteRange);
+  }
+  const quote = document.createElement("blockquote");
+  quote.className = "editor-quote quote-" + style;
+  quote.textContent = selection.toString();
+  if (!quote.textContent) quote.append(document.createElement("br"));
+  document.execCommand("insertHTML", false, quote.outerHTML + "<p><br></p>");
+  if (!quote.textContent) {
+    const inserted = Array.from(contentBox.querySelectorAll(".editor-quote")).reverse().find(node=>!node.textContent);
+    if (inserted) selection.collapse(inserted, 0);
+  }
+});

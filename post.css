@@ -806,3 +806,9 @@ cursor:pointer;
     font-size:14px !important;
   }
 }
+
+blockquote.editor-quote { margin: 1.5em 0; padding: 1em 1.25em; background: #f6f6f6; color: #303030; white-space: pre-wrap; }
+blockquote.quote-line { border-left: 4px solid #161616; }
+blockquote.quote-frame { border: 1px solid #aaa; border-radius: 10px; }
+blockquote.quote-marks { text-align: center; }
+blockquote.quote-marks::before { content: "“"; display: block; font-size: 2em; line-height: 1; color: #646464; }

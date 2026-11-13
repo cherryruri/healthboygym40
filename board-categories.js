@@ -9,7 +9,7 @@ function categorySettings(db, scope){
 function readCategories(snapshot){
   const items = snapshot.data()?.items;
   return (Array.isArray(items) ? items : []).filter(item=>
-    item && isCustomCategory(item.id) && typeof item.label === "string" && item.label.length <= 24
+    item && (isCustomCategory(item.id) || ["all","notice","info_fc","info_health","info_pt","info_pilates"].includes(item.id)) && typeof item.label === "string" && item.label.length <= 24
   );
 }
 

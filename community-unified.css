@@ -128,3 +128,15 @@ html body[data-board="free"] .board-menu-panel { display: contents; }
     padding-bottom: 18px;
   }
 }
+
+.board-category-manager { background: #fff; border-color: #e2e2e2; }
+.board-category-manager summary { padding-block: 4px; }
+.board-menu-help { font-size: 12px; color: #666; line-height: 1.5; }
+.board-category-manager .board-menu-edit { display: grid; grid-template-columns: minmax(0,1fr) auto auto; gap: 5px; }
+.board-category-manager button[type="submit"] { background: #171717; color: #fff; border-color: #171717; }
+.board-category-manager .board-menu-remove { color: #a22727; }
+.board-custom-categories .is-archived input { background: #eee; color: #666; }
+@media (min-width:769px) {
+  .desktop-board[data-board="infoboard"] .board-menu-edit { grid-template-columns: 1fr 1fr; }
+  .desktop-board[data-board="infoboard"] .board-menu-edit input { grid-column: 1 / -1; }
+}

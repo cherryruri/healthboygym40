@@ -14,7 +14,7 @@
 <title>글쓰기</title>
 
 <link rel="stylesheet" href="style.css?v=20260728-mobile-info2">
-<link rel="stylesheet" href="editor.css?v=20261112-category-tools">
+<link rel="stylesheet" href="editor.css?v=quotes">
 
 <link rel="stylesheet" href="site-header.css?v=verified-admin-menu">
 <script src="site-header.js?v=20261112-talk" defer></script>
@@ -94,6 +94,9 @@
 
     <input type="text" id="postTitle" class="editor-title-input" placeholder="제목을 입력하세요">
 <div class="editor-toolbar">
+  <select id="quoteStyle" aria-label="인용구 스타일">
+    <option value="">인용구</option><option value="marks">따옴표</option><option value="line">세로줄</option><option value="frame">프레임</option>
+  </select>
 
 <select id="fontSizeSelect">
   <option value="14">14</option>
@@ -168,7 +171,7 @@
 <script src="js/feather.min.js"></script>
 <script src="site-menu.js?v=mobile-info-board"></script>
 <script type="module" src="firebase-index.js?v=verified-admin-menu"></script>
-<script type="module" src="editor.js?v=inquiry-paused"></script>
+<script type="module" src="editor.js?v=quotes"></script>
 
 </body>
 </html>

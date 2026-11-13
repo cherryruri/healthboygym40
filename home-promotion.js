@@ -1,5 +1,5 @@
-import { authReady } from "./firebase-index.js?v=20261112-admin";
-import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=1";
+import { authReady } from "./firebase-index.js?v=verified-admin-menu";
+import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-menu";
 
 (async () => {
   const hero = document.querySelector('#hbChapter1');

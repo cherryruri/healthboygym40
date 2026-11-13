@@ -248,10 +248,9 @@ onAuthStateChanged(auth, async user=>{
   const isAdmin = isAdminUser(user, data);
   const verifiedAdmin = Boolean(user && (data?.role === "admin" || data?.isAdmin === true ||
     data?.admin === true || data?.permission === "admin"));
-  try { sessionStorage.setItem("hbg-admin-menu", isAdmin ? "1" : "0"); } catch {}
   setUserMenu(user, data);
   setMobileUserMenu(user, data);
-  setAdminOnlyMenus(isAdmin);
+  setAdminOnlyMenus(verifiedAdmin);
   resolveAuthReady({ isAdmin, verifiedAdmin });
 });
 

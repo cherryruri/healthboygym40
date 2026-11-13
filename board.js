@@ -431,10 +431,15 @@ function updateCategoryBar(){
   updateCategoryManager(bar);
 }
 
+function hasVerifiedAdminProfile(){
+  return Boolean(currentUser && (currentUserData?.role === "admin" || currentUserData?.isAdmin === true ||
+    currentUserData?.admin === true || currentUserData?.permission === "admin"));
+}
+
 let categoryManager;
 function updateCategoryManager(bar){
   const scope = categoryScope();
-  if(!scope || !currentUser || !isAdmin()){
+  if(!scope || !hasVerifiedAdminProfile()){
     if(categoryManager) categoryManager.hidden = true;
     return;
   }
@@ -520,7 +525,7 @@ function updateCategoryManager(bar){
 }
 
 async function saveCategoryChange(scope, change, message, onSaved){
-  if(!currentUser || !isAdmin()) return;
+  if(!hasVerifiedAdminProfile()) return;
   const status = categoryManager.querySelector('[role="status"]');
   const controls = [...categoryManager.querySelectorAll("input,button")];
   controls.forEach(control=>{control.disabled = true;});

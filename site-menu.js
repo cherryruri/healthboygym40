@@ -188,7 +188,6 @@
       infoItem.className = "info-menu-link";
       infoItem.dataset.adminOnly = "true";
       infoItem.hidden = true;
-      try { infoItem.hidden = sessionStorage.getItem("hbg-admin-menu") !== "1"; } catch {}
       infoItem.innerHTML = `<a href="board.html?board=infoboard">인포게시판</a>`;
 
       if(noticeItem && noticeItem.nextSibling){
@@ -317,7 +316,7 @@
     });
 
     document.dispatchEvent(new CustomEvent("siteMenuReady"));
-    import("./site-traffic.js?v=1").then(({ recordTraffic }) => recordTraffic("visit")).catch(console.error);
+    import("./site-traffic.js?v=verified-admin-menu").then(({ recordTraffic }) => recordTraffic("visit")).catch(console.error);
 
     document.addEventListener("click", event=>{
       if(event.target.closest(".mobile-menu-btn")){

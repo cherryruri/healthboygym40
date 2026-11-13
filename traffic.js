@@ -1,6 +1,6 @@
 import { collection, getDocsFromServer, query, where } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-import { authReady, db } from "./firebase-index.js?v=20261112-admin";
-import { todayInSeoul } from "./site-traffic.js?v=1";
+import { authReady, db } from "./firebase-index.js?v=verified-admin-menu";
+import { todayInSeoul } from "./site-traffic.js?v=verified-admin-menu";
 
 const dashboard = document.querySelector("#dashboard");
 const access = document.querySelector("#access");

@@ -1,5 +1,5 @@
 import { collection, doc, getCountFromServer, query, serverTimestamp, setDoc, where } from "https://www.gstatic.com/firebasejs/11.7.3/firebase-firestore.js";
-import { authReady, db } from "./firebase-index.js?v=20261112-admin";
+import { authReady, db } from "./firebase-index.js?v=verified-admin-menu";
 
 const dateFormat = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' });
 export const todayInSeoul = () => dateFormat.format(new Date());

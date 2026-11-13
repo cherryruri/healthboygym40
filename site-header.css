@@ -291,3 +291,7 @@ html body #site-header#site-header a[href*="mypage.html"]{display:none!important
 html[data-admin-menu-access="true"] body #site-header#site-header .admin-mypage-link[data-admin-only]:not([hidden]) > a[href="mypage.html"],
 html[data-admin-menu-access="true"] body #site-header#site-header .mobile-menu-list a[data-admin-only]:not([hidden])[href="mypage.html"]{display:flex!important}
 html[data-admin-menu-access="true"] body .travel-quick-dock.is-open .travel-quick-actions a[href="mypage.html"]{display:grid!important}
+
+/* Admin links stay hidden until the signed-in profile has been verified. */
+html body #site-header#site-header [data-admin-only][hidden],
+html:not([data-admin-menu-access="true"]) body #site-header#site-header [data-admin-only] { display: none !important; }

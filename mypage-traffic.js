@@ -1,5 +1,5 @@
-import { authReady } from './firebase-index.js?v=20261112-admin';
-import { countTraffic, todayInSeoul } from './site-traffic.js?v=1';
+import { authReady } from './firebase-index.js?v=verified-admin-menu';
+import { countTraffic, todayInSeoul } from './site-traffic.js?v=verified-admin-menu';
 
 const panel = document.querySelector('#adminTraffic');
 const date = document.querySelector('#trafficDate');

@@ -171,3 +171,29 @@ html body:is(body,#site-typography).mobile-board-look .board-post h2{font-size:1
   html body.cinema-mobile .board-inline-carousel :is(.mall-prev,.mall-next,.mall-slide-dots) { display: grid !important; }
   html body.cinema-mobile .board-inline-carousel .mall-slide-dots { display: flex !important; }
 }
+@media (max-width: 768px) {
+  html body.cinema-mobile .board-inline-carousel .mall-slide-dots {
+    position: absolute;
+    inset: 442px auto auto 50%;
+    transform: translateX(-50%);
+    gap: 4px;
+    z-index: 6;
+  }
+  html body.cinema-mobile .board-inline-carousel .mall-slide-dots button {
+    width: 26px;
+    height: 30px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  html body.cinema-mobile .board-inline-carousel .mall-slide-dots button::after {
+    content: "";
+    display: block;
+    margin: auto;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #aaa;
+  }
+  html body.cinema-mobile .board-inline-carousel .mall-slide-dots button[aria-pressed="true"]::after { background: #111; }
+}

@@ -11,6 +11,7 @@
   let revealed = false;
 
   function reveal() {
+    if (revealed) return;
     revealed = true;
     statement.setAttribute("aria-hidden", "true");
     demo.removeAttribute("aria-hidden");
@@ -19,22 +20,26 @@
     if (!reducedMotion.matches) video.play().catch(() => {});
   }
 
+  function startTransition() {
+    if (!video.getAttribute("src")) video.src = video.dataset.src;
+    stage.classList.add("is-statement-fading");
+    fadeTimer = setTimeout(reveal, reducedMotion.matches ? 0 : 650);
+  }
+
   new IntersectionObserver(([entry]) => {
-    clearTimeout(revealTimer);
-    if (entry.intersectionRatio >= .8) {
+    if (entry.isIntersecting && entry.intersectionRatio >= .5) {
       if (revealed) {
         if (!reducedMotion.matches) video.play().catch(() => {});
         return;
       }
       if (!video.getAttribute("src")) video.src = video.dataset.src;
-      revealTimer = setTimeout(() => {
-        stage.classList.add("is-statement-fading");
-        fadeTimer = setTimeout(reveal, reducedMotion.matches ? 0 : 650);
-      }, 3500);
+      revealTimer ??= setTimeout(startTransition, 2700);
     } else {
+      clearTimeout(revealTimer);
+      revealTimer = undefined;
       clearTimeout(fadeTimer);
       video.pause();
       if (!revealed) stage.classList.remove("is-statement-fading");
     }
-  }, { threshold: .8 }).observe(stage);
+  }, { threshold: .5 }).observe(statement);
 })();

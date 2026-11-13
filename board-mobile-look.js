@@ -152,7 +152,7 @@
   const stage = document.createElement('section');
   stage.className = 'travel-board-mobile';
   stage.innerHTML = `
-    <div class="travel-board-hero" style="background-image: url(gym80-high-row.jpg)">
+    <div class="travel-board-hero">
       <video class="travel-board-video" muted playsinline webkit-playsinline loop preload="metadata" aria-hidden="true"></video>
       <div class="travel-board-shade"></div>
       <div class="travel-board-copy">

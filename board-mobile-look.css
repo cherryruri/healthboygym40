@@ -164,3 +164,10 @@ html body:is(body,#site-typography).mobile-board-look .board-post h2{font-size:1
     display: none !important;
   }
 }
+
+.travel-board-interviews { padding: 28px 20px 48px; background: #fff; }
+.travel-board-interviews h2 { margin: 0 0 16px; font-size: 22px; }
+.travel-interview-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.travel-interview-grid article { min-width: 0; }
+.travel-interview-grid video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 10px; background: #111; object-fit: contain; }
+.travel-interview-grid h3 { margin: 8px 0 0; font-size: 14px; }

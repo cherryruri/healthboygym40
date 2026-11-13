@@ -110,6 +110,7 @@
     list.querySelectorAll('a:not(.mobile-primary-link), .mobile-menu-section-title:not(:first-child)').forEach(node=>node.remove());
     const extraLinks = [
       ['mypage.html','MY PAGE','마이페이지'],
+      ['board.html?board=infoboard','INFO BOARD','인포게시판'],
       ['traffic.html','ANALYTICS','방문 통계'],
       ['board.html','COMMUNITY','공지문/자유게시판'],
       ['login.html','LOGIN','로그인'],
@@ -117,7 +118,7 @@
     ];
     extraLinks.forEach(([href,en,ko])=>{
       const link=document.createElement('a');link.href=href;link.className='mobile-primary-link';
-      if(href==='mypage.html'||href==='traffic.html'){link.dataset.adminOnly='true';link.hidden=true;}
+      if(href==='mypage.html'||href==='traffic.html'||href==='board.html?board=infoboard'){link.dataset.adminOnly='true';link.hidden=true;}
       link.innerHTML='<span class="mobile-nav-en" lang="en">'+en+'</span><span class="mobile-nav-ko">'+ko+'</span>';
       list.appendChild(link);
     });

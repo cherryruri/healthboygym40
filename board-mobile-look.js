@@ -170,6 +170,22 @@
   const contentLayer=stage.querySelector('.travel-board-content');stage.querySelector('.travel-board-search-panel').append(searchField);
   const searchIcon=document.createElement('span');searchIcon.className='travel-search-icon';searchIcon.setAttribute('aria-hidden','true');searchIcon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>';searchField.append(searchIcon);
   contentLayer.append(shell);
+  const interviews = document.createElement("section");
+  interviews.className = "travel-board-interviews";
+  interviews.setAttribute("aria-labelledby", "mobile-interviews-title");
+  interviews.innerHTML = `
+    <h2 id="mobile-interviews-title">센터 영상</h2>
+    <div class="travel-interview-grid">
+      <article>
+        <video controls playsinline preload="none" poster="bodychallenge34-interview-poster.jpg" src="bodychallenge34-interview.mp4" aria-label="바디챌린지 34기 회원 인터뷰"></video>
+        <h3>바디챌린지 34기 회원 인터뷰</h3>
+      </article>
+      <article>
+        <video controls playsinline preload="none" poster="sangwon-tensecond-v3.jpg" src="assets/pt/pt-sangwon.mp4" aria-label="이상원 팀장님 영상"></video>
+        <h3>이상원 팀장님 영상</h3>
+      </article>
+    </div>`;
+  contentLayer.append(interviews);
   video.muted=true;
   video.defaultMuted=true;
   video.playsInline=true;
@@ -177,7 +193,8 @@
    if(!video.paused&&video.readyState>=2)video.classList.add('is-playing');
   });
   video.addEventListener('error', () => video.classList.remove('is-playing'));
-  video.src = 'mobile-center-intro.mp4';
+  video.addEventListener('pause', () => video.classList.remove('is-playing'));
+  video.src = 'mobile-center-intro.mp4?v=board-background';
   video.play()?.catch(() => video.classList.remove('is-playing'));
  };
  const style=document.createElement('style');

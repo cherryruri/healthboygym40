@@ -676,11 +676,14 @@ function rememberQuoteRange() {
   }
 }
 document.addEventListener("selectionchange", rememberQuoteRange);
+contentBox.addEventListener("keyup", rememberQuoteRange);
+contentBox.addEventListener("pointerup", rememberQuoteRange);
 quoteStyle.addEventListener("pointerdown", rememberQuoteRange);
 quoteStyle.addEventListener("change", () => {
   const style = quoteStyle.value;
   quoteStyle.value = "";
   if (!style) return;
+  rememberQuoteRange();
   const text = quoteRange?.toString() || "";
   contentBox.focus();
   const selection = window.getSelection();

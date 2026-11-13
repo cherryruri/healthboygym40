@@ -100,6 +100,78 @@ function renderMetric(kind, title, result) {
   return card;
 }
 
+function renderTrend(current, previous, start, prior) {
+  const card = document.createElement("section");
+  card.className = "traffic-card traffic-trend";
+  const heading = document.createElement("h2");
+  heading.textContent = "방문 추이";
+  card.append(heading);
+  if (current.status !== "fulfilled" || previous.status !== "fulfilled") {
+    card.append("기간 비교를 불러오지 못했습니다.");
+    return card;
+  }
+
+  const now = new Date(Date.now() + seoulOffset);
+  const elapsed = mode === "hour" ? now.getUTCHours() + 1 :
+    mode === "day" ? now.getUTCDate() : now.getUTCMonth() + 1;
+  const selected = start.getTime() === periodStart(mode, now).getTime()
+    ? current.value.slice(0, elapsed) : current.value;
+  const series = [
+    [previous.value, prior, "#efd5be"],
+    [selected, start, "#ff8a42"]
+  ];
+  const size = Math.max(current.value.length, previous.value.length);
+  const step = Math.max(1, Math.ceil(Math.max(...current.value, ...previous.value) / 4));
+  const width = Math.max(620, size * 29 + 64);
+  const x = i => 52 + i * (width - 76) / (size - 1);
+  const y = value => 172 - value / (step * 4) * 144;
+  const scroll = document.createElement("div");
+  scroll.className = "traffic-line-scroll";
+  scroll.tabIndex = 0;
+  scroll.setAttribute("aria-label", "방문 추이 그래프");
+  const ns = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 " + width + " 202");
+  svg.setAttribute("role", "group");
+  svg.setAttribute("aria-label", "선택 기간과 직전 기간의 방문 수");
+  svg.style.minWidth = width + "px";
+
+  function draw(tag, attributes, label, parent = svg) {
+    const node = document.createElementNS(ns, tag);
+    for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
+    if (label) node.textContent = label;
+    parent.append(node);
+    return node;
+  }
+
+  for (let i = 0; i <= 4; i++) {
+    const value = i * step;
+    draw("line", { x1: 52, x2: width - 20, y1: y(value), y2: y(value), class: "traffic-guide" });
+    draw("text", { x: 44, y: y(value) + 4, "text-anchor": "end" }, number.format(value));
+  }
+  for (let i = 0; i < size; i++) {
+    draw("text", { x: x(i), y: 194, "text-anchor": "middle" }, bucketLabel(i));
+  }
+  const legend = document.createElement("ul");
+  legend.className = "traffic-line-legend";
+  for (const [counts, date, color] of series) {
+    draw("polyline", { points: counts.map((value, i) => [x(i), y(value)].join(",")).join(" "),
+      fill: "none", stroke: color, "stroke-width": 2 });
+    counts.forEach((value, i) => {
+      const label = periodLabel(date) + " · " + bucketLabel(i) + " · " + number.format(value) + "회";
+      const point = draw("circle", { cx: x(i), cy: y(value), r: 3.5, fill: color, "aria-label": label });
+      draw("title", {}, label, point);
+    });
+    const item = document.createElement("li");
+    item.style.setProperty("--series-color", color);
+    item.textContent = periodLabel(date);
+    legend.prepend(item);
+  }
+  scroll.append(svg);
+  card.append(scroll, legend);
+  return card;
+}
+
 async function refresh() {
   const request = ++generation;
   const end = periodStart(mode, cursor, 1);
@@ -108,9 +180,15 @@ async function refresh() {
   period.textContent = periodLabel(cursor);
   status.textContent = "집계 중…";
   charts.replaceChildren();
-  const results = await Promise.allSettled(metrics.map(([kind]) => readMetric(kind, mode, cursor, end)));
+  const start = cursor;
+  const prior = periodStart(mode, start, -1);
+  const results = await Promise.allSettled([
+    ...metrics.map(([kind]) => readMetric(kind, mode, start, end)),
+    readMetric("visit", mode, prior, start)
+  ]);
   if (request !== generation) return;
-  charts.replaceChildren(...metrics.map(([kind, title], index) => renderMetric(kind, title, results[index])));
+  charts.replaceChildren(renderTrend(results[0], results[metrics.length], start, prior),
+    ...metrics.map(([kind, title], index) => renderMetric(kind, title, results[index])));
   status.textContent = "";
 }
 

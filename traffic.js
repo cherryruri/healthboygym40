@@ -142,9 +142,6 @@ function renderTrend(current, previous, start, prior) {
   scroll.tabIndex = 0;
   scroll.setAttribute("aria-label", "방문 추이 그래프");
   const ns = "http://www.w3.org/2000/svg";
-  const tooltip = document.createElement("output");
-  tooltip.className = "traffic-point-value";
-  tooltip.textContent = "그래프에서 점을 선택하면 방문 수가 표시됩니다.";
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", "0 0 " + width + " 202");
   svg.setAttribute("role", "group");
@@ -158,6 +155,11 @@ function renderTrend(current, previous, start, prior) {
     parent.append(node);
     return node;
   }
+
+  const tooltip = document.createElementNS(ns, "text");
+  tooltip.setAttribute("class", "traffic-point-value");
+  tooltip.setAttribute("text-anchor", "middle");
+  tooltip.setAttribute("aria-hidden", "true");
 
   for (let i = 0; i <= 4; i++) {
     const value = i * step;
@@ -180,7 +182,9 @@ function renderTrend(current, previous, start, prior) {
       function showValue() {
         svg.querySelector(".is-selected")?.classList.remove("is-selected");
         point.classList.add("is-selected");
-        tooltip.textContent = label;
+        tooltip.setAttribute("x", x(i));
+        tooltip.setAttribute("y", y(value) - 11);
+        tooltip.textContent = number.format(value);
       }
       point.addEventListener("pointerenter", showValue);
       point.addEventListener("focus", showValue);
@@ -197,8 +201,9 @@ function renderTrend(current, previous, start, prior) {
     item.textContent = periodLabel(date);
     legend.prepend(item);
   }
+  svg.append(tooltip);
   scroll.append(svg);
-  card.append(tooltip, scroll, legend);
+  card.append(scroll, legend);
   return card;
 }
 

@@ -50,4 +50,4 @@ body { margin: 0; background: #111; color: #f4f4f4; font-family: Pretendard, sys
 
 .traffic-point{cursor:pointer;outline:none}
 .traffic-point:is(:focus-visible,.is-selected) .traffic-point-dot{stroke:white;stroke-width:2;r:5}
-.traffic-point-value{display:block;min-height:32px;width:fit-content;margin:8px 0 3px;padding:6px 10px;border-radius:6px;background:#342820;color:#ffe2c9;font-size:13px;position:sticky;left:0}
+.traffic-line-scroll .traffic-point-value{fill:#fff;font-size:13px;font-weight:750;stroke:#211915;stroke-width:4px;stroke-linejoin:round;paint-order:stroke;pointer-events:none}

@@ -11,8 +11,9 @@ const period = document.querySelector("#period");
 const modes = document.querySelector(".traffic-modes");
 const metrics = [
   ["visit", "사이트 방문"],
-  ["new-member", "신규 회원 이벤트 클릭"],
-  ["pilates", "필라테스 예약 클릭"]
+  ["new-member", "신규 회원 할인 팝업 클릭", "home-new-member-november-2026.jpg?v=2"],
+  ["pilates", "필라테스 체험 팝업 클릭", "home-pilates-trial.jpg"],
+  ["exam-discount", "수험생 할인 팝업 클릭", "home-exam-discount.png"]
 ];
 
 const seoulOffset = 9 * 60 * 60 * 1000;
@@ -58,13 +59,23 @@ async function readMetric(kind, unit, start, end) {
   return counts;
 }
 
-function renderMetric(kind, title, result) {
+function renderMetric(kind, title, image, result) {
   const card = document.createElement("section");
   card.className = "traffic-card";
   card.dataset.metric = kind;
   const heading = document.createElement("h2");
   heading.textContent = title;
-  card.append(heading);
+  const header = document.createElement("header");
+  header.className = "traffic-metric-heading";
+  if (image) {
+    const thumbnail = document.createElement("img");
+    thumbnail.src = image;
+    thumbnail.alt = "";
+    thumbnail.loading = "lazy";
+    header.append(thumbnail);
+  }
+  header.append(heading);
+  card.append(header);
   if (result.status === "rejected") {
     const error = document.createElement("p");
     error.textContent = "집계 데이터를 불러오지 못했습니다.";
@@ -198,19 +209,30 @@ function renderCalendar(results, start, end, today) {
     date.textContent = (start.getUTCMonth() + 1) + "월 " + (index + 1) + "일";
     const list = document.createElement("dl");
     const values = results.map(result => result.status === "fulfilled" ? result.value[index] : null);
-    const [visits, , pilates] = values;
-    const rate = visits > 0 && pilates !== null ? format.format(pilates / visits) : "—";
+    const visits = values[0];
     const rows = metrics.map(([, name], i) => [
-      name, values[i] === null ? "집계 실패" : number.format(values[i]) + "회"
+      name, values[i] === null ? "집계 실패" : number.format(values[i]) + "회", metrics[i][2],
+      i > 0 && visits > 0 && values[i] !== null ? "방문 대비 " + format.format(values[i] / visits) : ""
     ]);
-    rows.push(["필라테스 예약 링크 클릭률", rate]);
-    for (const [label, value] of rows) {
+    for (const [label, value, image, rate] of rows) {
       const row = document.createElement("div");
       const term = document.createElement("dt");
       const count = document.createElement("dd");
-      term.textContent = label;
+      if (image) {
+        const thumbnail = document.createElement("img");
+        thumbnail.src = image;
+        thumbnail.alt = "";
+        thumbnail.loading = "lazy";
+        term.append(thumbnail);
+      }
+      term.append(label);
       count.textContent = value;
       row.append(term, count);
+      if (rate) {
+        const ratio = document.createElement("dd");
+        ratio.textContent = rate;
+        row.append(ratio);
+      }
       list.append(row);
     }
     detail.replaceChildren(date, list);
@@ -229,7 +251,7 @@ function renderCalendar(results, start, end, today) {
     ? today.getUTCDate() - 1 : 0);
   const note = document.createElement("p");
   note.className = "traffic-note";
-  note.textContent = "클릭률은 해당 날짜의 필라테스 예약 링크 클릭 수를 사이트 방문 수로 나눈 값입니다. 네이버 예약 완료 건수는 별도입니다.";
+  note.textContent = "팝업마다 브라우저당 하루 한 번 예약 링크 클릭을 집계합니다. 방문 대비 비율은 클릭 수 ÷ 방문 수입니다.";
   card.append(title, grid, detail, note);
   return card;
 }
@@ -251,7 +273,7 @@ async function refresh() {
   if (request !== generation) return;
   const calendar = mode === "day" ? [renderCalendar(results.slice(0, metrics.length), start, end, today)] : [];
   charts.replaceChildren(...calendar, renderTrend(results[0], results[metrics.length], start, prior),
-    ...metrics.map(([kind, title], index) => renderMetric(kind, title, results[index])));
+    ...metrics.map(([kind, title, image], index) => renderMetric(kind, title, image, results[index])));
   status.textContent = "";
 }
 

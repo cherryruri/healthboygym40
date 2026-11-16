@@ -4,18 +4,18 @@ import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-
 (async () => {
   const hero = document.querySelector('#hbChapter1');
   const popup = document.querySelector('#homePromotion');
-  const storageKey = 'hbg-pilates-trial-dismissed';
+  const storageKey = card => 'hbg-' + (card.dataset.promotion === 'pilates' ? 'pilates-trial' : card.dataset.promotion) + '-dismissed';
   const promotionCards = [...popup.querySelectorAll('[data-promotion]')];
   const pageUrl = new URL(location.href);
   if (pageUrl.searchParams.get('showPromotions') === '1') {
-    try { localStorage.removeItem(storageKey); } catch {}
+    try { promotionCards.forEach(card => localStorage.removeItem(storageKey(card))); } catch {}
     pageUrl.searchParams.delete('showPromotions');
     history.replaceState(history.state, '', pageUrl);
   }
   const { isAdmin } = await authReady;
-  const cards = promotionCards.filter(() => {
+  const cards = promotionCards.filter(card => {
     if (isAdmin) return true;
-    try { return localStorage.getItem(storageKey) !== todayInSeoul(); }
+    try { return localStorage.getItem(storageKey(card)) !== todayInSeoul(); }
     catch { return true; }
   });
   if (!cards.length) return;
@@ -87,7 +87,7 @@ import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-
         return;
       }
       if (!isAdmin) {
-        try { localStorage.setItem(storageKey, todayInSeoul()); } catch {}
+        try { localStorage.setItem(storageKey(card), todayInSeoul()); } catch {}
       }
       closeCard(card);
     });

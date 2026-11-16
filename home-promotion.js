@@ -4,30 +4,21 @@ import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-
 (async () => {
   const hero = document.querySelector('#hbChapter1');
   const popup = document.querySelector('#homePromotion');
-  const startsAt = Date.parse('2026-11-10T00:00:00+09:00');
-  const endsAt = Date.parse('2026-11-16T00:00:00+09:00');
+  const storageKey = 'hbg-pilates-trial-dismissed';
   const promotionCards = [...popup.querySelectorAll('[data-promotion]')];
   const pageUrl = new URL(location.href);
   if (pageUrl.searchParams.get('showPromotions') === '1') {
-    try { promotionCards.forEach(card => localStorage.removeItem(storageKey(card))); } catch {}
+    try { localStorage.removeItem(storageKey); } catch {}
     pageUrl.searchParams.delete('showPromotions');
     history.replaceState(history.state, '', pageUrl);
   }
   const { isAdmin } = await authReady;
-  const cards = promotionCards.filter(card => {
-    const isDiscount = card.dataset.promotion === 'new-member';
+  const cards = promotionCards.filter(() => {
     if (isAdmin) return true;
-    if (isDiscount && (Date.now() < startsAt || Date.now() >= endsAt)) return false;
-    try { return localStorage.getItem(storageKey(card)) !== todayInSeoul(); }
+    try { return localStorage.getItem(storageKey) !== todayInSeoul(); }
     catch { return true; }
   });
   if (!cards.length) return;
-
-  function storageKey(card) {
-    return card.dataset.promotion === 'new-member'
-      ? 'hbg-new-member-november-2026-dismissed'
-      : 'hbg-pilates-trial-dismissed';
-  }
 
   function closeCard(card) {
     card.hidden = true;
@@ -96,7 +87,7 @@ import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-
         return;
       }
       if (!isAdmin) {
-        try { localStorage.setItem(storageKey(card), todayInSeoul()); } catch {}
+        try { localStorage.setItem(storageKey, todayInSeoul()); } catch {}
       }
       closeCard(card);
     });

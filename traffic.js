@@ -172,6 +172,68 @@ function renderTrend(current, previous, start, prior) {
   return card;
 }
 
+function renderCalendar(results, start, end, today) {
+  const card = document.createElement("section");
+  card.className = "traffic-card traffic-calendar";
+  const title = document.createElement("h2");
+  title.textContent = "일별 통계 달력";
+  const grid = document.createElement("div");
+  grid.className = "traffic-calendar-grid";
+  for (const day of ["일", "월", "화", "수", "목", "금", "토"]) {
+    const header = document.createElement("span");
+    header.textContent = day;
+    grid.append(header);
+  }
+  for (let i = 0; i < start.getUTCDay(); i++) grid.append(document.createElement("span"));
+  const detail = document.createElement("div");
+  detail.className = "traffic-day-detail";
+  detail.setAttribute("aria-live", "polite");
+  const buttons = [];
+  const days = new Date(end - 1).getUTCDate();
+  const format = new Intl.NumberFormat("ko-KR", { style: "percent", maximumFractionDigits: 1 });
+
+  function select(index) {
+    buttons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === index)));
+    const date = document.createElement("h3");
+    date.textContent = (start.getUTCMonth() + 1) + "월 " + (index + 1) + "일";
+    const list = document.createElement("dl");
+    const values = results.map(result => result.status === "fulfilled" ? result.value[index] : null);
+    const [visits, , pilates] = values;
+    const rate = visits > 0 && pilates !== null ? format.format(pilates / visits) : "—";
+    const rows = metrics.map(([, name], i) => [
+      name, values[i] === null ? "집계 실패" : number.format(values[i]) + "회"
+    ]);
+    rows.push(["필라테스 예약 링크 클릭률", rate]);
+    for (const [label, value] of rows) {
+      const row = document.createElement("div");
+      const term = document.createElement("dt");
+      const count = document.createElement("dd");
+      term.textContent = label;
+      count.textContent = value;
+      row.append(term, count);
+      list.append(row);
+    }
+    detail.replaceChildren(date, list);
+  }
+
+  for (let index = 0; index < days; index++) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = String(index + 1);
+    button.disabled = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), index + 1)) > today;
+    button.addEventListener("click", () => select(index));
+    buttons.push(button);
+    grid.append(button);
+  }
+  select(start.getUTCFullYear() === today.getUTCFullYear() && start.getUTCMonth() === today.getUTCMonth()
+    ? today.getUTCDate() - 1 : 0);
+  const note = document.createElement("p");
+  note.className = "traffic-note";
+  note.textContent = "클릭률은 해당 날짜의 필라테스 예약 링크 클릭 수를 사이트 방문 수로 나눈 값입니다. 네이버 예약 완료 건수는 별도입니다.";
+  card.append(title, grid, detail, note);
+  return card;
+}
+
 async function refresh() {
   const request = ++generation;
   const end = periodStart(mode, cursor, 1);
@@ -187,7 +249,8 @@ async function refresh() {
     readMetric("visit", mode, prior, start)
   ]);
   if (request !== generation) return;
-  charts.replaceChildren(renderTrend(results[0], results[metrics.length], start, prior),
+  const calendar = mode === "day" ? [renderCalendar(results.slice(0, metrics.length), start, end, today)] : [];
+  charts.replaceChildren(...calendar, renderTrend(results[0], results[metrics.length], start, prior),
     ...metrics.map(([kind, title], index) => renderMetric(kind, title, results[index])));
   status.textContent = "";
 }

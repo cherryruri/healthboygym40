@@ -1,11 +1,35 @@
 import { authReady } from "./firebase-index.js?v=verified-admin-menu";
 import { recordTraffic, todayInSeoul } from "./site-traffic.js?v=verified-admin-menu";
 
+import { loadPromotions } from "./promotions.js";
+
 (async () => {
   const hero = document.querySelector('#hbChapter1');
   const popup = document.querySelector('#homePromotion');
   const storageKey = card => 'hbg-' + (card.dataset.promotion === 'pilates' ? 'pilates-trial' : card.dataset.promotion) + '-dismissed';
-  const promotionCards = [...popup.querySelectorAll('[data-promotion]')];
+  const promotions = await loadPromotions().catch(error => {
+    console.warn('Unable to load homepage promotions', error);
+    return [];
+  });
+  const promotionCards = promotions.filter(item => !item.archived && item.url).map(item => {
+    const card = document.createElement('article');
+    card.className = 'home-promotion-card';
+    card.dataset.promotion = item.id;
+    card.hidden = true;
+    card.innerHTML = '<div class="home-promotion-panel"><div class="home-promotion-art"><img></div>' +
+      '<div class="home-promotion-actions"><button type="button" value="close">닫기</button>' +
+      '<a>지금 바로 예약하기 <span aria-hidden="true">›</span></a></div></div>' +
+      '<div class="home-promotion-dismiss"><button type="button" value="dismiss" aria-pressed="false">' +
+      '<span aria-hidden="true">✓</span> 오늘 하루 다시 보지 않기</button></div>';
+    const panel = card.firstElementChild;
+    if (['pilates', 'exam'].includes(item.theme)) panel.classList.add('home-promotion-' + item.theme);
+    const image = card.querySelector('img');
+    image.dataset.src = item.image;
+    image.alt = item.title;
+    card.querySelector('a').href = item.url;
+    popup.append(card);
+    return card;
+  });
   const pageUrl = new URL(location.href);
   if (pageUrl.searchParams.get('showPromotions') === '1') {
     try { promotionCards.forEach(card => localStorage.removeItem(storageKey(card))); } catch {}

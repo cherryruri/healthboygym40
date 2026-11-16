@@ -2,6 +2,8 @@ import { collection, getDocsFromServer, query, where } from "https://www.gstatic
 import { authReady, db } from "./firebase-index.js?v=verified-admin-menu";
 import { todayInSeoul } from "./site-traffic.js?v=verified-admin-menu";
 
+import { loadPromotions } from "./promotions.js";
+
 const dashboard = document.querySelector("#dashboard");
 const access = document.querySelector("#access");
 const charts = document.querySelector("#traffic-charts");
@@ -9,11 +11,10 @@ const status = document.querySelector("#traffic-status");
 const next = document.querySelector("#next");
 const period = document.querySelector("#period");
 const modes = document.querySelector(".traffic-modes");
+
 const metrics = [
   ["visit", "사이트 방문"],
-  ["new-member", "신규 회원 할인 팝업 클릭", "home-new-member-november-2026.jpg?v=2"],
-  ["pilates", "필라테스 체험 팝업 클릭", "home-pilates-trial.jpg"],
-  ["exam-discount", "수험생 할인 팝업 클릭", "home-exam-discount.png"]
+  ["new-member", "신규 회원 할인 팝업 클릭", "home-new-member-november-2026.jpg?v=2"]
 ];
 
 const seoulOffset = 9 * 60 * 60 * 1000;
@@ -141,6 +142,9 @@ function renderTrend(current, previous, start, prior) {
   scroll.tabIndex = 0;
   scroll.setAttribute("aria-label", "방문 추이 그래프");
   const ns = "http://www.w3.org/2000/svg";
+  const tooltip = document.createElement("output");
+  tooltip.className = "traffic-point-value";
+  tooltip.textContent = "그래프에서 점을 선택하면 방문 수가 표시됩니다.";
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", "0 0 " + width + " 202");
   svg.setAttribute("role", "group");
@@ -170,8 +174,23 @@ function renderTrend(current, previous, start, prior) {
       fill: "none", stroke: color, "stroke-width": 2 });
     counts.forEach((value, i) => {
       const label = periodLabel(date) + " · " + bucketLabel(i) + " · " + number.format(value) + "회";
-      const point = draw("circle", { cx: x(i), cy: y(value), r: 3.5, fill: color, "aria-label": label });
-      draw("title", {}, label, point);
+      const point = draw("g", { tabindex: 0, role: "button", "aria-label": label, class: "traffic-point" });
+      draw("circle", { cx: x(i), cy: y(value), r: 12, fill: "transparent" }, null, point);
+      draw("circle", { cx: x(i), cy: y(value), r: 3.5, fill: color, class: "traffic-point-dot" }, null, point);
+      function showValue() {
+        svg.querySelector(".is-selected")?.classList.remove("is-selected");
+        point.classList.add("is-selected");
+        tooltip.textContent = label;
+      }
+      point.addEventListener("pointerenter", showValue);
+      point.addEventListener("focus", showValue);
+      point.addEventListener("click", showValue);
+      point.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showValue();
+        }
+      });
     });
     const item = document.createElement("li");
     item.style.setProperty("--series-color", color);
@@ -179,7 +198,7 @@ function renderTrend(current, previous, start, prior) {
     legend.prepend(item);
   }
   scroll.append(svg);
-  card.append(scroll, legend);
+  card.append(tooltip, scroll, legend);
   return card;
 }
 
@@ -279,6 +298,14 @@ async function refresh() {
 
 const { verifiedAdmin } = await authReady;
 if (verifiedAdmin) {
+  try {
+    for (const popup of await loadPromotions()) {
+      metrics.push([popup.id, popup.title + " 팝업 클릭" + (popup.archived ? " (종료)" : ""), popup.image]);
+    }
+  } catch {
+    access.textContent = "팝업 목록을 불러오지 못했습니다. 새로고침해 주세요.";
+    throw new Error("Unable to load promotion metrics");
+  }
   access.hidden = true;
   dashboard.hidden = false;
   cursor = periodStart(mode, new Date(todayInSeoul() + "T00:00:00Z"));

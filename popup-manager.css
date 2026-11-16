@@ -1,0 +1,15 @@
+.popup-manager-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px; }
+.popup-manager .traffic-card { padding: clamp(16px, 3vw, 28px); }
+.popup-manager h2 { font-size: 19px; margin-bottom: 18px; }
+.popup-manager label { display: block; font-weight: 650; margin: 14px 0 7px; }
+.popup-manager input { width: 100%; min-height: 44px; padding: 9px 12px; color: inherit; background: #131313; border: 1px solid #565358; border-radius: 8px; font: inherit; }
+.popup-manager input::file-selector-button { padding: 5px 8px; margin-right: 8px; }
+.popup-manager-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.popup-manager form .popup-manager-actions { margin-top: 16px; }
+.popup-manager button[type="submit"] { background: #ffab65; color: #171411; border-color: #ffab65; font-weight: 700; }
+.popup-manager a { color: #ffbd89; }
+#popup-list { margin-bottom: 18px; }
+.popup-manager-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid #3d3b3d; overflow-wrap: anywhere; }
+.popup-manager-row img { width: 58px; height: 58px; object-fit: cover; border-radius: 6px; }
+#popup-preview { display: block; max-width: 100%; max-height: 250px; margin-top: 12px; border-radius: 8px; }
+@media(max-width: 760px) { .popup-manager-layout { grid-template-columns: 1fr; } }

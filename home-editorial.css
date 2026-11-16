@@ -340,3 +340,8 @@ html:has(.home-promotion[open]){overflow:hidden}
 
 /* Native fling momentum must not bypass the authored chapter transitions. */
 html body .hb-home .hb-chapter{touch-action:pinch-zoom!important;overscroll-behavior:contain}
+
+.home-promotion[open]{flex-wrap:wrap;justify-content:center;max-width:min(936px, calc(100vw - 24px))}
+.home-promotion .home-promotion-art img{width:100%;height:auto}
+.home-promotion-panel:not(.home-promotion-pilates,.home-promotion-exam) .home-promotion-art{aspect-ratio:auto}
+.home-promotion-panel:not(.home-promotion-pilates,.home-promotion-exam) .home-promotion-art img{max-height:calc(100dvh - 135px);object-fit:contain}
